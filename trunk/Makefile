@@ -88,7 +88,7 @@ unamemod:
 
 tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
-	lfs-gawk lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
+	lfs-gawk-scpt lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
 	lfs-bash-scpt lfs-m4-scpt lfs-bison-scpt lfs-flex-scpt lfs-util-linux-scpt lfs-perl-scpt lfs-strip-scpt
 
@@ -110,10 +110,8 @@ lfs-which: lfsuser
 lfs-wget: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) wget'"
 	
-
 lfs-binutils-pass1: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass1-scpt'"
-
 
 lfs-gcc-pass1: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gcc-pass1-scpt'"
@@ -280,97 +278,97 @@ linux-libc-headers: unamemod
 # They are used internally and must be called by
 # other rules.
 
-lfs-binutils-pass1-scpt: lfsuser
+lfs-binutils-pass1-scpt:
 	$(MAKE) -C $(PKG)/binutils pass1
 
-lfs-gcc-pass1-scpt: lfsuser
+lfs-gcc-pass1-scpt:
 	$(MAKE) -C $(PKG)/gcc pass1
 
-lfs-linux-libc-headers-scpt: lfsuser
+lfs-linux-libc-headers-scpt:
 	$(MAKE) -C $(PKG)/linux-libc-headers stage1
 
-lfs-glibc-scpt: lfsuser
+lfs-glibc-scpt:
 	$(MAKE) -C $(PKG)/glibc stage1
 
-lfs-adjust-toolchain-scpt: lfsuser
+lfs-adjust-toolchain-scpt:
 	$(MAKE) -C $(PKG)/binutils adjust-toolchain
 
-lfs-tcl-scpt: lfsuser
+lfs-tcl-scpt:
 	$(MAKE) -C $(PKG)/tcl stage1
 
-lfs-expect-scpt: lfsuser
+lfs-expect-scpt:
 	$(MAKE) -C $(PKG)/expect stage1
 
-lfs-dejagnu-scpt: lfsuser
+lfs-dejagnu-scpt:
 	$(MAKE) -C $(PKG)/dejagnu stage1
 
-lfs-gcc-pass2-scpt: lfsuser
+lfs-gcc-pass2-scpt:
 	$(MAKE) -C $(PKG)/gcc pass2
 
-lfs-binutils-pass2-scpt: lfsuser
+lfs-binutils-pass2-scpt:
 	$(MAKE) -C $(PKG)/binutils pass2
 
-lfs-gawk-scpt: lfsuser
+lfs-gawk-scpt:
 	$(MAKE) -C $(PKG)/gawk stage1
 
-lfs-coreutils-scpt: lfsuser
+lfs-coreutils-scpt:
 	$(MAKE) -C $(PKG)/coreutils stage1
 
-lfs-bzip2-scpt: lfsuser
+lfs-bzip2-scpt:
 	$(MAKE) -C $(PKG)/bzip2 stage1
 
-lfs-gzip-scpt: lfsuser
+lfs-gzip-scpt:
 	$(MAKE) -C $(PKG)/gzip stage1
 
-lfs-diffutils-scpt: lfsuser
+lfs-diffutils-scpt:
 	$(MAKE) -C $(PKG)/diffutils stage1
 
-lfs-findutils-scpt: lfsuser
+lfs-findutils-scpt:
 	$(MAKE) -C $(PKG)/findutils stage1
 
-lfs-make-scpt: lfsuser
+lfs-make-scpt:
 	$(MAKE) -C $(PKG)/make stage1
 
-lfs-grep-scpt: lfsuser
+lfs-grep-scpt:
 	$(MAKE) -C $(PKG)/grep stage1
 
-lfs-sed-scpt: lfsuser
+lfs-sed-scpt:
 	$(MAKE) -C $(PKG)/sed stage1
 
-lfs-gettext-scpt: lfsuser
+lfs-gettext-scpt:
 	$(MAKE) -C $(PKG)/gettext stage1
 
-lfs-ncurses-scpt: lfsuser
+lfs-ncurses-scpt:
 	$(MAKE) -C $(PKG)/ncurses stage1
 
-lfs-patch-scpt: lfsuser
+lfs-patch-scpt:
 	$(MAKE) -C $(PKG)/patch stage1
 
-lfs-tar-scpt: lfsuser
+lfs-tar-scpt:
 	$(MAKE) -C $(PKG)/tar stage1
 
-lfs-texinfo-scpt: lfsuser
+lfs-texinfo-scpt:
 	$(MAKE) -C $(PKG)/texinfo stage1
 
-lfs-bash-scpt: lfsuser
+lfs-bash-scpt:
 	$(MAKE) -C $(PKG)/bash stage1
 
-lfs-m4-scpt: lfsuser
+lfs-m4-scpt:
 	$(MAKE) -C $(PKG)/m4 stage1
 
-lfs-bison-scpt: lfsuser
+lfs-bison-scpt:
 	$(MAKE) -C $(PKG)/bison stage1
 
-lfs-flex-scpt: lfsuser
+lfs-flex-scpt:
 	$(MAKE) -C $(PKG)/flex stage1
 
-lfs-util-linux-scpt: lfsuser
+lfs-util-linux-scpt:
 	$(MAKE) -C $(PKG)/util-linux stage1
 
-lfs-perl-scpt-scpt: lfsuser
+lfs-perl-scpt:
 	$(MAKE) -C $(PKG)/perl stage1
 
-lfs-strip-scpt-scpt: lfsuser
+lfs-strip-scpt:
 	@-strip --strip-debug $(WD)/lib/*
 	@-strip --strip-unneeded $(WD)/{,s}bin/*
 	@-rm -rf $(WD)/{doc,info,man}

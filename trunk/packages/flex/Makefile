@@ -18,7 +18,7 @@ stage1:
 	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(MP)/$(DLP) ; fi
 	@if [ ! -f $(MP)/$(DLP)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(FILE) $(MP)/$(DLP) ; fi
+	 mv $(PATCH) $(MP)/$(DLP) ; fi
 	@if [ ! -f $(WD)/bin/flex ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(MP)/$(DLP)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
