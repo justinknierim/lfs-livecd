@@ -2,7 +2,7 @@
 
 # Package versions
 NM= subversion
-VRS= 1.1.2
+VRS= 1.1.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://subversion.tigris.org/tarballs/$(FILE)

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= bzip2
-VRS= 1.0.2
+VRS= 1.0.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

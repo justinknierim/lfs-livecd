@@ -2,7 +2,7 @@
 
 # Package versions
 NM= libaal
-VRS= 1.0.3
+VRS= 1.0.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiser4progs/$(FILE)

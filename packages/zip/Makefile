@@ -2,9 +2,9 @@
 
 # Package versions
 NM= zip
-VRS= 2.3
+VRS= 2.31
 DIR= $(NM)-$(VRS)
-FILE= $(NM)23.tar.gz
+FILE= $(NM)231.tar.gz
 URL= http://www.mirrorservice.org/sites/ftp.info-zip.org/pub/infozip/src/$(FILE)
 
 #RULES

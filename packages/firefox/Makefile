@@ -2,10 +2,10 @@
 
 # Package versions
 NM= firefox
-VRS= 1.0
+VRS= 1.0.2
 DIR= mozilla
 FILE= $(NM)-$(VRS)-source.tar.bz2
-URL= http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/1.0/source/$(FILE)
+URL= http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(VRS)/source/$(FILE)
 
 #RULES
 
@@ -23,7 +23,7 @@ stage2:
 	 export MOZILLA_OFFICIAL="1" && \
 	 export BUILD_OFFICIAL="1" && \
 	 export MOZ_PHOENIX="1" && \
-	 ./configure --prefix=/usr --with-default-mozilla-five-home=/usr/lib/firefox-1.0 \
+	 ./configure --prefix=/usr --with-default-mozilla-five-home=/usr/lib/firefox-$(VRS) \
 	 --with-user-appdir=.firefox --with-system-zlib --with-system-jpeg --with-system-png \
 	 --enable-application=browser --enable-default-toolkit=gtk2 --enable-extensions=all,-typeaheadfind \
 	 --enable-crypto --enable-xft --enable-xinerama --enable-optimize --enable-reorder --enable-strip \
@@ -31,8 +31,8 @@ stage2:
 	 --disable-tests --disable-logging --disable-pedantic --disable-installer --disable-mailnews \
 	 --disable-ldap --disable-composer --disable-profilesharing && \
 	 make -j3 && make install && \
-	 install -d /usr/include/firefox-1.0/nss && \
-	 cp -Lf dist/private/nss/*.h dist/public/nss/*.h /usr/include/firefox-1.0/nss ; fi
+	 install -d /usr/include/firefox-$(VRS)/nss && \
+	 cp -Lf dist/private/nss/*.h dist/public/nss/*.h /usr/include/firefox-$(VRS)/nss ; fi
 	@cp -ra $(ROOT)/root/.firefox /root
 	@cp -ra $(ROOT)/root/.mozilla /root
 	@make clean

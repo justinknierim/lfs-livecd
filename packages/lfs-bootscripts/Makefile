@@ -2,7 +2,7 @@
 
 # Package versions
 NM= lfs-bootscripts
-VRS= 2.2.3
+VRS= 3.1.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

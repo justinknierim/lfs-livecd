@@ -2,14 +2,12 @@
 
 # Package versions
 NM= udev
-VRS= 050
+VRS= 056
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-FILE1= $(NM)-config-2.permissions
-FILE2= $(NM)-config-1.rules
+FILE1= $(NM)-config-3.rules
 URL= $(FTP)/$(NM)/$(FILE)
 URL1= $(FTP)/$(NM)/$(FILE1)
-URL2= $(FTP)/$(NM)/$(FILE2)
 
 # RULES
 
@@ -26,12 +24,9 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL1) && \
 	 mv $(FILE1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(FILE2) ] ; then $(WGET) $(URL2) && \
-	 mv $(FILE2) $(SRC) ; fi
 	@if [ ! -f /sbin/udevstart ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 make udevdir=/dev && make udevdir=/dev install && \
-	 cp $(SRC)/$(FILE1) /etc/udev/permissions.d/25-lfs.permissions && \
-	 cp $(SRC)/$(FILE2) /etc/udev/rules.d/25-lfs.rules && \
+	 cp $(SRC)/$(FILE1) /etc/udev/rules.d/25-lfs.rules && \
 	 /sbin/udevstart ; fi
 	@make clean
 	 

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= linux-libc-headers
-VRS= 2.6.10.0
+VRS= 2.6.11.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= xchat
-VRS= 2.4.1
+VRS= 2.4.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://xchat.org/files/source/2.4/$(FILE)

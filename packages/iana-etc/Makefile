@@ -2,7 +2,7 @@
 
 # Package versions
 NM= iana-etc
-VRS= 1.03
+VRS= 1.04
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

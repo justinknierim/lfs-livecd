@@ -2,7 +2,7 @@
 
 # Package versions
 NM= e2fsprogs
-VRS= 1.35
+VRS= 1.36
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= glibc
-VRS= 20041011
+VRS= 2.3.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

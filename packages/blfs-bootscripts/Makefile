@@ -2,9 +2,10 @@
 
 # Package versions
 NM= blfs-bootscripts
-VRS= 20041227
+VRS= 20050313
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
+PATCH=$(DIR)-add-autosshd-1.patch
 URL= http://www.linuxfromscratch.org/blfs/downloads/svn/$(FILE)
 
 #RULES
@@ -20,9 +21,11 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@tar xjvf $(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH) &&
 	 make install-service-dhcpcd && \
 	 make install-service-pppoe && \
 	 make install-gpm && \
+	 make install-autosshd && \
 	 install -m754 blfs/init.d/sshd /etc/rc.d/init.d/ && \
 	 install -m754 blfs/init.d/random /etc/rc.d/init.d/ && \
 	 install -m754 blfs/init.d/portmap /etc/rc.d/init.d/ && \

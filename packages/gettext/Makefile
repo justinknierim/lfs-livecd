@@ -2,7 +2,7 @@
 
 # Package versions
 NM= gettext
-VRS= 0.14.1
+VRS= 0.14.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= libol
-VRS= 0.3.14
+VRS= 0.3.15
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
