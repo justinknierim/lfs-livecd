@@ -1,12 +1,13 @@
-# Syslog-ng Makefile
+# Sysklogd Makefile
 
 # Package versions
-NM= syslog-ng
-VRS= 1.6.6
+NM= sysklogd
+VRS= 1.6.20
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
+PATCH=$(DIR)-fixes-1.patch
 URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
+URL1= $(FTP)/$(NM)/$(PATCH)
 
 # RULES
 
@@ -22,7 +23,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -d /etc/syslog-ng ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc && \
+	 patch -Np1 -i ../$(PATCH) && \
 	 make -j3 && make install && \
 	 cp -ra $(ROOT)/etc/syslog-ng /etc ; fi
 	@make clean

@@ -7,8 +7,7 @@
 #
 
 DIR=/etc/sysconfig/network-devices
-DHCP=$DIR/ifconfig.eth0/dhcpcd
-IPV4=$DIR/ifconfig.eth0/ipv4
+ETH0CFG=$DIR/ifconfig.eth0
 IFUP=$DIR/ifup
 IFDOWN=$DIR/ifdown
 LINKTEST=`ip link show eth0 2> /dev/null`
@@ -51,7 +50,7 @@ set_static_ip(){
 		echo "$IP is not a valid IP address."
 		set_static_ip;
 	else
-		echo "IP=$IP" >> $IPV4
+		echo "IP=$IP" >> $ETH0CFG
 	fi
 }
 
@@ -63,7 +62,7 @@ set_static_gateway(){
 		echo "$GTWY is not a valid default gateway."
 		set_static_gateway;
 	else
-		echo "GATEWAY=$GTWY" >> $IPV4
+		echo "GATEWAY=$GTWY" >> $ETH0CFG
 	fi
 }
 
@@ -79,7 +78,7 @@ set_static_prefix(){
 			echo "$PRFX is not a valid prefix."
 			set_static_prefix;
 		else
-			echo "PREFIX=$PRFX" >> $IPV4
+			echo "PREFIX=$PRFX" >> $ETH0CFG
 		fi
 	else
 		echo "Prefix cannot be empty."
@@ -96,7 +95,7 @@ set_static_broadcast(){
 		echo "$BRDCST is not a valid broadcast address."
 		set_static_broadcast;
 	else
-		echo "BROADCAST=$BRDCST" >> $IPV4
+		echo "BROADCAST=$BRDCST" >> $ETH0CFG
 	fi
 }
 
@@ -116,9 +115,9 @@ choose_service(){
 case "$SERVICE" in
 
 	dhcp) 
-		echo "SERVICE=dhcpcd" > $DHCP
-		echo "DHCP_START=\"\"" >> $DHCP
-		echo "DHCP_STOP=\"-k\"" >> $DHCP
+		echo "SERVICE=dhcpcd" > $ETH0CFG
+		echo "DHCP_START=\"\"" >> $ETH0CFG
+		echo "DHCP_STOP=\"-k\"" >> $ETH0CFG
 
 		# Start the service
 		$IFUP eth0
@@ -135,7 +134,7 @@ case "$SERVICE" in
 		;;
 
 	static)
-		echo "SERVICE=ipv4-static" > $IPV4
+		echo "SERVICE=ipv4-static" > $ETH0CFG
 		set_static_ip;
 		set_static_gateway;
 		set_static_prefix;
