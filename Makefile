@@ -3,15 +3,16 @@
 
 # Edit this line to match the mount-point of the
 # partition you'll be using to build the cd.
-MP= /mnt/lfs
+export MP := /mnt/lfs
 
 # Don't edit these!
-WD= /tools
+export WD := /tools
+export SRC := sources
+export PKG := packages
+export MKTREE := $(MP)/mklivecd
+export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 WHICH= $(WD)/bin/which
 FTPGET= $(WD)/bin/ftpget
-MKTREE= $(MP)/mklivecd
-SRC= sources
-PKG= packages
 CFLAGS= -Os -s
 
 # Package versions
@@ -67,7 +68,16 @@ unamemod:
 	@make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules
 	@-insmod uname/uname_i486.ko
 
-tools:
+tools: binutils-pass1
+
+binutils-pass1:
+	@echo ""
+	@echo "=========================="
+	@echo " Building LFS Base System"
+	@echo "=========================="
+	@echo ""
+	$(MAKE) -C $(PKG)/binutils pass1
+
 
 clean:
 	@-rm -rf $(WD)
@@ -76,6 +86,7 @@ clean:
 	@-rm -rf /home/lfs
 	@-rmmod uname_i486
 	@$(MAKE) -C $(PKG)/wget clean
+	@$(MAKE) -C $(PKG)/binutils clean
 
 scrub: clean
 	@-rm -rf sources
