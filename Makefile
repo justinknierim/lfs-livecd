@@ -51,7 +51,8 @@ lfs-base:
 	@echo "==============================================================="
 	@sleep 8
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
-	@-mkdir $(MP)$(SRC); ln -s $(MP)$(SRC) /
+	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
+	@-ln -sf $(MP)$(SRC) /
 	@make lfsuser
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MKTREE)
 	@echo ""
