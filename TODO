@@ -4,6 +4,8 @@
 * Extend the base system to include BLFS packages ***IN PROGRESS***
 	Some packages need blfs bootscripts [ openssh, gpm ]
 
+* Check for existence of $(WD)/sources before making the dir
+* Add a note to the Makefile about requiring an internet connection
 * Add a section for building a cdrtools and squashfs (outside the cd system)
 * Add custom bootscript package to svn repo
 * Setup kernel build -- include initramfs build

@@ -21,10 +21,10 @@ export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
 export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
-export chenv1 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
-export chenv2 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-export chenv3 := /usr/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
-export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$$TERM PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
+export chenv1 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chenv2 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+export chenv3 := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
 export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
@@ -34,6 +34,9 @@ FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
 #RULES
+
+test:
+	echo $(TERM)
 
 .PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
@@ -66,11 +69,11 @@ lfs-base:
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
-	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make post-bash $(chbash2)'
+	@chroot "$(MP)" $(chenv1) 'set +h && chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
+	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
 	@cp $(WD)/bin/which $(MP)/usr/bin
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make blfs $(chbash2)'
-	@chroot "$(MP)" $(chenvstrip) 'cd $(ROOT) && make ch-strip'
+	@chroot "$(MP)" $(chenv3) 'set +h && cd $(ROOT) && make blfs $(chbash2)'
+	@chroot "$(MP)" $(chenvstrip) 'set +h && cd $(ROOT) && make ch-strip'
 	@make unloadmodule
 	@make unmount
 

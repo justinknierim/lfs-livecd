@@ -21,8 +21,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /sbin/mkfs.xfs ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 sed -i 's/autoconf//' Makefile && \
-	 patch -Np1 -i ../$(DIR)-fix_compile-1.patch && \
-	 make -j3 && make install ; fi
+	 make && make install ; fi
 	@make clean
 
 clean:
