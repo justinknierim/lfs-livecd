@@ -23,10 +23,17 @@ export pagesize := letter
 # cd will not be an official cd then ;) )
 UNAMEMOD= y
 
+# Directory where your current compiled kernel source is located.
+# This is needed to be able to compile the uname module.
+# Since it's not a good idea to have your kernel source in
+# /usr/src/linux, this value should probably be changed to match
+# where you have wisely stored your source. :)
+LINUXSRC= /usr/src/linux
+
 # Top-level of these Makefiles. Edit this if you've named
 # this directory differently.
 # (The beginning / is necessary - leave it in place - this is *not*
-# a real file path.)
+# an absolute file path.)
 export ROOT := /lfs-livecd
 
 # Don't edit these!
@@ -66,22 +73,23 @@ lfs-base:
 	@echo " 1) Your running kernel is the same version as the target "
 	@echo "    kernel for the cd."
 	@echo ""
-	@echo " 2) Your compiled kernel sources are located in /usr/src/linux "
-	@echo "    (This is so we can build a uname module) "
+	@echo " 2) Your compiled source for your current kernel and the"
+	@echo "    variable LINUXSRC set to that location. (Default is"
+	@echo "    /usr/src/linux). You can set that by passing the variable "
+	@echo "    to make: 'make LINUXSRC=/path/to/kernel/source'"
+	@echo "    This is necessary for building a uname module."
 	@echo ""
-	@echo " 3) You have an active internet connection (or have already"
-	@echo "    downloaded all the sources and have placed them in"
-	@echo "    $(MP)$(SRC))"
+	@echo " 3) You have an active internet connection."
 	@echo "==============================================================="
 	@echo ""
-	@echo -n -e "Countdown to commence building :) :"
+	@echo -n -e "Countdown to commence building:"
 	@for i in 10 9 8 7 6 5 4 3 2 1 ; do echo -n -e " $$i" && sleep 1 ; done
 	@echo ""
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
 	@-ln -sf $(MP)$(SRC) /
 	@make lfsuser
-	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MKTREE)
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MP)$(SRC) $(MKTREE)
 	@echo ""
 	@echo "=========================="
 	@echo " Building LFS Base System"
@@ -131,7 +139,7 @@ pre-wget: lfsuser
 unamemod:
 ifeq ($(UNAMEMOD),y)
 	@if [ ! -f uname/uname_i486.ko ] ; then echo "" && echo "=====> Making Uname Module" && echo "" && \
-  	make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules ; fi
+  	make -C $(LINUXSRC) SUBDIRS=$(MKTREE)/uname modules ; fi
 	@lsmod 1> $(WD)/.file
 	@if ! grep -q uname_i486 $(WD)/.file ; then insmod uname/uname_i486.ko ; fi
 	@-rm -f $(WD)/.file
@@ -1297,7 +1305,7 @@ scrub: clean
 	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
 	 usr var ; do rm -rf $(MP)/$$i ; done
 	@-rm $(MP)/{etc,root}.tar.bz2
-	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/*{.gz,.bz2,.zip,.tgz}
+	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/{*.gz,*.bz2,*.zip,*.tgz} ; done
 	@-rm lfs-livecd-$(DATE).iso
 
 unloadmodule:
