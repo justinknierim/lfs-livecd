@@ -8,7 +8,8 @@ FILE= $(DIR).tar.bz2
 FILE1= $(PATCH2).gz
 PATCH1= $(DIR)-security_fix-1.patch
 PATCH2= reiser4-for-2.6.10-1
-PATCH3= squashfs2.1-patch 
+PATCH3= squashfs2.1-patch
+PATCH4= $(DIR)-reiser4_missing_export-1.patch
 URL= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
 URL1= http://www.linuxfromscratch.org/patches/lfs/cvs/testing/$(PATCH1)
 URL2= http://ftp.namesys.com/pub/reiser4-for-2.6/$(VRS)/$(FILE1)
@@ -33,7 +34,7 @@ stage2:
 	 patch -Np1 -i $(ROOT)/$(PKG)/squashfs/squashfs2.1/linux-2.6.9/$(PATCH3) && \
 	 make mrproper && \
 	 sed -i 's@/sbin/hotplug@/bin/true@' kernel/kmod.c && \
-	 sed -i 's@(find_get_pages)@(find_get_pages_tag)@' mm/filemap.c && \
+	 patch -Np1 -i ../$(PATCH4) && \
 	 cp $(ROOT)/linux/config .config && \
 	 make -j3 && \
 	 make modules_install && \
