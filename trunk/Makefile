@@ -12,6 +12,7 @@ export timezone := America/New_York
 export pagesize := letter
 
 # Don't edit these!
+export HOSTNAME := lfslivecd
 export WD := /tools
 export SRC := /sources
 export PKG := packages
@@ -133,7 +134,8 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy \
-	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links
+	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links ch-openssh \
+	ch-pkgconfig ch-glib2 ch-openbox
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -307,6 +309,8 @@ popdev:
 	 mkdir /dev/pts && mkdir /dev/shm && \
 	 mount -t devpts -o gid=4,mode=620 none /dev/pts && \
 	 mount -t tmpfs none /dev/shm ; fi
+	@if [ -f /sbin/udevstart ] ; then /sbin/udevstart ; fi
+	@if [ -f /bin/hostname ] ; then hostname $(HOSTNAME) ; fi
 
 linux-libc-headers: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
@@ -630,6 +634,21 @@ libtiff: unamemod prep-chroot
 	make unmount
 
 links: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+openssh: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+pkgconfig: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+glib2: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+
+openbox: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -988,6 +1007,18 @@ ch-libtiff: popdev
 
 ch-links: popdev
 	make -C $(PKG)/links stage2
+
+ch-openssh: popdev
+	make -C $(PKG)/openssh stage2
+
+ch-pkgconfig: popdev
+	make -C $(PKG)/pkgconfig stage2
+
+ch-openbox: popdev
+	make -C $(PKG)/openbox stage2
+
+ch-glib2: popdev
+	make -C $(PKG)/glib2 stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'

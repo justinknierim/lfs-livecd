@@ -28,7 +28,7 @@ stage2:
 	@if [ ! -f /usr/sbin/gpm ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && patch -Np1 -i ../$(PATCH2) && \
 	 CFLAGS="" LDFLAGS="-lm" ./configure --prefix=/usr --sysconfdir=/etc && \
-	 LDFLAGS="-lm" make -j3 && make install && \
+	 LDFLAGS="-lm" && make install && \
 	 cp conf/gpm-root.conf /etc && /sbin/ldconfig ; fi
 	@make clean
 

@@ -8,11 +8,10 @@
 #define HasLibpng		YES
 #define HasZlib			YES
 
-#define XF86CardDrivers		mga glint nv tga s3virge sis rendition neomagic i740 \
+#define XF86CardDrivers		vesa mga glint tga s3virge sis rendition neomagic i740 \
 				tdfx savage cirrus vmware tsent trident chips apm \
 				GlideDriver fbdev i128 ati DevelDrivers ark cyrix \
-				siliconmotion vesa vga XF86OSCardDrivers \
-				XF86ExtraCardDrivers
+				siliconmotion vga XF86OSCardDrivers XF86ExtraCardDrivers
 
 #define XInputDrivers		mouse keyboard
 
