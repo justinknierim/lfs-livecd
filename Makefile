@@ -71,7 +71,8 @@ unamemod:
 tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers lfs-glibc lfs-adjust-toolchain \
 	lfs-tcl lfs-expect lfs-dejagnu lfs-gcc-pass2 lfs-binutils-pass2 lfs-gawk lfs-coreutils \
 	lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make lfs-grep lfs-sed lfs-gettext \
-	lfs-ncurses lfs-patch lfs-tar lfs-texinfo
+	lfs-ncurses lfs-patch lfs-tar lfs-texinfo lfs-bash lfs-m4 lfs-bison lfs-flex lfs-util-linux \
+	lfs-perl lfs-strip
 
 # Rules which can be called by themselves, if necessary
 binutils-pass1: lfsuser
@@ -145,6 +146,29 @@ tar: lfsuser
 
 texinfo: lfsuser
 	$(MAKE) -C $(PKG)/texinfo pre1
+
+bash: lfsuser
+	$(MAKE) -C $(PKG)/bash pre1
+
+m4: lfsuser
+	$(MAKE) -C $(PKG)/m4 pre1
+
+bison: lfsuser
+	$(MAKE) -C $(PKG)/bison pre1
+
+flex: lfsuser
+	$(MAKE) -C $(PKG)/flex pre1
+
+util-linux: lfsuser
+	$(MAKE) -C $(PKG)/util-linux pre1
+
+perl: lfsuser
+	$(MAKE) -C $(PKG)/perl pre1
+
+strip: lfsuser
+	@-strip --strip-debug $(WD)/lib/*
+	@-strip --strip-unneeded $(WD)/{,s}bin/*
+	@-rm -rf $(WD)/{doc,info,man}
 
 # DO NOT CALL THESE RULES - FOR SCRIPTING ONLY
 # The rules below are what is used when the environment
@@ -226,6 +250,29 @@ lfs-tar:
 
 lfs-texinfo:
 	$(MAKE) -C $(PKG)/texinfo stage1
+
+lfs-bash:
+	$(MAKE) -C $(PKG)/bash stage1
+
+lfs-m4:
+	$(MAKE) -C $(PKG)/m4 stage1
+
+lfs-bison:
+	$(MAKE) -C $(PKG)/bison stage1
+
+lfs-flex:
+	$(MAKE) -C $(PKG)/flex stage1
+
+lfs-util-linux:
+	$(MAKE) -C $(PKG)/util-linux stage1
+
+lfs-perl:
+	$(MAKE) -C $(PKG)/perl stage1
+
+lfs-strip:
+	@-strip --strip-debug $(WD)/lib/*
+	@-strip --strip-unneeded $(WD)/{,s}bin/*
+	@-rm -rf $(WD)/{doc,info,man}
 
 # Rules to clean your tree. 
 # "clean" removes package directories and
