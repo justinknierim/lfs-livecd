@@ -71,6 +71,14 @@ III. Building the livecd using these Makefiles
   uname to return i486 as your system architecture.  This has the desired
   effect of easily producing binaries compatible with 486 machines and later.
 
+* These Makefiles rely heavily on an active internet connection.
+
+* Verify that this directory is called 'lfs-livecd' and is located in the 
+  top of your lfs partition.  For example, if your lfs partition is mounted
+  at /mnt/lfs this directory should be /mnt/lfs/lfs-livecd. You can change
+  the name of this directory if you like, but if you do, be sure to edit the
+  ROOT variable in top-level Makefile to match (include the beginning '/'). 
+
   To start the build, simply run:
 
 	make
