@@ -2,7 +2,7 @@
 
 # Package versions
 NM= findutils
-VRS= 4.2.3
+VRS= 4.2.20
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

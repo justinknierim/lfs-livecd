@@ -2,10 +2,10 @@
 
 # Package versions
 NM= automake
-VRS= 1.9.4
+VRS= 1.9.5
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
 URL1= $(FTP)/$(NM)/$(PATCH1)
 
 # RULES

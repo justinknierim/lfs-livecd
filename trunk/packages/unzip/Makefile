@@ -2,9 +2,9 @@
 
 # Package versions
 NM= unzip
-VRS= 5.51
+VRS= 5.52
 DIR= $(NM)-$(VRS)
-FILE= $(NM)551.tar.gz
+FILE= $(NM)552.tar.gz
 PATCH1= $(DIR)-fix_Makefile-1.patch
 PATCH2= $(DIR)-fix_libz-1.patch
 PATCH3= $(DIR)-dont_make_noise-1.patch

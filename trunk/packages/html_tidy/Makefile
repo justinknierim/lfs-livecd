@@ -2,7 +2,7 @@
 
 # Package versions
 NM= tidy
-VRS= 050120
+VRS= 050321
 DIR= $(NM)
 FILE= $(NM)_src_$(VRS).tgz
 FILE2= $(NM)_docs.tgz

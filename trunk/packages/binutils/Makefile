@@ -2,7 +2,7 @@
 
 # Package versions
 NM= binutils
-VRS= 2.15.94.0.2
+VRS= 2.15.94.0.2.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= grub
-VRS= 0.95
+VRS= 0.96
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

@@ -2,12 +2,12 @@
 
 # Package versions
 NM= linux
-VRS= 2.6.10
+VRS= 2.6.11.6
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 FILE1= $(PATCH2).gz
 PATCH1= $(DIR)-security_fix-1.patch
-PATCH2= reiser4-for-2.6.10-1
+PATCH2= reiser4-for-2.6.11-1
 PATCH3= squashfs2.1-patch
 PATCH4= $(DIR)-reiser4_missing_export-1.patch
 URL= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)

@@ -2,8 +2,8 @@
 
 # Package versions
 NM= expect
-VRS= 5.42.1
-DIR= $(NM)-5.42
+VRS= 5.43.0
+DIR= $(NM)-5.43
 FILE= $(NM)-$(VRS).tar.bz2
 PATCH= $(NM)-$(VRS)-spawn-1.patch
 URL= $(FTP)/$(NM)/$(FILE)

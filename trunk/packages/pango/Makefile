@@ -2,7 +2,7 @@
 
 # Package versions
 NM= pango
-VRS= 1.8.0
+VRS= 1.8.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://ftp.gnome.org/pub/GNOME/sources/pango/1.8/$(FILE)

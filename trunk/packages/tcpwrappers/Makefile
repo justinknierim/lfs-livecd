@@ -8,8 +8,8 @@ FILE= $(DIR).tar.gz
 PATCH1= tcp_wrappers-$(VRS)-shared_lib_plus_plus-1.patch
 PATCH2= tcp_wrappers-$(VRS)-gcc34-1.patch
 URL= http://files.ichilton.co.uk/nfs/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH1)
-URL2= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH2)
+URL1= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH1)
+URL2= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH2)
 
 #RULES
 

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= file
-VRS= 4.12
+VRS= 4.13
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

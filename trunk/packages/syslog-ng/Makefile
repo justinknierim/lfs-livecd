@@ -2,7 +2,7 @@
 
 # Package versions
 NM= syslog-ng
-VRS= 1.6.5
+VRS= 1.6.6
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

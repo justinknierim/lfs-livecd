@@ -1303,7 +1303,7 @@ prepiso:
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
-	@install -m755 scripts/{net-setup,greeting} $(MP)/usr/bin/
+	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
 	@-mkdir $(MP)/etc/sysconfig/network-devices/ifconfig.eth0
 	@-mkdir $(MP)/iso
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \

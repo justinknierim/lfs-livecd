@@ -2,7 +2,7 @@
 
 # Package versions
 NM= curl
-VRS= 7.12.3
+VRS= 7.13.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://curl.haxx.se/download/$(FILE)

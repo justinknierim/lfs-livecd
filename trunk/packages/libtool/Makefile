@@ -2,7 +2,7 @@
 
 # Package versions
 NM= libtool
-VRS= 1.5.10
+VRS= 1.5.14
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

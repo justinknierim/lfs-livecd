@@ -1,0 +1,44 @@
+diff -Naur blfs-bootscripts-20050313.orig/blfs/init.d/autosshd blfs-bootscripts-20050313/blfs/init.d/autosshd
+--- blfs-bootscripts-20050313.orig/blfs/init.d/autosshd	1969-12-31 19:00:00.000000000 -0500
++++ blfs-bootscripts-20050313/blfs/init.d/autosshd	2005-03-30 22:06:02.986977573 -0500
+@@ -0,0 +1,20 @@
++#!/bin/sh
++# Begin $rc_base/init.d/autosshd
++
++. /etc/sysconfig/rc
++. $rc_functions
++
++case "$1" in
++	start)
++		if cat /proc/cmdline | grep -q "autosshd"; then
++			echo "root:lfs" | chpasswd
++			/etc/rc.d/init.d/sshd start
++		fi
++		;;
++	*)
++		echo "Usage: $0 {start|stop|reload|restart|status}"
++		exit 1
++		;;
++esac
++
++# End $rc_base/init.d/autosshd
+diff -Naur blfs-bootscripts-20050313.orig/Makefile blfs-bootscripts-20050313/Makefile
+--- blfs-bootscripts-20050313.orig/Makefile	2005-03-06 22:48:33.000000000 -0500
++++ blfs-bootscripts-20050313/Makefile	2005-03-30 22:06:02.988977310 -0500
+@@ -54,6 +54,16 @@
+ 	install -m $(CONFMODE) blfs/sysconfig/autofs.conf $(EXTDIR)/sysconfig/
+ 	ln -sf  ../init.d/autofs $(EXTDIR)/rc.d/rcsysinit.d/S45autofs
+ 
++install-autosshd: create-dirs
++	install -m ${MODE} blfs/init.d/autosshd       ${EXTDIR}/rc.d/init.d/
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc0.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc1.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc2.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc3.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc4.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc5.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc6.d/K40autosshd
++
+ install-bind: create-dirs
+ 	install -m ${MODE} blfs/init.d/bind       ${EXTDIR}/rc.d/init.d/
+ 	ln -sf  ../init.d/bind ${EXTDIR}/rc.d/rc0.d/K49bind
