@@ -1,14 +1,5 @@
-* Re-work the download system and the way package variables are stored ***DONE***
-* Check that chroot system mounts are being done correctly (proc, sys, etc.) ***DONE**
-* Finish up the chroot build section for the lfs-base ***DONE***
-* Extend the base system to include BLFS packages ***DONE***
-* WWW_HOME variable in /etc/profile should be set for lynx ***DONE***
-* Check for existence of $(WD)/sources before making the dir ***DONE***
-* Add a note to the Makefile about requiring an internet connection
-* Add a section for building a cdrtools and squashfs ***DONE***
 * Add custom bootscript package to svn repo ***IN PROGRESS***
 	[ Also need to devise expert mode as per suggestion by Alexander P. ]
-* Setup kernel build -- include initramfs build ***DONE***
 * Package up kernel source (include in squashed usr dir?)
 * i18n READMEs and adjust font dirs again
 * Tweak fluxbox menus
