@@ -33,6 +33,7 @@ stage2:
 	 patch -Np1 -i $(ROOT)/$(PKG)/squashfs/squashfs2.1/linux-2.6.9/$(PATCH3) && \
 	 make mrproper && \
 	 sed -i 's@/sbin/hotplug@/bin/true@' kernel/kmod.c && \
+	 sed -i 's@(find_get_pages)@(find_get_pages_tag)@' mm/filemap.c && \
 	 cp $(ROOT)/linux/config .config && \
 	 make -j3 && \
 	 make modules_install && \
