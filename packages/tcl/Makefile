@@ -1,12 +1,12 @@
-# Linux-Libc-Headers Makefile
+# Tcl Makefile
 
 # Package versions
-NM= linux-libc-headers
-VRS= 2.6.10.0
-DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
+NM= tcl
+VRS= 8.4.9
+DIR= $(NM)$(VRS)
+FILE= $(DIR)-src.tar.bz2
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ep09.pld-linux.org/~mmazur/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
 #RULES
@@ -19,9 +19,8 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -d $(WD)/include/asm ] ; then tar xjvf $(DLP) && cd $(DIR) && \
-	 cp -R include/asm-i386 $(WD)/include/asm && cp -R include/linux $(WD)/include ; fi
-	@make clean
+	@if [ ! -f $(WD)/bin/tclsh ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	 cd unix && ./configure --prefix=$(WD) && make -j3 && make install && ln -s tclsh8.4 $(WD)/bin/tclsh ; fi
 
 clean:
 	@-rm -rf $(DIR)

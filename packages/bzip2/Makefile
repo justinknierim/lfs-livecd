@@ -1,12 +1,12 @@
-# Linux-Libc-Headers Makefile
+# Bzip2 Makefile
 
 # Package versions
-NM= linux-libc-headers
-VRS= 2.6.10.0
+NM= bzip2
+VRS= 1.0.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ep09.pld-linux.org/~mmazur/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
 #RULES
@@ -19,8 +19,8 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -d $(WD)/include/asm ] ; then tar xjvf $(DLP) && cd $(DIR) && \
-	 cp -R include/asm-i386 $(WD)/include/asm && cp -R include/linux $(WD)/include ; fi
+	@if [ ! -f $(WD)/bin/bzip2 ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	 make -j3 && make PREFIX=$(WD) install ; fi
 	@make clean
 
 clean:
