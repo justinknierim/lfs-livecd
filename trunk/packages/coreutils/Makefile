@@ -1,12 +1,12 @@
-# Linux-Libc-Headers Makefile
+# Coreutils Makefile
 
 # Package versions
-NM= linux-libc-headers
-VRS= 2.6.10.0
+NM= coreutils
+VRS= 5.2.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ep09.pld-linux.org/~mmazur/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
 #RULES
@@ -19,8 +19,8 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -d $(WD)/include/asm ] ; then tar xjvf $(DLP) && cd $(DIR) && \
-	 cp -R include/asm-i386 $(WD)/include/asm && cp -R include/linux $(WD)/include ; fi
+	@if [ ! -f $(WD)/bin/ls ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 
 clean:
