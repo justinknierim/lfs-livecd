@@ -21,9 +21,8 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d /etc/sysconfig ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 make install && make install-hotplug && make install-syslog-ng ; fi
-	@make clean 
+	@if [ ! -d bootscripts ] ; then svn co svn://svn.linuxfromscratch.org/LFS/trunk/bootscripts && \
+	 cd bootscripts && make install-livecd ; fi
 
 clean:
-	@-rm -rf $(DIR)
+	@-rm -rf bootscripts

@@ -20,13 +20,14 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@tar xjvf $(FILE) && cd $(DIR) && \
-	 make install-gpm && \
-	 make install-sshd && \
 	 make install-service-dhcpcd && \
-	 make install-random && \
-	 make install-portmap && \
-	 make install-nfs-server && \
-	 make install-nfs-client
+	 make install-service-pppoe && \
+	 make install-gpm && \
+	 install -m754 blfs/init.d/sshd /etc/rc.d/init.d/ && \
+	 install -m754 blfs/init.d/random /etc/rc.d/init.d/ && \
+	 install -m754 blfs/init.d/portmap /etc/rc.d/init.d/ && \
+	 install -m754 blfs/init.d/nfs-server /etc/rc.d/init.d/ && \
+	 install -m754 blfs/init.d/nfs-client /etc/rc.d/init.d/
 	@make clean
 
 clean:
