@@ -1,5 +1,12 @@
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#
 # Makefile for automating the LFS LiveCD build
-# Written by Jeremy Huntwork, 2004-1-09
+#
+# Written by Jeremy Huntwork, 2004-1-27
+#
+# jhuntwork@linuxfromscratch.org
+#
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Edit this line to match the mount-point of the
 # partition you'll be using to build the cd.
@@ -30,6 +37,7 @@ export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget -c --passive-ftp
+export DATE= `date +%Y%m%d`
 
 FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
@@ -39,7 +47,8 @@ WGET_V= 1.9.1
 .PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
 
-all: lfs-base extend-lfs
+all: lfs-base extend-lfs iso
+	@echo "The livecd, $(MKTREE)/lfs-livecd-$(DATE).iso, is ready!"
 
 lfs-base:
 	@echo "==============================================================="
@@ -763,6 +772,10 @@ blfs-bootscripts: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+syslinux: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 strip: prep-chroot
 	@chroot $(MP) $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	make unmount
@@ -1213,8 +1226,28 @@ ch-cdrtools: popdev
 ch-blfs-bootscripts: popdev
 	make -C $(PKG)/blfs-bootscripts stage2
 
+ch-syslinux: popdev
+	make -C $(PKG)/syslinux stage2
+
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
+
+##################################
+# Rule to create the iso
+#----------------------------------
+
+prepiso:
+	@-mkdir $(MP)/iso
+	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
+	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
+	 tar cjvf root.tar.bz2 root && cp root.tar.bz2 iso/ && \
+	 $(WD)/bin/mksquashfs usr usr.sqfs && mv usr.sqfs iso/ && \
+	 echo "LFS-LIVECD" > iso/LFS
+	@touch prepiso
+
+iso: prepiso
+	cd $(MP)/iso ; $(WD)/bin/mkisofs -R -l -L -D -o $(MKTREE)/lfs-livecd-$(DATE).iso -b boot/isolinux/isolinux.bin \
+	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "LFS_CD" ./
 
 # Rules to clean your tree. 
 # "clean" removes package directories and
@@ -1225,6 +1258,7 @@ clean: unloadmodule unmount
 	@-rm -rf $(WD) $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
+	@-rm prepiso
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 
 scrub: clean
