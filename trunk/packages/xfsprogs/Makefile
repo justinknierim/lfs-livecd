@@ -5,7 +5,7 @@ NM= xfsprogs
 VRS= 2.6.25
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).src.tar.gz
-URL= http://mirrors.sunsite.dk/xfs/download/cmd_tars/$(FILE)
+URL= ftp://oss.sgi.com/projects/xfs/download/cmd_tars/$(FILE)
 
 #RULES
 
