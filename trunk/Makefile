@@ -35,9 +35,6 @@ WGET_V= 1.9.1
 
 #RULES
 
-test:
-	echo $(TERM)
-
 .PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
 
