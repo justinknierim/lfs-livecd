@@ -1,25 +1,25 @@
-# Glib Makefile
+# Pango Makefile
 
 # Package versions
-NM= glib
-VRS= 2.6.0
+NM= pango
+VRS= 1.8.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= ftp://ftp.gtk.org/pub/gtk/v2.6/$(FILE)
+URL= http://ftp.gnome.org/pub/GNOME/sources/pango/1.8/$(FILE)
 
 #RULES
 
 .PHONY: clean chroot stage2
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM)2 $(chbash2)'
+	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
 
 stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libglib-2.0.so ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libpango-1.0.so ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
 	@make clean

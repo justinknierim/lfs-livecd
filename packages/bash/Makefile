@@ -25,7 +25,7 @@ stage1:
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/bash ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && \
-	 ./configure --prefix=$(WD) --without-bash-malloc && make -j3 && make install && \
+	 ./configure --prefix=$(WD) --without-bash-malloc && make && make install && \
 	 ln -s bash $(WD)/bin/sh ; fi
 	@make clean
 
@@ -45,7 +45,7 @@ stage2:
 	@if [ ! -f /bin/bashbug ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH2) && patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr --bindir=/bin --without-bash-malloc --with-installed-readline && \
-	 make -j3 && make install ; fi
+	 make && make install ; fi
 	@make clean
 	
 

@@ -1,11 +1,11 @@
-# Openbox Makefile
+# libast Makefile
 
 # Package versions
-NM= openbox
-VRS= 3.2
+NM= libast
+VRS= 0.6.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-URL= http://icculus.org/openbox/releases/$(FILE)
+URL= http://www.eterm.org/download/$(FILE)
 
 #RULES
 
@@ -19,10 +19,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/openbox ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libast.so ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
-	@cp $(ROOT)/root/.xinitrc /root
 	@make clean
 
 clean:
