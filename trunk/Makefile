@@ -135,7 +135,9 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy \
 	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links ch-openssh \
-	ch-pkgconfig ch-glib2 ch-openbox
+	ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-libIDL ch-firefox ch-fluxbox \
+	ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
+	ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -647,8 +649,89 @@ pkgconfig: unamemod prep-chroot
 
 glib2: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
 
-openbox: unamemod prep-chroot
+libungif: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+imlib2: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+pango: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+atk: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+gtk2: unamemod prep-chroot
+	make -C $(PKG)/gtk+2 chroot
+	make unmount
+
+libIDL: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+firefox: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+fluxbox: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libast: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+Eterm: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+irssi: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+xchat: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+samba: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+tcpwrappers: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+portmap: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+nfs-utils: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+traceroute: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+nALFS: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+device-mapper: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+LVM2: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+dhcpcd: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1014,11 +1097,71 @@ ch-openssh: popdev
 ch-pkgconfig: popdev
 	make -C $(PKG)/pkgconfig stage2
 
-ch-openbox: popdev
-	make -C $(PKG)/openbox stage2
+ch-libungif: popdev
+	make -C $(PKG)/libungif stage2
+
+ch-imlib2: popdev
+	make -C $(PKG)/imlib2 stage2
+
+ch-libIDL: popdev
+	make -C $(PKG)/libIDL stage2
 
 ch-glib2: popdev
 	make -C $(PKG)/glib2 stage2
+
+ch-pango: popdev
+	make -C $(PKG)/pango stage2
+
+ch-atk: popdev
+	make -C $(PKG)/atk stage2
+
+ch-gtk2: popdev
+	make -C $(PKG)/gtk+2 stage2
+
+ch-firefox: popdev
+	make -C $(PKG)/firefox stage2
+
+ch-fluxbox: popdev
+	make -C $(PKG)/fluxbox stage2
+
+ch-libast: popdev
+	make -C $(PKG)/libast stage2
+
+ch-Eterm: popdev
+	make -C $(PKG)/Eterm stage2
+
+ch-irssi: popdev
+	make -C $(PKG)/irssi stage2
+
+ch-xchat: popdev
+	make -C $(PKG)/xchat stage2
+
+ch-samba: popdev
+	make -C $(PKG)/samba stage2
+
+ch-tcpwrappers: popdev
+	make -C $(PKG)/tcpwrappers stage2
+
+ch-portmap: popdev
+	make -C $(PKG)/portmap stage2
+
+ch-nfs-utils: popdev
+	make -C $(PKG)/nfs-utils stage2
+
+ch-traceroute: popdev
+	make -C $(PKG)/traceroute stage2
+
+ch-nALFS: popdev
+	make -C $(PKG)/nALFS stage2
+
+ch-device-mapper: popdev
+	make -C $(PKG)/device-mapper stage2
+
+ch-LVM2: popdev
+	make -C $(PKG)/LVM2 stage2
+
+ch-dhcpcd: popdev
+	make -C $(PKG)/dhcpcd stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
@@ -1035,7 +1178,7 @@ clean: unloadmodule unmount
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 
 scrub: clean
-	@-rm -rf $(SRC) $(MP)$(SRC)
+	#@-rm -rf $(SRC) $(MP)$(SRC)
 	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
 	@-for i in bin boot dev etc home lib media mnt opt proc root sbin srv sys tmp \

@@ -1,27 +1,29 @@
-# Glib Makefile
+# Fluxbox Makefile
 
 # Package versions
-NM= glib
-VRS= 2.6.0
+NM= fluxbox
+VRS= 0.9.12
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= ftp://ftp.gtk.org/pub/gtk/v2.6/$(FILE)
+URL= http://voxel.dl.sourceforge.net/sourceforge/fluxbox/$(FILE)
 
 #RULES
 
 .PHONY: clean chroot stage2
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM)2 $(chbash2)'
+	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
 
 stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libglib-2.0.so ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/fluxbox ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
+	@cp -ra $(ROOT)/root/.fluxbox /root &&
+	@cp $(ROOT)/root/.xinitrc /root
 	@make clean
 
 clean:
