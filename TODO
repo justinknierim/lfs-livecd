@@ -1,7 +1,7 @@
-* Package up kernel source (include in squashed usr dir?)
+* Package up kernel source and upload to mirrors
 * i18n READMEs and adjust font dirs again
 * Automate name of irssi and xchat nicks based on cd version
 * udev rules for mice
-* Tweak fluxbox menus/setup xterm to use scrollbars and source /etc/profile
 * nALFS profile
 * Incorporate Firefox first-run into script, to improve loading performance
+* New shutdown scripts to handle unmounts of drives, stopping of services, if they were started, etc.
