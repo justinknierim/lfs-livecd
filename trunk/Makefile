@@ -19,7 +19,9 @@ FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
 #RULES
-all:
+all: lfs-base
+
+lfs-base:
 	@echo "==============================================================="
 	@echo " Before you begin building the LiveCD image, please ensure "
 	@echo " that the following is true: "
@@ -36,6 +38,12 @@ all:
 	@make lfsuser
 	@su - lfs -c "exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=/tools/bin:/bin:/usr/bin \
 	 /bin/bash -c 'set +h && umask 022 && cd $(MKTREE) && make which && make wget && make tools'"
+	@make prep-chroot
+	@chroot "$(MP)" $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' \
+	 PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c 'chown -R 0:0 $(WD) && cd mklivecd && \
+	 make chroot SHELL=$(WD)/bin/bash'
+	@make unloadmodule
+	@make unmount
 
 lfsuser: unamemod
 	@-groupadd lfs
@@ -73,6 +81,15 @@ tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers lfs-glibc lfs-adj
 	lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make lfs-grep lfs-sed lfs-gettext \
 	lfs-ncurses lfs-patch lfs-tar lfs-texinfo lfs-bash lfs-m4 lfs-bison lfs-flex lfs-util-linux \
 	lfs-perl lfs-strip
+
+prep-chroot:
+	@-mkdir -p $(MP)/{proc,sys}
+	@-mount -t proc proc $(MP)/proc && mount -t sysfs sysfs $(MP)/sys && \
+	 mount -f -t ramfs ramfs $(MP)/dev && mount -f -t tmpfs tmpfs $(MP)/dev/shm && \
+	 mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
+
+chroot: createdirs createfiles popdev ch-linux-libc-headers
+
 
 # Rules which can be called by themselves, if necessary
 binutils-pass1: lfsuser
@@ -169,6 +186,9 @@ strip: lfsuser
 	@-strip --strip-debug $(WD)/lib/*
 	@-strip --strip-unneeded $(WD)/{,s}bin/*
 	@-rm -rf $(WD)/{doc,info,man}
+
+linux-libc-headers-chroot:
+	$(MAKE) -C $(PKG)/linux-libc-headers prechroot
 
 # DO NOT CALL THESE RULES - FOR SCRIPTING ONLY
 # The rules below are what is used when the environment
@@ -274,41 +294,102 @@ lfs-strip:
 	@-strip --strip-unneeded $(WD)/{,s}bin/*
 	@-rm -rf $(WD)/{doc,info,man}
 
+createdirs:
+	@-$(WD)/bin/install -d /{bin,boot,dev,etc/opt,home,lib,mnt}
+	@-$(WD)/bin/install -d /{sbin,srv,usr/local,var,opt}
+	@-$(WD)/bin/install -d /root -m 0750
+	@-$(WD)/bin/install -d /tmp /var/tmp -m 1777
+	@-$(WD)/bin/install -d /media/{floppy,cdrom}
+	@-$(WD)/bin/install -d /usr/{bin,include,lib,sbin,share,src}
+	@-$(WD)/bin/ln -s share/{man,doc,info} /usr
+	@-$(WD)/bin/install -d /usr/share/{doc,info,locale,man}
+	@-$(WD)/bin/install -d /usr/share/{misc,terminfo,zoneinfo}
+	@-$(WD)/bin/install -d /usr/share/man/man{1,2,3,4,5,6,7,8}
+	@-$(WD)/bin/install -d /usr/local/{bin,etc,include,lib,sbin,share,src}
+	@-$(WD)/bin/ln -s share/{man,doc,info} /usr/local
+	@-$(WD)/bin/install -d /usr/local/share/{doc,info,locale,man}
+	@-$(WD)/bin/install -d /usr/local/share/{misc,terminfo,zoneinfo}
+	@-$(WD)/bin/install -d /usr/local/share/man/man{1,2,3,4,5,6,7,8}
+	@-$(WD)/bin/install -d /var/{lock,log,mail,run,spool}
+	@-$(WD)/bin/install -d /var/{opt,cache,lib/{misc,locate},local}
+	@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
+	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
+	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
+	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
+	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so.1 /usr/lib
+	@-$(WD)/bin/ln -s bash /bin/sh
+
+createfiles:
+	@echo "root:x:0:0:root:/root:/bin/bash" > /etc/passwd
+	@echo "root:x:0:" > /etc/group
+	@echo "bin:x:1:" >> /etc/group
+	@echo "sys:x:2:" >> /etc/group
+	@echo "kmem:x:3:" >> /etc/group
+	@echo "tty:x:4:" >> /etc/group
+	@echo "tape:x:5:" >> /etc/group
+	@echo "daemon:x:6:" >> /etc/group
+	@echo "floppy:x:7:" >> /etc/group
+	@echo "disk:x:8:" >> /etc/group
+	@echo "lp:x:9:" >> /etc/group
+	@echo "dialout:x:10:" >> /etc/group
+	@echo "audio:x:11:" >> /etc/group
+	@echo "video:x:12:" >> /etc/group
+	@echo "utmp:x:13:" >> /etc/group
+	@echo "usb:x:14:" >> /etc/group
+	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
+	@chgrp utmp /var/run/utmp /var/log/lastlog
+	@chmod 664 /var/run/utmp /var/log/lastlog
+
+popdev:
+	@-mknod -m 600 /dev/console c 5 1
+	@-mknod -m 666 /dev/console c 1 3
+	@-mount -n -t ramfs none /dev
+	@-mknod -m 662 /dev/console c 5 1
+	@-mknod -m 666 /dev/null c 1 3
+	@-mknod -m 666 /dev/zero c 1 5
+	@-mknod -m 666 /dev/ptmx c 5 2
+	@-mknod -m 666 /dev/tty c 5 0 
+	@-mknod -m 444 /dev/random c 1 8
+	@-mknod -m 444 /dev/urandom c 1 9
+	@chown root:tty /dev/{console,ptmx,tty}
+	@-ln -s /proc/self/fd /dev/fd
+	@-ln -s /proc/self/fd/0 /dev/stdin
+	@-ln -s /proc/self/fd/1 /dev/stdout
+	@-ln -s /proc/self/fd/2 /dev/stderr
+	@-ln -s /proc/kcore /dev/core
+	@-mkdir /dev/pts
+	@-mkdir /dev/shm
+	@-mount -t devpts -o gid=4,mode=620 none /dev/pts
+	@-mount -t tmpfs none /dev/shm
+
+ch-linux-libc-headers:
+	$(MAKE) -C $(PKG)/linux-libc-headers stage2
+
 # Rules to clean your tree. 
 # "clean" removes package directories and
 # "scrub" also removes all sources and the uname modules - basically
 # returning the tree to the condition it was when it was unpacked
 
-clean:
+clean: unloadmodule unmount
 	@-rm -rf $(WD)
 	@-rm -rf $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
-	@-rmmod uname_i486
-	@$(MAKE) -C $(PKG)/wget clean
-	@$(MAKE) -C $(PKG)/binutils clean
-	@$(MAKE) -C $(PKG)/gcc clean
-	@$(MAKE) -C $(PKG)/linux-libc-headers clean
-	@$(MAKE) -C $(PKG)/glibc clean
-	@$(MAKE) -C $(PKG)/tcl clean
-	@$(MAKE) -C $(PKG)/expect clean
-	@$(MAKE) -C $(PKG)/dejagnu clean
-	@$(MAKE) -C $(PKG)/gawk clean
-	@$(MAKE) -C $(PKG)/coreutils clean
-	@$(MAKE) -C $(PKG)/bzip2 clean
-	@$(MAKE) -C $(PKG)/gzip clean
-	@$(MAKE) -C $(PKG)/diffutils clean
-	@$(MAKE) -C $(PKG)/findutils clean
-	@$(MAKE) -C $(PKG)/make clean
-	@$(MAKE) -C $(PKG)/grep clean
-	@$(MAKE) -C $(PKG)/sed clean
-	@$(MAKE) -C $(PKG)/gettext clean
-	@$(MAKE) -C $(PKG)/ncurses clean
-	@$(MAKE) -C $(PKG)/patch clean
-	@$(MAKE) -C $(PKG)/tar clean
-	@$(MAKE) -C $(PKG)/texinfo clean
+	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 
 scrub: clean
 	@-rm -rf sources
 	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
+	@-for i in bin boot dev etc home lib media mnt opt proc root sbin srv sys tmp \
+	 usr var ; do rm -rf $(MP)/$$i ; done
+
+unloadmodule:
+	@-rmmod uname_i486
+
+unmount:
+	@-umount $(MP)/dev/shm
+	@-umount $(MP)/dev/pts
+	@-umount $(MP)/dev
+	@-umount $(MP)/proc
+	@-umount $(MP)/sys

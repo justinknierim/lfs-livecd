@@ -1,0 +1,8 @@
+* Re-work the download system and the way package variables are stored
+* Finish up the chroot build section for the lfs-base
+* Extend the base system to include BLFS packages
+* Add a section for building a cdrtools and squashfs (outside the cd system)
+* Add custom bootscript package to svn repo
+* Setup kernel build -- include initramfs build
+* squash up /usr
+* Build the iso

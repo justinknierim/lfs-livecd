@@ -58,35 +58,29 @@ nALFS - A tool for automating LFS builds
 
 ------------------
 
-III. Configuration
+III. Building the livecd using these Makefiles
 
-  A large part of what will unify the cds as official cds, is not just the
-software, but how the software is configured.  I will attempt to keep as
-many configuration files for each program in the repository so that all that
-is needed is to simply checkout the files for that particular piece of
-software
+  Before you begin building the livecd, you should make sure of the following:
+
+* The kernel running on your host system should be the same version for the
+  target cd. We need this so that Xorg compiles and runs correctly. This
+  version of the livecd uses linux-2.6.10.
+
+* Be sure to have your compiled kernel source tree located at /usr/src/linux
+  This is so that a kernel module can be built and installed that will force
+  uname to return i486 as your system architecture.  This has the desired
+  effect of easily producing binaries compatible with 486 machines and later.
+
+  To start the build, simply run:
+
+	make
 
 ------------------
 
 IV. Basic Installation Steps
 
-  1) Make sure that your host system (the one you'll be building the cd on)
-     has the following:
+  I've moved this section from the README and placed it online. You can read
+it here for now: http://linuxfromscratch.org/~jhuntwork/livecd/
 
-     a. The same kernel version as the cd will have (this is important for X).
-        You may also want to take the time now to build squashfs support into
-	your kernel, so that you can read squashed files and dirs on the host.
-
-     b. cdrtools - You'll need this to create an iso when the cd is complete.
-
-     c. cpio - You'll need this when creating the initramfs.
-
-     d. squashfs - The most recent version should be good.
-
-  2) Build the base LFS system by the book (with the exception of the
-     bootscripts - we'll have our own adjusted bootscripts package)
-
-  3) Build each of the extra packages listed in section II according to the
-     instructions in BLFS (as of today, the svn version of BLFS).
-
-  4) 
+  The purpose of the page linked above is to provide general notes for the
+techniques used in producing the Official LFS LiveCD. 
