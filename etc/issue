@@ -1,0 +1,18 @@
+[H[J
+This is the [1;6m[1;37m Official Linux From Scratch LiveCD[1;6m[00m by[1;6m[1;32m
+Jeremy Huntwork, jhuntwork@linuxfromscratch.org [1;6m[1;37m
+
+Version:
+_______________________________________________________________________________
+[1;6m[00m
+To begin, login as root. (There is no password.)
+
+All the source packages you will need to build an LFS system
+are located in /sources and you can find the book in
+/usr/share/LFS-BOOK-testing-HTML.
+
+Support questions concerning this cd should be directed to
+livecd@linuxfromscratch.org
+
+Type "greeting" at any time to view this message again.
+

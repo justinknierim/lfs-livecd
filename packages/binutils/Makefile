@@ -9,7 +9,7 @@ URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
-.PHONY: pass1 adjust-toolchain pass2 chroot-re-adjust-toolchain re-adjust-toolchain clean chroot stage2
+.PHONY: pass1 pass2 chroot-re-adjust-toolchain clean chroot stage2
 
 pass1:
 	@echo ""
@@ -29,6 +29,7 @@ adjust-toolchain:
 	 sed 's@ /lib/ld-linux.so.2@ $(WD)/lib/ld-linux.so.2@g' $$SPECFILE > tempspecfile && \
 	 mv -f tempspecfile $$SPECFILE && unset SPECFILE && \
 	 rm -f $(WD)/lib/gcc/*/*/include/{pthread.h,bits/sigthread.h} && cd .. && make clean ; fi
+	@touch adjust-toolchain
 
 pass2:
 	@echo ""
@@ -49,6 +50,7 @@ re-adjust-toolchain:
 	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .specstest
 	@if cat .specstest | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
 	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' `gcc --print-file specs` ; fi
+	@touch re-adjust-toolchain
 	@make clean
 
 chroot:

@@ -1233,10 +1233,16 @@ ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
 
 ##################################
-# Rule to create the iso
+# Rules to create the iso
 #----------------------------------
 
 prepiso:
+	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
+	@install -m644 etc/issue $(MP)/etc/issue
+	@sed -i "s/Version:/Version: $(DATE)/" $(MP)/etc/issue
+	@install -m755 scripts/{net-setup,greeting} $(MP)/usr/bin/
+	@-mkdir $(MP)/etc/sysconfig/network-devices/ifconfig.eth0
+	@touch $(MP)/etc/hotplug/pnp.distmap
 	@-mkdir $(MP)/iso
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
 	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
@@ -1259,14 +1265,18 @@ clean: unloadmodule unmount
 	@-userdel lfs
 	@-rm -rf /home/lfs
 	@-rm prepiso
+	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
+	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
 
 scrub: clean
-	#@-rm -rf $(SRC) $(MP)$(SRC)
+	@-rm -rf $(SRC) $(MP)$(SRC)
 	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
-	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
-	@-for i in bin boot dev etc home lib media mnt opt proc root sbin srv sys tmp \
+	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
 	 usr var ; do rm -rf $(MP)/$$i ; done
+	@-rm $(MP)/{etc,root}.tar.bz2
+	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/*{.gz,.bz2,.zip,.tgz}
+	@-rm lfs-livecd-$(DATE).iso
 
 unloadmodule:
 	@-rmmod uname_i486
