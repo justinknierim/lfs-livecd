@@ -126,10 +126,10 @@ lfsuser:
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 	@touch lfsuser
 
-#pre-which: lfsuser
-#	@echo "#!/bin/sh" > $(WHICH)
-#	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
-#	@chmod 755 $(WHICH)
+pre-which:
+	@echo "#!/bin/sh" > $(WHICH)
+	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
+	@chmod 755 $(WHICH)
 
 pre-wget: 
 	@if [ ! -f /tools/bin/ftpget ] ; then echo "#!/bin/sh" > $(FTPGET) && \
@@ -155,7 +155,7 @@ ifeq ($(UNAMEMOD),y)
 else
 endif
 
-tools:  pre-wget lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
+tools:  pre-which pre-wget lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
 	lfs-gawk-scpt lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
@@ -1092,15 +1092,13 @@ ch-lfs-bootscripts: popdev
 	make -C $(PKG)/lfs-bootscripts stage2
 
 ch-environment:
-	@-mkdir /etc/sysconfig
-	@-cp $(ROOT)/etc/sysconfig/clock /etc/sysconfig
+	@cp -ra $(ROOT)/etc/sysconfig /etc
 	@-cp $(ROOT)/etc/inputrc /etc
 	@-cp $(ROOT)/etc/bashrc /etc
 	@-cp $(ROOT)/etc/profile /etc
 	@-dircolors -p > /etc/dircolors
 	@-cp $(ROOT)/etc/hosts /etc
 	@-cp $(ROOT)/etc/fstab /etc
-	@echo "HOSTNAME=lfslivecd" > /etc/sysconfig/network
 
 ch-wget: popdev
 	make -C $(PKG)/wget stage2
@@ -1355,7 +1353,7 @@ unmount:
 	@-umount $(MP)/sys
 
 .PHONY: lfs-base pre-which pre-wget tools prep-chroot chroot createdirs createfiles popdev unamemod \
-	clean scrub unloadmodule unmount lfs-which lfs-wget lfs-rm-wget lfs-binutils-pass1 lfs-gcc-pass1 \
+	clean scrub unloadmodule unmount lfs-wget lfs-rm-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers lfs-glibc lfs-adjust-toolchain lfs-tcl lfs-expect lfs-dejagnu lfs-gcc-pass2 \
 	lfs-binutils-pass2 lfs-gawk lfs-coreutils lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make \
 	lfs-grep lfs-gettext lfs-ncurses lfs-patch lfs-tar lfs-texinfo lfs-bash lfs-m4 lfs-bison lfs-flex \

@@ -1,0 +1,5 @@
+ONBOOT="yes"
+SERVICE="dhcpcd"
+DHCP_START=""
+DHCP_STOP="-k"
+PRINTALL="yes"
