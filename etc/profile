@@ -4,5 +4,6 @@ INPUTRC=/etc/inputrc
 XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog"
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 WWW_HOME="/usr/share/LFS-BOOK-testing-HTML/index.html"
-export PS1 PATH INPUTRC PKG_CONFIG_PATH XML_CATALOG_FILES WWW_HOME
+NNTPSERVER=news.linuxfromscratch.org
+export PS1 PATH INPUTRC PKG_CONFIG_PATH XML_CATALOG_FILES WWW_HOME NNTPSERVER
 source /etc/bashrc

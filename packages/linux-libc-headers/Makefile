@@ -5,7 +5,7 @@ NM= linux-libc-headers
 VRS= 2.6.10.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://ep09.pld-linux.org/~mmazur/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 

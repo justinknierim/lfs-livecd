@@ -4,9 +4,8 @@
 NM= procps
 VRS= 3.2.5
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
+FILE= $(DIR).tar.gz
+URL= http://procps.sf.net/$(FILE)
 
 # RULES
 
@@ -21,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/ps ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/ps ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 make -j3 && make install ; fi
 	@make clean
 	 
