@@ -23,8 +23,8 @@ pass1:
 	make install && make -C ld clean && make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
 
 adjust-toolchain:
-	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .file
-	@if ! cat .file | grep -q $(WD) ; then cd $(NM)-build && \
+	@if [ ! -f .adj1 ] ; then echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .adj1 ; fi
+	@if ! cat .adj1 | grep -q $(WD) ; then cd $(NM)-build && \
 	 make -C ld install && SPECFILE=`gcc --print-file specs` && \
 	 sed 's@ /lib/ld-linux.so.2@ $(WD)/lib/ld-linux.so.2@g' $$SPECFILE > tempspecfile && \
 	 mv -f tempspecfile $$SPECFILE && unset SPECFILE && \
@@ -43,12 +43,29 @@ pass2:
 	@touch .pass2
 
 chroot-re-adjust-toolchain:
-	@chroot "$(MP)" $(chenv1) 'cd $(MKTREE) && make ch-re-adjust-toolchain $(chbash1)'
+	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-re-adjust-toolchain $(chbash1)'
 
 re-adjust-toolchain:
-	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .file
-	@if cat .file | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
-	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/@g;' `gcc --print-file specs` ; fi
+	@if [ ! -f .adj2 ] ; then echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .adj2 ; fi
+	@if cat .adj2 | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
+	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' `gcc --print-file specs` ; fi
+	@make clean
+
+chroot:
+	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-binutils $(chbash1)'
+
+stage2:
+	@echo ""
+	@echo "=====> Building $(NM) in chroot"
+	@echo ""
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f /usr/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
+	 ../$(DIR)/configure --prefix=/usr --enable-shared && \
+	 make -j3 tooldir=/usr && \
+	 make tooldir=/usr install && \
+	 cp ../$(DIR)/include/libiberty.h /usr/include ; fi
 	@make clean
 
 clean:

@@ -12,7 +12,7 @@ export timezone := America/New_York
 export WD := /tools
 export SRC := /sources
 export PKG := packages
-export ROOT := /mklivecd
+export ROOT := /lfs-livecd
 export MKTREE := $(MP)$(ROOT)
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
@@ -106,7 +106,8 @@ prep-chroot:
 	 mount -f -t ramfs ramfs $(MP)/dev && mount -f -t tmpfs tmpfs $(MP)/dev/shm && \
 	 mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
 
-chroot: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain
+chroot: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
+	ch-binutils ch-gcc ch-coreutils
 
 
 # Rules for building tools/stage1
@@ -262,27 +263,46 @@ createfiles:
 	@mv $(WD)/etc/resolv.conf /etc
 
 popdev:
-	@-mknod -m 600 /dev/console c 5 1
-	@-mknod -m 666 /dev/console c 1 3
-	@if ! cat /proc/mounts | grep -q $(MP)/dev ; then mount -n -t ramfs none /dev && mknod -m 662 /dev/console c 5 1 \
-	 && mknod -m 666 /dev/null c 1 3  && mknod -m 666 /dev/zero c 1 5 && mknod -m 666 /dev/ptmx c 5 2 \
-	 && mknod -m 666 /dev/tty c 5 0 && mknod -m 444 /dev/random c 1 8 && mknod -m 444 /dev/urandom c 1 9 \
-	 && chown root:tty /dev/{console,ptmx,tty} && ln -s /proc/self/fd /dev/fd && ln -s /proc/self/fd/0 /dev/stdin \
-	 && ln -s /proc/self/fd/1 /dev/stdout && ln -s /proc/self/fd/2 /dev/stderr && ln -s /proc/kcore /dev/core \
-	 && mkdir /dev/pts && mkdir /dev/shm && mount -t devpts -o gid=4,mode=620 none /dev/pts \
-	 && mount -t tmpfs none /dev/shm ; fi
+	@-mknod -m 600 /dev/console c 5 1 && \
+	 mknod -m 666 /dev/console c 1 3
+	@if ! cat /proc/mounts | grep -q $(MP)/dev ; then mount -n -t ramfs none /dev && \
+	 mknod -m 662 /dev/console c 5 1 && \
+	 mknod -m 666 /dev/null c 1 3 && \
+	 mknod -m 666 /dev/zero c 1 5 && \
+	 mknod -m 666 /dev/ptmx c 5 2 && \
+	 mknod -m 666 /dev/tty c 5 0 && \
+	 mknod -m 444 /dev/random c 1 8 && \
+	 mknod -m 444 /dev/urandom c 1 9 && \
+	 chown root:tty /dev/{console,ptmx,tty} && \
+	 ln -s /proc/self/fd /dev/fd && \
+	 ln -s /proc/self/fd/0 /dev/stdin && \
+	 ln -s /proc/self/fd/1 /dev/stdout && \
+	 ln -s /proc/self/fd/2 /dev/stderr && \
+	 ln -s /proc/kcore /dev/core && \
+	 mkdir /dev/pts && mkdir /dev/shm && \
+	 mount -t devpts -o gid=4,mode=620 none /dev/pts && \
+	 mount -t tmpfs none /dev/shm ; fi
 
 linux-libc-headers: unamemod
-	$(MAKE) -C $(PKG)/$@ chroot
+	make -C $(PKG)/$@ chroot
 
 man-pages: unamemod
-	$(MAKE) -C $(PKG)/$@ chroot
+	make -C $(PKG)/$@ chroot
 
 glibc: unamemod
-	$(MAKE) -C $(PKG)/$@ chroot
+	make -C $(PKG)/$@ chroot
 
 re-adjust-toolchain: unamemod
-	$(MAKE) -C $(PKG)/binutils chroot-re-adjust-toolchain
+	make -C $(PKG)/binutils chroot-re-adjust-toolchain
+
+binutils: unamemod
+	make -C $(PKG)/$@ chroot
+
+gcc: unamemod
+	make -C $(PKG)/$@ chroot
+
+coreutils: unamemod
+	make -C $(PKG)/$@ chroot
 
 # Do Not call the rules below manually!
 # They are used internally and must be called by
@@ -384,17 +404,25 @@ lfs-strip-scpt:
 	@-rm -rf $(WD)/{doc,info,man}
 
 ch-linux-libc-headers:
-	$(MAKE) -C $(PKG)/linux-libc-headers stage2
+	make -C $(PKG)/linux-libc-headers stage2
 
 ch-man-pages:
-	$(MAKE) -C $(PKG)/man-pages stage2
+	make -C $(PKG)/man-pages stage2
 
 ch-glibc:
-	$(MAKE) -C $(PKG)/glibc stage2
+	make -C $(PKG)/glibc stage2
 
 ch-re-adjust-toolchain:
-	$(MAKE) -C $(PKG)/binutils re-adjust-toolchain
+	make -C $(PKG)/binutils re-adjust-toolchain
 
+ch-binutils:
+	make -C $(PKG)/binutils stage2
+
+ch-gcc:
+	make -C $(PKG)/gcc stage2
+
+ch-coreutils:
+	make -C $(PKG)/coreutils stage2
 
 # Rules to clean your tree. 
 # "clean" removes package directories and
@@ -402,14 +430,13 @@ ch-re-adjust-toolchain:
 # returning the tree to the condition it was in when it was unpacked
 
 clean: unloadmodule unmount
-	@-rm -rf $(WD)
-	@-rm -rf $(MP)$(WD)
+	@-rm -rf $(WD) $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 
 scrub: clean
-	@-rm -rf sources
+	@-rm -rf $(SRC) $(MP)$(SRC)
 	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
 	@-for i in bin boot dev etc home lib media mnt opt proc root sbin srv sys tmp \
