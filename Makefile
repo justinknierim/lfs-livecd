@@ -33,10 +33,10 @@ all:
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@-mkdir $(SRC)
 	@make lfsuser
-	@su - lfs -c "exec env -i LFS=$(MP) LC_ALL=POSIX PATH=/tools/bin:/bin:/usr/bin \
+	@su - lfs -c "exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=/tools/bin:/bin:/usr/bin \
 	 /bin/bash -c 'set +h && umask 022 && cd $(MKTREE) && make which && make wget && make tools'"
 
-lfsuser:
+lfsuser: unamemod
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 	@chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
@@ -60,6 +60,13 @@ wget:
 					      chmod 755 $(FTPGET) ; fi
 	@$(MAKE) -C $(PKG)/wget prebuild
 
+unamemod:
+	@echo ""
+	@echo "====> Making Uname Module"
+	@echo ""
+	@make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules
+	@-insmod uname/uname_i486.ko
+
 tools:
 
 clean:
@@ -67,4 +74,9 @@ clean:
 	@-rm -rf $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
+	@-rmmod uname_i486
 	@$(MAKE) -C $(PKG)/wget clean
+
+scrub: clean
+	@-rm -rf sources
+	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
