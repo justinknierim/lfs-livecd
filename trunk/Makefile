@@ -130,15 +130,15 @@ pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-gl
 
 post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep ch-grub ch-gzip \
 	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow ch-libol \
-	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-lfs-bootscripts ch-environment
+	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-environment
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
-	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy \
-	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links ch-openssh \
-	ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-libIDL ch-firefox ch-fluxbox \
-	ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
-	ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-linux \
-	ch-cdrtools ch-blfs-bootscripts ch-syslinux
+	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg \
+	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
+	ch-libIDL ch-firefox ch-fluxbox ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
+	ch-nfs-utils ch-traceroute ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs \
+	ch-squashfs ch-cpio ch-linux ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
