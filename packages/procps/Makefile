@@ -2,7 +2,7 @@
 
 # Package versions
 NM= procps
-VRS= 3.2.4
+VRS= 3.2.5
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)

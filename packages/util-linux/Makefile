@@ -2,7 +2,7 @@
 
 # Package versions
 NM= util-linux
-VRS= 2.12p
+VRS= 2.12q
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-cramfs-1.patch

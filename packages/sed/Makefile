@@ -2,7 +2,7 @@
 
 # Package versions
 NM= sed
-VRS= 4.1.2
+VRS= 4.1.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
