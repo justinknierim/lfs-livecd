@@ -33,12 +33,14 @@ pass1:
 	make install && make -C ld clean && make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
 
 adjust-toolchain:
-	@cd $(NM)-build && make -C ld install && SPECFILE=`gcc --print-file specs` && \
+	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > file
+	@if ! cat file | grep -q $(WD) ; then cd $(NM)-build && \
+	 make -C ld install && SPECFILE=`gcc --print-file specs` && \
 	 sed 's@ /lib/ld-linux.so.2@ $(WD)/lib/ld-linux.so.2@g' $$SPECFILE > tempspecfile && \
 	 mv -f tempspecfile $$SPECFILE && unset SPECFILE && \
 	 rm -f $(WD)/lib/gcc/*/*/include/{pthread.h,bits/sigthread.h} && \
 	 echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out | grep ': $(WD)' && \
-	 rm dummy.c a.out
+	 rm dummy.c a.out ; fi
 	@make clean
 
 pass2:
@@ -55,3 +57,4 @@ pass2:
 clean:
 	@-rm -rf $(DIR)
 	@-rm -rf $(NM)-build
+	@-rm -rf dummy.c a.out

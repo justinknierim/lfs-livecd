@@ -24,7 +24,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
 	@if [ ! -f $(DLP1) ] ; then $(WGET1) ; fi
-	@if [ ! -f $(WD)/bin/perl ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then tar xjvf $(DLP) && cd $(DIR) && \
 	 patch -Np1 -i $(DLP1) && \
 	 ./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX' && \
 	 make -j3 perl utilities && cp perl pod/pod2man $(WD)/bin && \

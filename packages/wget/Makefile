@@ -14,7 +14,8 @@ prebuild:
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then cd $(MKTREE)/$(SRC) && ftpget ; fi
 	@if [ ! -f $(WD)/bin/$(NM) ] ; then \
-	 tar xzf $(MKTREE)/$(SRC)/$(FILE) && cd $(DIR) && ./configure --prefix=$(WD) && make -j3 && make install ; fi
+	 tar xzf $(MKTREE)/$(SRC)/$(FILE) && cd $(DIR) && ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl && \
+	 make -j3 && make install ; fi
 	@make clean
 
 clean:
