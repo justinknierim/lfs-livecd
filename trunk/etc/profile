@@ -1,0 +1,6 @@
+PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin:
+PS1='\h:\u \[\033[00;32m\]\w\[\033[00m\] \$ '
+INPUTRC=/etc/inputrc
+PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
+export PS1 PATH INPUTRC PKG_CONFIG_PATH
+source /etc/bashrc

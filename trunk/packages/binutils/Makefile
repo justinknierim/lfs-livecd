@@ -9,7 +9,7 @@ URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
-.PHONY: pass1 adjust-toolchain pass2 chroot-re-adjust-toolchain re-adjust-toolchain clean
+.PHONY: pass1 adjust-toolchain pass2 chroot-re-adjust-toolchain re-adjust-toolchain clean chroot stage2
 
 pass1:
 	@echo ""
@@ -23,8 +23,8 @@ pass1:
 	make install && make -C ld clean && make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
 
 adjust-toolchain:
-	@if [ ! -f .adj1 ] ; then echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .adj1 ; fi
-	@if ! cat .adj1 | grep -q $(WD) ; then cd $(NM)-build && \
+	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .specstest ; fi
+	@if ! cat .specstest | grep -q $(WD) ; then cd $(NM)-build && \
 	 make -C ld install && SPECFILE=`gcc --print-file specs` && \
 	 sed 's@ /lib/ld-linux.so.2@ $(WD)/lib/ld-linux.so.2@g' $$SPECFILE > tempspecfile && \
 	 mv -f tempspecfile $$SPECFILE && unset SPECFILE && \
@@ -46,8 +46,8 @@ chroot-re-adjust-toolchain:
 	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-re-adjust-toolchain $(chbash1)'
 
 re-adjust-toolchain:
-	@if [ ! -f .adj2 ] ; then echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .adj2 ; fi
-	@if cat .adj2 | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
+	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .specstest ; fi
+	@if cat .specstest | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
 	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' `gcc --print-file specs` ; fi
 	@make clean
 
@@ -71,4 +71,4 @@ stage2:
 clean:
 	@-rm -rf $(DIR)
 	@-rm -rf $(NM)-build
-	@-rm -rf dummy.c a.out .file
+	@-rm -rf dummy.c a.out .specstest

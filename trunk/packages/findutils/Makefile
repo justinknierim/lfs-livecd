@@ -9,7 +9,7 @@ URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
-.PHONY: stage1 clean
+.PHONY: stage1 clean chroot stage2
 
 stage1:
 	@echo ""
@@ -19,6 +19,20 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/find ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
+	@make clean
+
+chroot:
+	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+
+stage2:
+	@echo ""
+	@echo "=====> Building $(NM) in chroot"
+	@echo ""
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f /usr/bin/find ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 ./configure --prefix=/usr --libexecdir=/usr/lib/locate --localstatedir=/var/lib/locate && \
+	 make -j3 && make install ; fi
 	@make clean
 
 clean:

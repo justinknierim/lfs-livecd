@@ -19,7 +19,7 @@ URL5= $(FTP)/$(NM)/$(FILE3)
 
 # RULES
 
-.PHONY: pass1 pass2 clean
+.PHONY: pass1 pass2 clean chroot stage2
 
 pass1:
 	@echo ""

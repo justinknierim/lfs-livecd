@@ -13,7 +13,7 @@ URL2= $(FTP)/$(NM)/$(PATCH2)
 
 # RULES
 
-.PHONY: stage1 clean
+.PHONY: stage1 clean stage2 chroot
 
 stage1:
 	@echo ""
@@ -26,7 +26,7 @@ stage1:
 	@make clean
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-coreutils $(chbash1)'
+	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
 
 stage2:
 	@echo ""
@@ -47,7 +47,7 @@ stage2:
 	 $(WD)/bin/mv /usr/bin/{ls,mkdir,mknod,mv,pwd,rm,rmdir,sync} /bin && \
 	 mv /usr/bin/{sleep,stty,test,touch,true,uname} /bin && \
 	 mv /usr/bin/chroot /usr/sbin && \
-	 ln s ../../bin/install /usr/bin ; fi
+	 ln -s ../../bin/install /usr/bin ; fi
 	@make clean
 	 
 

@@ -8,6 +8,9 @@ export MP := /mnt/lfs
 # Timezone, obviously ;)
 export timezone := America/New_York
 
+# Page size for groff
+export pagesize := letter
+
 # Don't edit these!
 export WD := /tools
 export SRC := /sources
@@ -19,7 +22,11 @@ export CFLAGS := -Os -s
 export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 export chenv1 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chenv2 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+export chenv3 := /usr/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$$TERM PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
 export chbash1 := SHELL=$(WD)/bin/bash
+export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget -c --passive-ftp
 
@@ -59,7 +66,10 @@ lfs-base:
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
-	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT)/$(PKG) && cd $(ROOT) && make chroot $(chbash1)'
+	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT)/$(PKG) && cd $(ROOT) && make pre-bash $(chbash1)'
+	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make post-bash $(chbash2)'
+	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make blfs $(chbash2)'
+	@chroot "$(MP)" $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	@make unloadmodule
 	@make unmount
 
@@ -67,12 +77,12 @@ lfsuser: unamemod
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 
-which: lfsuser
+pre-which: lfsuser
 	@echo "#!/bin/sh" > $(WHICH)
 	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
 	@chmod 755 $(WHICH)
 
-wget: lfsuser
+pre-wget: lfsuser
 	@if [ ! -f /tools/bin/ftpget ] ; then echo "#!/bin/sh" > $(FTPGET) && \
 					      echo "ftp -n << END" >> $(FTPGET) && \
 					      echo "open ftp.gnu.org" >> $(FTPGET) && \
@@ -102,22 +112,31 @@ tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt l
 
 prep-chroot:
 	@-mkdir -p $(MP)/{proc,sys}
-	@-mount -t proc proc $(MP)/proc && mount -t sysfs sysfs $(MP)/sys && \
-	 mount -f -t ramfs ramfs $(MP)/dev && mount -f -t tmpfs tmpfs $(MP)/dev/shm && \
-	 mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
+	@-mount -t proc proc $(MP)/proc
+	@-mount -t sysfs sysfs $(MP)/sys
+	@-mount -f -t ramfs ramfs $(MP)/dev
+	@-mount -f -t tmpfs tmpfs $(MP)/dev/shm
+	@-mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
 
-chroot: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
-	ch-binutils ch-gcc ch-coreutils
+pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
+	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-ncurses \
+	ch-readline ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
+	ch-iproute2 ch-perl ch-texinfo ch-autoconf ch-automake ch-bash
 
+post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep ch-grub ch-gzip \
+	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow ch-libol \
+	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-lfs-bootscripts ch-environment
+
+blfs: ch-wget
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
 
 lfs-which: lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) which'"
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-which'"
 
 lfs-wget: lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) wget'"
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-wget'"
 
 lfs-rm-wget: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) &&rm $(WD)/bin/wget'"
@@ -263,9 +282,9 @@ createfiles:
 	@mv $(WD)/etc/resolv.conf /etc
 
 popdev:
-	@-mknod -m 600 /dev/console c 5 1 && \
-	 mknod -m 666 /dev/console c 1 3
-	@if ! cat /proc/mounts | grep -q $(MP)/dev ; then mount -n -t ramfs none /dev && \
+	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
+	 mknod -m 666 /dev/null c 1 3 ; fi
+	@if [ ! -f /proc/mounts ] ; then mount -n -t ramfs none /dev && \
 	 mknod -m 662 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 && \
 	 mknod -m 666 /dev/zero c 1 5 && \
@@ -283,26 +302,225 @@ popdev:
 	 mount -t devpts -o gid=4,mode=620 none /dev/pts && \
 	 mount -t tmpfs none /dev/shm ; fi
 
-linux-libc-headers: unamemod
+linux-libc-headers: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
 
-man-pages: unamemod
+man-pages: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
-
-glibc: unamemod
+	make unmount
+	
+glibc: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
 
-re-adjust-toolchain: unamemod
+re-adjust-toolchain: unamemod prep-chroot
 	make -C $(PKG)/binutils chroot-re-adjust-toolchain
+	make unmount
 
-binutils: unamemod
+binutils: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
 
-gcc: unamemod
+gcc: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
 
-coreutils: unamemod
+coreutils: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
+
+zlib: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+mktemp: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+iana-etc: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+findutils: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+gawk: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+ncurses: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+readline: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+vim: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+m4: unamemod prep-chroot   
+	make -C $(PKG)/$@ chroot
+	make unmount
+	
+bison: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+less: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+groff: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+sed: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+flex: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+gettext: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+inetutils: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+iproute2: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+perl: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+texinfo: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+autoconf: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+automake: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+bash: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+file: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libtool: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+bzip2: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+diffutils: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+kbd: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+e2fsprogs: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+grep: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+grub: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+gzip: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+hotplug: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+man: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+make: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+module-init-tools: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+patch: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+procps: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+psmisc: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+shadow: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libol: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+syslog-ng: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+sysvinit: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+tar: unamemod prep-chroot 
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+udev: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+util-linux: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+wget: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+lfs-bootscripts: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+strip: prep-chroot
+	@chroot $(MP) $(chenvstrip) 'cd $(ROOT) && make ch-strip'
+	make unmount
 
 # Do Not call the rules below manually!
 # They are used internally and must be called by
@@ -403,26 +621,181 @@ lfs-strip-scpt:
 	@-strip --strip-unneeded $(WD)/{,s}bin/*
 	@-rm -rf $(WD)/{doc,info,man}
 
-ch-linux-libc-headers:
+ch-linux-libc-headers: popdev
 	make -C $(PKG)/linux-libc-headers stage2
 
-ch-man-pages:
+ch-man-pages: popdev
 	make -C $(PKG)/man-pages stage2
 
-ch-glibc:
+ch-glibc: popdev
 	make -C $(PKG)/glibc stage2
 
-ch-re-adjust-toolchain:
+ch-re-adjust-toolchain: popdev
 	make -C $(PKG)/binutils re-adjust-toolchain
 
-ch-binutils:
+ch-binutils: popdev
 	make -C $(PKG)/binutils stage2
 
-ch-gcc:
+ch-gcc: popdev
 	make -C $(PKG)/gcc stage2
 
-ch-coreutils:
+ch-coreutils: popdev
 	make -C $(PKG)/coreutils stage2
+
+ch-zlib: popdev
+	make -C $(PKG)/zlib stage2
+
+ch-mktemp: popdev
+	make -C $(PKG)/mktemp stage2
+
+ch-iana-etc: popdev
+	make -C $(PKG)/iana-etc stage2
+
+ch-findutils: popdev
+	make -C $(PKG)/findutils stage2
+
+ch-gawk: popdev
+	make -C $(PKG)/gawk stage2
+
+ch-ncurses: popdev
+	make -C $(PKG)/ncurses stage2
+
+ch-readline: popdev
+	make -C $(PKG)/readline stage2
+
+ch-vim: popdev
+	make -C $(PKG)/vim stage2
+
+ch-m4: popdev
+	make -C $(PKG)/m4 stage2
+
+ch-bison: popdev
+	make -C $(PKG)/bison stage2
+
+ch-less: popdev
+	make -C $(PKG)/less stage2
+
+ch-groff: popdev
+	make -C $(PKG)/groff stage2
+
+ch-sed: popdev
+	make -C $(PKG)/sed stage2
+
+ch-flex: popdev
+	make -C $(PKG)/flex stage2
+
+ch-gettext: popdev
+	make -C $(PKG)/gettext stage2
+
+ch-inetutils: popdev
+	make -C $(PKG)/inetutils stage2
+
+ch-iproute2: popdev
+	make -C $(PKG)/iproute2 stage2
+
+ch-perl: popdev
+	make -C $(PKG)/perl stage2
+
+ch-texinfo: popdev
+	make -C $(PKG)/texinfo stage2
+
+ch-autoconf: popdev
+	make -C $(PKG)/autoconf stage2
+
+ch-automake: popdev
+	make -C $(PKG)/automake stage2
+
+ch-bash: popdev
+	make -C $(PKG)/bash stage2
+
+ch-file: popdev
+	make -C $(PKG)/file stage2
+
+ch-libtool: popdev
+	make -C $(PKG)/libtool stage2
+
+ch-bzip2: popdev
+	make -C $(PKG)/bzip2 stage2
+
+ch-diffutils: popdev
+	make -C $(PKG)/diffutils stage2
+
+ch-kbd: popdev
+	make -C $(PKG)/kbd stage2
+
+ch-e2fsprogs: popdev
+	make -C $(PKG)/e2fsprogs stage2
+
+ch-grep: popdev
+	make -C $(PKG)/grep stage2
+
+ch-grub: popdev
+	make -C $(PKG)/grub stage2
+
+ch-gzip: popdev
+	make -C $(PKG)/gzip stage2
+
+ch-hotplug: popdev
+	make -C $(PKG)/hotplug stage2
+
+ch-man: popdev
+	make -C $(PKG)/man stage2
+
+ch-make: popdev
+	make -C $(PKG)/make stage2
+
+ch-module-init-tools: popdev
+	make -C $(PKG)/module-init-tools stage2
+
+ch-patch: popdev
+	make -C $(PKG)/patch stage2
+
+ch-procps: popdev
+	make -C $(PKG)/procps stage2
+
+ch-psmisc: popdev
+	make -C $(PKG)/psmisc stage2
+
+ch-shadow: popdev
+	make -C $(PKG)/shadow stage2
+
+ch-libol: popdev
+	make -C $(PKG)/libol stage2
+
+ch-syslog-ng: popdev
+	make -C $(PKG)/syslog-ng stage2
+
+ch-sysvinit: popdev
+	make -C $(PKG)/sysvinit stage2
+
+ch-tar: popdev
+	make -C $(PKG)/tar stage2
+
+ch-udev: popdev
+	make -C $(PKG)/udev stage2
+
+ch-util-linux: popdev
+	make -C $(PKG)/util-linux stage2
+
+ch-wget: popdev
+	make -C $(PKG)/wget stage2
+
+ch-lfs-bootscripts: popdev
+	make -C $(PKG)/lfs-bootscripts stage2
+
+ch-environment:
+	@-cp $(ROOT)/etc/sysconfig/clock /etc/sysconfig
+	@-cp $(ROOT)/etc/inputrc /etc
+	@-cp $(ROOT)/etc/bashrc /etc
+	@-cp $(ROOT)/etc/profile /etc
+	@-dircolors -p > /etc/dircolors
+	@-cp $(ROOT)/etc/hosts /etc
+	@-cp $(ROOT)/etc/fstab /etc
+	@echo "HOSTNAME=lfslivecd" > /etc/sysconfig/network"
+
+
+ch-strip: popdev
+	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
 
 # Rules to clean your tree. 
 # "clean" removes package directories and
