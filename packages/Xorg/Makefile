@@ -2,7 +2,7 @@
 
 # Package versions
 NM= Xorg
-VRS= 6.8.1
+VRS= 6.8.2
 DIR= xc
 FILE= X11R$(VRS)-src.tar.bz2
 URL= http://xorg.freedesktop.org/X11R$(VRS)/src-single/$(FILE)

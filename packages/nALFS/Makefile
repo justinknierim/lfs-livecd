@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/nALFS ] ; then tar xjvf $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
+	 ./configure --prefix=/usr --with-libxml2 --with-curl --with-ssl && \
 	 make -j3 && \
 	 make install ; fi
 	@make clean
