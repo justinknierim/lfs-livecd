@@ -132,7 +132,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy \
-	ch-LFS-BOOK
+	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -604,6 +604,34 @@ LFS-BOOK: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+libpng: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+freetype: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+fontconfig: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+Xorg: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libjpeg: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libtiff: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+links: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 strip: prep-chroot
 	@chroot $(MP) $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	make unmount
@@ -938,6 +966,27 @@ ch-html_tidy: popdev
 
 ch-LFS-BOOK: popdev
 	make -C $(PKG)/LFS-BOOK stage2
+
+ch-libpng: popdev
+	make -C $(PKG)/libpng stage2
+
+ch-freetype: popdev
+	make -C $(PKG)/freetype stage2
+
+ch-fontconfig: popdev
+	make -C $(PKG)/fontconfig stage2
+
+ch-Xorg: popdev
+	make -C $(PKG)/Xorg stage2
+
+ch-libjpeg: popdev
+	make -C $(PKG)/libjpeg stage2
+
+ch-libtiff: popdev
+	make -C $(PKG)/libtiff stage2
+
+ch-links: popdev
+	make -C $(PKG)/links stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
