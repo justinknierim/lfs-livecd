@@ -122,7 +122,7 @@ chatnets = {
   SILC = { type = "SILC"; };
   lfs = {
     type = "IRC";
-    nick = "livecd-20050124";
+    nick = "lfs-livecd";
     username = "guest";
     realname = "guest";
   };
@@ -133,6 +133,7 @@ channels = (
   { name = "#irssi"; chatnet = "freenode"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
   { name = "#lfs-support"; chatnet = "lfs"; autojoin = "yes"; }
+  { name = "#lfs"; chatnet = "lfs"; autojoin = "yes"; }
 );
 
 aliases = {
@@ -296,4 +297,3 @@ settings = {
   core = { real_name = "guest"; user_name = "guest"; nick = "lfs-livecd"; };
   "fe-text" = { term_force_colors = "yes"; };
 };
-hilights = ( { text = "nick"; nick = "yes"; word = "yes"; } );
