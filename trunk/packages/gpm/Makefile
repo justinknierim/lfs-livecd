@@ -30,6 +30,7 @@ stage2:
 	 CFLAGS="" LDFLAGS="-lm" ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make LDFLAGS="-lm" && make install && \
 	 cp conf/gpm-root.conf /etc && /sbin/ldconfig ; fi
+	@cp $(ROOT)/etc/sysconfig/mouse /etc/sysconfig/
 	@make clean
 
 clean:
