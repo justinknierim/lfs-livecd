@@ -11,9 +11,9 @@ export SRC := sources
 export PKG := packages
 export MKTREE := $(MP)/mklivecd
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
+export CFLAGS := -Os -s
 WHICH= $(WD)/bin/which
 FTPGET= $(WD)/bin/ftpget
-CFLAGS= -Os -s
 
 # Package versions
 WGET_V= 1.9.1
@@ -40,7 +40,7 @@ all:
 lfsuser: unamemod
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-	@chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
 
 which:
 	@echo "#!/bin/sh" > $(WHICH)
@@ -68,9 +68,25 @@ unamemod:
 	@make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules
 	@-insmod uname/uname_i486.ko
 
-tools: binutils-pass1
+tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers glibc
 
-binutils-pass1:
+
+# Rules which can be called by themselves, if necessary
+binutils-pass1: lfsuser
+	$(MAKE) -C $(PKG)/binutils pre1
+
+gcc-pass1: lfsuser
+	$(MAKE) -C $(PKG)/gcc pre1
+
+linux-libc-headers: lfsuser 
+	$(MAKE) -C $(PKG)/$@ pre1
+
+glibc: lfsuser
+	$(MAKE) -C $(PKG)/$@ pre1
+
+
+# DO NOT CALL THESE RULES - FOR SCRIPTING ONLY
+lfs-binutils-pass1:
 	@echo ""
 	@echo "=========================="
 	@echo " Building LFS Base System"
@@ -78,6 +94,19 @@ binutils-pass1:
 	@echo ""
 	$(MAKE) -C $(PKG)/binutils pass1
 
+lfs-gcc-pass1:
+	$(MAKE) -C $(PKG)/gcc pass1
+
+lfs-linux-libc-headers:
+	$(MAKE) -C $(PKG)/linux-libc-headers stage1
+
+lfs-glibc:
+	$(MAKE) -C $(PKG)/glibc stage1
+
+# Rules to clean your tree. 
+# "clean" removes package directories and
+# "scrub" also removes all sources and the uname modules - basically
+# returning the tree to the condition it was when it was unpacked
 
 clean:
 	@-rm -rf $(WD)
@@ -87,6 +116,9 @@ clean:
 	@-rmmod uname_i486
 	@$(MAKE) -C $(PKG)/wget clean
 	@$(MAKE) -C $(PKG)/binutils clean
+	@$(MAKE) -C $(PKG)/gcc clean
+	@$(MAKE) -C $(PKG)/linux-libc-headers clean
+	@$(MAKE) -C $(PKG)/glibc clean
 
 scrub: clean
 	@-rm -rf sources
