@@ -48,7 +48,7 @@ char *init_argv[MAX_INIT_ARGS+2] = { "init", NULL, };
 const char *var_tree[] = {
 	"var",
 	"var/cache", "var/empty", "var/lib", "var/local", "var/lock", 
-	"var/log",   "var/mail",  "var/opt", "var/run",   "var/spool", 
+	"var/log",   "var/mail",  "var/opt", "var/run",   "var/spool", "var/tmp",
 	"var/lib/locate", "var/lib/misc", "var/lib/nfs", "var/lib/xkb", "var/lib/xdm",
 	NULL,
 };
@@ -61,6 +61,7 @@ const char *cdrom_links[][2] =
 	{CDROM_MOUNT "/sbin", "sbin"},
 	{CDROM_MOUNT "/etc",  "etc"},
 	{CDROM_MOUNT "/boot", "boot"},
+	{CDROM_MOUNT "/sources", "sources"},
 	{NULL, NULL},
 };
 
@@ -105,7 +106,7 @@ int main(void)
 	if (i>=MAX_RETRIES)
 	{
 		printf("I couldn't find an LFS LiveCD in any drive after %d retries!\n", MAX_RETRIES);
-		reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, LINUX_REBOOT_CMD_HALT, NULL);
+	     /*	reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, LINUX_REBOOT_CMD_HALT, NULL); */
 		return(1);
 	}
 
