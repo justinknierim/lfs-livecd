@@ -1,12 +1,12 @@
-# Texinfo Makefile
+# M4 Makefile
 
 # Package versions
-NM= texinfo
-VRS= 4.8
+NM= m4
+VRS= 1.4.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
 #RULES
@@ -19,7 +19,7 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -f $(WD)/bin/info ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/m4 ] ; then tar xjvf $(DLP) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 

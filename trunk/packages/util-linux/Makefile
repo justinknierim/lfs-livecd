@@ -1,12 +1,12 @@
-# Texinfo Makefile
+# Util-Linux Makefile
 
 # Package versions
-NM= texinfo
-VRS= 4.8
+NM= util-linux
+VRS= 2.12p
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
+URL= $(FTP)/$(NM)/$(FILE)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
 #RULES
@@ -19,8 +19,10 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -f $(WD)/bin/info ] ; then tar xjvf $(DLP) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
+	@if [ ! -f $(WD)/bin/mount ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	 sed -i 's@/usr/include@$(WD)/include@g' configure && \
+	 ./configure && make -j3 -C lib && make -j3 -C mount mount umount && \
+	 make -j3 -C text-utils more && cp mount/{,u}mount text-utils/more $(WD)/bin ; fi
 	@make clean
 
 clean:

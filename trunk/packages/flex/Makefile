@@ -1,13 +1,17 @@
-# Texinfo Makefile
+# Flex Makefile
 
 # Package versions
-NM= texinfo
-VRS= 4.8
+NM= flex
+VRS= 2.5.31
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
+PATCH= $(DIR)-debian_fixes-2.patch
 DLP= $(MKTREE)/$(SRC)/$(FILE)
-URL= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
+DLP1= $(MKTREE)/$(SRC)/$(PATCH)
+URL= $(FTP)/$(NM)/$(FILE)
+URL1= $(FTP)/$(NM)/$(PATCH)
 WGET= wget -c --passive-ftp -O $(DLP) $(URL)
+WGET1= wget -c --passive-ftp -O $(DLP1) $(URL1)
 
 #RULES
 
@@ -19,7 +23,9 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -f $(WD)/bin/info ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	@if [ ! -f $(DLP1) ] ; then $(WGET1) ; fi
+	@if [ ! -f $(WD)/bin/flex ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	 patch -Np1 -i $(DLP1) && touch doc/flex.1 && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 
