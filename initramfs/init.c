@@ -1,6 +1,6 @@
 /*
    Init for the Official LFS LiveCD
-   Written by Jeremy Huntwork, based on earlier code by Chris Lingard.
+   Written by Jeremy Huntwork, based on code by Chris Lingard.
    Major overhaul/reorganization by James Lee on 2005-01-06.
 
    This code sets up a directory structure for the cd in the initramfs,
@@ -21,6 +21,7 @@
 #include <sys/stat.h>
 #include <sys/ioctl.h>
 #include <linux/cdrom.h>
+#include <linux/reboot.h>
 
 #define CDROM_MOUNT   "/.cdrom"           /* Mount point for CD */
 #define CDROM_FSTYPE  "iso9660"           /* Filesystem of CD (could be udf? :) */
@@ -104,6 +105,7 @@ int main(void)
 	if (i>=MAX_RETRIES)
 	{
 		printf("I couldn't find an LFS LiveCD in any drive after %d retries!\n", MAX_RETRIES);
+		reboot(LINUX_REBOOT_MAGIC1, LINUX_REBOOT_MAGIC2, LINUX_REBOOT_CMD_HALT, NULL);
 		return(1);
 	}
 
