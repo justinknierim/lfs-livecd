@@ -68,7 +68,7 @@ unamemod:
 	@make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules
 	@-insmod uname/uname_i486.ko
 
-tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers glibc
+tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers lfs-glibc
 
 
 # Rules which can be called by themselves, if necessary
