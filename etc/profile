@@ -3,5 +3,6 @@ PS1='\h:\u \[\033[00;32m\]\w\[\033[00m\] \$ '
 INPUTRC=/etc/inputrc
 XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog"
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
-export PS1 PATH INPUTRC PKG_CONFIG_PATH
+WWW_HOME="/usr/share/LFS-BOOK-testing-HTML/index.html"
+export PS1 PATH INPUTRC PKG_CONFIG_PATH XML_CATALOG_FILES WWW_HOME
 source /etc/bashrc
