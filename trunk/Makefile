@@ -263,7 +263,7 @@ createdirs:
 	@-$(WD)/bin/install -d /usr/local/share/man/man{1,2,3,4,5,6,7,8}
 	@-$(WD)/bin/install -d /var/{lock,log,mail,run,spool}
 	@-$(WD)/bin/install -d /var/{opt,cache,lib/{misc,locate},local}
-	:q@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
+	@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
 	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
 	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
