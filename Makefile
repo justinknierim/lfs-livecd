@@ -38,7 +38,7 @@ WGET_V= 1.9.1
 .PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
 
-all: lfs-base
+all: lfs-base extend-lfs
 
 lfs-base:
 	@echo "==============================================================="
@@ -68,6 +68,8 @@ lfs-base:
 	@make prep-chroot
 	@chroot "$(MP)" $(chenv1) 'set +h && chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
 	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
+
+extend-lfs:
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@chroot "$(MP)" $(chenv3) 'set +h && cd $(ROOT) && make blfs $(chbash2)'
 	#@chroot "$(MP)" $(chenvstrip) 'set +h && cd $(ROOT) && make ch-strip'
