@@ -17,8 +17,8 @@ stage1:
 	@echo ""
 	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(PATCH) ] ; then $(WGET) $(URL1) && mv
-	 $(PATCH) $(MP)/$(DLP) ; fi
+	@if [ ! -f $(MP)/$(DLP)/$(PATCH) ] ; then $(WGET) $(URL1) && \
+	 mv $(PATCH) $(MP)/$(DLP) ; fi
 	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(MP)/$(DLP)/$(PATCH) && \
 	 ./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX' && \
