@@ -22,8 +22,8 @@ stage2:
 	@if [ ! -f /usr/bin/slrn ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --with-slrnpull --enable-spool --with-ssl && \
 	 make -j3 && make install && \
-	 cp $(ROOT)/root/.slrnrc /root/ && \
-	 NNTPSERVER=news.linuxfromscratch.org slrn -f ~/.jnewsrc --create ; fi
+	 cp $(ROOT)/root/.slrnrc /root/ ; fi
+	@make clean
 
 clean:
 	@-rm -rf $(DIR)
