@@ -44,7 +44,7 @@ WGET_V= 1.9.1
 
 #RULES
 
-.PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
+.PHONY: all lfs-base pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
 
 all: lfs-base extend-lfs iso
@@ -90,6 +90,7 @@ extend-lfs:
 lfsuser: unamemod
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+	@touch lfsuser
 
 pre-which: lfsuser
 	@echo "#!/bin/sh" > $(WHICH)
@@ -1264,7 +1265,7 @@ clean: unloadmodule unmount
 	@-rm -rf $(WD) $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
-	@-rm prepiso
+	@-rm {prepiso,lfsuser}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
