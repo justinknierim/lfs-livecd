@@ -1,4 +1,5 @@
-* Re-work the download system and the way package variables are stored
+* Re-work the download system and the way package variables are stored ***DONE***
+* Check that chroot system mounts are being done correctly (proc, sys, etc.)
 * Finish up the chroot build section for the lfs-base
 * Extend the base system to include BLFS packages
 * Add a section for building a cdrtools and squashfs (outside the cd system)

@@ -5,21 +5,17 @@ NM= glibc
 VRS= 20041011
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-DLP= $(MKTREE)/$(SRC)/$(FILE)
 URL= $(FTP)/$(NM)/$(FILE)
-WGET= wget -c --passive-ftp -O $(DLP) $(URL)
 
-#RULES
+# RULES
 
-pre1:
-	@su - lfs -c "exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin \
-	 /bin/bash -c 'set +h && umask 022 && cd $(MKTREE) && make lfs-$(NM)'"
 stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f $(DLP) ] ; then $(WGET) ; fi
-	@if [ ! -f $(WD)/bin/ldd ] ; then tar xjvf $(DLP) && cd $(DIR) && \
+	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(MP)/$(DLP) ; fi
+	@if [ ! -f $(WD)/bin/ldd ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
 	 --with-binutils=$(WD)/bin --without-gd --without-cvs --with-headers=$(WD)/include --disable-selinux && \
