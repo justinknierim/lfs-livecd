@@ -18,12 +18,22 @@ export timezone := America/New_York
 # Page size for groff
 export pagesize := letter
 
+# Change this to 'no' if you don't want to use the
+# uname module to build for i486. (Of course, the resultant
+# cd will not be an official cd then ;) )
+UNAMEMOD= y
+
+# Top-level of these Makefiles. Edit this if you've named
+# this directory differently.
+# (The beginning / is necessary - leave it in place - this is *not*
+# a real file path.)
+export ROOT := /lfs-livecd
+
 # Don't edit these!
 export HOSTNAME := lfslivecd
 export WD := /tools
 export SRC := /sources
 export PKG := packages
-export ROOT := /lfs-livecd
 export MKTREE := $(MP)$(ROOT)
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
@@ -44,8 +54,6 @@ WGET_V= 1.9.1
 
 #RULES
 
-.PHONY: all lfs-base pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
-	clean scrub unloadmodule unmount
 
 all: lfs-base extend-lfs iso
 	@echo "The livecd, $(MKTREE)/lfs-livecd-$(DATE).iso, is ready!"
@@ -54,12 +62,21 @@ lfs-base:
 	@echo "==============================================================="
 	@echo " Before you begin building the LiveCD image, please ensure "
 	@echo " that the following is true: "
+	@echo ""
 	@echo " 1) Your running kernel is the same version as the target "
 	@echo "    kernel for the cd."
+	@echo ""
 	@echo " 2) Your compiled kernel sources are located in /usr/src/linux "
 	@echo "    (This is so we can build a uname module) "
+	@echo ""
+	@echo " 3) You have an active internet connection (or have already"
+	@echo "    downloaded all the sources and have placed them in"
+	@echo "    $(MP)$(SRC))"
 	@echo "==============================================================="
-	@sleep 8
+	@echo ""
+	@echo -n -e "Countdown to commence building :) :"
+	@for i in 10 9 8 7 6 5 4 3 2 1 ; do echo -n -e " $$i" && sleep 1 ; done
+	@echo ""
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
 	@-ln -sf $(MP)$(SRC) /
@@ -87,7 +104,7 @@ extend-lfs:
 	@make unloadmodule
 	@make unmount
 
-lfsuser: unamemod
+lfsuser:
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 	@touch lfsuser
@@ -112,11 +129,14 @@ pre-wget: lfsuser
 	@$(MAKE) -C $(PKG)/wget prebuild
 
 unamemod:
+ifeq ($(UNAMEMOD),y)
 	@if [ ! -f uname/uname_i486.ko ] ; then echo "" && echo "=====> Making Uname Module" && echo "" && \
-	  make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules ; fi
+  	make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules ; fi
 	@lsmod 1> $(WD)/.file
 	@if ! grep -q uname_i486 $(WD)/.file ; then insmod uname/uname_i486.ko ; fi
 	@-rm -f $(WD)/.file
+else
+endif
 
 tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
@@ -153,106 +173,106 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 # Rules for building tools/stage1
 # These can be called individually, if necessary
 
-lfs-which: lfsuser
+lfs-which: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-which'"
 
-lfs-wget: lfsuser
+lfs-wget: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-wget'"
 
-lfs-rm-wget: lfsuser
+lfs-rm-wget: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) &&rm $(WD)/bin/wget'"
 	
-lfs-binutils-pass1: lfsuser
+lfs-binutils-pass1: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass1-scpt'"
 
-lfs-gcc-pass1: lfsuser
+lfs-gcc-pass1: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gcc-pass1-scpt'"
 
-lfs-linux-libc-headers: lfsuser
+lfs-linux-libc-headers: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-linux-libc-headers-scpt'"
 
-lfs-glibc: lfsuser
+lfs-glibc: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-glibc-scpt'"
 
-lfs-adjust-toolchain: lfsuser
+lfs-adjust-toolchain: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-adjust-toolchain-scpt'"
 
-lfs-tcl: lfsuser
+lfs-tcl: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-tcl-scpt'"
 
-lfs-expect: lfsuser
+lfs-expect: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-expect-scpt'"
 
-lfs-dejagnu: lfsuser
+lfs-dejagnu: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-dejagnu-scpt'"
 
-lfs-gcc-pass2: lfsuser
+lfs-gcc-pass2: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gcc-pass2-scpt'"
 
-lfs-binutils-pass2: lfsuser
+lfs-binutils-pass2: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass2-scpt'"
 
-lfs-gawk: lfsuser
+lfs-gawk: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gawk-scpt'"
 
-lfs-coreutils: lfsuser
+lfs-coreutils: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-coreutils-scpt'"
 
-lfs-bzip2: lfsuser
+lfs-bzip2: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bzip2-scpt'"
 
-lfs-gzip: lfsuser
+lfs-gzip: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gzip-scpt'"
 
-lfs-diffutils: lfsuser
+lfs-diffutils: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-diffutils-scpt'"
 
-lfs-findutils: lfsuser
+lfs-findutils: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-findutils-scpt'"
 
-lfs-make: lfsuser
+lfs-make: uanmemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-make-scpt'"
 
-lfs-grep: lfsuser
+lfs-grep: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-grep-scpt'"
 
-lfs-sed: lfsuser
+lfs-sed: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-sed-scpt'"
 
-lfs-gettext: lfsuser
+lfs-gettext: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gettext-scpt'"
 
-lfs-ncurses: lfsuser
+lfs-ncurses: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-ncurses-scpt'"
 
-lfs-patch: lfsuser
+lfs-patch: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-patch-scpt'"
 
-lfs-tar: lfsuser
+lfs-tar: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-tar-scpt'"
 
-lfs-texinfo: lfsuser
+lfs-texinfo: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-texinfo-scpt'"
 
-lfs-bash: lfsuser
+lfs-bash: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bash-scpt'"
 
-lfs-m4: lfsuser
+lfs-m4: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-m4-scpt'"
 
-lfs-bison: lfsuser
+lfs-bison: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bison-scpt'"
 
-lfs-flex: lfsuser
+lfs-flex: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-flex-scpt'"
 
-lfs-util-linux: lfsuser
+lfs-util-linux: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-util-linux-scpt'"
 
-lfs-perl: lfsuser
+lfs-perl: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-perl-scpt'"
 
-lfs-strip: lfsuser
+lfs-strip: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-strip-scpt'"
 
 createdirs:
@@ -1264,6 +1284,7 @@ iso: prepiso
 clean: unloadmodule unmount
 	@-rm -rf $(WD) $(MP)$(WD)
 	@-userdel lfs
+	@-groupdel lfs
 	@-rm -rf /home/lfs
 	@-rm {prepiso,lfsuser}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
@@ -1288,3 +1309,10 @@ unmount:
 	@-umount $(MP)/dev
 	@-umount $(MP)/proc
 	@-umount $(MP)/sys
+
+.PHONY: lfs-base pre-which pre-wget tools prep-chroot chroot createdirs createfiles popdev unamemod \
+	clean scrub unloadmodule unmount lfs-which lfs-wget lfs-rm-wget lfs-binutils-pass1 lfs-gcc-pass1 \
+	lfs-linux-libc-headers lfs-glibc lfs-adjust-toolchain lfs-tcl lfs-expect lfs-dejagnu lfs-gcc-pass2 \
+	lfs-binutils-pass2 lfs-gawk lfs-coreutils lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make \
+	lfs-grep lfs-gettext lfs-ncurses lfs-patch lfs-tar lfs-texinfo lfs-bash lfs-m4 lfs-bison lfs-flex \
+	lfs-util-linux lfs-perl lfs-strip
