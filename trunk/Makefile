@@ -9,13 +9,18 @@ export MP := /mnt/lfs
 export WD := /tools
 export SRC := sources
 export PKG := packages
-export MKTREE := $(MP)/mklivecd
+export MKTREE := mklivecd
+export DLP := $(MKTREE)/$(SRC)
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
-WHICH= $(WD)/bin/which
-FTPGET= $(WD)/bin/ftpget
+export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+export lfsbash := set +h && umask 022 && cd $(MP)/$(MKTREE)
+export chenv1 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chbash1 := SHELL=$(WD)/bin/bash
+export WHICH= $(WD)/bin/which
+export WGET= wget -c --passive-ftp
 
-# Package versions
+FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
 #RULES
@@ -36,26 +41,31 @@ lfs-base:
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@-mkdir $(SRC)
 	@make lfsuser
-	@su - lfs -c "exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=/tools/bin:/bin:/usr/bin \
-	 /bin/bash -c 'set +h && umask 022 && cd $(MKTREE) && make which && make wget && make tools'"
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
+	@echo ""
+	@echo "=========================="
+	@echo " Building LFS Base System"
+	@echo "=========================="
+	@echo ""
+	@make unamemod
+	@make lfs-which
+	@make lfs-wget
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@make prep-chroot
-	@chroot "$(MP)" $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' \
-	 PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c 'chown -R 0:0 $(WD) && cd mklivecd && \
-	 make chroot SHELL=$(WD)/bin/bash'
+	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) && cd mklivecd && make chroot $(chbash1)'
 	@make unloadmodule
 	@make unmount
 
 lfsuser: unamemod
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
 
-which:
+which: lfsuser
 	@echo "#!/bin/sh" > $(WHICH)
 	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
 	@chmod 755 $(WHICH)
 
-wget:
+wget: lfsuser
 	@if [ ! -f /tools/bin/ftpget ] ; then echo "#!/bin/sh" > $(FTPGET) && \
 					      echo "ftp -n << END" >> $(FTPGET) && \
 					      echo "open ftp.gnu.org" >> $(FTPGET) && \
@@ -70,17 +80,17 @@ wget:
 	@$(MAKE) -C $(PKG)/wget prebuild
 
 unamemod:
-	@echo ""
-	@echo "=====> Making Uname Module"
-	@echo ""
-	@make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules
-	@-insmod uname/uname_i486.ko
+	@if [ ! -f uname/uname_i486.ko ] ; then echo "" && echo "=====> Making Uname Module" && echo "" && \
+	  make -C /usr/src/linux SUBDIRS=$(MP)/$(MKTREE)/uname modules ; fi
+	@lsmod 1> $(WD)/.file
+	@if ! grep -q uname_i486 $(WD)/.file ; then insmod uname/uname_i486.ko ; fi
+	@-rm -f $(WD)/.file
 
-tools: lfs-binutils-pass1 lfs-gcc-pass1 lfs-linux-libc-headers lfs-glibc lfs-adjust-toolchain \
-	lfs-tcl lfs-expect lfs-dejagnu lfs-gcc-pass2 lfs-binutils-pass2 lfs-gawk lfs-coreutils \
-	lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make lfs-grep lfs-sed lfs-gettext \
-	lfs-ncurses lfs-patch lfs-tar lfs-texinfo lfs-bash lfs-m4 lfs-bison lfs-flex lfs-util-linux \
-	lfs-perl lfs-strip
+tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
+	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
+	lfs-gawk lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
+	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
+	lfs-bash-scpt lfs-m4-scpt lfs-bison-scpt lfs-flex-scpt lfs-util-linux-scpt lfs-perl-scpt lfs-strip-scpt
 
 prep-chroot:
 	@-mkdir -p $(MP)/{proc,sys}
@@ -91,208 +101,109 @@ prep-chroot:
 chroot: createdirs createfiles popdev ch-linux-libc-headers
 
 
-# Rules which can be called by themselves, if necessary
-binutils-pass1: lfsuser
-	$(MAKE) -C $(PKG)/binutils pre1
+# Rules for building tools/stage1
+# These can be called individually, if necessary
 
-gcc-pass1: lfsuser
-	$(MAKE) -C $(PKG)/gcc pre1
+lfs-which: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) which'"
 
-linux-libc-headers: lfsuser 
-	$(MAKE) -C $(PKG)/$@ pre1
+lfs-wget: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) wget'"
+	
 
-glibc: lfsuser
-	$(MAKE) -C $(PKG)/$@ pre1
+lfs-binutils-pass1: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass1-scpt'"
 
-adjust-toolchain: lfsuser
-	$(MAKE) -C $(PKG)/binutils pre-adjust
 
-tcl: lfsuser
-	$(MAKE) -C $(PKG)/tcl pre1
+lfs-gcc-pass1: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gcc-pass1-scpt'"
 
-expect: lfsuser
-	$(MAKE) -C $(PKG)/expect pre1
+lfs-linux-libc-headers: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-linux-libc-headers-scpt'"
 
-dejagnu: lfsuser
-	$(MAKE) -C $(PKG)/dejagnu pre1
+lfs-glibc: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-glibc-scpt'"
 
-gcc-pass2: lfsuser
-	$(MAKE) -C $(PKG)/gcc pre2
+lfs-adjust-toolchain: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-adjust-toolchain-scpt'"
 
-binutils-pass2: lfsuser
-	$(MAKE) -C $(PKG)/binutils pre2
+lfs-tcl: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-tcl-scpt'"
 
-gawk: lfsuser
-	$(MAKE) -C $(PKG)/gawk pre1
+lfs-expect: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-expect-scpt'"
 
-coreutils: lfsuser
-	$(MAKE) -C $(PKG)/coreutils pre1
+lfs-dejagnu: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-dejagnu-scpt'"
 
-bzip2: lfsuser
-	$(MAKE) -C $(PKG)/bzip2 pre1
+lfs-gcc-pass2: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gcc-pass2-scpt'"
 
-gzip: lfsuser
-	$(MAKE) -C $(PKG)/gzip pre1
+lfs-binutils-pass2: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass2-scpt'"
 
-diffutils: lfsuser
-	$(MAKE) -C $(PKG)/diffutils pre1
+lfs-gawk: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gawk-scpt'"
 
-findutils: lfsuser
-	$(MAKE) -C $(PKG)/findutils pre1
+lfs-coreutils: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-coreutils-scpt'"
 
-make: lfsuser
-	$(MAKE) -C $(PKG)/make pre1
+lfs-bzip2: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bzip2-scpt'"
 
-grep: lfsuser
-	$(MAKE) -C $(PKG)/grep pre1
+lfs-gzip: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gzip-scpt'"
 
-sed: lfsuser
-	$(MAKE) -C $(PKG)/sed pre1
+lfs-diffutils: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-diffutils-scpt'"
 
-gettext: lfsuser
-	$(MAKE) -C $(PKG)/gettext pre1
+lfs-findutils: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-findutils-scpt'"
 
-ncurses: lfsuser
-	$(MAKE) -C $(PKG)/ncurses pre1
+lfs-make: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-make-scpt'"
 
-patch: lfsuser
-	$(MAKE) -C $(PKG)/patch pre1
+lfs-grep: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-grep-scpt'"
 
-tar: lfsuser
-	$(MAKE) -C $(PKG)/tar pre1
+lfs-sed: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-sed-scpt'"
 
-texinfo: lfsuser
-	$(MAKE) -C $(PKG)/texinfo pre1
+lfs-gettext: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-gettext-scpt'"
 
-bash: lfsuser
-	$(MAKE) -C $(PKG)/bash pre1
+lfs-ncurses: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-ncurses-scpt'"
 
-m4: lfsuser
-	$(MAKE) -C $(PKG)/m4 pre1
+lfs-patch: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-patch-scpt'"
 
-bison: lfsuser
-	$(MAKE) -C $(PKG)/bison pre1
+lfs-tar: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-tar-scpt'"
 
-flex: lfsuser
-	$(MAKE) -C $(PKG)/flex pre1
+lfs-texinfo: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-texinfo-scpt'"
 
-util-linux: lfsuser
-	$(MAKE) -C $(PKG)/util-linux pre1
+lfs-bash: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bash-scpt'"
 
-perl: lfsuser
-	$(MAKE) -C $(PKG)/perl pre1
+lfs-m4: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-m4-scpt'"
 
-strip: lfsuser
-	@-strip --strip-debug $(WD)/lib/*
-	@-strip --strip-unneeded $(WD)/{,s}bin/*
-	@-rm -rf $(WD)/{doc,info,man}
+lfs-bison: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-bison-scpt'"
 
-linux-libc-headers-chroot:
-	$(MAKE) -C $(PKG)/linux-libc-headers prechroot
+lfs-flex: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-flex-scpt'"
 
-# DO NOT CALL THESE RULES - FOR SCRIPTING ONLY
-# The rules below are what is used when the environment
-# is properly set up during the make script and would
-# not work properly if called directly from the command line.
-lfs-binutils-pass1:
-	@echo ""
-	@echo "=========================="
-	@echo " Building LFS Base System"
-	@echo "=========================="
-	@echo ""
-	$(MAKE) -C $(PKG)/binutils pass1
+lfs-util-linux: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-util-linux-scpt'"
 
-lfs-gcc-pass1:
-	$(MAKE) -C $(PKG)/gcc pass1
+lfs-perl: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-perl-scpt'"
 
-lfs-linux-libc-headers:
-	$(MAKE) -C $(PKG)/linux-libc-headers stage1
-
-lfs-glibc:
-	$(MAKE) -C $(PKG)/glibc stage1
-
-lfs-adjust-toolchain:
-	$(MAKE) -C $(PKG)/binutils adjust-toolchain
-
-lfs-tcl:
-	$(MAKE) -C $(PKG)/tcl stage1
-
-lfs-expect:
-	$(MAKE) -C $(PKG)/expect stage1
-
-lfs-dejagnu:
-	$(MAKE) -C $(PKG)/dejagnu stage1
-
-lfs-gcc-pass2:
-	$(MAKE) -C $(PKG)/gcc pass2
-
-lfs-binutils-pass2:
-	$(MAKE) -C $(PKG)/binutils pass2
-
-lfs-gawk:
-	$(MAKE) -C $(PKG)/gawk stage1
-
-lfs-coreutils:
-	$(MAKE) -C $(PKG)/coreutils stage1
-
-lfs-bzip2:
-	$(MAKE) -C $(PKG)/bzip2 stage1
-
-lfs-gzip:
-	$(MAKE) -C $(PKG)/gzip stage1
-
-lfs-diffutils:
-	$(MAKE) -C $(PKG)/diffutils stage1
-
-lfs-findutils:
-	$(MAKE) -C $(PKG)/findutils stage1
-
-lfs-make:
-	$(MAKE) -C $(PKG)/make stage1
-
-lfs-grep:
-	$(MAKE) -C $(PKG)/grep stage1
-
-lfs-sed:
-	$(MAKE) -C $(PKG)/sed stage1
-
-lfs-gettext:
-	$(MAKE) -C $(PKG)/gettext stage1
-
-lfs-ncurses:
-	$(MAKE) -C $(PKG)/ncurses stage1
-
-lfs-patch:
-	$(MAKE) -C $(PKG)/patch stage1
-
-lfs-tar:
-	$(MAKE) -C $(PKG)/tar stage1
-
-lfs-texinfo:
-	$(MAKE) -C $(PKG)/texinfo stage1
-
-lfs-bash:
-	$(MAKE) -C $(PKG)/bash stage1
-
-lfs-m4:
-	$(MAKE) -C $(PKG)/m4 stage1
-
-lfs-bison:
-	$(MAKE) -C $(PKG)/bison stage1
-
-lfs-flex:
-	$(MAKE) -C $(PKG)/flex stage1
-
-lfs-util-linux:
-	$(MAKE) -C $(PKG)/util-linux stage1
-
-lfs-perl:
-	$(MAKE) -C $(PKG)/perl stage1
-
-lfs-strip:
-	@-strip --strip-debug $(WD)/lib/*
-	@-strip --strip-unneeded $(WD)/{,s}bin/*
-	@-rm -rf $(WD)/{doc,info,man}
+lfs-strip: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-strip-scpt'"
 
 createdirs:
 	@-$(WD)/bin/install -d /{bin,boot,dev,etc/opt,home,lib,mnt}
@@ -362,13 +273,115 @@ popdev:
 	@-mount -t devpts -o gid=4,mode=620 none /dev/pts
 	@-mount -t tmpfs none /dev/shm
 
+linux-libc-headers: unamemod
+	$(MAKE) -C $(PKG)/$@ chroot
+
+# Do Not call the rules below manually!
+# They are used internally and must be called by
+# other rules.
+
+lfs-binutils-pass1-scpt: lfsuser
+	$(MAKE) -C $(PKG)/binutils pass1
+
+lfs-gcc-pass1-scpt: lfsuser
+	$(MAKE) -C $(PKG)/gcc pass1
+
+lfs-linux-libc-headers-scpt: lfsuser
+	$(MAKE) -C $(PKG)/linux-libc-headers stage1
+
+lfs-glibc-scpt: lfsuser
+	$(MAKE) -C $(PKG)/glibc stage1
+
+lfs-adjust-toolchain-scpt: lfsuser
+	$(MAKE) -C $(PKG)/binutils adjust-toolchain
+
+lfs-tcl-scpt: lfsuser
+	$(MAKE) -C $(PKG)/tcl stage1
+
+lfs-expect-scpt: lfsuser
+	$(MAKE) -C $(PKG)/expect stage1
+
+lfs-dejagnu-scpt: lfsuser
+	$(MAKE) -C $(PKG)/dejagnu stage1
+
+lfs-gcc-pass2-scpt: lfsuser
+	$(MAKE) -C $(PKG)/gcc pass2
+
+lfs-binutils-pass2-scpt: lfsuser
+	$(MAKE) -C $(PKG)/binutils pass2
+
+lfs-gawk-scpt: lfsuser
+	$(MAKE) -C $(PKG)/gawk stage1
+
+lfs-coreutils-scpt: lfsuser
+	$(MAKE) -C $(PKG)/coreutils stage1
+
+lfs-bzip2-scpt: lfsuser
+	$(MAKE) -C $(PKG)/bzip2 stage1
+
+lfs-gzip-scpt: lfsuser
+	$(MAKE) -C $(PKG)/gzip stage1
+
+lfs-diffutils-scpt: lfsuser
+	$(MAKE) -C $(PKG)/diffutils stage1
+
+lfs-findutils-scpt: lfsuser
+	$(MAKE) -C $(PKG)/findutils stage1
+
+lfs-make-scpt: lfsuser
+	$(MAKE) -C $(PKG)/make stage1
+
+lfs-grep-scpt: lfsuser
+	$(MAKE) -C $(PKG)/grep stage1
+
+lfs-sed-scpt: lfsuser
+	$(MAKE) -C $(PKG)/sed stage1
+
+lfs-gettext-scpt: lfsuser
+	$(MAKE) -C $(PKG)/gettext stage1
+
+lfs-ncurses-scpt: lfsuser
+	$(MAKE) -C $(PKG)/ncurses stage1
+
+lfs-patch-scpt: lfsuser
+	$(MAKE) -C $(PKG)/patch stage1
+
+lfs-tar-scpt: lfsuser
+	$(MAKE) -C $(PKG)/tar stage1
+
+lfs-texinfo-scpt: lfsuser
+	$(MAKE) -C $(PKG)/texinfo stage1
+
+lfs-bash-scpt: lfsuser
+	$(MAKE) -C $(PKG)/bash stage1
+
+lfs-m4-scpt: lfsuser
+	$(MAKE) -C $(PKG)/m4 stage1
+
+lfs-bison-scpt: lfsuser
+	$(MAKE) -C $(PKG)/bison stage1
+
+lfs-flex-scpt: lfsuser
+	$(MAKE) -C $(PKG)/flex stage1
+
+lfs-util-linux-scpt: lfsuser
+	$(MAKE) -C $(PKG)/util-linux stage1
+
+lfs-perl-scpt-scpt: lfsuser
+	$(MAKE) -C $(PKG)/perl stage1
+
+lfs-strip-scpt-scpt: lfsuser
+	@-strip --strip-debug $(WD)/lib/*
+	@-strip --strip-unneeded $(WD)/{,s}bin/*
+	@-rm -rf $(WD)/{doc,info,man}
+
 ch-linux-libc-headers:
 	$(MAKE) -C $(PKG)/linux-libc-headers stage2
 
 # Rules to clean your tree. 
 # "clean" removes package directories and
 # "scrub" also removes all sources and the uname modules - basically
-# returning the tree to the condition it was when it was unpacked
+# returning the tree to the condition it was in when it was unpacked
 
 clean: unloadmodule unmount
 	@-rm -rf $(WD)
