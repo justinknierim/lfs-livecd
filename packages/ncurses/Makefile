@@ -19,7 +19,7 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/clear ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) --with-shared --without-debug --without-ada --enable-overwrite && \
-	 make && make install ; fi
+	 make sources && make -j3 && make install ; fi
 	@make clean
 
 chroot:
@@ -33,7 +33,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/clear ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --with-shared --without-debug && \
-	 make && make install && chmod 755 /usr/lib/*.5.4 && \
+	 make sources && make -j3 && make install && chmod 755 /usr/lib/*.5.4 && \
 	 chmod 644 /usr/lib/libncurses++.a && mv /usr/lib/libncurses.so.5* /lib && \
 	 ln -sf ../../lib/libncurses.so.5 /usr/lib/libncurses.so && \
 	 ln -sf libncurses.so /usr/lib/libcurses.so ; fi
