@@ -27,7 +27,7 @@
 #define CDROM_FSTYPE  "iso9660"           /* Filesystem of CD (could be udf? :) */
 #define LFSID_FILE    CDROM_MOUNT "/LFS"  /* The file the LFS ID is stored in */
 #define LFSID_STRING  "LFS-6.0-TP-CD"     /* Text expected in the file */
-#define MAX_RETRIES   4                   /* How many times to retry scanning for the liveCD */
+#define MAX_RETRIES   3                   /* How many times to retry scanning for the liveCD */
 
 
 /* Devices to check for the LFS-CD, could scan some stuff in /proc in a later version */
@@ -182,7 +182,7 @@ int mountlfscd(void)
 				(No such device, No such file or directory, etc, etc)
 			*/
 			printf("%s: open failed: %s\n", curdevice, strerror(errno));
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		}
 
 		/* Try to see what the status of the CD drive is */
@@ -190,9 +190,9 @@ int mountlfscd(void)
 		if (status<0)
 		{
 			/* We'll probably get here if we open a hard disk */
-			printf("%s: ioctl failed: %s\n", curdevice, strerror(errno));
+			/* printf("%s: ioctl failed: %s\n", curdevice, strerror(errno)); */
 			close(fd);
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		} 
 
 		close(fd); /* We don't need this fd any more */
@@ -201,7 +201,7 @@ int mountlfscd(void)
 		{
 			/* We'll probably get here if there's no CD in the drive */
 			printf("%s: Drive not ready\n", curdevice);
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		}
 
 		/* If we're here, the cd drive seems to have a disc in it, and is okay! */
@@ -211,7 +211,7 @@ int mountlfscd(void)
 		if (status<0)
 		{
 			printf("%s: mount failed: %s\n", curdevice, strerror(errno));
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		} 
 
 		/* If we're here, we have definatly have a data CD mounted at the mount point :) */
@@ -222,7 +222,7 @@ int mountlfscd(void)
 		if (fd<0)
 		{
 			printf("%s: Not our LFS LiveCD!\n", curdevice);
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		}
 		
 		memset(buf, 0, 32); /* Clear buffer so we don't have to check read's status */
@@ -236,7 +236,7 @@ int mountlfscd(void)
 			if (status<0)
 				printf("%s: umount failed: %s\n", curdevice, strerror(errno));
 				/* (don't care if umount failed, not much we can do about it, but nice to say anyway) */
-			continue; /* Onto the next device!! */
+			continue; /* On to the next device!! */
 		}
 
 		/* YAY! we have the lfs boot cd mounted :) */
