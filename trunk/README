@@ -56,4 +56,37 @@ Filesystem Programs
 
 nALFS - A tool for automating LFS builds
 
+------------------
 
+III. Configuration
+
+  A large part of what will unify the cds as official cds, is not just the
+software, but how the software is configured.  I will attempt to keep as
+many configuration files for each program in the repository so that all that
+is needed is to simply checkout the files for that particular piece of
+software
+
+------------------
+
+IV. Basic Installation Steps
+
+  1) Make sure that your host system (the one you'll be building the cd on)
+     has the following:
+
+     a. The same kernel version as the cd will have (this is important for X).
+        You may also want to take the time now to build squashfs support into
+	your kernel, so that you can read squashed files and dirs on the host.
+
+     b. cdrtools - You'll need this to create an iso when the cd is complete.
+
+     c. cpio - You'll need this when creating the initramfs.
+
+     d. squashfs - The most recent version should be good.
+
+  2) Build the base LFS system by the book (with the exception of the
+     bootscripts - we'll have our own adjusted bootscripts package)
+
+  3) Build each of the extra packages listed in section II according to the
+     instructions in BLFS (as of today, the svn version of BLFS).
+
+  4) 
