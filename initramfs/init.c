@@ -26,6 +26,8 @@
 #define CDROM_FSTYPE  "iso9660"           /* Filesystem of CD (could be udf? :) */
 #define LFSID_FILE    CDROM_MOUNT "/LFS"  /* The file the LFS ID is stored in */
 #define LFSID_STRING  "LFS-6.0-TP-CD"     /* Text expected in the file */
+#define MAX_RETRIES   4                   /* How many times to retry scanning for the liveCD */
+
 
 /* Devices to check for the LFS-CD, could scan some stuff in /proc in a later version */
 const char *devices[] = 
@@ -88,12 +90,21 @@ int main(void)
 
 	mkdir(CDROM_MOUNT, 0755);
 
-	while(!mountlfscd())
+	for (i=0;i<MAX_RETRIES;i++)
 	{
+		if (mountlfscd())
+			break;
+
 		/* Failed to find any device with an lfs boot cd in :( */
-		printf("I couldn't find an LFS live CD in any drive!!\n");
-		printf("I'm going to wait 10 seconds and try again\n");
+		printf("I couldn't find an LFS LiveCD in any drive!!\n");
+		printf("I'm going to wait 10 seconds and try again (Try %d/%d)\n", i, MAX_RETRIES);
 		sleep(10);
+	}
+
+	if (i>=MAX_RETRIES)
+	{
+		printf("I couldn't find an LFS LiveCD in any drive after %d retries!\n", MAX_RETRIES);
+		return(1);
 	}
 
 	/* If we're here, we have an lfs cd mounted and verified */
@@ -227,7 +238,7 @@ int mountlfscd(void)
 		}
 
 		/* YAY! we have the lfs boot cd mounted :) */
-		printf("%s: LFS CD Verified\n");
+		printf("%s: LFS CD Verified\n", curdevice);
 		return(1);
 	}
 
