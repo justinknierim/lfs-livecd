@@ -24,7 +24,7 @@ stage1:
 	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/bash ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
+	 patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=$(WD) --without-bash-malloc && make -j3 && make install && \
 	 ln -s bash $(WD)/bin/sh ; fi
 	@make clean

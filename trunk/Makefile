@@ -35,7 +35,7 @@ WGET_V= 1.9.1
 
 #RULES
 
-.PHONY: all lfs-base lfsuser which wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
+.PHONY: all lfs-base lfsuser pre-which pre-wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount
 
 all: lfs-base
@@ -66,8 +66,9 @@ lfs-base:
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
-	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT)/$(PKG) && cd $(ROOT) && make pre-bash $(chbash1)'
+	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
 	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make post-bash $(chbash2)'
+	@cp $(WD)/bin/which $(MP)/usr/bin
 	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make blfs $(chbash2)'
 	@chroot "$(MP)" $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	@make unloadmodule
@@ -127,7 +128,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow ch-libol \
 	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-lfs-bootscripts ch-environment
 
-blfs: ch-wget
+blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -256,7 +257,7 @@ createdirs:
 	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
 	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
-	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so.1 /usr/lib
+	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
 
 createfiles:
@@ -284,7 +285,7 @@ createfiles:
 popdev:
 	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 ; fi
-	@if [ ! -f /proc/mounts ] ; then mount -n -t ramfs none /dev && \
+	@if ! cat /proc/mounts | grep -q "dev ramfs" ; then mount -n -t ramfs none /dev && \
 	 mknod -m 662 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 && \
 	 mknod -m 666 /dev/zero c 1 5 && \
@@ -510,11 +511,48 @@ util-linux: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+
+lfs-bootscripts: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 wget: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-lfs-bootscripts: unamemod prep-chroot
+reiserfsprogs: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+xfsprogs: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+slang: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+nano: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+joe: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+screen: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+openssl: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+curl: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+gpm: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -777,9 +815,6 @@ ch-udev: popdev
 ch-util-linux: popdev
 	make -C $(PKG)/util-linux stage2
 
-ch-wget: popdev
-	make -C $(PKG)/wget stage2
-
 ch-lfs-bootscripts: popdev
 	make -C $(PKG)/lfs-bootscripts stage2
 
@@ -791,8 +826,37 @@ ch-environment:
 	@-dircolors -p > /etc/dircolors
 	@-cp $(ROOT)/etc/hosts /etc
 	@-cp $(ROOT)/etc/fstab /etc
-	@echo "HOSTNAME=lfslivecd" > /etc/sysconfig/network"
+	@echo "HOSTNAME=lfslivecd" > /etc/sysconfig/network
 
+ch-wget: popdev
+	make -C $(PKG)/wget stage2
+
+ch-reiserfsprogs: popdev
+	make -C $(PKG)/reiserfsprogs stage2
+
+ch-xfsprogs: popdev
+	make -C $(PKG)/xfsprogs stage2
+
+ch-slang: popdev
+	make -C $(PKG)/slang stage2
+
+ch-nano: popdev
+	make -C $(PKG)/nano stage2
+
+ch-joe: popdev
+	make -C $(PKG)/joe stage2
+
+ch-screen: popdev
+	make -C $(PKG)/screen stage2
+
+ch-openssl: popdev
+	make -C $(PKG)/openssl stage2
+
+ch-curl: popdev
+	make -C $(PKG)/curl stage2
+
+ch-gpm: popdev
+	make -C $(PKG)/gpm stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'

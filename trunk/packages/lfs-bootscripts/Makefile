@@ -22,7 +22,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -d /etc/sysconfig ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 make install && make install-hotplug && make install-syslog-ng
+	 make install && make install-hotplug && make install-syslog-ng ; fi
 	@make clean 
 
 clean:
