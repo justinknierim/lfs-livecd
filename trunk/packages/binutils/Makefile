@@ -49,7 +49,7 @@ chroot-re-adjust-toolchain:
 re-adjust-toolchain:
 	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .specstest
 	@if cat .specstest | grep -q $(WD) ; then cd $(NM)-build && make -C ld INSTALL=$(WD)/bin/install install && \
-	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' `gcc --print-file specs` ; fi
+	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/@g;' `gcc --print-file specs` ; fi
 	@touch re-adjust-toolchain
 	@make clean
 
