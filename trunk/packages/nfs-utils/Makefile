@@ -25,7 +25,6 @@ stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make && \
 	 make install ; fi
-	@cp $(ROOT)/etc/sysconfig/nfs-server /etc/sysconfig
 	@make clean
 
 clean:
