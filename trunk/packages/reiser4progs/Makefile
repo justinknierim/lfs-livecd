@@ -1,11 +1,11 @@
-# ReiserFS Progs Makefile
+# Reiser4progs Makefile
 
 # Package versions
-NM= reiserfsprogs
-VRS= 3.6.19
+NM= reiser4progs
+VRS= 1.0.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiserfsprogs/$(FILE)
+URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiser4progs/$(FILE)
 
 #RULES
 
@@ -19,11 +19,10 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkreiserfs ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mkfs.reiser4 ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sbindir=/sbin && \
-	 make -j3 && make install && \
-	 ln -s reiserfsck /sbin/fsck.reiserfs && \
-	 ln -s mkreiserfs /sbin/mkfs.reiserfs ; fi
+	 make -j3 && \
+	 make install && ln -s mkfs.reiser4 /sbin/mkreiser4fs ; fi
 	@make clean
 
 clean:

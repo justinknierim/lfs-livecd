@@ -1,11 +1,11 @@
-# Eterm Makefile
+# CDRTools Makefile
 
 # Package versions
-NM= irssi
-VRS= 0.8.9
+NM= cdrtools
+VRS= 2.01
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://irssi.org/files/$(FILE)
+URL= ftp://ftp.berlios.de/pub/cdrecord/$(FILE)
 
 #RULES
 
@@ -19,10 +19,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/irssi ] ; then tar xjvf $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@cp -ra $(ROOT)/root/.irssi /root
+	@if [ ! -f $(WD)/bin/mkisofs ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root && \
+	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root install ; fi
 	@make clean
 
 clean:

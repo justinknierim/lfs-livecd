@@ -22,7 +22,7 @@ stage2:
 	@if [ ! -f /usr/bin/fluxbox ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
-	@cp -ra $(ROOT)/root/.fluxbox /root &&
+	@cp -ra $(ROOT)/root/.fluxbox /root
 	@cp $(ROOT)/root/.xinitrc /root
 	@make clean
 

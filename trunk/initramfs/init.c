@@ -26,7 +26,7 @@
 #define CDROM_MOUNT   "/.cdrom"           /* Mount point for CD */
 #define CDROM_FSTYPE  "iso9660"           /* Filesystem of CD (could be udf? :) */
 #define LFSID_FILE    CDROM_MOUNT "/LFS"  /* The file the LFS ID is stored in */
-#define LFSID_STRING  "LFS-6.0-LIVECD"     /* Text expected in the file */
+#define LFSID_STRING  "LFS-LIVECD"     /* Text expected in the file */
 #define MAX_RETRIES   3                   /* How many times to retry scanning for the liveCD */
 
 
@@ -226,7 +226,7 @@ int mountlfscd(void)
 		}
 		
 		memset(buf, 0, 32); /* Clear buffer so we don't have to check read's status */
-		read(fd, buf, 13);
+		read(fd, buf, 10);
 		close(fd);
 
 		if (memcmp(buf, LFSID_STRING, strlen(LFSID_STRING)))

@@ -137,7 +137,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg ch-libtiff ch-links ch-openssh \
 	ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-libIDL ch-firefox ch-fluxbox \
 	ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
-	ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd
+	ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-linux \
+	ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -262,7 +263,7 @@ createdirs:
 	@-$(WD)/bin/install -d /usr/local/share/man/man{1,2,3,4,5,6,7,8}
 	@-$(WD)/bin/install -d /var/{lock,log,mail,run,spool}
 	@-$(WD)/bin/install -d /var/{opt,cache,lib/{misc,locate},local}
-	@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
+	:q@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
 	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
 	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
@@ -312,7 +313,6 @@ popdev:
 	 mount -t devpts -o gid=4,mode=620 none /dev/pts && \
 	 mount -t tmpfs none /dev/shm ; fi
 	@if [ -f /sbin/udevstart ] ; then /sbin/udevstart ; fi
-	@if [ -f /bin/hostname ] ; then hostname $(HOSTNAME) ; fi
 
 linux-libc-headers: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
@@ -732,6 +732,34 @@ LVM2: unamemod prep-chroot
 	make unmount
 
 dhcpcd: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libaal: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+reiser4progs: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+squashfs: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+cpio: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+linux: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+cdrtools: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+blfs-bootscripts: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1162,6 +1190,27 @@ ch-LVM2: popdev
 
 ch-dhcpcd: popdev
 	make -C $(PKG)/dhcpcd stage2
+
+ch-libaal: popdev
+	make -C $(PKG)/libaal stage2
+
+ch-reiser4progs: popdev
+	make -C $(PKG)/reiser4progs stage2
+
+ch-squashfs: popdev
+	make -C $(PKG)/squashfs stage2
+
+ch-cpio: popdev
+	make -C $(PKG)/cpio stage2
+
+ch-linux: popdev
+	make -C $(PKG)/linux stage2
+
+ch-cdrtools: popdev
+	make -C $(PKG)/cdrtools stage2
+
+ch-blfs-bootscripts: popdev
+	make -C $(PKG)/blfs-bootscripts stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
