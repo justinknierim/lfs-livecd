@@ -2,8 +2,6 @@
 	[ Also need to devise expert mode as per suggestion by Alexander P. ]
 * Package up kernel source (include in squashed usr dir?)
 * i18n READMEs and adjust font dirs again
-* Create /var/tmp directory ***DONE***
-	[ Also move all directory creation to the init.c? ] 
 * New /etc/issue file and greeting wrapper ***DONE***
 * Automate name of irssi and xchat nicks based on cd version
 * udev rules for mice
