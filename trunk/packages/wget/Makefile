@@ -10,17 +10,21 @@ WD= /tools
 SRC= sources
 PKG= packages
 MKTREE= $(MP)/mklivecd
-PWD= $(PKG)/wget
+PWD= $(PKG)/$(NM)
 CFLAGS= -Os -s
 
 # Package versions
+NM= wget
 VRS= 1.9.1
-DIR= wget-$(VRS)
+DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 
 #RULES
 prebuild:
-	@if [ ! -f /tools/bin/wget ] ; then cd $(MKTREE)/$(SRC) && ftpget && cd $(MKTREE)/$(PWD) && \
+	@echo ""
+	@echo "=====> Building $(NM)"
+	@echo ""
+	@if [ ! -f /tools/bin/$(NM) ] ; then cd $(MKTREE)/$(SRC) && ftpget && cd $(MKTREE)/$(PWD) && \
 	 tar xzf $(MKTREE)/$(SRC)/$(FILE) && cd $(DIR) && ./configure --prefix=$(WD) && make && make install ; fi
 	@-rm -rf $(DIR)
 
