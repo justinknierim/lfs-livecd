@@ -32,6 +32,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/diff ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && make -j3 && make install ; fi
+	@make clean
 	
 clean:
 	@-rm -rf $(DIR)

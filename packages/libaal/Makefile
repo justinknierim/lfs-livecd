@@ -1,11 +1,11 @@
-# Eterm Makefile
+# libaal Makefile
 
 # Package versions
-NM= irssi
-VRS= 0.8.9
+NM= libaal
+VRS= 1.0.3
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
-URL= http://irssi.org/files/$(FILE)
+FILE= $(DIR).tar.gz
+URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiser4progs/$(FILE)
 
 #RULES
 
@@ -19,10 +19,10 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/irssi ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libaal.so ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@cp -ra $(ROOT)/root/.irssi /root
+	 make -j3 && \
+	 make install ; fi
 	@make clean
 
 clean:

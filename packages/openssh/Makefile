@@ -6,6 +6,7 @@ VRS= 3.9p1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://sunsite.ualberta.ca/pub/OpenBSD/OpenSSH/portable/$(FILE)
+HOST-ORIG= `hostname`
 
 #RULES
 
@@ -20,6 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -d /var/empty ] ; then mkdir /var/empty ; fi
+	@hostname $(HOSTNAME)
 	@if [ ! -f /usr/bin/ssh ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 chown root:sys /var/empty && \
 	 groupadd sshd && \
@@ -28,6 +30,7 @@ stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords && \
 	 make -j3 && make install ; fi
 	@make clean
+	@hostname $(HOST-ORIG)
 
 clean:
 	@-rm -rf $(DIR)

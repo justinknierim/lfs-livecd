@@ -33,16 +33,7 @@ stage2:
 	 mkdir /etc/default && \
 	 rm /bin/groups && \
 	 pwconv && grpconv && \
-	 echo "#!$(WD)/bin/expect" > rootpasswd && \
-	 echo "spawn passwd root" >> rootpasswd && \
-	 echo "expect \"password:\"" >> rootpasswd && \
-	 echo "send \"\\n\"" >> rootpasswd && \
-	 echo "expect \"password:\"" >> rootpasswd && \
-	 echo "send \"\\n\"" >> rootpasswd && \
-	 echo "expect \"password:\"" >> rootpasswd && \
-	 echo "send \"\\n\"" >> rootpasswd && \
-	 echo "expect eof" >> rootpasswd && \
-	 chmod 755 rootpasswd && ./rootpasswd ; fi
+	 echo "root:" | chpasswd ; fi
 	@make clean
 	 
 

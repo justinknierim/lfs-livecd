@@ -33,6 +33,8 @@ stage2:
 	 make -j3 && make install && \
 	 install -d /usr/include/firefox-1.0/nss && \
 	 cp -Lf dist/private/nss/*.h dist/public/nss/*.h /usr/include/firefox-1.0/nss ; fi
+	@cp -ra $(ROOT)/root/.firefox /root
+	@cp -ra $(ROOT)/root/.mozilla /root
 	@make clean
 
 clean:
