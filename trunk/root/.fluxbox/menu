@@ -14,19 +14,22 @@
 # - To prevent any other app from overwriting your menu
 #   you can change the menu name in .fluxbox/init to:
 #     session.menuFile: /home/you/.fluxbox/my-menu
-[begin] (Fluxbox-0.9.12)
-      [exec] (xterm) {xterm}
-      [exec] (firefox) {firefox}
+[begin] (LFS LiveCD)
 [submenu] (Terminals)
       [exec] (xterm) {xterm}
       [exec] (Eterm) {Eterm}
 [end]
 [submenu] (Net)
+      [exec] (net-setup) {xterm -e net-setup}
 [submenu] (Browsers)
       [exec] (firefox) {firefox}
       [exec] (links-graphic) {links -driver x fluxbox.org}
       [exec] (links) {xterm -e links fluxbox.org}
       [exec] (lynx) {xterm -e lynx fluxbox.org}
+[end]
+[submenu] (IRC)
+      [exec] (irssi) {xterm -e irssi}
+      [exec] (xchat) {xchat}
 [end]
 [submenu] (ftp)
       [exec] (ftp) {xterm -e ftp}
