@@ -22,7 +22,10 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /sbin/hotplug ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 make install && rm -rf /etc/init.d && rm -f /etc/hotplug/net.agent ; fi
+	 make install && \
+	 cp etc/hotplug/pnp.distmap /etc/hotplug && \
+	 rm -rf /etc/init.d && \
+	 rm -f /etc/hotplug/net.agent ; fi
 	@make clean
 	 
 
