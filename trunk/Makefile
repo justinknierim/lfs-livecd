@@ -340,7 +340,7 @@ createfiles:
 popdev:
 	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 ; fi
-	@if ! cat /proc/mounts | grep -q "dev ramfs" ; then mount -n -t ramfs none /dev && \
+	@if ! tail -n 3 /proc/mounts | grep -q "dev ramfs" ; then mount -n -t ramfs none /dev && \
 	 mknod -m 662 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 && \
 	 mknod -m 666 /dev/zero c 1 5 && \

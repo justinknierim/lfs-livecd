@@ -2,7 +2,7 @@
 
 # Package versions
 NM= LVM2
-VRS= 2.01.02
+VRS= 2.01.04
 DIR= $(NM).$(VRS)
 FILE= $(DIR).tgz
 URL= ftp://sources.redhat.com/pub/lvm2/$(FILE)
