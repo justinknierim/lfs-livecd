@@ -18,9 +18,9 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f /$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) /$(DLP) ; fi
-	@if [ ! -d /usr/share/man/man9 ] ; then tar xjvf /$(DLP)/$(FILE) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -d /usr/share/man/man9 ] ; then tar xjvf $(SRC)/$(FILE) && \
 	 cd $(DIR) && make install ; fi
 	@make clean
 clean:

@@ -17,13 +17,13 @@ stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(WD)/bin/expect ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(MP)/$(DLP)/$(PATCH) && \
-	 ./configure --prefix=$(WD) --with-tcl=$(WD)/lib --with-tclinclude=$(MP)/$(MKTREE)/$(PKG)/tcl/tcl8.4.9 --with-x=no && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
+	 mv $(PATCH) $(SRC) ; fi
+	@if [ ! -f $(WD)/bin/expect ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH) && \
+	 ./configure --prefix=$(WD) --with-tcl=$(WD)/lib --with-tclinclude=../../tcl/tcl8.4.9 --with-x=no && \
 	 make -j3 && make SCRIPTS="" install ; fi
 	@make clean
 	@make -C ../tcl clean

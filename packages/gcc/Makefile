@@ -21,9 +21,9 @@ pass1:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 1"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE1) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE1) $(MP)/$(DLP) ; fi
-	if [ ! -f $(WD)/bin/$(NM) ] ; then tar xjvf $(MP)/$(DLP)/$(FILE1) && cd $(DIR) && \
+	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE1) $(SRC) ; fi
+	if [ ! -f $(WD)/bin/$(NM) ] ; then tar xjvf $(SRC)/$(FILE1) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
 	 --disable-nls --enable-shared && make -j3 BOOT_LDFLAGS="-static" bootstrap && \
@@ -34,16 +34,16 @@ pass2:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 2"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE1) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE1) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(FILE2) ] ; then $(WGET) $(URL1) && \
-	 mv $(FILE2) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(PATCH1) ] ; then $(WGET) $(URL2) && \
-	 mv $(PATCH1) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(PATCH2) ] ; then $(WGET) $(URL3) && \
-	 mv $(PATCH2) $(MP)/$(DLP) ; fi
-	@if [ ! -f .pass2 ] ; then tar xjvf $(MP)/$(DLP)/$(FILE1) && tar xjvf $(MP)/$(DLP)/$(FILE2) && cd $(DIR) && \
-	 patch -Np1 -i $(MP)/$(DLP)/$(PATCH1) && patch -Np1 -i $(MP)/$(DLP)/$(PATCH2) && \
+	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE1) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(FILE2) ] ; then $(WGET) $(URL1) && \
+	 mv $(FILE2) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL2) && \
+	 mv $(PATCH1) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL3) && \
+	 mv $(PATCH2) $(SRC) ; fi
+	@if [ ! -f .pass2 ] ; then tar xjvf $(SRC)/$(FILE1) && tar xjvf $(SRC)/$(FILE2) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) --enable-clocale=gnu \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ --disable-libstdcxx-pch && \

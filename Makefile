@@ -10,14 +10,14 @@ export timezone := America/New_York
 
 # Don't edit these!
 export WD := /tools
-export SRC := sources
+export SRC := /sources
 export PKG := packages
-export MKTREE := mklivecd
-export DLP := $(MKTREE)/$(SRC)
+export ROOT := /mklivecd
+export MKTREE := $(MP)$(ROOT)
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
 export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
-export lfsbash := set +h && umask 022 && cd $(MP)/$(MKTREE)
+export lfsbash := set +h && umask 022 && cd $(MKTREE)
 export chenv1 := $(WD)/bin/env -i HOME=/root TERM="$$TERM" PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 export chbash1 := SHELL=$(WD)/bin/bash
 export WHICH= $(WD)/bin/which
@@ -43,12 +43,10 @@ lfs-base:
 	@echo "    (This is so we can build a uname module) "
 	@echo "==============================================================="
 	#@sleep 8
-	#@if [ ! `type -pa which | head -n 1` ] ; then make which ; fi
-	#@if [ ! `$(WCH) wget` ] ; then make wget ; fi
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
-	@-mkdir $(SRC)
+	@-mkdir $(MP)$(SRC); ln -s $(MP)$(SRC) /
 	@make lfsuser
-	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MKTREE)
 	@echo ""
 	@echo "=========================="
 	@echo " Building LFS Base System"
@@ -58,8 +56,10 @@ lfs-base:
 	@make lfs-which
 	@make lfs-wget
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
+	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
+	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
-	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) && cd mklivecd && make chroot $(chbash1)'
+	@chroot "$(MP)" $(chenv1) 'chown -R 0:0 $(WD) $(SRC) $(ROOT)/$(PKG) && cd $(ROOT) && make chroot $(chbash1)'
 	@make unloadmodule
 	@make unmount
 
@@ -88,7 +88,7 @@ wget: lfsuser
 
 unamemod:
 	@if [ ! -f uname/uname_i486.ko ] ; then echo "" && echo "=====> Making Uname Module" && echo "" && \
-	  make -C /usr/src/linux SUBDIRS=$(MP)/$(MKTREE)/uname modules ; fi
+	  make -C /usr/src/linux SUBDIRS=$(MKTREE)/uname modules ; fi
 	@lsmod 1> $(WD)/.file
 	@if ! grep -q uname_i486 $(WD)/.file ; then insmod uname/uname_i486.ko ; fi
 	@-rm -f $(WD)/.file
@@ -117,6 +117,9 @@ lfs-which: lfsuser
 
 lfs-wget: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) wget'"
+
+lfs-rm-wget: lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) &&rm $(WD)/bin/wget'"
 	
 lfs-binutils-pass1: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-binutils-pass1-scpt'"
@@ -261,24 +264,13 @@ createfiles:
 popdev:
 	@-mknod -m 600 /dev/console c 5 1
 	@-mknod -m 666 /dev/console c 1 3
-	@-mount -n -t ramfs none /dev
-	@-mknod -m 662 /dev/console c 5 1
-	@-mknod -m 666 /dev/null c 1 3
-	@-mknod -m 666 /dev/zero c 1 5
-	@-mknod -m 666 /dev/ptmx c 5 2
-	@-mknod -m 666 /dev/tty c 5 0 
-	@-mknod -m 444 /dev/random c 1 8
-	@-mknod -m 444 /dev/urandom c 1 9
-	@chown root:tty /dev/{console,ptmx,tty}
-	@-ln -s /proc/self/fd /dev/fd
-	@-ln -s /proc/self/fd/0 /dev/stdin
-	@-ln -s /proc/self/fd/1 /dev/stdout
-	@-ln -s /proc/self/fd/2 /dev/stderr
-	@-ln -s /proc/kcore /dev/core
-	@-mkdir /dev/pts
-	@-mkdir /dev/shm
-	@-mount -t devpts -o gid=4,mode=620 none /dev/pts
-	@-mount -t tmpfs none /dev/shm
+	@if ! cat /proc/mounts | grep -q $(MP)/dev ; then mount -n -t ramfs none /dev && mknod -m 662 /dev/console c 5 1 \
+	 && mknod -m 666 /dev/null c 1 3  && mknod -m 666 /dev/zero c 1 5 && mknod -m 666 /dev/ptmx c 5 2 \
+	 && mknod -m 666 /dev/tty c 5 0 && mknod -m 444 /dev/random c 1 8 && mknod -m 444 /dev/urandom c 1 9 \
+	 && chown root:tty /dev/{console,ptmx,tty} && ln -s /proc/self/fd /dev/fd && ln -s /proc/self/fd/0 /dev/stdin \
+	 && ln -s /proc/self/fd/1 /dev/stdout && ln -s /proc/self/fd/2 /dev/stderr && ln -s /proc/kcore /dev/core \
+	 && mkdir /dev/pts && mkdir /dev/shm && mount -t devpts -o gid=4,mode=620 none /dev/pts \
+	 && mount -t tmpfs none /dev/shm ; fi
 
 linux-libc-headers: unamemod
 	$(MAKE) -C $(PKG)/$@ chroot

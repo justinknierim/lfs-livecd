@@ -17,12 +17,12 @@ stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(MP)/$(DLP)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(MP)/$(DLP) ; fi
-	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(MP)/$(DLP)/$(PATCH) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
+	 mv $(PATCH) $(SRC) ; fi
+	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX' && \
 	 make -j3 perl utilities && cp perl pod/pod2man $(WD)/bin && \
 	 mkdir -p $(WD)/lib/perl5/$(VRS) && cp -R lib/* $(WD)/lib/perl5/$(VRS) ; fi

@@ -15,9 +15,9 @@ stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(MP)/$(DLP) ; fi
-	@if [ ! -f $(WD)/bin/diff ] ; then tar xjvf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(WD)/bin/diff ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 
