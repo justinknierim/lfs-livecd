@@ -1026,6 +1026,7 @@ ch-lfs-bootscripts: popdev
 	make -C $(PKG)/lfs-bootscripts stage2
 
 ch-environment:
+	@-mkdir /etc/sysconfig
 	@-cp $(ROOT)/etc/sysconfig/clock /etc/sysconfig
 	@-cp $(ROOT)/etc/inputrc /etc
 	@-cp $(ROOT)/etc/bashrc /etc
