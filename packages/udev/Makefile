@@ -31,7 +31,8 @@ stage2:
 	@if [ ! -f /sbin/udevstart ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 make udevdir=/dev && make udevdir=/dev install && \
 	 cp $(SRC)/$(FILE1) /etc/udev/permissions.d/25-lfs.permissions && \
-	 cp $(SRC)/$(FILE2) /etc/udev/rules.d/25-lfs.rules ; fi
+	 cp $(SRC)/$(FILE2) /etc/udev/rules.d/25-lfs.rules && \
+	 /sbin/udevstart ; fi
 	@make clean
 	 
 
