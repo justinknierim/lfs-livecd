@@ -2,7 +2,7 @@
 
 # Package versions
 NM= samba
-VRS= 3.0.10
+VRS= 3.0.11
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://us2.samba.org/samba/ftp/$(FILE)
