@@ -6,6 +6,8 @@
 #
 # jhuntwork@linuxfromscratch.org
 #
+# Version for x86 arch using LFS 6.1
+#
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 # Edit this line to match the mount-point of the
@@ -18,17 +20,18 @@ export timezone := America/New_York
 # Page size for groff
 export pagesize := letter
 
-# Change this to 'no' if you don't want to use the
+# Change this to 'n' if you don't want to use the
 # uname module to build for i486. (Of course, the resultant
 # cd will not be an official cd then ;) )
 UNAMEMOD= y
 
 # Directory where your current compiled kernel source is located.
-# This is needed to be able to compile the uname module.
+# This is needed to be able to compile the uname module, if you
+# have left UNAMEMOD to its default 'y'.
 # Since it's not a good idea to have your kernel source in
 # /usr/src/linux, this value should probably be changed to match
 # where you have wisely stored your source. :)
-LINUXSRC= /usr/src/linux
+LINUXSRC= /mnt/lfs/linux-2.6.10
 
 # Top-level of these Makefiles. Edit this if you've named
 # this directory differently.
@@ -36,13 +39,15 @@ LINUXSRC= /usr/src/linux
 # an absolute file path.)
 export ROOT := /lfs-livecd
 
+# Ftp server for the lfs-base packages
+export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
+
 # Don't edit these!
 export HOSTNAME := lfslivecd
 export WD := /tools
 export SRC := /sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
-export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 export CFLAGS := -Os -s
 export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
@@ -53,17 +58,23 @@ export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PA
 export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
-export WGET= wget -c --passive-ftp
+export WGET= wget --passive-ftp
 export DATE= `date +%Y%m%d`
 
 FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
-#RULES
+# TARGETS
+#=======================================================================
 
+
+# The make build starts and ends here, first building the dependency targets,
+# lfs-base, extend-lfs and iso, then it echos a handy notice that it's finished. :)
 
 all: lfs-base extend-lfs iso
 	@echo "The livecd, $(MKTREE)/lfs-livecd-$(DATE).iso, is ready!"
+
+# This target builds just a base LFS system, minus the kernel and bootscripts
 
 lfs-base:
 	@echo "==============================================================="
@@ -96,8 +107,6 @@ lfs-base:
 	@echo "=========================="
 	@echo ""
 	@make unamemod
-	@make lfs-which
-	@make lfs-wget
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
@@ -117,12 +126,12 @@ lfsuser:
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
 	@touch lfsuser
 
-pre-which: lfsuser
-	@echo "#!/bin/sh" > $(WHICH)
-	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
-	@chmod 755 $(WHICH)
+#pre-which: lfsuser
+#	@echo "#!/bin/sh" > $(WHICH)
+#	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
+#	@chmod 755 $(WHICH)
 
-pre-wget: lfsuser
+pre-wget: 
 	@if [ ! -f /tools/bin/ftpget ] ; then echo "#!/bin/sh" > $(FTPGET) && \
 					      echo "ftp -n << END" >> $(FTPGET) && \
 					      echo "open ftp.gnu.org" >> $(FTPGET) && \
@@ -146,7 +155,7 @@ ifeq ($(UNAMEMOD),y)
 else
 endif
 
-tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
+tools:  pre-wget lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
 	lfs-gawk-scpt lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
@@ -180,9 +189,6 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
-
-lfs-which: unamemod lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-which'"
 
 lfs-wget: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) pre-wget'"
