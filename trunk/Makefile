@@ -5,6 +5,9 @@
 # partition you'll be using to build the cd.
 export MP := /mnt/lfs
 
+# Timezone, obviously ;)
+export timezone := America/New_York
+
 # Don't edit these!
 export WD := /tools
 export SRC := sources
@@ -24,6 +27,10 @@ FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
 #RULES
+
+.PHONY: all lfs-base lfsuser which wget unamemod tools prep-chroot chroot createdirs createfiles popdev \
+	clean scrub unloadmodule unmount
+
 all: lfs-base
 
 lfs-base:
@@ -91,6 +98,7 @@ tools:  lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt l
 	lfs-gawk-scpt lfs-coreutils-scpt lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
 	lfs-bash-scpt lfs-m4-scpt lfs-bison-scpt lfs-flex-scpt lfs-util-linux-scpt lfs-perl-scpt lfs-strip-scpt
+	@cp /etc/resolv.conf $(WD)/etc
 
 prep-chroot:
 	@-mkdir -p $(MP)/{proc,sys}
@@ -98,7 +106,7 @@ prep-chroot:
 	 mount -f -t ramfs ramfs $(MP)/dev && mount -f -t tmpfs tmpfs $(MP)/dev/shm && \
 	 mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
 
-chroot: createdirs createfiles popdev ch-linux-libc-headers
+chroot: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain
 
 
 # Rules for building tools/stage1
@@ -248,6 +256,7 @@ createfiles:
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
+	@mv $(WD)/etc/resolv.conf /etc
 
 popdev:
 	@-mknod -m 600 /dev/console c 5 1
@@ -273,6 +282,15 @@ popdev:
 
 linux-libc-headers: unamemod
 	$(MAKE) -C $(PKG)/$@ chroot
+
+man-pages: unamemod
+	$(MAKE) -C $(PKG)/$@ chroot
+
+glibc: unamemod
+	$(MAKE) -C $(PKG)/$@ chroot
+
+re-adjust-toolchain: unamemod
+	$(MAKE) -C $(PKG)/binutils chroot-re-adjust-toolchain
 
 # Do Not call the rules below manually!
 # They are used internally and must be called by
@@ -375,6 +393,16 @@ lfs-strip-scpt:
 
 ch-linux-libc-headers:
 	$(MAKE) -C $(PKG)/linux-libc-headers stage2
+
+ch-man-pages:
+	$(MAKE) -C $(PKG)/man-pages stage2
+
+ch-glibc:
+	$(MAKE) -C $(PKG)/glibc stage2
+
+ch-re-adjust-toolchain:
+	$(MAKE) -C $(PKG)/binutils re-adjust-toolchain
+
 
 # Rules to clean your tree. 
 # "clean" removes package directories and

@@ -9,6 +9,8 @@ URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
+.PHONY: stage1 clean
+
 stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"

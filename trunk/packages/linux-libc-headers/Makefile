@@ -9,6 +9,8 @@ URL= http://ep09.pld-linux.org/~mmazur/$(NM)/$(FILE)
 
 # RULES
 
+.PHONY: stage1 chroot stage2 clean
+
 stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"
