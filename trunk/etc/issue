@@ -9,7 +9,7 @@ To begin, login as root. (There is no password.)
 
 All the source packages you will need to build an LFS system
 are located in /sources and you can find the book in
-/usr/share/LFS-BOOK-testing-HTML.
+/usr/share/LFS-BOOK-6.1-HTML.
 
 Support questions concerning this cd should be directed to
 livecd@linuxfromscratch.org

@@ -19,8 +19,10 @@ pass1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --disable-nls && make configure-host && make -j3 LDFLAGS="-all-static" && \
-	make install && make -C ld clean && make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
+	 ../$(DIR)/configure --prefix=$(WD) --host=$(CHOST) --target=$(CHOST) --disable-nls && make && \
+	make install && \
+	make -C ld clean && \
+	make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
 
 adjust-toolchain:
 	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .specstest
@@ -39,8 +41,11 @@ pass2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f .pass2 ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --enable-shared --with-lib-path=$(WD)/lib && \
-	 make -j3 && make install && make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib ; fi
+	 ../$(DIR)/configure --prefix=$(WD) --host=$(CHOST) --target=$(CHOST) \
+	 --enable-shared --with-lib-path=$(WD)/lib && \
+	 make -j3 && \
+	 make install && \
+	 make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib ; fi
 	@touch .pass2
 
 chroot-re-adjust-toolchain:
@@ -64,7 +69,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=/usr --enable-shared && \
+	 ../$(DIR)/configure --prefix=/usr --host=$(CHOST) --target=$(CHOST) --enable-shared && \
 	 make -j3 tooldir=/usr && \
 	 make tooldir=/usr install && \
 	 cp ../$(DIR)/include/libiberty.h /usr/include ; fi

@@ -2,7 +2,7 @@
 
 # Package versions
 NM= LFS-BOOK
-VRS= testing
+VRS= 6.1
 DIR= $(NM)-$(VRS)-HTML
 URL= svn://svn.linuxfromscratch.org/LFS/branches/$(VRS)/BOOK
 

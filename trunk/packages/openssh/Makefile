@@ -6,7 +6,7 @@ VRS= 3.9p1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://sunsite.ualberta.ca/pub/OpenBSD/OpenSSH/portable/$(FILE)
-HOST-ORIG= `hostname`
+HOSTORIG= `hostname`
 
 #RULES
 
@@ -30,7 +30,7 @@ stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords && \
 	 make -j3 && make install ; fi
 	@make clean
-	@hostname $(HOST-ORIG)
+	@hostname $(HOSTORIG)
 
 clean:
 	@-rm -rf $(DIR)

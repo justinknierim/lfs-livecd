@@ -20,19 +20,6 @@ export timezone := America/New_York
 # Page size for groff
 export pagesize := letter
 
-# Change this to 'n' if you don't want to use the
-# uname module to build for i486. (Of course, the resultant
-# cd will not be an official cd then ;) )
-UNAMEMOD= y
-
-# Directory where your current compiled kernel source is located.
-# This is needed to be able to compile the uname module, if you
-# have left UNAMEMOD to its default 'y'.
-# Since it's not a good idea to have your kernel source in
-# /usr/src/linux, this value should probably be changed to match
-# where you have wisely stored your source. :)
-LINUXSRC= /mnt/lfs/linux-2.6.10
-
 # Top-level of these Makefiles. Edit this if you've named
 # this directory differently.
 # (The beginning / is necessary - leave it in place - this is *not*
@@ -40,7 +27,7 @@ LINUXSRC= /mnt/lfs/linux-2.6.10
 export ROOT := /lfs-livecd
 
 # Ftp server for the lfs-base packages
-export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
+export FTP := ftp://ftp.lfs-matrix.net/pub/lfs/lfs-packages/conglomeration
 
 # Don't edit these!
 export VERSION=x86-6.1-1-pre3
@@ -49,13 +36,21 @@ export WD := /tools
 export SRC := /sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
-export CFLAGS := -Os -s
-export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+export CFLAGS := -Os -s -march=i486
+export CXXFLAGS := -Os -s -march=i486
+export CHOST := i486-pc-linux-gnu
+export lfsenv := exec env -i CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
-export chenv1 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
-export chenv2 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-export chenv3 := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+
+export chenv1 := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+
+export chenv2 := $(WD)/bin/env -i HOME=/root CFLGAS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+
+export chenv3 := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+
 export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
+
 export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
@@ -72,11 +67,13 @@ WGET_V= 1.9.1
 # lfs-base, extend-lfs and iso, then it echos a handy notice that it's finished. :)
 
 all: lfs-base extend-lfs iso
-	@echo "The livecd, $(MKTREE)/livecd-$(VERSION).iso, is ready!"
+	@echo "The livecd, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 
 lfs-base:
+	@if [ `whoami` != "root" ] ; then echo "You must be logged in as root." \
+	 && exit 1 ; fi
 	@echo "==============================================================="
 	@echo " Before you begin building the LiveCD image, please ensure "
 	@echo " that the following is true: "
@@ -84,13 +81,7 @@ lfs-base:
 	@echo " 1) Your running kernel is the same version as the target "
 	@echo "    kernel for the cd."
 	@echo ""
-	@echo " 2) Your compiled source for your current kernel and the"
-	@echo "    variable LINUXSRC set to that location. (Default is"
-	@echo "    /usr/src/linux). You can set that by passing the variable "
-	@echo "    to make: 'make LINUXSRC=/path/to/kernel/source'"
-	@echo "    This is necessary for building a uname module."
-	@echo ""
-	@echo " 3) You have an active internet connection."
+	@echo " 2) You have an active internet connection."
 	@echo "==============================================================="
 	@echo ""
 	@echo -n -e "Countdown to commence building:"
@@ -99,6 +90,7 @@ lfs-base:
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
 	@-ln -sf $(MP)$(SRC) /
+	@-ln -s $(MP)$(ROOT) /
 	@make lfsuser
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MP)$(SRC) $(MKTREE)
 	@echo ""
@@ -146,14 +138,6 @@ pre-wget:
 	@$(MAKE) -C $(PKG)/wget prebuild
 
 unamemod:
-ifeq ($(UNAMEMOD),y)
-	@if [ ! -f uname/uname_i486.ko ] ; then echo "" && echo "=====> Making Uname Module" && echo "" && \
-  	make -C $(LINUXSRC) SUBDIRS=$(MKTREE)/uname modules ; fi
-	@lsmod 1> $(WD)/.file
-	@if ! grep -q uname_i486 $(WD)/.file ; then insmod uname/uname_i486.ko ; fi
-	@-rm -f $(WD)/.file
-else
-endif
 
 tools:  pre-which pre-wget lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
@@ -176,8 +160,8 @@ pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-gl
 	ch-iproute2 ch-perl ch-texinfo ch-autoconf ch-automake ch-bash
 
 post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep ch-grub ch-gzip \
-	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow ch-libol \
-	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-environment
+	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
+	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux ch-environment
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
@@ -543,11 +527,7 @@ shadow: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libol: unamemod prep-chroot 
-	make -C $(PKG)/$@ chroot
-	make unmount
-
-syslog-ng: unamemod prep-chroot 
+sysklogd: unamemod prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1070,11 +1050,8 @@ ch-psmisc: popdev
 ch-shadow: popdev
 	make -C $(PKG)/shadow stage2
 
-ch-libol: popdev
-	make -C $(PKG)/libol stage2
-
-ch-syslog-ng: popdev
-	make -C $(PKG)/syslog-ng stage2
+ch-sysklogd: popdev
+	make -C $(PKG)/sysklogd stage2
 
 ch-sysvinit: popdev
 	make -C $(PKG)/sysvinit stage2
