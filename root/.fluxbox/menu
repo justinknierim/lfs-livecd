@@ -23,9 +23,9 @@
       [exec] (net-setup) {xterm -e net-setup}
 [submenu] (Browsers)
       [exec] (firefox) {firefox}
-      [exec] (links-graphic) {links -driver x fluxbox.org}
-      [exec] (links) {xterm -e links fluxbox.org}
-      [exec] (lynx) {xterm -e lynx fluxbox.org}
+      [exec] (links-graphic) {links -driver x}
+      [exec] (links) {xterm -e links}
+      [exec] (lynx) {xterm -e lynx}
 [end]
 [submenu] (IRC)
       [exec] (irssi) {xterm -e irssi}
@@ -39,6 +39,7 @@
       [exec] (xedit) {xedit}
       [exec] (nano) {xterm -e nano}
       [exec] (vi) {xterm -e vi}
+      [exec] (joe) {xterm -e joe}
 [end]
 [submenu] (Multimedia)
 [submenu] (X-utils)
