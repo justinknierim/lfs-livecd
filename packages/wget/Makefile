@@ -30,7 +30,8 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WD)/bin/ftpget ; fi
 	@if [ ! -f /usr/bin/$(NM) ] ; then \
-	 tar xzvf $(FILE) && cd $(DIR) && ./configure --prefix=/usr && \
+	 tar xzvf $(FILE) && cd $(DIR) && \
+	 ./configure --prefix=/usr --with-ssl && \
 	 make -j3 && make install ; fi
 	@make clean
 
