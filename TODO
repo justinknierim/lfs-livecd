@@ -2,6 +2,9 @@
 	[ Also need to devise expert mode as per suggestion by Alexander P. ]
 * Package up kernel source (include in squashed usr dir?)
 * i18n READMEs and adjust font dirs again
+* Create /var/tmp directory
+	[ Also move all directory creation to the init.c ] 
+* New /etc/issue file and greeting wrapper
 * Tweak fluxbox menus
 * nALFS profile
 * slnr and mutt?
