@@ -5,7 +5,7 @@
 	Some packages need blfs bootscripts [ openssh, gpm ]
 
 * WWW_HOME variable in /etc/profile should be set for lynx
-* Check for existence of $(WD)/sources before making the dir
+* Check for existence of $(WD)/sources before making the dir ***DONE***
 * Add a note to the Makefile about requiring an internet connection
 * Add a section for building a cdrtools and squashfs (outside the cd system)
 * Add custom bootscript package to svn repo
