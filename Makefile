@@ -6,11 +6,12 @@
 MP= /mnt/lfs
 
 # Don't edit these!
-SRC= /sources
 WD= /tools
 WHICH= $(WD)/bin/which
 FTPGET= $(WD)/bin/ftpget
 MKTREE= $(MP)/mklivecd
+SRC= sources
+PKG= packages
 CFLAGS= -Os -s
 
 # Package versions
@@ -30,7 +31,7 @@ all:
 	#@if [ ! `type -pa which | head -n 1` ] ; then make which ; fi
 	#@if [ ! `$(WCH) wget` ] ; then make wget ; fi
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
-	@-mkdir $(MP)$(SRC); ln -s $(MP)$(SRC) /
+	@-mkdir $(SRC)
 	@make lfsuser
 	@su - lfs -c "exec env -i LFS=$(MP) LC_ALL=POSIX PATH=/tools/bin:/bin:/usr/bin \
 	 /bin/bash -c 'set +h && umask 022 && cd $(MKTREE) && make which && make wget && make tools'"
@@ -38,7 +39,7 @@ all:
 lfsuser:
 	@-groupadd lfs
 	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
-	@chown lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(MP)$(SRC)
+	@chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(SRC) $(PKG)
 
 which:
 	@echo "#!/bin/sh" > $(WHICH)
@@ -46,20 +47,18 @@ which:
 	@chmod 755 $(WHICH)
 
 wget:
-	@if [ !
-	@echo "#!/bin/sh" > $(FTPGET)
-	@echo "ftp -n << END" >> $(FTPGET)
-	@echo "open ftp.gnu.org" >> $(FTPGET) 
-	@echo "user anonymous" >> $(FTPGET)
-	@echo "passive" >> $(FTPGET)
-	@echo "binary" >> $(FTPGET)
-	@echo "cd gnu/wget" >> $(FTPGET)
-	@echo "get wget-$(WGET_V).tar.gz" >> $(FTPGET)
-	@echo "bye" >> $(FTPGET)
-	@echo "END" >> $(FTPGET)
-	@chmod 755 $(FTPGET)
-	@cd $(SRC) && echo $$PATH && ftpget && tar xzvf wget-$(WGET_V).tar.gz && cd wget-$(WGET_V) && \
-	 ./configure --prefix=$(WD) && make && make install ; 
+	@if [ ! -f /tools/bin/ftpget ] ; then echo "#!/bin/sh" > $(FTPGET) && \
+					      echo "ftp -n << END" >> $(FTPGET) && \
+					      echo "open ftp.gnu.org" >> $(FTPGET) && \
+					      echo "user anonymous" >> $(FTPGET) && \
+				 	      echo "passive" >> $(FTPGET) && \
+					      echo "binary" >> $(FTPGET) && \
+					      echo "cd gnu/wget" >> $(FTPGET) && \
+					      echo "get wget-$(WGET_V).tar.gz" >> $(FTPGET) && \
+					      echo "bye" >> $(FTPGET) && \
+					      echo "END" >> $(FTPGET) && \
+					      chmod 755 $(FTPGET) ; fi
+	@$(MAKE) -C $(PKG)/wget prebuild
 
 tools:
 
@@ -68,3 +67,4 @@ clean:
 	@-rm -rf $(MP)$(WD)
 	@-userdel lfs
 	@-rm -rf /home/lfs
+	@$(MAKE) -C $(PKG)/wget clean
