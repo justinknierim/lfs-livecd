@@ -43,6 +43,7 @@ export ROOT := /lfs-livecd
 export FTP := ftp://ftp.lfs-matrix.de/pub/lfs/lfs-packages/conglomeration
 
 # Don't edit these!
+export VERSION=x86-6.1-1-pre3
 export HOSTNAME := lfslivecd
 export WD := /tools
 export SRC := /sources
@@ -59,7 +60,6 @@ export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget --passive-ftp
-export DATE= `date +%Y%m%d`
 
 FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
@@ -72,7 +72,7 @@ WGET_V= 1.9.1
 # lfs-base, extend-lfs and iso, then it echos a handy notice that it's finished. :)
 
 all: lfs-base extend-lfs iso
-	@echo "The livecd, $(MKTREE)/lfs-livecd-$(DATE).iso, is ready!"
+	@echo "The livecd, $(MKTREE)/livecd-$(VERSION).iso, is ready!"
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 
@@ -1302,19 +1302,20 @@ ch-strip: popdev
 prepiso:
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
 	@install -m644 etc/issue $(MP)/etc/issue
-	@sed -i "s/Version:/Version: $(DATE)/" $(MP)/etc/issue
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m755 scripts/{net-setup,greeting} $(MP)/usr/bin/
 	@-mkdir $(MP)/etc/sysconfig/network-devices/ifconfig.eth0
 	@-mkdir $(MP)/iso
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
 	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
+	 if [ -f root/.bash_history ] ; then rm root/.bash_history ; fi && \
 	 tar cjvf root.tar.bz2 root && cp root.tar.bz2 iso/ && \
 	 $(WD)/bin/mksquashfs usr usr.sqfs && mv usr.sqfs iso/ && \
 	 echo "LFS-LIVECD" > iso/LFS
 	@touch prepiso
 
 iso: prepiso
-	cd $(MP)/iso ; $(WD)/bin/mkisofs -R -l -L -D -o $(MKTREE)/lfs-livecd-$(DATE).iso -b boot/isolinux/isolinux.bin \
+	cd $(MP)/iso ; $(WD)/bin/mkisofs -R -l -L -D -o $(MKTREE)/livecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "LFS_CD" ./
 
 # Rules to clean your tree. 
@@ -1339,7 +1340,7 @@ scrub: clean
 	 usr var ; do rm -rf $(MP)/$$i ; done
 	@-rm $(MP)/{etc,root}.tar.bz2
 	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/{*.gz,*.bz2,*.zip,*.tgz} ; done
-	@-rm lfs-livecd-$(DATE).iso
+	@-rm livecd-$(VERSION).iso
 
 unloadmodule:
 	@-rmmod uname_i486
