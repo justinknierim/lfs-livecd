@@ -19,8 +19,8 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
-	@if [ ! -d $(DIR) ] ; then svn co $(URL) $(DIR) ; fi
-	@if [ ! -d /usr/share/$(DIR) ] ; then cd $(DIR) && \
+	@if [ ! -d /usr/share/$(DIR) ] ; then svn co $(URL) $(DIR) && \
+	 cd $(DIR) && \
 	 make BASEDIR=/usr/share/$(DIR) ; fi
 	@make clean
 

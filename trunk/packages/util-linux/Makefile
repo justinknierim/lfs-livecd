@@ -6,8 +6,8 @@ VRS= 2.12q
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-cramfs-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH)
+URL= http://www.kernel.org/pub/linux/utils/$(NM)/$(FILE)
+URL1= http://www.linuxfromscratch.org/patches/lfs/cvs/testing/$(PATCH)
 
 # RULES
 
