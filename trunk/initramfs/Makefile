@@ -29,7 +29,8 @@ init: init.c
 	$(MK) -m 660 $(WD)/dev/sr6 b 11 6
 	$(MK) -m 660 $(WD)/dev/sr7 b 11 7
 	$(CC) $(CFLAGS) $? -o $(WD)/$@
-	cd $(WD); find . | cpio -o -H newc | gzip -9 > ../initramfs_data.cpio.gz	
+	cd $(WD); find . | cpio -o -H newc | gzip -9 > ../initramfs_data.cpio.gz
+	rm -rf temp
 
 clean:
 	-rm -f init
