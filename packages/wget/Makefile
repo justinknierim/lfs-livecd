@@ -7,13 +7,17 @@ DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 
 #RULES
+
+.PHONY: prebuild clean
+
 prebuild:
 	@echo ""
 	@echo "=====> Building $(NM)"
 	@echo ""
-	@if [ ! -f $(MP)/$(DLP)/$(FILE) ] ; then cd $(MP)/$(DLP) && ftpget ; fi
+	@if [ ! -f $(FILE) ] ; then ftpget ; fi
 	@if [ ! -f $(WD)/bin/$(NM) ] ; then \
-	 tar xzf $(MP)/$(DLP)/$(FILE) && cd $(DIR) && ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl && \
+	 tar xzf $(FILE) && cd $(DIR) && ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
+	 --enable-static --disable-shared && \
 	 make -j3 && make install ; fi
 	@make clean
 

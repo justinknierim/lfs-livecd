@@ -9,6 +9,8 @@ URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
+.PHONY: pass1 adjust-toolchain pass2 chroot-re-adjust-toolchain re-adjust-toolchain clean
+
 pass1:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 1"
@@ -43,6 +45,15 @@ pass2:
 	 ../$(DIR)/configure --prefix=$(WD) --enable-shared --with-lib-path=$(WD)/lib && \
 	 make -j3 && make install && make -C ld clean && make -C ld LIB_PATH=/usr/lib:/lib ; fi
 	@touch .pass2
+
+chroot-re-adjust-toolchain:
+	@chroot "$(MP)" $(chenv1) 'cd $(MKTREE) && make ch-re-adjust-toolchain $(chbash1)'
+
+re-adjust-toolchain:
+	@echo 'main(){}' > dummy.c && cc dummy.c && readelf -l a.out > .file
+	@if cat .file | grep -q $(WD) ; then cd $(NM) make -C ld INSTALL=$(WD)/bin/install install && \
+	 perl -pi -e 's@ $(WD)/lib/ld-linux.so.2@ /lib/ld-linux.so.2@g;' -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/@g;' `gcc --print-file specs` ; fi
+	@make clean
 
 clean:
 	@-rm -rf $(DIR)

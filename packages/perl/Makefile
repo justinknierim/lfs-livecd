@@ -11,6 +11,8 @@ URL1= $(FTP)/$(NM)/$(PATCH)
 
 # RULES
 
+.PHONY: stage1 clean
+
 stage1:
 	@echo ""
 	@echo "=====> Building $(NM)"

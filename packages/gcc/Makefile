@@ -14,7 +14,9 @@ URL2= $(FTP)/$(NM)/$(PATCH1)
 URL3= $(FTP)/$(NM)/$(PATCH2)
 
 # RULES
-	
+
+.PHONY: pass1 pass2 clean
+
 pass1:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 1"
