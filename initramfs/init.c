@@ -114,6 +114,9 @@ int main(void)
 	printf("Building Directory Structure...\n");
 	mkdir("tmp", 01777);
 	mkdir("root", 01750);
+	mkdir("home", 01755);
+	mkdir("mnt", 01755);
+	mkdir("mnt/lfs", 01755);
 
 	/* Make var directories */
 	for (i=0;var_tree[i]!=NULL;i++)
@@ -181,8 +184,8 @@ int mountlfscd(void)
 			/*
 				We'll get here if we can't open the device
 				(No such device, No such file or directory, etc, etc)
-			*/
-			printf("%s: open failed: %s\n", curdevice, strerror(errno));
+			
+			printf("%s: open failed: %s\n", curdevice, strerror(errno)); */
 			continue; /* On to the next device!! */
 		}
 
