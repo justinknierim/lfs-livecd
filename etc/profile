@@ -1,6 +1,7 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
 PS1='\h:\u \[\033[00;32m\]\w\[\033[00m\] \$ '
 INPUTRC=/etc/inputrc
+XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog"
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 export PS1 PATH INPUTRC PKG_CONFIG_PATH
 source /etc/bashrc

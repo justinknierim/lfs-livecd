@@ -23,7 +23,7 @@ export lfsenv := exec env -i CFLAGS=' $(CFLAGS) ' LFS=$(MP) LC_ALL=POSIX PATH=$(
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 export chenv1 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 export chenv2 := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-export chenv3 := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+export chenv3 := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
 export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
 export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
@@ -49,7 +49,7 @@ lfs-base:
 	@echo " 2) Your compiled kernel sources are located in /usr/src/linux "
 	@echo "    (This is so we can build a uname module) "
 	@echo "==============================================================="
-	#@sleep 8
+	@sleep 8
 	@-mkdir -p $(MP)$(WD)/bin; ln -s $(MP)$(WD) /
 	@-mkdir $(MP)$(SRC); ln -s $(MP)$(SRC) /
 	@make lfsuser
@@ -70,7 +70,7 @@ lfs-base:
 	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@chroot "$(MP)" $(chenv3) 'set +h && cd $(ROOT) && make blfs $(chbash2)'
-	@chroot "$(MP)" $(chenvstrip) 'set +h && cd $(ROOT) && make ch-strip'
+	#@chroot "$(MP)" $(chenvstrip) 'set +h && cd $(ROOT) && make ch-strip'
 	@make unloadmodule
 	@make unmount
 
@@ -128,7 +128,9 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow ch-libol \
 	ch-syslog-ng ch-sysvinit ch-tar ch-udev ch-util-linux ch-lfs-bootscripts ch-environment
 
-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm
+blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
+	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy \
+	ch-LFS-BOOK
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -556,6 +558,50 @@ gpm: unamemod prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+zip: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+unzip: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+lynx: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libxml2: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+expat: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+subversion: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+docbook-xml: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+libxslt: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+docbook-xsl: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+html_tidy: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+LFS-BOOK: unamemod prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 strip: prep-chroot
 	@chroot $(MP) $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	make unmount
@@ -857,6 +903,39 @@ ch-curl: popdev
 
 ch-gpm: popdev
 	make -C $(PKG)/gpm stage2
+
+ch-zip: popdev
+	make -C $(PKG)/zip stage2
+
+ch-unzip: popdev
+	make -C $(PKG)/unzip stage2
+
+ch-lynx: popdev
+	make -C $(PKG)/lynx stage2
+
+ch-libxml2: popdev
+	make -C $(PKG)/libxml2 stage2
+
+ch-expat: popdev
+	make -C $(PKG)/expat stage2
+
+ch-subversion: popdev
+	make -C $(PKG)/subversion stage2
+
+ch-docbook-xml: popdev
+	make -C $(PKG)/docbook-xml stage2
+
+ch-libxslt: popdev
+	make -C $(PKG)/libxslt stage2
+
+ch-docbook-xsl: popdev
+	make -C $(PKG)/docbook-xsl stage2
+
+ch-html_tidy: popdev
+	make -C $(PKG)/html_tidy stage2
+
+ch-LFS-BOOK: popdev
+	make -C $(PKG)/LFS-BOOK stage2
 
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'

@@ -24,7 +24,9 @@ stage2:
 	 rm doc/apps/passwd.pod && mv doc/crypto/{,openssl_}threads.pod && \
 	 ./config --openssldir=/etc/ssl --prefix=/usr shared && \
 	 sed -i 's@SHLIBDIRS= fips crypto ssl@SHLIBDIRS= crypto ssl@g' Makefile && \
-	 make -j3 MANDIR=/usr/share/man CFLAGS="-Os -s -mtune=i486" && make MANDIR=/usr/share/man install && \
+	 sed -i 's/mcpu=pentium/mtune=i486/' Configure && \
+	 sed -i 's/mcpu=pentium/mtune=i486/' Makefile && \
+	 make -j3 MANDIR=/usr/share/man && make MANDIR=/usr/share/man install && \
 	 cp -r certs /etc/ssl ; fi
 	@make clean
 
