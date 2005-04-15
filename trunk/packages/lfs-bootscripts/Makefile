@@ -2,7 +2,7 @@
 
 # Package versions
 NM= lfs-bootscripts
-VRS= 3.1.0
+VRS= 3.2.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
@@ -21,8 +21,8 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d bootscripts ] ; then svn co svn://svn.linuxfromscratch.org/LFS/trunk/bootscripts && \
-	 cd bootscripts && make install-livecd ; fi
+	@if [ ! -f /etc/rc.d/init.d/mountsqfs ] ; then tar xjvf ${SRC}/${FILE} && \
+	 cd ${DIR} && make install-livecd ; fi
 
 clean:
 	@-rm -rf bootscripts

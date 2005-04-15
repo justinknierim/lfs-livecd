@@ -5,7 +5,9 @@ NM= shadow
 VRS= 4.0.7
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= ftp://ftp.pld.org.pl/software/$(NM)/$(FILE)
+PATCH=${DIR}-fix_lastlog-1.patch
+URL= $(FTP)/$(NM)/$(FILE)
+URL1=$(FTP)/$(NM)/$(PATCH)
 
 # RULES
 
@@ -20,7 +22,10 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
+	 mv $(PATCH) $(SRC) ; fi
 	@if [ ! -d /etc/default ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure --libdir=/lib --enable-shared && \
 	 sed -i 's/groups$$(EXEEXT) //' src/Makefile && \
 	 sed -i '/groups/d' man/Makefile && \

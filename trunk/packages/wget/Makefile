@@ -17,7 +17,7 @@ prebuild:
 	@if [ ! -f $(FILE) ] ; then ftpget ; fi
 	@if [ ! -f $(WD)/bin/$(NM) ] ; then \
 	 tar xzvf $(FILE) && cd $(DIR) && ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
-	 --enable-static --disable-shared --host=$(CHOST) --target=$(CHOST) && \
+	 --enable-static --disable-shared && \
 	 make -j3 && make install ; fi
 	@make clean
 
@@ -31,7 +31,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WD)/bin/ftpget ; fi
 	@if [ ! -f /usr/bin/$(NM) ] ; then \
 	 tar xzvf $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --with-ssl --host=$(CHOST) --target=$(CHOST) && \
+	 ./configure --prefix=/usr --with-ssl && \
 	 make -j3 && make install ; fi
 	@make clean
 

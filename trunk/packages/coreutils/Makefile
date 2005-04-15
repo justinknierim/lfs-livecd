@@ -22,7 +22,9 @@ stage1:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD) && make -j3 && make install ; fi
+	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD) && make -j3 && make install && \
+	 mv ${WD}/bin/uname ${WD}/bin/uname.real && \
+	 install -m 755 ${MP}${ROOT}/uname/uname ${WD}/bin/ ; fi
 	@make clean
 
 chroot:
@@ -47,7 +49,9 @@ stage2:
 	 $(WD)/bin/mv /usr/bin/{ls,mkdir,mknod,mv,pwd,rm,rmdir,sync} /bin && \
 	 mv /usr/bin/{sleep,stty,test,touch,true,uname} /bin && \
 	 mv /usr/bin/chroot /usr/sbin && \
-	 ln -s ../../bin/install /usr/bin ; fi
+	 ln -s ../../bin/install /usr/bin && \
+	 mv /bin/uname /bin/uname.real && \
+	 install -m 755 ${ROOT}/uname/uname /bin/ ; fi
 	@make clean
 	 
 

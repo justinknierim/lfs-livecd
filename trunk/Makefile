@@ -64,7 +64,7 @@ WGET_V= 1.9.1
 
 
 # The make build starts and ends here, first building the dependency targets,
-# lfs-base, extend-lfs and iso, then it echos a handy notice that it's finished. :)
+# lfs-base, extend-lfs and iso, then it echos a notice that it's finished. :)
 
 all: lfs-base extend-lfs iso
 	@echo "The livecd, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
@@ -103,6 +103,7 @@ lfs-base:
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
+	@ln -sf ${WD}/bin/bash ${MP}/bin/bash
 	@chroot "$(MP)" $(chenv1) 'set +h && chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
 	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
 
@@ -138,6 +139,9 @@ pre-wget:
 	@$(MAKE) -C $(PKG)/wget prebuild
 
 unamemod:
+	@if [ ! -d ${WD}/bin ] ; then mkdir ${WD}/bin ; fi
+	@install -m 755 uname/uname ${WD}/bin/
+	@touch unamemod
 
 tools:  pre-which pre-wget lfs-binutils-pass1-scpt lfs-gcc-pass1-scpt lfs-linux-libc-headers-scpt lfs-glibc-scpt \
 	lfs-adjust-toolchain-scpt lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2-scpt lfs-binutils-pass2-scpt \
@@ -1305,7 +1309,7 @@ clean: unloadmodule unmount
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,lfs-strip,lfs-strip-scpt}
+	@-rm {prepiso,lfsuser,lfs-strip,lfs-strip-scpt,unamemod}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
@@ -1329,7 +1333,7 @@ unmount:
 	@-umount $(MP)/proc
 	@-umount $(MP)/sys
 
-.PHONY: lfs-base pre-which pre-wget tools prep-chroot chroot createdirs createfiles popdev unamemod \
+.PHONY: lfs-base pre-which pre-wget tools prep-chroot chroot createdirs createfiles popdev \
 	clean scrub unloadmodule unmount lfs-wget lfs-rm-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers lfs-glibc lfs-adjust-toolchain lfs-tcl lfs-expect lfs-dejagnu lfs-gcc-pass2 \
 	lfs-binutils-pass2 lfs-gawk lfs-coreutils lfs-bzip2 lfs-gzip lfs-diffutils lfs-findutils lfs-make \

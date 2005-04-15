@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ ! -f /bin/uname.real ] && [ ! -f /tools/bin/uname.real ]
+then
+	REAL="/bin/uname"
+else
+	REAL="uname.real"
+fi
+
+$REAL "$@" | sed 's/[56]86/486/'
