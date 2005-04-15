@@ -3,7 +3,7 @@
 # Package versions
 NM= iproute2
 VRS= 2.6.11
-DATE= 050314
+DATE= 050330
 DIR= $(NM)-$(VRS)
 FILE= $(NM)-$(VRS)-$(DATE).tar.bz2
 PATCH= $(NM)-$(VRS)_$(DATE)-remove_db-1.patch

@@ -30,7 +30,7 @@ pass1:
 	if [ ! -f $(WD)/bin/$(NM) ] ; then tar xjvf $(SRC)/$(FILE1) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
-	 --disable-nls --enable-shared --host=$(CHOST) --target=$(CHOST) && \
+	 --disable-nls --enable-shared && \
 	 make -j3 bootstrap && \
 	 make install && ln -s gcc $(WD)/bin/cc ; fi
 	@make clean
@@ -81,7 +81,7 @@ stage2:
 	 sed -i 's/install_to_$$(INSTALL_DEST) //' libiberty/Makefile.in && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib --enable-shared --enable-threads=posix \
-	 --enable-__cxa_atexit --enable-clocale=gnu --enable-languages=c,c++ --host=$(CHOST) --target=$(CHOST) && \
+	 --enable-__cxa_atexit --enable-clocale=gnu --enable-languages=c,c++ && \
 	 make -j3 && make install && ln -s ../usr/bin/cpp /lib && ln -s gcc /usr/bin/cc ; fi
 	@make clean	
 

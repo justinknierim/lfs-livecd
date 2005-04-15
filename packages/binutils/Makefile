@@ -19,7 +19,7 @@ pass1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --host=$(CHOST) --target=$(CHOST) --disable-nls && make && \
+	 ../$(DIR)/configure --prefix=$(WD) --disable-nls && make && \
 	make install && \
 	make -C ld clean && \
 	make -j3 -C ld LDFLAGS="-all-static" LIB_PATH=/tools/lib ; fi
@@ -41,7 +41,7 @@ pass2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f .pass2 ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --host=$(CHOST) --target=$(CHOST) \
+	 ../$(DIR)/configure --prefix=$(WD) \
 	 --enable-shared --with-lib-path=$(WD)/lib && \
 	 make -j3 && \
 	 make install && \
@@ -69,7 +69,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=/usr --host=$(CHOST) --target=$(CHOST) --enable-shared && \
+	 ../$(DIR)/configure --prefix=/usr --enable-shared && \
 	 make -j3 tooldir=/usr && \
 	 make tooldir=/usr install && \
 	 cp ../$(DIR)/include/libiberty.h /usr/include ; fi

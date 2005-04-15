@@ -25,7 +25,9 @@ stage2:
 	 make install && \
 	 cp etc/hotplug/pnp.distmap /etc/hotplug && \
 	 rm -rf /etc/init.d && \
-	 rm -f /etc/hotplug/net.agent ; fi
+	 rm -f /etc/hotplug/net.agent && \
+	 touch /var/log/hotplug/events && \
+	 mkdir /lib/firmware ; fi
 	@make clean
 	 
 
