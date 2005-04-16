@@ -25,7 +25,9 @@ stage2:
 	 sed -i 's@-is@&R@g' configure && \
 	 sed -i 's@MANPATH./usr/man@#&@g' src/man.conf.in && \
 	 ./configure -confdir=/etc && make && \
-	 make install ; fi
+	 make install && \
+	 sed -i 's@Tlatin1 -@@' /etc/man.conf && \
+	 sed -i 's@Tnippon -@@' /etc/man.conf ; fi
 	@make clean
 	 
 

@@ -1,5 +1,9 @@
 * Package up kernel source and upload to mirrors
 * i18n READMEs and adjust font dirs again
+	[ xfce ]
+	[ ncurses-20050319 ]
+	[ freefont ]
+	[ xterm -lc ]
 * Automate name of irssi and xchat nicks based on cd version
 * udev rules for mice
 * nALFS profile
