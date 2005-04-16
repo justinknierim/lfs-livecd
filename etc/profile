@@ -1,9 +1,29 @@
 PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
-PS1='\h:\u \[\033[00;32m\]\w\[\033[00m\] \$ '
+
 INPUTRC=/etc/inputrc
+
 XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog"
+
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
+
 WWW_HOME="/usr/share/LFS-BOOK-testing-HTML/index.html"
+
 NNTPSERVER=news.linuxfromscratch.org
+
+# Colors for PS1
+RED="\[\033[0;31m\]"
+GREEN="\[\033[0;32m\]"
+ORANGE="\[\033[0;33m\]"
+BRWHITE="\[\033[0;38m\]"
+WHITE="\[\033[00m\]"
+
+# Prompt
+if [ `whoami` == "root" ] ; then
+	PS1="${BRWHITE}\h:$RED\u | $BRWHITE\@ \d $RED| $GREEN\w$BRWHITE\n$WHITE\\$ "
+else
+	PS1="$BRWHITE\h:$GREEN\u | $ORANGE\@ $BRWHITE\d $GREEN| \w\n$BRWHITE\\$ $WHITE"
+fi
+
 export PS1 PATH INPUTRC PKG_CONFIG_PATH XML_CATALOG_FILES WWW_HOME NNTPSERVER
+
 source /etc/bashrc

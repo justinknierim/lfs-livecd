@@ -16,7 +16,7 @@
 #     session.menuFile: /home/you/.fluxbox/my-menu
 [begin] (LFS LiveCD)
 [submenu] (Terminals)
-      [exec] (xterm) {xterm -T "LFS LiveCD" -e /bin/bash --login}
+      [exec] (xterm) {xterm -lc -fa FreeMono -fs 10 -T "LFS LiveCD" -e /bin/bash --login}
       [exec] (Eterm) {Eterm}
 [end]
 [submenu] (Net)
