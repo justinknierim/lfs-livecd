@@ -20,8 +20,9 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/lib/libaal.so ] ; then tar xzvf $(FILE) && cd $(DIR) && \
-	 make -j3 PREFIX=/usr && \
-	 make PREFIX=/usr install ; fi
+	 make PREFIX=/usr && \
+	 make PREFIX=/usr install && \
+	 update-pciids ; fi
 	@make clean
 
 clean:
