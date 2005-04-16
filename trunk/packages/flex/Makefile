@@ -22,7 +22,7 @@ stage1:
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/flex ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
+	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 
