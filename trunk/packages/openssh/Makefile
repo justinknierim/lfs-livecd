@@ -2,7 +2,7 @@
 
 # Package versions
 NM= openssh
-VRS= 3.9p1
+VRS= 4.0p1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://sunsite.ualberta.ca/pub/OpenBSD/OpenSSH/portable/$(FILE)
@@ -23,11 +23,13 @@ stage2:
 	@if [ ! -d /var/empty ] ; then mkdir /var/empty ; fi
 	@hostname $(HOSTNAME)
 	@if [ ! -f /usr/bin/ssh ] ; then tar xzvf $(FILE) && cd $(DIR) && \
-	 chown root:sys /var/empty && \
+	 install -v -d -m700 /var/lib/sshd && \
+	 chown root:sys /var/lib/sshd && \
 	 groupadd sshd && \
-	 useradd -c 'sshd privsep' -d /var/empty -g sshd -s /bin/false sshd && \
+	 useradd -c 'sshd PrivSep' -d /var/lib/sshd -g sshd -s /bin/false sshd \
 	 sed -i "s:-lcrypto:/usr/lib/libcrypto.a:g" configure && \
-	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords && \
+	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords \
+	 --with-privsep-path=/var/lib/sshd && \
 	 make -j3 && make install ; fi
 	@make clean
 	@hostname $(HOSTORIG)
