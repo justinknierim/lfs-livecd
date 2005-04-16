@@ -172,7 +172,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
 	ch-libIDL ch-firefox ch-fluxbox ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
-	ch-nfs-utils ch-traceroute ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs \
+	ch-nfs-utils ch-traceroute ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs \
 	ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
@@ -347,468 +347,472 @@ popdev:
 	 mount -t tmpfs none /dev/shm ; fi
 	@if [ -f /sbin/udevstart ] ; then /sbin/udevstart ; fi
 
-linux-libc-headers: unamemod prep-chroot
+linux-libc-headers: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-man-pages: unamemod prep-chroot
+man-pages: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 	
-glibc: unamemod prep-chroot
+glibc: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-re-adjust-toolchain: unamemod prep-chroot
+re-adjust-toolchain: prep-chroot
 	make -C $(PKG)/binutils chroot-re-adjust-toolchain
 	make unmount
 
-binutils: unamemod prep-chroot
+binutils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gcc: unamemod prep-chroot
+gcc: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-coreutils: unamemod prep-chroot
+coreutils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-zlib: unamemod prep-chroot
+zlib: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-mktemp: unamemod prep-chroot
+mktemp: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-iana-etc: unamemod prep-chroot
+iana-etc: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-findutils: unamemod prep-chroot
+findutils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gawk: unamemod prep-chroot
+gawk: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-ncurses: unamemod prep-chroot
+ncurses: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-readline: unamemod prep-chroot
+readline: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-vim: unamemod prep-chroot
+vim: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-m4: unamemod prep-chroot   
+m4: prep-chroot   
 	make -C $(PKG)/$@ chroot
 	make unmount
 	
-bison: unamemod prep-chroot 
+bison: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-less: unamemod prep-chroot 
+less: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-groff: unamemod prep-chroot 
+groff: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-sed: unamemod prep-chroot 
+sed: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-flex: unamemod prep-chroot 
+flex: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gettext: unamemod prep-chroot 
+gettext: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-inetutils: unamemod prep-chroot 
+inetutils: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-iproute2: unamemod prep-chroot 
+iproute2: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-perl: unamemod prep-chroot 
+perl: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-texinfo: unamemod prep-chroot 
+texinfo: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-autoconf: unamemod prep-chroot 
+autoconf: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-automake: unamemod prep-chroot 
+automake: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-bash: unamemod prep-chroot 
+bash: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-file: unamemod prep-chroot 
+file: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libtool: unamemod prep-chroot 
+libtool: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-bzip2: unamemod prep-chroot 
+bzip2: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-diffutils: unamemod prep-chroot 
+diffutils: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-kbd: unamemod prep-chroot 
+kbd: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-e2fsprogs: unamemod prep-chroot 
+e2fsprogs: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-grep: unamemod prep-chroot 
+grep: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-grub: unamemod prep-chroot 
+grub: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gzip: unamemod prep-chroot 
+gzip: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-hotplug: unamemod prep-chroot 
+hotplug: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-man: unamemod prep-chroot 
+man: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-make: unamemod prep-chroot 
+make: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-module-init-tools: unamemod prep-chroot 
+module-init-tools: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-patch: unamemod prep-chroot 
+patch: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-procps: unamemod prep-chroot 
+procps: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-psmisc: unamemod prep-chroot 
+psmisc: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-shadow: unamemod prep-chroot 
+shadow: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-sysklogd: unamemod prep-chroot 
+sysklogd: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-sysvinit: unamemod prep-chroot 
+sysvinit: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-tar: unamemod prep-chroot 
+tar: prep-chroot 
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-udev: unamemod prep-chroot
+udev: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-util-linux: unamemod prep-chroot
+util-linux: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
 
-lfs-bootscripts: unamemod prep-chroot
+lfs-bootscripts: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-wget: unamemod prep-chroot
+wget: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-reiserfsprogs: unamemod prep-chroot
+reiserfsprogs: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-xfsprogs: unamemod prep-chroot
+xfsprogs: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-slang: unamemod prep-chroot
+slang: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-nano: unamemod prep-chroot
+nano: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-joe: unamemod prep-chroot
+joe: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-screen: unamemod prep-chroot
+screen: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-openssl: unamemod prep-chroot
+openssl: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-curl: unamemod prep-chroot
+curl: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gpm: unamemod prep-chroot
+gpm: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-zip: unamemod prep-chroot
+zip: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-unzip: unamemod prep-chroot
+unzip: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-lynx: unamemod prep-chroot
+lynx: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libxml2: unamemod prep-chroot
+libxml2: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-expat: unamemod prep-chroot
+expat: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-subversion: unamemod prep-chroot
+subversion: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-docbook-xml: unamemod prep-chroot
+docbook-xml: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libxslt: unamemod prep-chroot
+libxslt: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-docbook-xsl: unamemod prep-chroot
+docbook-xsl: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-html_tidy: unamemod prep-chroot
+html_tidy: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-LFS-BOOK: unamemod prep-chroot
+LFS-BOOK: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libpng: unamemod prep-chroot
+libpng: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-freetype: unamemod prep-chroot
+freetype: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-fontconfig: unamemod prep-chroot
+fontconfig: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-Xorg: unamemod prep-chroot
+Xorg: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libjpeg: unamemod prep-chroot
+libjpeg: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libtiff: unamemod prep-chroot
+libtiff: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-links: unamemod prep-chroot
+links: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-openssh: unamemod prep-chroot
+openssh: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-pkgconfig: unamemod prep-chroot
+pkgconfig: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-glib2: unamemod prep-chroot
+glib2: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libungif: unamemod prep-chroot
+libungif: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-imlib2: unamemod prep-chroot
+imlib2: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-pango: unamemod prep-chroot
+pango: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-atk: unamemod prep-chroot
+atk: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-gtk2: unamemod prep-chroot
+gtk2: prep-chroot
 	make -C $(PKG)/gtk+2 chroot
 	make unmount
 
-libIDL: unamemod prep-chroot
+libIDL: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-firefox: unamemod prep-chroot
+firefox: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-fluxbox: unamemod prep-chroot
+fluxbox: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libast: unamemod prep-chroot
+libast: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-Eterm: unamemod prep-chroot
+Eterm: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-irssi: unamemod prep-chroot
+irssi: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-xchat: unamemod prep-chroot
+xchat: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-samba: unamemod prep-chroot
+samba: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-tcpwrappers: unamemod prep-chroot
+tcpwrappers: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-portmap: unamemod prep-chroot
+portmap: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-nfs-utils: unamemod prep-chroot
+nfs-utils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-traceroute: unamemod prep-chroot
+traceroute: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-nALFS: unamemod prep-chroot
+pciutils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-device-mapper: unamemod prep-chroot
+nALFS: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-LVM2: unamemod prep-chroot
+device-mapper: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-dhcpcd: unamemod prep-chroot
+LVM2: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libaal: unamemod prep-chroot
+dhcpcd: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-reiser4progs: unamemod prep-chroot
+libaal: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-squashfs: unamemod prep-chroot
+reiser4progs: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-cpio: unamemod prep-chroot
+squashfs: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-db: unamemod prep-chroot
+cpio: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-postfix: unamemod prep-chroot
+db: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-mutt: unamemod prep-chroot
+postfix: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-slrn: unamemod prep-chroot
+mutt: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-linux: unamemod prep-chroot
+slrn: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-cdrtools: unamemod prep-chroot
+linux: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-blfs-bootscripts: unamemod prep-chroot
+cdrtools: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-syslinux: unamemod prep-chroot
+blfs-bootscripts: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+syslinux: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1224,6 +1228,9 @@ ch-nfs-utils: popdev
 
 ch-traceroute: popdev
 	make -C $(PKG)/traceroute stage2
+
+ch-pciutils: popdev
+	make -C $(PKG)/pciutils stage2
 
 ch-nALFS: popdev
 	make -C $(PKG)/nALFS stage2
