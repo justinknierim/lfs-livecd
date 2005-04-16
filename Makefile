@@ -103,6 +103,7 @@ lfs-base:
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
+	@-mkdir $(MP)/bin
 	@ln -sf ${WD}/bin/bash ${MP}/bin/bash
 	@chroot "$(MP)" $(chenv1) 'set +h && chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
 	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
