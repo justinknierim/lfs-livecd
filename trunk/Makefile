@@ -1285,6 +1285,7 @@ prepiso:
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
+	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/etc/sysconfig/network-devices/ifconfig.eth0
 	@-mkdir $(MP)/iso
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
