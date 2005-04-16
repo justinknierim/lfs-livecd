@@ -2,9 +2,10 @@
 
 # Package versions
 NM= openssl
-VRS= 0.9.7e
+VRS= 0.9.7f
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
+PATCH=  http://www.linuxfromscratch.org/blfs/downloads/svn/openssl-0.9.7f-fix_manpages-1.patch
 URL= http://www.openssl.org/source/$(FILE)
 
 #RULES
@@ -19,11 +20,10 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
+	@if [ ! -f $(PATCH) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
 	@if [ ! -d /etc/ssl ] ; then tar xzvf $(FILE) && cd $(DIR) && \
-	 sed 's/^passwd/openssl-passwd/' doc/apps/passwd.pod > doc/apps/openssl-passwd.pod && \
-	 rm doc/apps/passwd.pod && mv doc/crypto/{,openssl_}threads.pod && \
+	 patch -Np1 -i ../$(PATCH) && \
 	 ./config --openssldir=/etc/ssl --prefix=/usr shared && \
-	 sed -i 's@SHLIBDIRS= fips crypto ssl@SHLIBDIRS= crypto ssl@g' Makefile && \
 	 sed -i 's/mcpu=pentium/mtune=i486/' Configure && \
 	 sed -i 's/mcpu=pentium/mtune=i486/' Makefile && \
 	 make -j3 MANDIR=/usr/share/man && make MANDIR=/usr/share/man install && \
