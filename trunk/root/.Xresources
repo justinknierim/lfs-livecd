@@ -1,4 +1,3 @@
-xterm*font:		fixed
 xterm*scrollBar:	true
 xterm*scrollKey:	true
 xterm*rightScrollBar:	true
