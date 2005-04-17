@@ -170,7 +170,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-libjpeg \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
 	ch-libIDL ch-firefox ch-fluxbox ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs \
@@ -654,6 +654,10 @@ fontconfig: prep-chroot
 	make unmount
 
 Xorg: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+freefont: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1160,6 +1164,9 @@ ch-fontconfig: popdev
 
 ch-Xorg: popdev
 	make -C $(PKG)/Xorg stage2
+
+ch-freefont: popdev
+	make -C $(PKG)/freefont stage2
 
 ch-libjpeg: popdev
 	make -C $(PKG)/libjpeg stage2
