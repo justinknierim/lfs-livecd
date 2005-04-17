@@ -5,7 +5,10 @@ NM= Xorg
 VRS= 6.8.2
 DIR= xc
 FILE= X11R$(VRS)-src.tar.bz2
+PATCH= $(NM)-6.8.1-luit_race-1.patch
 URL= http://xorg.freedesktop.org/X11R$(VRS)/src-single/$(FILE)
+URL1= http://www.linuxfromscratch.org/patches/downloads/xorg/$(PATCH)
+
 
 
 #RULES
@@ -20,7 +23,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
+	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -d /usr/include/X11 ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH) && \
 	 sed -i '/^SUBDIRS =/s/s etc$$//' programs/Xserver/Xprint/Imakefile && \
 	 pushd config/util && \
 	 make -f Makefile.ini lndir && \
