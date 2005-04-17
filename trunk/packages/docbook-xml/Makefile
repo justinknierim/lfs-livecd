@@ -2,7 +2,7 @@
 
 # Package versions
 NM= docbook-xml
-VRS= 4.3
+VRS= 4.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).zip
 URL= http://www.docbook.org/xml/4.3/$(FILE)

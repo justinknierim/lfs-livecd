@@ -2,7 +2,7 @@
 
 # Package versions
 NM= libxslt
-VRS= 1.1.12
+VRS= 1.1.14
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://ftp.gnome.org/pub/GNOME/sources/libxslt/1.1/$(FILE)
