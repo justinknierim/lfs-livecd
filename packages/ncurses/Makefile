@@ -5,7 +5,9 @@ NM= ncurses
 VRS= 5.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
+PATCH= $(DIR)-20050320.patch
 URL= $(FTP)/$(NM)/$(FILE)
+URL1= ftp://invisible-island.net/ncurses/5.4/$(PATCH).gz
 
 # RULES
 
@@ -31,7 +33,10 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/clear ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL) ; fi
+	@if [ ! -f /usr/bin/clear ] ; then tar xjvf $(SRC)/$(FILE) && \
+	 gunzip $(PATCH).gz && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH) && \
 	 ./configure --prefix=/usr --with-shared --without-debug && \
 	 make sources && make -j3 && make install && chmod 755 /usr/lib/*.5.4 && \
 	 chmod 644 /usr/lib/libncurses++.a && mv /usr/lib/libncurses.so.5* /lib && \
