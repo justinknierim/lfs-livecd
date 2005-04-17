@@ -43,6 +43,7 @@ stage2:
 	@echo "/tmp/.ICE-unix dir 1777 root root" >> /etc/sysconfig/createfiles
 	@cp $(ROOT)/etc/fonts/local.conf /etc/fonts/local.conf && \
 	 fc-cache
+	@if [ -f xorg.conf ] ; then mv xorg.conf /etc/X11/xorg.conf ; fi
 	@make clean
 
 clean:

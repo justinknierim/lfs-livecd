@@ -2,7 +2,7 @@
 
 # Package versions
 NM= firefox
-VRS= 1.0.2
+VRS= 1.0.3
 DIR= mozilla
 FILE= $(NM)-$(VRS)-source.tar.bz2
 URL= http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(VRS)/source/$(FILE)
@@ -32,9 +32,10 @@ stage2:
 	 --disable-ldap --disable-composer --disable-profilesharing && \
 	 make -j3 && make install && \
 	 install -d /usr/include/firefox-$(VRS)/nss && \
-	 cp -Lf dist/private/nss/*.h dist/public/nss/*.h /usr/include/firefox-$(VRS)/nss ; fi
-	@cp -ra $(ROOT)/root/.firefox /root
-	@cp -ra $(ROOT)/root/.mozilla /root
+	 cp -Lf dist/private/nss/*.h dist/public/nss/*.h /usr/include/firefox-$(VRS)/nss && \
+	 cd $(ROOT)/$(PKG)/$(NM) && ./firstrun ; fi
+	#@cp -ra $(ROOT)/root/.firefox /root
+	#@cp -ra $(ROOT)/root/.mozilla /root
 	@make clean
 
 clean:
