@@ -173,8 +173,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
 	ch-libIDL ch-firefox ch-fluxbox ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
-	ch-nfs-utils ch-traceroute ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-libaal ch-reiser4progs \
-	ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts ch-syslinux
+	ch-nfs-utils ch-traceroute ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-ppp ch-rp-pppoe ch-libaal \
+	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts \
+	ch-syslinux
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -773,6 +774,14 @@ dhcpcd: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+ppp: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+rp-pppoe: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 libaal: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1251,6 +1260,12 @@ ch-LVM2: popdev
 
 ch-dhcpcd: popdev
 	make -C $(PKG)/dhcpcd stage2
+
+ch-ppp: popdev
+	make -C $(PKG)/ppp stage2
+
+ch-rp-pppoe: popdev
+	make -C $(PKG)/rp-pppoe stage2
 
 ch-libaal: popdev
 	make -C $(PKG)/libaal stage2
