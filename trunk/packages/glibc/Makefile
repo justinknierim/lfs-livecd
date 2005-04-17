@@ -5,7 +5,9 @@ NM= glibc
 VRS= 2.3.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
+FILE1= $(NM)-linuxthreads-$(VRS).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
+URL1= $(FTP)/$(NM)/$(FILE1)
 
 # RULES
 
@@ -34,7 +36,10 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/ldd ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL1) && \
+	 mv $(FILE1) $(SRC) ; fi
+	@if [ ! -f /usr/bin/ldd ] ; then tar -xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 tar -xjvf $(SRC)/$(FILE1) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=/usr --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
 	 --without-cvs --libexecdir=/usr/lib/glibc && PARALLELMFLAGS=-j3 make && \
