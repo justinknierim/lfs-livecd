@@ -158,6 +158,7 @@ prep-chroot:
 	@-mount -f -t ramfs ramfs $(MP)/dev
 	@-mount -f -t tmpfs tmpfs $(MP)/dev/shm
 	@-mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
+	@if [ ! -f $(MP)/etc/X11/xorg.conf ] ; then if [ -f /etc/X11/xorg.conf ] ; then cp /etc/X11/xorg.conf $(PKG)/Xorg ; fi ; fi
 
 pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
 	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-ncurses \
@@ -1331,6 +1332,7 @@ prepiso:
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
+	@-rm /etc/X11/xorg.conf
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
 	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
 	 if [ -f root/.bash_history ] ; then rm root/.bash_history ; fi && \

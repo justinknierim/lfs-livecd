@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -f /etc/X11/xorg.conf ]
+then
+	Xorg -configure &&
+	sed -i 's@/dev/mouse@/dev/input/mice@' ~/xorg.conf.new &&
+	mv ~/xorg.conf.new /etc/X11/xorg.conf
+fi
+
+Xorg :3 &
+firefox --display=:3
+sleep 300
+PID=`pidof Xorg`
+kill $PID
