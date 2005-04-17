@@ -2,7 +2,7 @@
 
 # Package versions
 NM= libxml2
-VRS= 2.6.16
+VRS= 2.6.19
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/$(FILE)

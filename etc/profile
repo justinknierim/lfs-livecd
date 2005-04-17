@@ -2,7 +2,7 @@ PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
 
 INPUTRC=/etc/inputrc
 
-XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.67.2/catalog.xml /etc/xml/catalog"
+XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog"
 
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 
