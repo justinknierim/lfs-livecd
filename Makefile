@@ -172,7 +172,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
-	ch-libIDL ch-firefox ch-startup-notification ch-fluxbox ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
+	ch-libIDL ch-firefox ch-startup-notification ch-xfce ch-libast ch-Eterm ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-ppp ch-rp-pppoe ch-libaal \
 	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts \
 	ch-syslinux
@@ -718,7 +718,7 @@ startup-notification: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-fluxbox: prep-chroot
+xfce: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1223,8 +1223,8 @@ ch-firefox: popdev
 ch-startup-notification: popdev
 	make -C $(PKG)/startup-notification stage2
 
-ch-fluxbox: popdev
-	make -C $(PKG)/fluxbox stage2
+ch-xfce: popdev
+	make -C $(PKG)/xfce stage2
 
 ch-libast: popdev
 	make -C $(PKG)/libast stage2
