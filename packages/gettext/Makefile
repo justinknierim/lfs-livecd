@@ -18,7 +18,7 @@ stage1:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/gettext ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) --disable-libasprintf --without-csharp && make -j3 && make install ; fi
+	 ./configure --prefix=$(WD) --disable-libasprintf --without-csharp && make && make install ; fi
 	@make clean
 
 chroot:
@@ -31,7 +31,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/gettext ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	./configure --prefix=/usr && make -j3 && make install ; fi
+	./configure --prefix=/usr && make && make install ; fi
 	@make clean
 	
 clean:
