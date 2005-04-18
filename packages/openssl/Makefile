@@ -5,8 +5,9 @@ NM= openssl
 VRS= 0.9.7f
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-PATCH=  http://www.linuxfromscratch.org/blfs/downloads/svn/openssl-0.9.7f-fix_manpages-1.patch
+PATCH=  $(DIR)-fix_manpages-1.patch
 URL= http://www.openssl.org/source/$(FILE)
+URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
 
 #RULES
 
@@ -20,7 +21,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
+	@if [ ! -f $(PATCH) ] ; then $(WD)/bin/$(WGET) $(URL1) ; fi
 	@if [ ! -d /etc/ssl ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 ./config --openssldir=/etc/ssl --prefix=/usr shared && \

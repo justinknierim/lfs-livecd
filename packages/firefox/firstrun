@@ -7,8 +7,11 @@ then
 	mv ~/xorg.conf.new /etc/X11/xorg.conf
 fi
 
-Xorg :3 &
 firefox --display=:3
-sleep 300
+echo "Sleeping for 90 seconds to allow Firefox's firstrun to complete"
+sleep 90
 PID=`pidof Xorg`
-kill $PID
+if [ $PID -gt 0 ]
+then
+	kill $PID
+fi

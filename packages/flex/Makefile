@@ -38,7 +38,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
 	@if [ ! -f /usr/bin/flex ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
+	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=/usr && make -j3 && make install && \
 	 ln -s libfl.a /usr/lib/libl.a && \
 	 echo "#!/bin/sh" > /usr/bin/lex && \
