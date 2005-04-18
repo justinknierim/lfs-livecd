@@ -161,7 +161,7 @@ prep-chroot:
 	@if [ ! -f $(MP)/etc/X11/xorg.conf ] ; then if [ -f /etc/X11/xorg.conf ] ; then cp /etc/X11/xorg.conf $(PKG)/Xorg ; fi ; fi
 
 pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
-	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-ncurses \
+	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-sharutils ch-ncurses \
 	ch-readline ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
 	ch-iproute2 ch-perl ch-texinfo ch-autoconf ch-automake ch-bash
 
@@ -395,6 +395,10 @@ findutils: prep-chroot
 	make unmount
 
 gawk: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+sharutils: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -986,6 +990,9 @@ ch-findutils: popdev
 
 ch-gawk: popdev
 	make -C $(PKG)/gawk stage2
+
+ch-sharutils: popdev
+	make -C $(PKG)/sharutils stage2
 
 ch-ncurses: popdev
 	make -C $(PKG)/ncurses stage2
