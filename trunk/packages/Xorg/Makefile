@@ -5,7 +5,7 @@ NM= Xorg
 VRS= 6.8.2
 DIR= xc
 FILE= X11R$(VRS)-src.tar.bz2
-PATCH= $(NM)-6.8.1-luit_race-1.patch
+PATCH= xorg-6.8.1-luit_race-1.patch
 URL= http://xorg.freedesktop.org/X11R$(VRS)/src-single/$(FILE)
 URL1= http://www.linuxfromscratch.org/patches/downloads/xorg/$(PATCH)
 

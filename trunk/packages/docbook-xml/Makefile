@@ -5,7 +5,7 @@ NM= docbook-xml
 VRS= 4.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).zip
-URL= http://www.docbook.org/xml/4.3/$(FILE)
+URL= http://www.docbook.org/xml/$(VRS)/$(FILE)
 
 
 

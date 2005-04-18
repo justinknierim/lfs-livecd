@@ -45,7 +45,7 @@ stage2:
 	@if [ ! -f /bin/bashbug ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH2) && patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr --bindir=/bin --without-bash-malloc --with-installed-readline && \
-	 make && make install ; fi
+	 make && rm /bin/bash && make install ; fi
 	@make clean
 	
 

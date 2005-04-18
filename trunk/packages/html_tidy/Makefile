@@ -2,12 +2,12 @@
 
 # Package versions
 NM= tidy
-VRS= 050321
+VRS=
 DIR= $(NM)
-FILE= $(NM)_src_$(VRS).tgz
-FILE2= $(NM)_docs.tgz
+FILE= $(NM)_src.tgz
+FILE1= $(NM)_docs.tgz
 URL= http://tidy.sourceforge.net/src/$(FILE)
-URL2= http://tidy.sourceforge.net/docs/$(FILE2)
+URL1= http://tidy.sourceforge.net/docs/$(FILE2)
 
 
 
@@ -23,13 +23,12 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(FILE2) ] ; then $(WGET) $(URL2) ; fi
+	@if [ ! -f $(FILE2) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -f /usr/bin/tidy ] ; then tar xzvf $(FILE) && \
-	 tar xzvf $(FILE2) && cd $(DIR) && \
+	 tar xzvf $(FILE1) && cd $(DIR) && \
 	 sh build/gnuauto/setup.sh && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install && \
-	 install -m644 htmldoc/man_page.txt /usr/share/man/man1/tidy.1 && \
 	 install -d -m755 /usr/share/doc/tidy && \
 	 cp -R htmldoc /usr/share/doc/tidy && \
 	 chown -R root:root /usr/share/doc/tidy ; fi

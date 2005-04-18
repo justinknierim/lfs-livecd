@@ -2,7 +2,7 @@
 
 # Package versions
 NM= sysklogd
-VRS= 1.6.20
+VRS= 1.4.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH=$(DIR)-fixes-1.patch
@@ -22,10 +22,12 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d /etc/syslog-ng ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) && \
+	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
+	 mv $(PATCH) $(SRC) ; fi
+	@if [ ! -f /etc/syslog.conf ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 make -j3 && make install && \
-	 cp -ra $(ROOT)/etc/syslog-ng /etc ; fi
+	 cp -ra $(ROOT)/etc/syslog.conf /etc ; fi
 	@make clean
 	 
 
