@@ -39,15 +39,15 @@ export MKTREE := $(MP)$(ROOT)
 export CFLAGS := -Os -s -march=i486
 export CXXFLAGS := -Os -s -march=i486
 export CHOST := i486-pc-linux-gnu
-export lfsenv := exec env -i CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 
-export chenv1 := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chenv1 := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 
-export chenv2 := $(WD)/bin/env -i HOME=/root CFLGAS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+export chenv2 := $(WD)/bin/env -i HOME=/root CFLGAS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 
-export chenv3 := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CHOST='$(CHOST)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+export chenv3 := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
 
 export chenvstrip := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin $(WD)/bin/bash -c
 
@@ -104,7 +104,7 @@ lfs-base:
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
 	@-mkdir $(MP)/bin
-	@ln -sf ${WD}/bin/bash ${MP}/bin/bash
+	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
 	@chroot "$(MP)" $(chenv1) 'set +h && chown -R 0:0 $(WD) $(SRC) $(ROOT) && cd $(ROOT) && make pre-bash $(chbash1)'
 	@chroot "$(MP)" $(chenv2) 'set +h && cd $(ROOT) && make post-bash $(chbash2)'
 
@@ -1353,7 +1353,7 @@ prepiso:
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
-	@-rm /etc/X11/xorg.conf
+	@-rm $(MP)/etc/X11/xorg.conf
 	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
 	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
 	 if [ -f root/.bash_history ] ; then rm root/.bash_history ; fi && \
@@ -1363,7 +1363,7 @@ prepiso:
 	@touch prepiso
 
 iso: prepiso
-	cd $(MP)/iso ; $(WD)/bin/mkisofs -R -l -L -D -o $(MKTREE)/livecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	cd $(MP)/iso ; $(WD)/bin/mkisofs -R -l -L -D -o $(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -V "LFS_CD" ./
 
 # Rules to clean your tree. 
@@ -1382,13 +1382,14 @@ clean: unloadmodule unmount
 	@-var=`find packages -name ".pass2"` && for i in $$var ; do rm -rf $$i ; done
 
 scrub: clean
-	@-rm -rf $(SRC) $(MP)$(SRC)
-	@-rm -rf uname/*.ko uname/*mod.c uname/*.o uname/.uname* uname/.tmp*
 	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
 	 usr var ; do rm -rf $(MP)/$$i ; done
 	@-rm $(MP)/{etc,root}.tar.bz2
+	@-rm lfslivecd-$(VERSION).iso
+
+clean_sources:
+	@-rm -rf $(SRC) $(MP)$(SRC)
 	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/{*.gz,*.bz2,*.zip,*.tgz} ; done
-	@-rm livecd-$(VERSION).iso
 
 unloadmodule:
 	@-rmmod uname_i486

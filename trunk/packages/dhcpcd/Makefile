@@ -22,7 +22,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/sbin/dhcpcd ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/dhcpcd ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 ./configure --prefix="" --sysconfdir=/var/lib --mandir=/usr/share/man && \
 	 make -j3 && \

@@ -19,9 +19,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/pppd ] ; then tar -xzvf $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
+	@if [ ! -f /usr/bin/lua ] ; then tar -xzvf $(FILE) && cd $(DIR) && \
+	 sed -i 's@/usr/local@/usr@' config && \
+	 make -j3 && make install && ldconfig ; fi
 	@make clean
 
 clean:

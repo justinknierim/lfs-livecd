@@ -104,8 +104,8 @@ set_static_broadcast(){
 
 choose_service(){
 
-	# Remove all previous configs, so ifup won't get confused.
-	rm -f $DIR/ifconfig.eth0/*
+	# Remove previous config, so ifup won't get confused.
+	rm -f $ETH0CFG
 
 	echo ""
 	echo "What type of service should eth0 use?"

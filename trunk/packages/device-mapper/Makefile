@@ -2,7 +2,7 @@
 
 # Package versions
 NM= device-mapper
-VRS= 1.01.00
+VRS= 1.01.01
 DIR= $(NM).$(VRS)
 FILE= $(DIR).tgz
 URL= ftp://sources.redhat.com/pub/dm/$(FILE)

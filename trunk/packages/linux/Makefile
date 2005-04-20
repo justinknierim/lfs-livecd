@@ -24,10 +24,9 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /boot/isolinux/linux ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 $(WGET) $(URL1).1/serie && \
-	 for i in `cat serie` ; do $(WGET) $(URL1).2/$i && \
-	 mv $i ../ && patch -Np1 -i ../$i ; done && \
+	 for i in `cat serie` ; do $(WGET) $(URL1).2/$$i && \
+	 mv $$i ../ && patch -Np1 -i ../$$i ; done && \
 	 patch -Np1 -i $(ROOT)/$(PKG)/squashfs/squashfs2.1/linux-2.6.9/$(PATCH1) && \
-	 patch -Np1 -i ../$(PATCH2) && \
 	 make mrproper && \
 	 cp $(ROOT)/linux/config .config && \
 	 make -j3 && \

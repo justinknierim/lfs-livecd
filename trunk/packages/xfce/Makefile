@@ -20,8 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/startxfce4 ] ; then tar -xjvf $(FILE) && cd $(DIR)/src-bz2 && \
-	 for i in `cat $(ROOT)/$(PKG)/list` ; do \
-	 tar xjvf $i.tar.bz2 && cd $i && \
+	 for i in `cat ../../list` ; do tar -xjvf $$i.tar.bz2 && cd $$i && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-debug=no --enable-panel --enable-startup-notification && \
 	 make -j3 && make install && cd .. ; done ; fi
 	@make clean

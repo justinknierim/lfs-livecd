@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libaal.so ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/lspci ] ; then tar -xjvf $(FILE) && cd $(DIR) && \
 	 make PREFIX=/usr && \
 	 make PREFIX=/usr install && \
 	 update-pciids ; fi

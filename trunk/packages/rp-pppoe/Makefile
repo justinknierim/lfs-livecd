@@ -24,7 +24,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /sbin/pppoe ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/pppoe ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && cd src && \
 	 ./configure && make && \
 	 make install ; fi

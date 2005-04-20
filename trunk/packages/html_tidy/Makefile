@@ -7,7 +7,7 @@ DIR= $(NM)
 FILE= $(NM)_src.tgz
 FILE1= $(NM)_docs.tgz
 URL= http://tidy.sourceforge.net/src/$(FILE)
-URL1= http://tidy.sourceforge.net/docs/$(FILE2)
+URL1= http://tidy.sourceforge.net/docs/$(FILE1)
 
 
 
@@ -23,7 +23,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(FILE2) ] ; then $(WGET) $(URL1) ; fi
+	@if [ ! -f $(FILE1) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -f /usr/bin/tidy ] ; then tar xzvf $(FILE) && \
 	 tar xzvf $(FILE1) && cd $(DIR) && \
 	 sh build/gnuauto/setup.sh && \
