@@ -20,8 +20,8 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@tar xjvf $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) &&
+	@if [ ! -f /etc/rc.d/init.d/nfs-client ] ; then tar -xjvf $(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH) && \
 	 make install-service-dhcpcd && \
 	 make install-service-pppoe && \
 	 make install-gpm && \
@@ -30,7 +30,7 @@ stage2:
 	 install -m754 blfs/init.d/random /etc/rc.d/init.d/ && \
 	 install -m754 blfs/init.d/portmap /etc/rc.d/init.d/ && \
 	 install -m754 blfs/init.d/nfs-server /etc/rc.d/init.d/ && \
-	 install -m754 blfs/init.d/nfs-client /etc/rc.d/init.d/
+	 install -m754 blfs/init.d/nfs-client /etc/rc.d/init.d ; fi
 	@make clean
 
 clean:

@@ -19,12 +19,12 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
+	@-groupadd postfix
+	@-groupadd postdrop
+	@-groupadd -g 65534 nogroup
+	@-useradd -c postfix -d /dev/null -g postfix -s /bin/false postfix
+	@-useradd -c nobody -d /home -g nogroup -s /bin/bash -u 65534 nobody
 	@if [ ! -f /usr/sbin/postfix ] ; then tar xzvf $(FILE) && cd $(DIR) && \
-	 groupadd postfix && \
-	 groupadd postdrop && \
-	 groupadd -g 65534 nogroup && \
-	 useradd -c postfix -d /dev/null -g postfix -s /bin/false postfix && \
-	 useradd -c nobody -d /home -g nogroup -s /bin/bash -u 65534 nobody && \
 	 chown postfix:postfix /var/mail && \
 	 make -j3 && \
 	 sh postfix-install daemon_directory=/usr/sbin manpage_directory=/usr/share/man \

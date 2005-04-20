@@ -19,9 +19,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/pppd ] ; then tar -xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/$(NM) ] ; then tar -xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
-	 make -C libncftp shared && make -C libncftp soinstall &&
+	 make -C libncftp shared && make -C libncftp soinstall && \
 	 make -j3 && make install ; fi
 	@make clean
 
