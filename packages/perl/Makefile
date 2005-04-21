@@ -39,7 +39,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /usr/bin/perl$(VRS) ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure.gnu --prefix=/usr -Dpager="/bin/less -isR" && \
-	 make -j3 && make install ; fi
+	 make && make install ; fi
 	@make clean
 	
 clean:

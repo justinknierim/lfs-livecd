@@ -21,4 +21,3 @@ if [ -f $CONF ]
 then
 	rm $CONF
 fi
-return 0

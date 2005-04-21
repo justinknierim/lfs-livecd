@@ -1,4 +1,4 @@
-# Firebox Makefile
+# Firefox Makefile
 
 # Package versions
 NM= firefox
@@ -20,9 +20,9 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/firefox ] ; then tar xjvf $(FILE) && cd $(DIR) && \
-	 cp ../.mozconfig . && \
+	 sed 's!@TOPSRCDIR@!$(ROOT)/$(PKG)/$(NM)/mozilla!' ../.mozconfig > .mozconfig && \
 	 make -f client.mk && make -f client.mk install && \
-	 cd $(ROOT)/$(PKG)/$(NM) && ./firstrun ; fi
+	 cd $(ROOT)/$(PKG)/$(NM) ; fi
 	#@cp -ra $(ROOT)/root/.firefox /root
 	#@cp -ra $(ROOT)/root/.mozilla /root
 	@make clean

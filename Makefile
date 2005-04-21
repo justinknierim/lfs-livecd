@@ -172,7 +172,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
-	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
+	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs \
 	ch-libIDL ch-firefox ch-startup-notification ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-ppp ch-rp-pppoe ch-libaal \
 	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts \
@@ -711,6 +711,10 @@ gtk2: prep-chroot
 	make -C $(PKG)/gtk+2 chroot
 	make unmount
 
+cvs: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 libIDL: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1236,6 +1240,9 @@ ch-atk: popdev
 
 ch-gtk2: popdev
 	make -C $(PKG)/gtk+2 stage2
+
+ch-cvs: popdev
+	make -C $(PKG)/cvs stage2
 
 ch-firefox: popdev
 	make -C $(PKG)/firefox stage2
