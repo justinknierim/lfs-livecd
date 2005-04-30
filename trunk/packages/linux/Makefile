@@ -2,7 +2,7 @@
 
 # Package versions
 NM= linux
-VRS= 2.6.11.6
+VRS= $(KVERS)
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= squashfs2.1-patch
