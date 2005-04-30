@@ -36,7 +36,7 @@ stage2:
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) && bunzip2 $(PATCH).bz2 ; fi
 	@if [ ! -f /usr/bin/clear ] ; then tar -xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 sh ../$(PATCH) && \
-	 ./configure --prefix=/usr --with-shared --without-debug --with-gpm && \
+	 ./configure --prefix=/usr --with-shared --without-debug && \
 	 make sources && make -j3 && make install && chmod 755 /usr/lib/*.5.4 && \
 	 chmod 644 /usr/lib/libncurses++.a && mv /usr/lib/libncurses.so.5* /lib && \
 	 ln -sf ../../lib/libncurses.so.5 /usr/lib/libncurses.so && \
