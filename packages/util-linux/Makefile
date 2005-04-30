@@ -11,7 +11,7 @@ URL1= http://www.linuxfromscratch.org/patches/lfs/cvs/testing/$(PATCH)
 
 # RULES
 
-.PHONY: stage1 clean chroot stage2 klibc-losetup
+.PHONY: stage1 clean chroot stage2
 
 stage1:
 	@echo ""
@@ -43,15 +43,6 @@ stage2:
 	 make HAVE_KILL=yes HAVE_SLN=yes install ; fi
 	@make clean
 	
-klibc-losetup:
-	@echo ""
-	@echo "=====> Building losetup with klibc"
-	@echo ""
-	@if [ ! -f /usr/lib/klibc/bin/losetup ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../../klibc/util-linux-2.12q-klibc-1.patch && \
-	 CC="klcc" LDFLAGS="-shared" ./configure && \
-	 make lib/xstrncpy.o lib/getpass.o && make -C mount losetup && \
-	 strip -s mount/losetup && install mount/losetup /usr/lib/klibc/bin ; fi
-	@make clean
+
 clean:
 	@-rm -rf $(DIR)

@@ -32,7 +32,7 @@ export FTP := ftp://ftp.lfs-matrix.net/pub/lfs/lfs-packages/conglomeration
 # Don't edit these!
 export VERSION=x86-6.1-1-pre3
 export HOSTNAME := lfslivecd
-export WD := /cdtools
+export WD := /tools
 export SRC := /sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
@@ -55,7 +55,6 @@ export chbash1 := SHELL=$(WD)/bin/bash
 export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget --passive-ftp
-export KVERS= 2.6.11.6
 
 FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
@@ -162,7 +161,7 @@ prep-chroot:
 	@if [ ! -f $(MP)/etc/X11/xorg.conf ] ; then if [ -f /etc/X11/xorg.conf ] ; then cp /etc/X11/xorg.conf $(PKG)/Xorg ; fi ; fi
 
 pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
-	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-sharutils ch-gpm ch-ncurses \
+	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-sharutils ch-ncurses \
 	ch-readline ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
 	ch-iproute2 ch-perl ch-texinfo ch-autoconf ch-automake ch-bash
 
@@ -170,7 +169,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux ch-environment
 
-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-zip \
+blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs \
@@ -856,10 +855,6 @@ syslinux: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-klibc: prep-chroot
-	make -C $(PKG)/$@ chroot
-	make unmount
-
 strip: prep-chroot
 	@chroot $(MP) $(chenvstrip) 'cd $(ROOT) && make ch-strip'
 	make unmount
@@ -1351,12 +1346,6 @@ ch-blfs-bootscripts: popdev
 ch-syslinux: popdev
 	make -C $(PKG)/syslinux stage2
 
-ch-klibc: popdev
-	make -C $(PKG)/klibc stage2
-
-ch-unionfs: popdev
-	make -C $(PKG)/unionfs stage2
-
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
 
@@ -1364,7 +1353,7 @@ ch-strip: popdev
 # Rules to create the iso
 #----------------------------------
 
-prepiso: unmount
+prepiso:
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
@@ -1372,12 +1361,12 @@ prepiso: unmount
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
 	@-rm $(MP)/etc/X11/xorg.conf
-	@cp -rav $(MP)/sources $(MP)/iso && \
-	 cp -rav $(MP)/boot $(MP)/iso && \
-	 rm -f iso/root.sqfs && \
-	 $(WD)/bin/mksquashfs $(MP) $(MP)/iso/root.sqfs -info -e \
-	 boot sources tools iso lfs-livecd lost+found && \
-	 echo "LFS-LIVECD" > $(MP)/iso/LFS
+	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
+	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
+	 if [ -f root/.bash_history ] ; then rm root/.bash_history ; fi && \
+	 tar cjvf root.tar.bz2 root && cp root.tar.bz2 iso/ && \
+	 $(WD)/bin/mksquashfs usr usr.sqfs && mv usr.sqfs iso/ && \
+	 echo "LFS-LIVECD" > iso/LFS
 	@touch prepiso
 
 iso: prepiso
