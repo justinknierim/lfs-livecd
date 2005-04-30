@@ -40,11 +40,11 @@ stage2:
 	@if [ ! -f /usr/bin/flex ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=/usr && make -j3 && make install && \
-	 ln -s libfl.a /usr/lib/libl.a && \
+	 ln -sf libfl.a /usr/lib/libl.a && \
 	 echo "#!/bin/sh" > /usr/bin/lex && \
 	 echo "# Begin /usr/bin/lex" >> /usr/bin/lex && \
 	 echo "" >> /usr/bin/lex && \
-	 echo "exec /usr/bin/flex -l \"$$@\"" >> /usr/bin/lex && \
+	 echo "exec /usr/bin/flex -l \"\$$@\"" >> /usr/bin/lex && \
 	 echo "" >> /usr/bin/lex && \
 	 echo "# End /usr/bin/lex" >> /usr/bin/lex && \
 	 chmod 755 /usr/bin/lex ; fi
