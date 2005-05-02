@@ -24,8 +24,7 @@ stage2:
 	@-groupadd sshd
 	@-useradd -c sshd -d /var/lib/sshd -g sshd -s /bin/false sshd
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@hostname $(HOSTNAME)
-	@if [ ! -f /usr/bin/ssh ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/ssh ] ; then hostname $(HOSTNAME) && tar xzvf $(FILE) && cd $(DIR) && \
 	 sed -i "s:-lcrypto:/usr/lib/libcrypto.a:g" configure && \
 	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords \
 	 --with-privsep-path=/var/lib/sshd && \
