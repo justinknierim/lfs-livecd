@@ -56,6 +56,8 @@ export chbash2 := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget --passive-ftp
 
+export KVERS= 2.6.11.6
+
 FTPGET= $(WD)/bin/ftpget
 WGET_V= 1.9.1
 
