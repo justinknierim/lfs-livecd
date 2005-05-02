@@ -2,7 +2,7 @@
 
 # Package versions
 NM= tiff
-VRS= 3.7.1
+VRS= 3.7.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://libtiff.maptools.org/dl/$(FILE)

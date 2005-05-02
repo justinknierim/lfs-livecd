@@ -2,7 +2,7 @@
 
 # Package versions
 NM= gtk+
-VRS= 2.6.4
+VRS= 2.6.7
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= ftp://ftp.gtk.org/pub/gtk/v2.6/$(FILE)

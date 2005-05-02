@@ -2,7 +2,7 @@
 
 # Package versions
 NM= atk
-VRS= 1.9.0
+VRS= 1.9.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= http://ftp.gnome.org/pub/GNOME/sources/atk/1.9/$(FILE)
