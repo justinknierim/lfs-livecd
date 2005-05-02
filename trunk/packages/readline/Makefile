@@ -5,7 +5,7 @@ NM= readline
 VRS= 5.0
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-display_wrap-1.patch
+PATCH= $(DIR)-fixes-1.patch
 URL= $(FTP)/$(NM)/$(FILE)
 URL1= $(FTP)/$(NM)/$(PATCH)
 
