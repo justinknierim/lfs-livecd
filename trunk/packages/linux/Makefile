@@ -2,7 +2,7 @@
 
 # Package versions
 NM= linux
-VRS= 2.6.11.6
+VRS= $(KVERS)
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= squashfs2.1-patch
@@ -23,8 +23,8 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /boot/isolinux/linux ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 $(WGET) $(URL1).1/serie && \
-	 for i in `cat serie` ; do $(WGET) $(URL1).2/$$i && \
+	 $(WGET) $(URL1).2/serie && \
+	 for i in `cat serie` ; do $(WGET) -c $(URL1).2/$$i && \
 	 mv $$i ../ && patch -Np1 -i ../$$i ; done && \
 	 patch -Np1 -i $(ROOT)/$(PKG)/squashfs/squashfs2.1/linux-2.6.9/$(PATCH1) && \
 	 make mrproper && \
