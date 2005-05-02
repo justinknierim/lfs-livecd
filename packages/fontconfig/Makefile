@@ -2,7 +2,7 @@
 
 # Package versions
 NM= fontconfig
-VRS= 2.2.3
+VRS= 2.3.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://fontconfig.org/release/$(FILE)

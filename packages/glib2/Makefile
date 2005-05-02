@@ -2,7 +2,7 @@
 
 # Package versions
 NM= glib
-VRS= 2.6.3
+VRS= 2.6.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= ftp://ftp.gtk.org/pub/gtk/v2.6/$(FILE)
