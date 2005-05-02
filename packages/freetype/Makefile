@@ -26,7 +26,7 @@ stage2:
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -f /usr/lib/libfreetype.so ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
-	 ./configure --prefix=/usr && \
+	 CFLAGS="$(CFLAGS) -fno-strict-aliasing" ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
 	@make clean
 
