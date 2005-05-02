@@ -27,7 +27,7 @@ stage2:
 	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
 	@if [ ! -f /usr/sbin/gpm ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && patch -Np1 -i ../$(PATCH2) && \
-	 CFLAGS="" LDFLAGS="-lm" ./configure --prefix=/usr --sysconfdir=/etc && \
+	 CFLAGS="" LDFLAGS="-lm" ./configure --prefix=/usr --sysconfdir=/etc --without-curses && \
 	 make LDFLAGS="-lm" && make install && \
 	 cp conf/gpm-root.conf /etc && /sbin/ldconfig ; fi
 	@make clean

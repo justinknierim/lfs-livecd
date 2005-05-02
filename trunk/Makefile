@@ -161,7 +161,7 @@ prep-chroot:
 	@if [ ! -f $(MP)/etc/X11/xorg.conf ] ; then if [ -f /etc/X11/xorg.conf ] ; then cp /etc/X11/xorg.conf $(PKG)/Xorg ; fi ; fi
 
 pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages ch-glibc ch-re-adjust-toolchain \
-	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-sharutils ch-ncurses \
+	ch-binutils ch-gcc ch-coreutils ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk ch-sharutils ch-gpm ch-ncurses \
 	ch-readline ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
 	ch-iproute2 ch-perl ch-texinfo ch-autoconf ch-automake ch-bash
 
@@ -169,7 +169,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 	ch-hotplug ch-man ch-make ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux ch-environment
 
-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-gpm ch-zip \
+blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs \
