@@ -21,8 +21,15 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /etc/rc.d/init.d/mountsqfs ] ; then tar xjvf ${SRC}/${FILE} && \
-	 cd ${DIR} && make install-livecd ; fi
+	@if [ ! -f /etc/rc.d/init.d/functions ] ; then tar xjvf ${SRC}/${FILE} && \
+	 cd ${DIR} && make install-livecd && \
+	 install -m 755 lfs/init.d/mountkernfs /etc/rc.d/init.d && \
+	 ln -sf ../init.d/mountkernfs /etc/rc.d/rcsysinit.d/S00mountkernks && \
+	 install -m 755 ../udev /etc/rc.d/init.d/ && \
+	 ln -sf ../init.d/udev /etc/rc.d/rcsysinit.d/S10udev && \
+	 install -m 755 ../mountfs /etc/rc.d/init.d/ && \
+	 ln -sf ../init.d/mountfs /etc/rc.d/rcsysinit.d/S40mountfs && \
+	 rm -f /etc/rc.d/*/*mountsqfs /etc/rc.d/*/*startup ; fi
 
 clean:
 	@-rm -rf bootscripts

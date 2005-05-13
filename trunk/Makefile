@@ -173,11 +173,11 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-libjpeg \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-fonts-dejavu ch-update-fontsdir ch-libjpeg \
 	ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs \
 	ch-libIDL ch-firefox ch-startup-notification ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-ppp ch-rp-pppoe ch-libaal \
-	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-cdrtools ch-blfs-bootscripts \
+	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-linux ch-klibc ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
 	ch-syslinux
 
 # Rules for building tools/stage1
@@ -669,6 +669,10 @@ freefont: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+fonts-dejavu: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 libjpeg: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -855,6 +859,18 @@ blfs-bootscripts: prep-chroot
 
 syslinux: prep-chroot
 	make -C $(PKG)/$@ chroot
+	make unmount
+
+klibc: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+unionfs: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+initramfs: prep-chroot
+	make -C $@ chroot
 	make unmount
 
 strip: prep-chroot
@@ -1207,6 +1223,12 @@ ch-Xorg: popdev
 ch-freefont: popdev
 	make -C $(PKG)/freefont stage2
 
+ch-fonts-dejavu: popdev
+	make -C $(PKG)/fonts-dejavu stage2
+
+ch-update-fontsdir: popdev
+	cd /usr/X11R6/lib/X11/fonts/TTF ; /usr/X11R6/bin/mkfontscale ; /usr/X11R6/bin/mkfontdir ; /usr/bin/fc-cache -f
+
 ch-libjpeg: popdev
 	make -C $(PKG)/libjpeg stage2
 
@@ -1348,6 +1370,15 @@ ch-blfs-bootscripts: popdev
 ch-syslinux: popdev
 	make -C $(PKG)/syslinux stage2
 
+ch-klibc: popdev
+	make -C $(PKG)/klibc stage2
+
+ch-initramfs: popdev
+	make -C initramfs
+
+ch-unionfs: popdev
+	make -C $(PKG)/unionfs stage2
+
 ch-strip: popdev
 	@$(WD)/bin/find /{,usr/}{bin,lib,sbin} -type f -exec $(WD)/bin/strip --strip-debug '{}' ';'
 
@@ -1355,20 +1386,24 @@ ch-strip: popdev
 # Rules to create the iso
 #----------------------------------
 
-prepiso:
+prepiso: unmount
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
+	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
+	@install -m644 root/.bashrc $(MP)/root/.bashrc
+	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
+	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
 	@-rm $(MP)/etc/X11/xorg.conf
-	@for i in bin boot etc lib sbin sources ; do cp -ra $(MP)/$$i $(MP)/iso ; done && \
-	 cd $(MP) && tar cjvf etc.tar.bz2 etc && cp etc.tar.bz2 iso/ && \
-	 if [ -f root/.bash_history ] ; then rm root/.bash_history ; fi && \
-	 tar cjvf root.tar.bz2 root && cp root.tar.bz2 iso/ && \
-	 $(WD)/bin/mksquashfs usr usr.sqfs && mv usr.sqfs iso/ && \
-	 echo "LFS-LIVECD" > iso/LFS
+	@cp -rav $(MP)/sources $(MP)/iso && \
+	 cp -rav $(MP)/boot $(MP)/iso && \
+	 rm -f iso/root.sqfs && \
+	 $(WD)/bin/mksquashfs $(MP) $(MP)/iso/root.sqfs -info -e \
+	 boot sources tools iso lfs-livecd lost+found && \
+	 echo "LFS-LIVECD" > $(MP)/iso/LFS
 	@touch prepiso
 
 iso: prepiso

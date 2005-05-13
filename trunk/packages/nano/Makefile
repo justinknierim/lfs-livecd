@@ -21,7 +21,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/nano ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-color --enable-multibuffer \
-	 --enable-nanorc --with-slang=/usr/lib && \
+	 --enable-nanorc && \
 	 make -j3 && make install && \
 	 mkdir -p /usr/share/doc/nano/examples && \
 	 cp nanorc.sample /usr/share/doc/nano/examples && \

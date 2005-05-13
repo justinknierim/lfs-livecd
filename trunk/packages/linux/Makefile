@@ -21,21 +21,17 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
+	@-mkdir /boot/isolinux
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /boot/isolinux/linux ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 $(WGET) $(URL1).2/serie && \
-	 for i in `cat serie` ; do $(WGET) -c $(URL1).2/$$i && \
+	 for i in `cat serie` ; do $(WGET) $(URL1).2/$$i && \
 	 mv $$i ../ && patch -Np1 -i ../$$i ; done && \
 	 patch -Np1 -i $(ROOT)/$(PKG)/squashfs/squashfs2.1/linux-2.6.9/$(PATCH1) && \
 	 make mrproper && \
 	 cp $(ROOT)/linux/config .config && \
 	 make -j3 && \
-	 make modules_install && \
-	 cd $(ROOT)/initramfs && make && \
-	 cp initramfs_data.cpio.gz $(ROOT)/$(PKG)/$(NM)/$(DIR)/usr/ && \
-	 cd $(ROOT)/$(PKG)/$(NM)/$(DIR) && \
-	 make ; fi
-	@-mkdir /boot/isolinux
+	 make modules_install ; fi
 	@-cp $(DIR)/arch/i386/boot/bzImage /boot/isolinux/linux
 
 clean:

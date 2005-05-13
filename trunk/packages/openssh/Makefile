@@ -2,11 +2,10 @@
 
 # Package versions
 NM= openssh
-VRS= 4.0p1
+VRS= 3.9p1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL= http://sunsite.ualberta.ca/pub/OpenBSD/OpenSSH/portable/$(FILE)
-HOSTORIG= `hostname`
 
 #RULES
 
@@ -24,13 +23,12 @@ stage2:
 	@-groupadd sshd
 	@-useradd -c sshd -d /var/lib/sshd -g sshd -s /bin/false sshd
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/ssh ] ; then hostname $(HOSTNAME) && tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/ssh ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 sed -i "s:-lcrypto:/usr/lib/libcrypto.a:g" configure && \
 	 ./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin --with-md5-passwords \
 	 --with-privsep-path=/var/lib/sshd && \
-	 make -j3 && make install ; fi
+	 make -j3 && make install-nokeys ; fi
 	@make clean
-	@hostname $(HOSTORIG)
 
 clean:
 	@-rm -rf $(DIR)
