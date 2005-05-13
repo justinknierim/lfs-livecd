@@ -1,0 +1,23 @@
+Submitted By: Alexander E. Patrakov
+Date: 2005-05-05
+Initial Package Version: 1.4.9
+Origin: Alexander E. Patrakov
+Upstream Status: Not submitted yet
+Description: This patch makes SLang compatible with "xterm -lc" when
+printing line-drawing characters. Escape sequences taken from ncurses-20050319.
+
+--- slang-1.4.9/src/sldisply.c	2003-03-23 12:06:40.000000000 +0500
++++ slang-1.4.9/src/sldisply.c	2005-05-05 13:39:24.000000000 +0600
+@@ -2325,9 +2325,9 @@
+     /* aixterm added by willi */
+    if (is_xterm || !strncmp (term, "aixterm", 7))
+      {
+-	Start_Alt_Chars_Str = "\016";
+-	End_Alt_Chars_Str = "\017";
+-	Enable_Alt_Char_Set = "\033(B\033)0";
++	Start_Alt_Chars_Str = "\033(0";
++	End_Alt_Chars_Str = "\033(B";
++	Enable_Alt_Char_Set = "";
+      }
+ 
+    if ((SLtt_Graphics_Char_Pairs == NULL) &&

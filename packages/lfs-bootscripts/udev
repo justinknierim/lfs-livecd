@@ -1,0 +1,57 @@
+#!/bin/sh
+########################################################################
+# Begin $rc_base/init.d/udev
+#
+# Description : Udev cold-plugging script
+#
+# Authors     : Zack Winkles
+#
+# Version     : 00.01
+#
+# Notes       :
+#
+########################################################################
+
+. /etc/sysconfig/rc
+. ${rc_functions}
+
+# Create some things that sysfs does not, and should not export for us.  Feel
+# free to add devices to this list.
+make_extra_nodes() {
+	ln -s /proc/self/fd /dev/fd
+	ln -s /proc/self/fd/0 /dev/stdin
+	ln -s /proc/self/fd/1 /dev/stdout
+	ln -s /proc/self/fd/2 /dev/stderr
+	ln -s /proc/kcore /dev/core
+	mkdir /dev/pts
+}
+
+case "${1}" in
+	start)
+		boot_mesg "Populating /dev with device nodes..."
+
+		# Assign udevsend to get hotplug events. udevsend can manage the whole
+		# hotplug handling by taking over the kernel spawned event process
+		echo /sbin/udevsend > /proc/sys/kernel/hotplug
+
+		# Populate /dev with all the devices that are already available,
+		# and save it's status so we can report failures.
+		udevstart || failed=1
+
+		# Now, create some required files/directories/devices that sysfs
+		# doesn't export for us.
+		make_extra_nodes
+
+		# When reporting the status, base it on the success or failure
+		# of the `udevstart' command, since that's the most important.
+		(exit ${failed})
+		evaluate_retval
+		;;
+
+	*)
+		echo "Usage ${0} {start}"
+		exit 1
+		;;
+esac
+
+# End $rc_base/init.d/udev

@@ -20,6 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/lib/libslang.so.1.4.9 ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../slang-1.4.9-luit-1.patch && \
 	 ./configure --prefix=/usr && \
 	 make && make install && \
 	 make elf && make install-elf && \

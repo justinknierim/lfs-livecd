@@ -2,10 +2,10 @@
 
 # Package versions
 NM= sharutils
-VRS= 4.3.78
+VRS= 4.3.80
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://ftp.gnu.org/gnu/sharutils/REL-4.3.78/$(FILE)
+URL= http://ftp.gnu.org/gnu/sharutils/REL-$(VRS)/$(FILE)
 
 # RULES
 

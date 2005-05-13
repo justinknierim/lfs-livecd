@@ -1,7 +1,7 @@
-diff -Naur blfs-bootscripts-20050313.orig/blfs/init.d/autosshd blfs-bootscripts-20050313/blfs/init.d/autosshd
---- blfs-bootscripts-20050313.orig/blfs/init.d/autosshd	1969-12-31 19:00:00.000000000 -0500
-+++ blfs-bootscripts-20050313/blfs/init.d/autosshd	2005-03-30 22:06:02.986977573 -0500
-@@ -0,0 +1,20 @@
+diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd blfs-bootscripts-20050313/blfs/init.d/autosshd
+--- blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd	1970-01-01 05:00:00.000000000 +0500
++++ blfs-bootscripts-20050313/blfs/init.d/autosshd	2005-05-13 09:07:15.000000000 +0600
+@@ -0,0 +1,26 @@
 +#!/bin/sh
 +# Begin $rc_base/init.d/autosshd
 +
@@ -15,16 +15,35 @@ diff -Naur blfs-bootscripts-20050313.orig/blfs/init.d/autosshd blfs-bootscripts-
 +			/etc/rc.d/init.d/sshd start
 +		fi
 +		;;
++	stop)
++		if statusproc /usr/sbin/sshd | grep -q "Process ID"
++		then
++			/etc/rc.d/init.d/sshd stop
++		fi
++		;;
 +	*)
-+		echo "Usage: $0 {start|stop|reload|restart|status}"
++		echo "Usage: $0 {start|stop}"
 +		exit 1
 +		;;
 +esac
 +
 +# End $rc_base/init.d/autosshd
-diff -Naur blfs-bootscripts-20050313.orig/Makefile blfs-bootscripts-20050313/Makefile
---- blfs-bootscripts-20050313.orig/Makefile	2005-03-06 22:48:33.000000000 -0500
-+++ blfs-bootscripts-20050313/Makefile	2005-03-30 22:06:02.988977310 -0500
+diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/sshd blfs-bootscripts-20050313/blfs/init.d/sshd
+--- blfs-bootscripts-20050313-ORIG/blfs/init.d/sshd	2004-09-29 10:00:58.000000000 +0600
++++ blfs-bootscripts-20050313/blfs/init.d/sshd	2005-05-13 09:09:05.000000000 +0600
+@@ -13,6 +13,9 @@
+ case "$1" in
+ 	start)
+ 		echo "Starting SSH Server..."
++		[ -f /etc/ssh/ssh_host_key ] || ssh-keygen -q -t rsa1 -f /etc/ssh/ssh_host_key -N ""
++		[ -f /etc/ssh/ssh_host_rsa_key ] || ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -N ""
++		[ -f /etc/ssh/ssh_host_dsa_key ] || ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -N ""
+ 		loadproc /usr/sbin/sshd
+ 		;;
+ 
+diff -Naur blfs-bootscripts-20050313-ORIG/Makefile blfs-bootscripts-20050313/Makefile
+--- blfs-bootscripts-20050313-ORIG/Makefile	2005-03-07 08:48:33.000000000 +0500
++++ blfs-bootscripts-20050313/Makefile	2005-05-13 09:07:03.000000000 +0600
 @@ -54,6 +54,16 @@
  	install -m $(CONFMODE) blfs/sysconfig/autofs.conf $(EXTDIR)/sysconfig/
  	ln -sf  ../init.d/autofs $(EXTDIR)/rc.d/rcsysinit.d/S45autofs
