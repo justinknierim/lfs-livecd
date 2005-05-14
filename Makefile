@@ -177,7 +177,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-fonts-dejavu ch-update-fontsdir ch-libjpeg ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 \
 	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-libIDL ch-firefox ch-startup-notification \
 	ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-samba ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
-	ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal \
+	ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-popt ch-distcc ch-ppp ch-rp-pppoe ch-libaal \
 	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-raidtools ch-linux ch-klibc ch-unionfs \
 	ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
@@ -810,6 +810,10 @@ distcc: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+popt: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 ppp: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1339,6 +1343,9 @@ ch-dhcpcd: popdev
 
 ch-distcc: popdev
 	make -C $(PKG)/distcc stage2
+
+ch-popt: popdev
+	make -C $(PKG)/popt stage2
 
 ch-ppp: popdev
 	make -C $(PKG)/ppp stage2
