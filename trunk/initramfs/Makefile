@@ -10,7 +10,7 @@ KLIBC= /usr/lib/klibc
 
 initramfs_data.cpio.gz: init
 	mkdir -p $(WD)/{dev,bin,lib,.tmpfs,.union}
-	$(CP) $(KLIBC)/bin/{insmod,isoinfo,losetup,mkdir,mount,run-init,sh,sleep} $(WD)/bin
+	$(CP) $(KLIBC)/bin/{insmod,isoinfo,ln,losetup,mkdir,mount,run-init,sh,sleep} $(WD)/bin
 	$(CP) $(KLIBC)/lib/klibc-*.so $(WD)/lib
 	$(CP) /lib/modules/$(KVERS)/kernel/fs/unionfs.ko $(WD)/lib
 	$(CP) init $(WD)

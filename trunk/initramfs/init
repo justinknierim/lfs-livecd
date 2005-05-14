@@ -27,15 +27,20 @@ mount -w -t tmpfs -o size=90% tmpfs /.tmpfs
 mkdir /.tmpfs/.overlay
 
 # Probably redundant, but might be useful in the future for ejecting the CD
-mkdir /.tmpfs/.overlay/dev
-mkdir /.tmpfs/.overlay/dev/shm
-mkdir /.tmpfs/.overlay/proc
+mkdir -p /.tmpfs/.overlay/dev/shm /.tmpfs/.overlay/proc
 
 mkdir /.tmpfs/.cdrom
 mkdir /.tmpfs/.sqfs
 mount -r -t iso9660 $CDROM /.tmpfs/.cdrom
 losetup /dev/loop0 /.tmpfs/.cdrom/root.sqfs
 mount -r -t squashfs /dev/loop0 /.tmpfs/.sqfs
+
+# File locking doesn't work well on unionfs, this breaks module-init-tools
+MODDIR=`echo /.tmpfs/.sqfs/lib/modules/*`
+MODDIR=${MODDIR#/.tmpfs/.sqfs/}
+mkdir -p /.tmpfs/.overlay/$MODDIR
+ln -s /dev/shm/.sqfs/$MODDIR/kernel /.tmpfs/.overlay/$MODDIR
+
 insmod /lib/unionfs.ko
 mount -w -t unionfs -o dirs=/.tmpfs/.overlay=rw:/.tmpfs/.cdrom=ro:/.tmpfs/.sqfs=ro unionfs /.union
 mount -o move /.tmpfs /.union/dev/shm
