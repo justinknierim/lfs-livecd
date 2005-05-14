@@ -51,9 +51,9 @@ pass2:
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) --enable-clocale=gnu \
-	 --enable-shared --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ --disable-libstdcxx-pch \
-	 --host=$(CHOST) --target=$(CHOST) && \
-	make -j3 && make install ; fi
+	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
+	 --enable-languages=c,c++ --disable-libstdcxx-pch && \
+	 make -j3 && make install ; fi
 	@make clean
 	@touch .pass2
 
