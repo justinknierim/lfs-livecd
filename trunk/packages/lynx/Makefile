@@ -22,8 +22,12 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/lynx ] ; then tar xjvf $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib && \
+	 ./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib \
+	    --enable-nls --with-ssl --enable-charset-choice \
+	    --enable-color-style --enable-default-colors \
+	    --enable-locale-charset && \
 	 make -j3 && make install && \
+	 sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg && \
 	 make docdir=/usr/share/doc/$(NM)-$(VRS)/lynx_doc helpdir=/usr/share/doc/$(NM)-$(VRS)/lynx_help install-doc && \
 	 make docdir=/usr/share/doc/$(NM)-$(VRS)/lynx_doc helpdir=/usr/share/doc/$(NM)-$(VRS)/lynx_help install-help && \
 	 chgrp -R root /usr/share/doc/$(NM)-$(VRS)/lynx_doc ; fi
