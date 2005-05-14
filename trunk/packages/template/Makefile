@@ -19,7 +19,7 @@ stage1:
 	@echo "=====> Building $(NM)"
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
+	 mv $(FILE) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
 	@if [ ! -f $(WD)/bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
@@ -40,9 +40,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
+	 mv $(FILE) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
 	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH1) $(SRC) ; fi
+	 mv $(PATCH1) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
 	@if [ ! -f /bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr && \
