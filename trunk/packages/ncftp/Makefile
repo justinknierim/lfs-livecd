@@ -2,10 +2,10 @@
 
 # Package versions
 NM= ncftp
-VRS= 3.1.7
+VRS= 3.1.9
 DIR= $(NM)-$(VRS)
 FILE= $(DIR)-src.tar.bz2
-URL= ftp://ftp.fu-berlin.de/unix/linux/mirrors/gentoo/distfiles/$(FILE)
+URL= http://ftp.rge.com/pub/networking/$(NM)/$(FILE)
 
 #RULES
 
