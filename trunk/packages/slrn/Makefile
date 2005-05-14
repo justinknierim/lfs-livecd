@@ -5,7 +5,7 @@ NM= slrn
 VRS= 0.9.8.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://voxel.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
 
 #RULES
 

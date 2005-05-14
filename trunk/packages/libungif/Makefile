@@ -5,7 +5,7 @@ NM= libungif
 VRS= 4.1.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://voxel.dl.sourceforge.net/sourceforge/libungif/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/libungif/$(FILE)
 
 #RULES
 

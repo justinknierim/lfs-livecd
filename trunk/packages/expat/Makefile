@@ -5,7 +5,7 @@ NM= expat
 VRS= 1.95.8
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-URL= http://voxel.dl.sourceforge.net/sourceforge/expat/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/expat/$(FILE)
 
 
 
