@@ -1391,6 +1391,7 @@ prepiso: unmount
 	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 	@install -m644 root/.bashrc $(MP)/root/.bashrc
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
