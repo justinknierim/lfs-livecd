@@ -807,8 +807,8 @@ dhcpcd: prep-chroot
 	make unmount
 
 distcc: prep-chroot
-        make -C $(PKG)/$@ chroot
-        make unmount
+	make -C $(PKG)/$@ chroot
+	make unmount
 
 ppp: prep-chroot
 	make -C $(PKG)/$@ chroot
@@ -851,8 +851,8 @@ slrn: prep-chroot
 	make unmount
 
 raidtools: prep-chroot
-        make -C $(PKG)/$@ chroot
-        make unmount
+	make -C $(PKG)/$@ chroot
+	make unmount
 
 linux: prep-chroot
 	make -C $(PKG)/$@ chroot
@@ -1404,7 +1404,8 @@ ch-strip: popdev
 prepiso: unmount
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
 	@-rm $(MP)/root/.bash_history
-	@>$(MP)/var/log/{b,w}tmp
+	@>$(MP)/var/log/btmp
+	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
