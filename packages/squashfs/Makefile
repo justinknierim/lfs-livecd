@@ -6,7 +6,7 @@ VRS= 2.1
 DIR= $(NM)$(VRS)
 PATCH=
 FILE= $(DIR).tar.gz
-URL= http://voxel.dl.sourceforge.net/sourceforge/squashfs/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/squashfs/$(FILE)
 
 #RULES
 

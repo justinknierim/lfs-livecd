@@ -23,8 +23,6 @@ stage2:
 	 sed 's!@TOPSRCDIR@!$(ROOT)/$(PKG)/$(NM)/mozilla!' ../.mozconfig > .mozconfig && \
 	 make -f client.mk && make -f client.mk install && \
 	 cd $(ROOT)/$(PKG)/$(NM) ; fi
-	#@cp -ra $(ROOT)/root/.firefox /root
-	#@cp -ra $(ROOT)/root/.mozilla /root
 	@make clean
 
 clean:

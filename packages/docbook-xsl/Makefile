@@ -5,7 +5,7 @@ NM= docbook-xsl
 VRS= 1.68.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://voxel.dl.sourceforge.net/sourceforge/docbook/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/docbook/$(FILE)
 
 
 

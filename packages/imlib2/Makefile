@@ -5,7 +5,7 @@ NM= imlib2
 VRS= 1.1.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-URL= http://voxel.dl.sourceforge.net/sourceforge/enlightenment/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/enlightenment/$(FILE)
 
 #RULES
 

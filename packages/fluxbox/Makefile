@@ -5,7 +5,7 @@ NM= fluxbox
 VRS= 0.9.12
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://voxel.dl.sourceforge.net/sourceforge/fluxbox/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/fluxbox/$(FILE)
 
 #RULES
 

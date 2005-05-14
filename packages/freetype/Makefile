@@ -6,7 +6,7 @@ VRS= 2.1.9
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-bytecode_interpreter-1.patch
-URL= http://voxel.dl.sourceforge.net/sourceforge/freetype/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/freetype/$(FILE)
 URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
 
 

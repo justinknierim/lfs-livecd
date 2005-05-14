@@ -6,7 +6,7 @@ VRS= 1.2.8
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-link_to_proper_libs-1.patch
-URL= http://voxel.dl.sourceforge.net/sourceforge/libpng/$(FILE)
+URL= http://easynews.dl.sourceforge.net/sourceforge/libpng/$(FILE)
 URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
 
 
