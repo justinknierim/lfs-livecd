@@ -1338,7 +1338,7 @@ ch-dhcpcd: popdev
 	make -C $(PKG)/dhcpcd stage2
 
 ch-distcc: popdev
-        make -C $(PKG)/distcc stage2
+	make -C $(PKG)/distcc stage2
 
 ch-ppp: popdev
 	make -C $(PKG)/ppp stage2
@@ -1371,7 +1371,7 @@ ch-slrn: popdev
 	make -C $(PKG)/slrn stage2
 
 ch-raidtools: popdev
-        make -C $(PKG)/raidtools stage2
+	make -C $(PKG)/raidtools stage2
 
 ch-linux: popdev
 	make -C $(PKG)/linux stage2
