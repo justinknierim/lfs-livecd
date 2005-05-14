@@ -12,6 +12,5 @@
 * Reduce dhcpcd timeout. The boot process appears to hang when there is no DHCP server in the network.
 * Add raid-tools
 * Add distcc
-* Remove .bash_history and /var/log/{btmp,wtmp}
 * Change /etc/issue information to acknowledge work done by the new livecd team as well.
   Should we list team members?
