@@ -746,14 +746,6 @@ ion: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-libast: prep-chroot
-	make -C $(PKG)/$@ chroot
-	make unmount
-
-Eterm: prep-chroot
-	make -C $(PKG)/$@ chroot
-	make unmount
-
 irssi: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1295,12 +1287,6 @@ ch-lua: popdev
 
 ch-ion: popdev
 	make -C $(PKG)/ion stage2
-
-ch-libast: popdev
-	make -C $(PKG)/libast stage2
-
-ch-Eterm: popdev
-	make -C $(PKG)/Eterm stage2
 
 ch-irssi: popdev
 	make -C $(PKG)/irssi stage2
