@@ -6,7 +6,7 @@ VRS= 1.00.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 PATCH1= $(DIR)-gcc-3.3_fix-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
+URL= http://people.redhat.com/mingo/$(NM)/$(FILE)
 
 # RULES
 
