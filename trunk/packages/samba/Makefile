@@ -24,10 +24,7 @@ stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-piddir=/var/run --with-fhs \
 	 --with-smbmount && \
 	 make && \
-	 mkdir /usr/lib/samba && mkdir /var/lib/samba && mkdir /etc/samba && \
-	 cp codepages/{upcase,lowcase,valid}.dat /usr/lib/samba && \
-	 touch /etc/samba/smb.conf && \
-	 cp bin/{smbmnt,smbmount,smbumount,smbclient} /usr/bin && \
+	 make install && \
 	 cd client && \
 	 gcc $(CFLAGS) -static mount.cifs.c -o mount.cifs && \
 	 cp mount.cifs /usr/bin ; fi
