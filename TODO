@@ -9,7 +9,6 @@
 * Add some Greek TrueType fonts.
 * Remove Bitstream Vera, adjust /etc/fonts/fonts.conf accordingly
 * Ask someone how to use USB to serial converters. Add support to the kernel.
-* Find out why via-agp.ko doesn't load properly here (regression against pre2 livecd)
 * Find out exact requirements for Intel framebuffer
 * Reduce dhcpcd timeout. The boot process appears to hang when there is no DHCP server in the network.
 * Add raid-tools
