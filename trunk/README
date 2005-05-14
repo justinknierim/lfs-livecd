@@ -66,11 +66,6 @@ III. Building the livecd using these Makefiles
   target cd. We need this so that Xorg compiles and runs correctly. This
   version of the livecd uses linux-2.6.10.
 
-* Be sure to have your compiled kernel source tree located at /usr/src/linux
-  This is so that a kernel module can be built and installed that will force
-  uname to return i486 as your system architecture.  This has the desired
-  effect of easily producing binaries compatible with 486 machines and later.
-
 * These Makefiles rely heavily on an active internet connection.
 
 * Verify that this directory is called 'lfs-livecd' and is located in the 
@@ -82,6 +77,34 @@ III. Building the livecd using these Makefiles
   To start the build, simply run:
 
 	make
+
+  If you run into an Error while building, you _should_ be able to resume
+  where you left off after you adjust the build to remove the error. To do
+  this, simply run 'make' again. If for some reason you want to build just
+  one package (at one particular stage of the build) you will need to specify
+  which package to build:
+
+  1) To build a package for the /tools directory (corresponding to chapter 5
+     in the LFS Book), you would run: make lfs-[package-name]
+
+  2) To build a package for the final system, (the chroot environment) you
+     would run: make [package-name]
+
+  Following the examples above should properly set up the environment (ie.,
+  switching to the lfs user for packages built for the /tools dir, and entering
+  chroot to build packages for the final system.)
+
+  That is why there are 'double' targets for packages in the main Makefile. One
+  set of targets are targets that you can directly call for the sake of building
+  just that package in the proper environment, and one set of targets
+  (lfs-[package-name]-scpt or ch-[package-name]) are targets that should only be
+  called by the make process internally because they expect the environment to
+  be already set up correctly.
+
+  I have tried to make the Makefiles as build friendly as possible, however
+  this being my first real attempt at scripted builds via Makefiles, there
+  are likely many improvements that could (and should!) be made to them.
+  
 
 ------------------
 
