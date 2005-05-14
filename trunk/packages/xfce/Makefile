@@ -23,6 +23,7 @@ stage2:
 	 for i in `cat ../../list` ; do tar -xzvf $$i.tar.gz && cd $$i && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-debug=no --enable-panel --enable-startup-notification --libexecdir=/usr/sbin && \
 	 make -j3 && make install && cd .. ; done ; fi
+	@cp $(ROOT)/root/.xinitrc /root/
 	@make clean
 
 clean:
