@@ -1,11 +1,12 @@
-# distcc Makefile
+# raidtools Makefile
 
 # Package versions
-NM= distcc
-VRS= 2.18.3
+NM= raidtools
+VRS= 1.00.3
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
-URL= http://distcc.samba.org/ftp/$(NM)/$(FILE)
+FILE= $(DIR).tar.gz
+PATCH1= $(DIR)-gcc-3.3_fix-1.patch
+URL= $(FTP)/$(NM)/$(FILE)
 
 # RULES
 
@@ -19,8 +20,9 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/distcc ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
+	@if [ ! -f /usr/sbin/mkraid ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH1) && \
+	 ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make -j3 && make install ; fi
 	@make clean
 	 
