@@ -1388,6 +1388,8 @@ ch-strip: popdev
 
 prepiso: unmount
 	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
+	@-rm $(MP)/root/.bash_history
+	@>$(MP)/var/log/{b,w}tmp
 	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
@@ -1398,7 +1400,6 @@ prepiso: unmount
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
-	@-rm $(MP)/etc/X11/xorg.conf
 	@cp -rav $(MP)/sources $(MP)/iso && \
 	 cp -rav $(MP)/boot $(MP)/iso && \
 	 rm -f iso/root.sqfs && \
