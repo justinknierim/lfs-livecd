@@ -10,6 +10,5 @@
 * Ask someone how to use USB to serial converters. Add support to the kernel.
 * Find out exact requirements for Intel framebuffer
 * Reduce dhcpcd timeout. The boot process appears to hang when there is no DHCP server in the network.
-* Add raid-tools
 * Change /etc/issue information to acknowledge work done by the new livecd team as well.
   Should we list team members?
