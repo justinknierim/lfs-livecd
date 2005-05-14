@@ -4,7 +4,6 @@
 * nALFS profile
 * New shutdown scripts to handle unmounts of drives, stopping of services, if they were started, etc.
 * Decide upon the default timezone in the Makefile. GMT? (Fine with me - JH)
-* Create .xinitrc file for root and choose default wm, probably xfce.
 * Menus and background for xfce
 * Add some Greek TrueType fonts.
 * Remove Bitstream Vera, adjust /etc/fonts/fonts.conf accordingly

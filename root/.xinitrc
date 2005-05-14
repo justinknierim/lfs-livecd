@@ -1,2 +1,1 @@
-xrdb -merge ~/.Xresources
-exec startfluxbox
+exec startxfce4
