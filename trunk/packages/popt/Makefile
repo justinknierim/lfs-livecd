@@ -21,8 +21,8 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH1).gz ]  ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f $(PATCH1) ] ; then gunzip $(PATCH1).gz ; fi
+	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) && \
+	 gunzip $(PATCH1).gz ; fi
 	@if [ ! -f /usr/lib/libpopt.a ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && \
 	 ./configure --prefix=/usr && \
