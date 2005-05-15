@@ -20,12 +20,10 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /usr/sbin/pppoe ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && cd src && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) ; fi
+	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) ; fi
+	@if [ ! -f /usr/sbin/pppoe ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	 patch -Np1 -i ../$(PATCH) && cd src && \
 	 ./configure && make && \
 	 make install ; fi
 	@make clean
