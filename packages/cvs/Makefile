@@ -2,11 +2,11 @@
 
 # Package versions
 NM= cvs
-VRS= 1.11.18
+VRS= 1.11.20
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-zlib-1.patch
-URL= https://ccvs.cvshome.org/files/documents/19/534/$(FILE)
+URL= https://ccvs.cvshome.org/files/documents/19/861/$(FILE)
 URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
 
 #RULES
