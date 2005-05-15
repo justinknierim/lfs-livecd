@@ -18,9 +18,8 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/sbin/unionctl ] ; then tar xzvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) ; fi
+	@if [ ! -f /usr/sbin/unionctl ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG && \
 	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG install && \
 	 strip --strip-debug /lib/modules/$(KVERS)/kernel/fs/unionfs.ko ; fi
