@@ -25,6 +25,7 @@ stage2:
 	 --with-smbmount && \
 	 make && \
 	 make install && \
+	 touch /etc/samba/smb.conf && \
 	 cd client && \
 	 gcc $(CFLAGS) -static mount.cifs.c -o mount.cifs && \
 	 cp mount.cifs /usr/bin ; fi
