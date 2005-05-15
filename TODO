@@ -9,5 +9,4 @@
 * Ask someone how to use USB to serial converters. Add support to the kernel.
 * Find out exact requirements for Intel framebuffer
 * Find a good way to run updatedb before the iso is burned (CD is now writable - so maybe we can just let the user run it himself? :) JH)
-* Set Firefox home page to LFS book
 * Fonts is xterm *slightly* too big? Any harm in reducing size by a point or two?

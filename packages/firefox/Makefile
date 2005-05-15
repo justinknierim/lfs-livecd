@@ -22,7 +22,8 @@ stage2:
 	@if [ ! -f /usr/bin/firefox ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 sed 's!@TOPSRCDIR@!$(ROOT)/$(PKG)/$(NM)/mozilla!' ../.mozconfig > .mozconfig && \
 	 make -f client.mk && make -f client.mk install && \
-	 cd $(ROOT)/$(PKG)/$(NM) ; fi
+	 cd $(ROOT)/$(PKG)/$(NM) && \
+	 cp -ra $(ROOT)/root/.mozilla /root ; fi
 	@make clean
 
 clean:
