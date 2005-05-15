@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/mkraid ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mkraid ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make -j3 && make install ; fi
