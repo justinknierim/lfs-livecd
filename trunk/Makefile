@@ -1403,10 +1403,11 @@ prepiso: unmount
 	@install -m644 etc/issue $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
-	@install -m644 root/.bashrc $(MP)/root/.bashrc
+	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
 	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
+	@cp -ra root $(MP)/etc/skel
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
 	@cp -rav $(MP)/sources $(MP)/iso && \
