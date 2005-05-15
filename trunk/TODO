@@ -1,6 +1,5 @@
 * Package up kernel source and upload to mirrors
 * i18n READMEs
-* udev rules for mice. Create a /dev/mouse symlink to /dev/input/mice?
 * nALFS profile
 * New shutdown scripts to handle unmounts of drives, stopping of services, if they were started, etc.
 * Decide upon the default timezone in the Makefile. GMT? (Fine with me - JH)
@@ -9,4 +8,6 @@
 * Remove Bitstream Vera, adjust /etc/fonts/fonts.conf accordingly
 * Ask someone how to use USB to serial converters. Add support to the kernel.
 * Find out exact requirements for Intel framebuffer
-* Find a good way to run updatedb before the iso is burned
+* Find a good way to run updatedb before the iso is burned (CD is now writable - so maybe we can just let the user run it himself? :) JH)
+* Set Firefox home page to LFS book
+* Fonts is xterm *slightly* too big? Any harm in reducing size by a point or two?
