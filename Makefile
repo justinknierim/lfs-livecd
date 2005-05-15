@@ -1426,7 +1426,7 @@ iso: prepiso
 # "scrub" also removes all sources and the uname modules - basically
 # returning the tree to the condition it was in when it was unpacked
 
-clean: unloadmodule unmount
+clean: unmount
 	@-rm -rf $(WD) $(MP)$(WD)
 	@-userdel lfs
 	@-groupdel lfs
@@ -1445,9 +1445,6 @@ scrub: clean
 clean_sources:
 	@-rm -rf $(SRC) $(MP)$(SRC)
 	@-for i in `ls $(PKG)` ; do rm -rf $(PKG)/$$i/{*.gz,*.bz2,*.zip,*.tgz} ; done
-
-unloadmodule:
-	@-rmmod uname_i486
 
 unmount:
 	@-umount $(MP)/dev/shm
