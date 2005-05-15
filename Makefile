@@ -15,7 +15,7 @@
 export MP := /mnt/lfs
 
 # Timezone, obviously ;)
-export timezone := America/New_York
+export timezone := GMT
 
 # Page size for groff
 export pagesize := letter
