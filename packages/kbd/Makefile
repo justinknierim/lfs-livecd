@@ -6,6 +6,7 @@ VRS= 1.12
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
+PATCH= $(DIR)-backspace-1.patch
 URL1= $(FTP)/$(NM)/$(PATCH1)
 
 # RULES
@@ -22,7 +23,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /bin/loadkeys ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure && make -j3 && make install ; fi
+	 patch -Np1 -i ../$(PATCH) && ./configure && make -j3 && make install ; fi
 	@make clean
 	 
 
