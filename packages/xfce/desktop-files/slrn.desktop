@@ -1,0 +1,8 @@
+[Desktop Entry]
+Name=SLRN
+Comment=Read news
+Exec=slrn
+Terminal=1
+MultipleArgs=false
+Type=Application
+Categories=Application;Network

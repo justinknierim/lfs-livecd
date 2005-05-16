@@ -24,6 +24,7 @@ stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-debug=no --enable-panel --enable-startup-notification --libexecdir=/usr/sbin && \
 	 make -j3 && make install && cd .. ; done ; fi
 	@cp $(ROOT)/root/.xinitrc /root/
+	@cp desktop-files/* /usr/share/applications
 	@make clean
 
 clean:
