@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec=links %u
+Name=Links
+Terminal=1
+Comment=Links
+Icon=html
+MimeType=text/html
+XClassHintResName=Links
+Categories=Application;Network;
