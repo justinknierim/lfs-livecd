@@ -172,7 +172,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs ch-grep 
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch-screen ch-curl ch-zip \
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-inputattach \
 	ch-fonts-dejavu ch-update-fontsdir ch-libjpeg ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 \
 	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-samba ch-libIDL ch-firefox ch-startup-notification \
 	ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
@@ -805,6 +805,10 @@ popt: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+inputattach: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 ppp: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1331,6 +1335,9 @@ ch-distcc: popdev
 
 ch-popt: popdev
 	make -C $(PKG)/popt stage2
+
+ch-inputattach: popdev
+	make -C $(PKG)/inputattach stage2
 
 ch-ppp: popdev
 	make -C $(PKG)/ppp stage2
