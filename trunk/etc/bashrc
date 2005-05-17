@@ -9,10 +9,10 @@ BRWHITE="\[\033[0;38m\]"
 WHITE="\[\033[00m\]"
 
 # Prompt
-if [ `whoami` == "root" ] ; then
-	PS1="${BRWHITE}\h:$RED\u | $BRWHITE\@ \d $RED| $GREEN\w$BRWHITE\n$WHITE\\$ "
+if [ `whoami` = "root" ] ; then
+	PS1="$BRWHITE\h:$RED\u | $BRWHITE\D{%c} $RED| $GREEN\w$BRWHITE\n$WHITE\\$ "
 else
-	PS1="$BRWHITE\h:$GREEN\u | $ORANGE\@ $BRWHITE\d $GREEN| \w\n$BRWHITE\\$ $WHITE"
+	PS1="$BRWHITE\h:$GREEN\u | $BRWHITE\D{%c} $GREEN| \w\n$BRWHITE\\$ $WHITE"
 fi
 
 export PS1
