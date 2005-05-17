@@ -18,7 +18,7 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) ; fi
+	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/sbin/unionctl ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG && \
 	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG install && \
