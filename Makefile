@@ -177,7 +177,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-samba ch-libIDL ch-firefox ch-startup-notification \
 	ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
 	ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-popt ch-distcc ch-ppp ch-rp-pppoe ch-libaal \
-	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-slrn ch-raidtools ch-linux ch-klibc ch-unionfs \
+	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-msmtp ch-slrn ch-raidtools ch-linux ch-klibc ch-unionfs \
 	ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
@@ -845,6 +845,10 @@ mutt: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+msmtp: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 slrn: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1365,6 +1369,9 @@ ch-postfix: popdev
 
 ch-mutt: popdev
 	make -C $(PKG)/mutt stage2
+
+ch-msmtp: popdev
+	make -C $(PKG)/msmtp stage2
 
 ch-slrn: popdev
 	make -C $(PKG)/slrn stage2
