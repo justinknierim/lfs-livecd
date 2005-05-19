@@ -2,10 +2,10 @@
 
 # Package versions
 NM= xfce
-VRS= 4.2.1.1
+VRS= 4.2.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR)-src.tar.bz2
-URL= http://www.us.xfce.org/archive/xfce-4.2.1.1/fat_tarballs/$(FILE)
+URL= http://www.us.xfce.org/archive/xfce-4.2.2/fat_tarballs/$(FILE)
 
 #RULES
 
