@@ -174,7 +174,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-inputattach \
 	ch-fonts-dejavu ch-update-fontsdir ch-libjpeg ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 \
-	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-samba ch-libIDL ch-firefox ch-startup-notification \
+	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-samba ch-libIDL ch-firefox ch-thunderbird ch-startup-notification \
 	ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
 	ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-popt ch-distcc ch-ppp ch-rp-pppoe ch-libaal \
 	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-msmtp ch-slrn ch-raidtools ch-linux ch-klibc ch-unionfs \
@@ -726,6 +726,10 @@ libIDL: prep-chroot
 	make unmount
 
 firefox: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
+thunderbird: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
@@ -1282,6 +1286,9 @@ ch-cvs: popdev
 
 ch-firefox: popdev
 	make -C $(PKG)/firefox stage2
+
+ch-thunderbird: popdev
+	make -C $(PKG)/thunderbird stage2
 
 ch-startup-notification: popdev
 	make -C $(PKG)/startup-notification stage2
