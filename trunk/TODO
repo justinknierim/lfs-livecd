@@ -6,7 +6,6 @@ NOTE: Items marked with a single star can wait for any time.
 ** nALFS profile
 ** New shutdown scripts to handle unmounts of drives, stopping of services, if they were started, etc.
 ** Background for xfce
-** Default applications for xffm (e.g. use vim, not xedit, to edit text files)
 ** Add some Greek TrueType fonts.
 * Remove Bitstream Vera
 * Find out exact requirements for Intel framebuffer
