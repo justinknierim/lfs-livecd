@@ -26,7 +26,8 @@ stage2:
 	@if [ ! -f /usr/bin/mutt ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(NNTP_PATCH) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-imap --enable-pop --enable-nntp --with-ssl && \
-	 make -j3 && make install ; fi
+	 make -j3 && make install && \
+	 install -m600  $(ROOT)/root/.muttrc /root ; fi
 	@make clean
 
 clean:
