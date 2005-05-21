@@ -32,8 +32,10 @@ stage2:
 	 make mrproper && \
 	 cp $(ROOT)/linux/config .config && \
 	 make -j3 && \
-	 make modules_install ; fi
-	@-cp $(DIR)/arch/i386/boot/bzImage /boot/isolinux/linux
+	 make modules_install && \
+	 cp arch/i386/boot/bzImage /boot/isolinux/linux && \
+	 cd .. && ./debian-style-headers.sh linux-$(KVERS) ; fi
+	@make clean
 
 clean:
 	@-rm -rf $(DIR)
