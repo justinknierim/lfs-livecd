@@ -11,8 +11,11 @@ To enable expert mode type "expert" anywhere after
 "linux". This will disable module loading and will
 not attempt to bring up your network.
 
-To set your timezone, add TZ=your/timezone (e.g.
-TZ=America/New_York or TZ=UTC+4) anywhere after "linux".
+To set your timezone, add TZ=your_timezone anywhere
+after "linux". For example, TZ=EDT+4 means that the timezone
+is named "EDT" and is 4 hours behind (west) of UTC.
+Specifications like TZ=America/New_York also work.
+
 Also, add UTC=1 if the hardware clock in your computer
-is set to GMT instead of local time.
+is set to UTC instead of local time.
 
