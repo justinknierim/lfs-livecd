@@ -24,7 +24,6 @@ stage2:
 	@if [ ! -f /usr/bin/lynx ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib \
 	    --enable-nls --with-ssl --enable-charset-choice \
-	    --enable-color-style --enable-default-colors \
 	    --enable-locale-charset && \
 	 make -j3 && make install && \
 	 sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg && \
