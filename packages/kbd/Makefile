@@ -8,8 +8,8 @@ FILE= $(DIR).tar.bz2
 URL= $(FTP)/$(NM)/$(FILE)
 PATCH= $(DIR)-backspace-1.patch
 
-BYELARUSIAN_FILE= belarusian-0.3.tar.gz
-BYELARUSIAN_URL= http://www.mova.org/bellinux/$(BYELARUSIAN_FILE)
+BELARUSIAN_FILE= belarusian-0.3.tar.gz
+BELARUSIAN_URL= http://www.mova.org/bellinux/$(BELARUSIAN_FILE)
 
 # RULES
 
@@ -24,9 +24,9 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(BYELARUSIAN_FILE) ] ; then $(WGET) $(BYELARUSIAN_URL) ; fi
+	@if [ ! -f $(BELARUSIAN_FILE) ] ; then $(WGET) $(BELARUSIAN_URL) ; fi
 	@if [ ! -f /bin/loadkeys ] ; then tar xjvf $(SRC)/$(FILE) && \
-	 tar zxvf $(BYELARUSIAN_FILE) && \
+	 tar zxvf $(BELARUSIAN_FILE) && \
 	 zcat bellinux/console/keymaps/by2_win.kmap.gz >$(DIR)/data/keymaps/i386/qwerty/by2_win.map && \
 	 echo 'Correcting SOFT SIGN in by2_win keymap' && \
 	 sed -i -e 's/\(50 = 0x.\)A/\1C/' $(DIR)/data/keymaps/i386/qwerty/by2_win.map && \
