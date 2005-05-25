@@ -27,7 +27,7 @@ stage2:
 	 rm -rf /etc/init.d && \
 	 rm -f /etc/hotplug/net.agent && \
 	 touch /var/log/hotplug/events && \
-	 mkdir /lib/firmware ; fi
+	 mkdir -p /lib/firmware ; fi
 	@make clean
 	 
 
