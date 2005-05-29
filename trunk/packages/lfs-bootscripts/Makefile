@@ -29,6 +29,8 @@ stage2:
 	 ln -sf ../init.d/udev /etc/rc.d/rcsysinit.d/S10udev && \
 	 install -m 755 ../mountfs /etc/rc.d/init.d/ && \
 	 ln -sf ../init.d/mountfs /etc/rc.d/rcsysinit.d/S40mountfs && \
+	 install -m 755 ../clkconf /etc/rc.d/init.d/ && \
+	 ln -sf ../init.d/clkconf /etc/rc.d/rcsysinit.d/S59clkconf && \
 	 rm -f /etc/rc.d/*/*mountsqfs /etc/rc.d/*/*startup ; fi
 
 clean:
