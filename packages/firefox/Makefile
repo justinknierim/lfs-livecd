@@ -2,7 +2,7 @@
 
 # Package versions
 NM= firefox
-VRS= 1.0.3
+VRS= 1.0.4
 DIR= mozilla
 FILE= $(NM)-$(VRS)-source.tar.bz2
 URL= http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(VRS)/source/$(FILE)
@@ -21,7 +21,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/firefox ] ; then tar xjvf $(FILE) && cd $(DIR) && \
 	 sed 's!@TOPSRCDIR@!$(ROOT)/$(PKG)/$(NM)/mozilla!' ../.mozconfig > .mozconfig && \
-	 make -f client.mk && make -f client.mk install && \
+	 make -f client.mk build && make -f client.mk install && \
 	 cd $(ROOT)/$(PKG)/$(NM) && \
 	 cp -ra $(ROOT)/root/.mozilla /root ; fi
 	@make clean
