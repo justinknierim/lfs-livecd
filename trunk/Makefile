@@ -1440,7 +1440,7 @@ prepiso: unmount
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
-	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/
+	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/
 	@cp -ra root $(MP)/etc/skel
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 	@-mkdir $(MP)/iso
