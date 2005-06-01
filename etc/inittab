@@ -16,11 +16,11 @@ ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
 
 su:S016:once:/sbin/sulogin
 
-1:2345:respawn:/sbin/agetty -I '\033(K' tty1 9600
-2:2345:respawn:/sbin/agetty -I '\033(K' tty2 9600
-3:2345:respawn:/sbin/agetty -I '\033(K' tty3 9600
-4:2345:respawn:/sbin/agetty -I '\033(K' tty4 9600
-5:2345:respawn:/sbin/agetty -I '\033(K' tty5 9600
-6:2345:respawn:/sbin/agetty -I '\033(K' tty6 9600
+1:2345:respawn:/usr/bin/openvt -f -c 1 -e -w -- /usr/bin/livecd-login
+2:2345:respawn:/usr/bin/openvt -f -c 2 -e -w -- /usr/bin/livecd-login
+3:2345:respawn:/usr/bin/openvt -f -c 3 -e -w -- /usr/bin/livecd-login
+4:2345:respawn:/usr/bin/openvt -f -c 4 -e -w -- /usr/bin/livecd-login
+5:2345:respawn:/usr/bin/openvt -f -c 5 -e -w -- /usr/bin/livecd-login
+6:2345:respawn:/usr/bin/openvt -f -c 6 -e -w -- /usr/bin/livecd-login
 
 # End /etc/inittab
