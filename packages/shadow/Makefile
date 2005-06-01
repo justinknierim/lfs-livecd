@@ -32,7 +32,9 @@ stage2:
 	 make -j3 && make install && \
 	 cp etc/{limits,login.access} /etc && \
 	 cp etc/login.defs.linux /etc/login.defs && \
-	 sed -i -e 's@#MD5_CRYPT_ENAB.no@MD5_CRYPT_ENAB yes@' -e 's@/var/spool/mail@/var/mail@' /etc/login.defs && \
+	 sed -i -e 's@#MD5_CRYPT_ENAB.no@MD5_CRYPT_ENAB yes@' \
+	     -e 's@/var/spool/mail@/var/mail@' \
+	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' /etc/login.defs && \
 	 mv /usr/bin/passwd /bin && \
 	 mv /lib/libshadow.*a /usr/lib && \
 	 rm /lib/libshadow.so && \
