@@ -1448,7 +1448,7 @@ prepiso: unmount
 	 cp -rav $(MP)/boot $(MP)/iso && \
 	 rm -f iso/root.sqfs && \
 	 $(WD)/bin/mksquashfs $(MP) $(MP)/iso/root.sqfs -info -e \
-	 boot sources tools iso lfs-livecd lost+found && \
+	 boot sources tools iso lfs-livecd lost+found tmp proc && \
 	 echo "LFS-LIVECD" > $(MP)/iso/LFS
 	@touch prepiso
 
