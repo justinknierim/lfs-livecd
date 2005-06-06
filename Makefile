@@ -1435,6 +1435,7 @@ prepiso: unmount
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 	@install -m600 root/.bashrc $(MP)/root/.bashrc

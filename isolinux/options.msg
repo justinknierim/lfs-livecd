@@ -1,4 +1,4 @@
-To use a framebuffer console, type "linux vga=xxx"
+7007To use a framebuffer console, type "linux vga=xxx"
 where xxx denotes a screen resolution and color depth.
 
 Examples:
@@ -18,4 +18,11 @@ Specifications like TZ=America/New_York also work.
 
 Also, add UTC=1 if the hardware clock in your computer
 is set to UTC instead of local time.
+
+Set your locale by adding LANG=your_locale anywhere after
+"linux". To see the list of presumably working locales,
+press F2 and F3. Add KEYMAP=your_keymap to set the keyboard
+layout. To see the list of available keymaps, press F4.
+
+[F1] = options  [F2] = locales, page 1  [F3] = locales, page 2  [F4] = keymaps
 

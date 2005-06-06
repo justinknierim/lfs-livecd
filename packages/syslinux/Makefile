@@ -21,7 +21,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /boot/isolinux/isolinux.bin ] ; then tar xzvf $(FILE) && cd $(DIR) && \
 	 cp isolinux.bin /boot/isolinux ; fi
-	@cp $(ROOT)/isolinux/{isolinux.cfg,boot.msg,options.msg,splash.lss} /boot/isolinux
+	@cp $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
 	@make clean
 
 clean:
