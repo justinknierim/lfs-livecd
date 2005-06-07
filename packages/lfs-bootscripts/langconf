@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Get a well-defined sort order
+LC_ALL=C
+export LC_ALL
+
+if [ ! -z "$LANG" ] ; then
+	# Assume that the locale is already configured, and the
+	# keymap is satisfactory
+	exit 0
+fi
+
+LOCALES=`cat /boot/isolinux/locales*.msg | grep _ | \
+    sed 's, ,\n,g' | grep -v '^$' | sort`
+
+ARGS="C Default "
+for L in $LOCALES ; do
+	ARGS="$ARGS $L \"`LC_ALL=$L locale language`\" "
+done
+
+DLG_COMMAND="dialog --title \"Locale configuration\" --default-item C \
+    --timeout 20 --menu \"Select your locale from the list below\" 0 0 0 \
+    $ARGS"
+
+LANG_SELECTED=`eval $DLG_COMMAND 3>&2 2>&1 1>&3`
+
+if [ $? -ne 0 ] ; then
+	exit 0
+fi
+
+echo "LANG=$LANG_SELECTED" >>/etc/environment
+echo "LANG=$LANG_SELECTED ; export LANG" >>/etc/sysconfig/rc
+echo "LANG=$LANG_SELECTED ; export LANG" >>/etc/profile
+
+KEYMAPS=`cat /boot/isolinux/keymaps.msg | grep -v ':' | grep -v '\[' | sort`
+ARGS="Default \"\" "
+for K in $KEYMAPS ; do
+	ARGS="$ARGS $K \"\" "
+done
+DLG_COMMAND="dialog --title \"Keyboard configuration\" --default-item Default \
+    --menu \"Select your keyboard layout from the list below\" 0 0 0 \
+    $ARGS"
+KEYMAP_SELECTED=`eval $DLG_COMMAND 3>&2 2>&1 1>&3`
+
+if [ $? -ne 0 ] ; then
+	exit 0
+fi
+
+if [ "$KEYMAP_SELECTED" = "Default" ] ; then
+	exit 0
+fi
+
+echo "KEYMAP=$KEYMAP_SELECTED" >>/etc/sysconfig/console
