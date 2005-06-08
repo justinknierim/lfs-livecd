@@ -1,0 +1,19 @@
+Submitted by: Alexander E. Patrakov
+Date: 2005-06-08
+Initial Package Version: 2004_01_05
+Upstream Status: Not accepted
+Origin: Debian
+Description: With this patch, hotplug tries all drivers for a given PCI device
+instead of stopping at the first one (even if it is blacklisted)
+
+diff -ruN hotplug-2004_01_05.orig/etc/hotplug/pci.agent hotplug-2004_01_05/etc/hotplug/pci.agent
+--- hotplug-2004_01_05.orig/etc/hotplug/pci.agent	2004-02-03 00:36:16.000000000 +0100
++++ hotplug-2004_01_05/etc/hotplug/pci.agent	2004-02-03 00:33:44.000000000 +0100
+@@ -122,7 +122,6 @@
+ 	if [ $class_temp -eq $class ]; then
+ 	    DRIVERS="$module $DRIVERS"
+ 	    : drivers $DRIVERS
+-	    break
+ 	fi
+     done
+ }
