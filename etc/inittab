@@ -14,7 +14,8 @@ l6:6:wait:/etc/rc.d/init.d/rc 6
 
 ca:12345:ctrlaltdel:/sbin/shutdown -t1 -a -r now
 
-su:S016:once:/sbin/sulogin
+su:S1:once:/sbin/sulogin
+sd:06:once:/usr/bin/shutdown-helper
 
 1:2345:respawn:/usr/bin/openvt -f -c 1 -e -w -- /usr/bin/livecd-login
 2:2345:respawn:/usr/bin/openvt -f -c 2 -e -w -- /usr/bin/livecd-login

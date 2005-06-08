@@ -34,6 +34,8 @@ stage2:
 	 install -m 755 ../langconf /etc/rc.d/init.d/ && \
 	 ln -sf ../init.d/langconf /etc/rc.d/rcsysinit.d/S69langconf && \
 	 install -m 755 ../console /etc/rc.d/init.d/ && \
+	 rm -f /etc/rc.d/rc0.d/S99halt && \
+	 rm -f /etc/rc.d/rc6.d/S99reboot && \
 	 rm -f /etc/rc.d/*/*mountsqfs /etc/rc.d/*/*startup ; fi
 
 clean:
