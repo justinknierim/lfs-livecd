@@ -1,0 +1,160 @@
+diff -urN klibc-1.0.orig/utils/halt.c klibc-1.0/utils/halt.c
+--- klibc-1.0.orig/utils/halt.c	1970-01-01 05:00:00.000000000 +0500
++++ klibc-1.0/utils/halt.c	2005-06-07 20:28:14.000000000 +0600
+@@ -0,0 +1,104 @@
++/* halt.c: halt, shutdown or reboot the system.
++   Derived from the sysvinit-2.86 version.
++   Copyright 1991-2004 Miquel van Smoorenburg.
++   Ported to klibc by Alexander E. Patrakov.
++ */
++#include <stdlib.h>
++#include <unistd.h>
++#include <signal.h>
++#include <stdio.h>
++#include "reboot.h"
++
++char *Version = "@(#)halt  2.86  31-Jul-2004 miquels@cistron.nl";
++
++/*
++ *	Send usage message.
++ */
++void usage(void)
++{
++	fprintf(stderr, "usage: halt [-n] [-p] [-r]\n");
++	fprintf(stderr, "\t-n: don't sync before halting the system\n");
++	fprintf(stderr, "\t-p: power down the system (if possible, otherwise halt)\n");
++	fprintf(stderr, "\t-r: reboot the system.\n");
++	exit(1);
++}
++
++/*
++ *	Main program.
++ */
++int main(int argc, char **argv)
++{
++	int do_reboot = 0;
++	int do_sync = 1;
++	int do_poweroff = 0;
++	int c;
++
++	/*
++	 *	Get flags
++	 */
++	while((c = getopt(argc, argv, "npr")) != EOF) {
++		switch(c) {
++			case 'n':
++				do_sync = 0;
++				break;
++			case 'p':
++				do_poweroff = 1;
++				break;
++			case 'r':
++				do_reboot = 1;
++				break;
++			default:
++				usage();
++		}
++	 }
++	if (argc != optind) usage();
++
++	if (geteuid() != 0) {
++		fprintf(stderr, "halt: must be superuser.\n");
++		exit(1);
++	}
++
++	(void)chdir("/");
++
++	if (do_sync) {
++		sync();
++		sleep(2);
++	}
++
++	if (do_reboot) {
++		init_reboot(BMAGIC_REBOOT);
++	} else {
++		/*
++		 *	Turn on hard reboot, CTRL-ALT-DEL will reboot now
++		 */
++#ifdef BMAGIC_HARD
++		init_reboot(BMAGIC_HARD);
++#endif
++
++		/*
++		 *	Stop init; it is insensitive to the signals sent
++		 *	by the kernel.
++		 */
++		kill(1, SIGTSTP);
++
++		/*
++		 *	Halt or poweroff.
++		 */
++		if (do_poweroff)
++			init_reboot(BMAGIC_POWEROFF);
++		/*
++		 *	Fallthrough if failed.
++		 */
++		init_reboot(BMAGIC_HALT);
++	}
++
++	/*
++	 *	If we return, we (c)ontinued from the kernel monitor.
++	 */
++#ifdef BMAGIC_SOFT
++	init_reboot(BMAGIC_SOFT);
++#endif
++	kill(1, SIGCONT);
++
++	exit(0);
++}
+diff -urN klibc-1.0.orig/utils/Makefile klibc-1.0/utils/Makefile
+--- klibc-1.0.orig/utils/Makefile	2005-03-02 03:36:50.000000000 +0500
++++ klibc-1.0/utils/Makefile	2005-06-07 20:21:58.000000000 +0600
+@@ -7,7 +7,7 @@
+ LIBS         = $(KLIBC) $(LIBGCC)
+ PROGS       := chroot dd fstype mkdir mkfifo mount pivot_root umount \
+ 		true false sleep ln nuke minips run-init printf cat \
+-		insmod uname
++		insmod uname halt
+ STATICPROGS := $(patsubst %,static/%,$(PROGS))
+ SHAREDPROGS := $(patsubst %,shared/%,$(PROGS))
+ OBJS        := $(patsubst %,%.o,$(PROGS))
+diff -urN klibc-1.0.orig/utils/reboot.h klibc-1.0/utils/reboot.h
+--- klibc-1.0.orig/utils/reboot.h	1970-01-01 05:00:00.000000000 +0500
++++ klibc-1.0/utils/reboot.h	2004-06-09 18:47:45.000000000 +0600
+@@ -0,0 +1,36 @@
++/*
++ * reboot.h	Headerfile that defines how to handle
++ *		the reboot() system call.
++ *
++ * Version:	@(#)reboot.h  2.85-17  04-Jun-2004  miquels@cistron.nl
++ *
++ */
++
++#include <sys/reboot.h>
++
++#ifdef RB_ENABLE_CAD
++#  define BMAGIC_HARD		RB_ENABLE_CAD
++#endif
++
++#ifdef RB_DISABLE_CAD
++#  define BMAGIC_SOFT		RB_DISABLE_CAD
++#endif
++
++#ifdef RB_HALT_SYSTEM
++#  define BMAGIC_HALT		RB_HALT_SYSTEM
++#else
++#  define BMAGIC_HALT		RB_HALT
++#endif
++
++#define BMAGIC_REBOOT		RB_AUTOBOOT
++
++#ifdef RB_POWER_OFF
++#  define BMAGIC_POWEROFF	RB_POWER_OFF
++#elif defined(RB_POWEROFF)
++#  define BMAGIC_POWEROFF	RB_POWEROFF
++#else
++#  define BMAGIC_POWEROFF	BMAGIC_HALT
++#endif
++
++#define init_reboot(magic)	reboot(magic)
++

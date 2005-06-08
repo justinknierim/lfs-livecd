@@ -1,0 +1,34 @@
+#!/bin/sh
+
+case "$RUNLEVEL" in
+	0)
+		HALTOPT=-p
+		;;
+	6)
+		HALTOPT=-r
+		;;
+esac
+cp -a /usr/lib/klibc/bin /dev/shm
+cp -a /usr/lib/klibc/lib /dev/shm
+mkdir /dev/shm/dev
+mkdir /dev/shm/old
+cp -a /dev/console /dev/loop0 /dev/null /dev/shm/dev
+mkdir /dev/shm/sbin
+cat >/dev/shm/sbin/init <<EOF
+#!/bin/sh
+exec </dev/console >/dev/console 2>/dev/console
+while ! umount /old 2>/dev/null ; do sleep 1 ; done
+umount /.sqfs
+losetup -d /dev/loop0
+umount /.cdrom
+echo -n "Remove the CD from the drive and press Enter..."
+read ENTER
+halt $HALTOPT
+EOF
+chmod 755 /dev/shm/sbin/init
+ln -nsf /old/dev/initctl /dev/shm/dev/initctl
+umount /tmp
+umount -a -t nounionfs
+cd /dev/shm
+pivot_root . old
+exec chroot . /old/lib/ld-linux.so.2 --library-path /old/lib /old/sbin/init u
