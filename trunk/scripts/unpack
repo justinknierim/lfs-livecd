@@ -1,0 +1,23 @@
+#!/bin/bash
+
+TAR=`which tar`
+
+if [ -z $1 ] ; then
+	echo "Error: No file specified."
+	exit 1
+fi
+
+if [ ! -f $1 ] ; then
+	echo "Error: File \"$1\" not found."
+	exit 1
+fi
+
+if echo $1 | grep -q "tar.gz" || echo $1 | grep -q ".tgz" ; then
+	$TAR -xzvf $1 || echo "Error: Unpacking of \"$1\" failed."
+elif echo $1 | grep -q "tar.bz2" ; then
+	$TAR -xjvf $1 || echo "Error: Unpacking of \"$1\" failed."
+elif [ `expr "$1" : '.*\(...\)'` = "tar" ] ; then
+	$TAR -xvf $1 || echo "Error: Unpacking of \"$1\" failed."
+else
+	echo "Error: Bad format or unknown compression type"
+fi	
