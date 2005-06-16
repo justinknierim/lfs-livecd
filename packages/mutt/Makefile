@@ -23,7 +23,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(NNTP_PATCH) ] ; then $(WGET) $(URL1) && gunzip $(NNTP_PATCH).gz ; fi
 	-groupadd mail
-	@if [ ! -f /usr/bin/mutt ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/mutt ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(NNTP_PATCH) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-imap --enable-pop --enable-nntp --with-ssl && \
 	 make -j3 && make install && \

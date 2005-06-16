@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/curl ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/curl ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install && \
 	 find docs -name "Makefile*" -o -name "*.1" -o -name "*.3" | xargs rm && \

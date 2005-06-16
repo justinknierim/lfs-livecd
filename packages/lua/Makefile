@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/lua ] ; then tar -xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/lua ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed -i 's@/usr/local@/usr@' config && \
 	 make -j3 && make install && ldconfig ; fi
 	@make clean

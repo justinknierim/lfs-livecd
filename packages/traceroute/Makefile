@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/traceroute ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/traceroute ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed -i -e 's/-o bin/-o root/' Makefile.in && \
 	 ./configure --prefix=/usr && \
 	 make && \

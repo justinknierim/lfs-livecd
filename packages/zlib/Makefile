@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/lib/libz.so ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libz.so ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --shared && \
 	 make -j3 && make install && make clean && ./configure --prefix=/usr && \
 	 make -j3 && make install && chmod 644 /usr/lib/libz.a && \

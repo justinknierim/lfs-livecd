@@ -20,7 +20,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
-	@if [ ! -f $(WD)/bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
 
@@ -43,7 +43,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
 	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi # This command, mv file to sources directory, is only for LFS Core packages and patches
-	@if [ ! -f /bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi

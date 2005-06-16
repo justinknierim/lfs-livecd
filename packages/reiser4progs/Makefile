@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkfs.reiser4 ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mkfs.reiser4 ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sbindir=/sbin && \
 	 make -j3 && \
 	 make install && ln -s mkfs.reiser4 /sbin/mkreiser4fs ; fi

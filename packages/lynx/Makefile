@@ -21,7 +21,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/lynx ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/lynx ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib \
 	    --enable-nls --with-ssl --enable-charset-choice \
 	    --enable-locale-charset && \

@@ -23,7 +23,7 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/bash ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/bash ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=$(WD) --without-bash-malloc && make && make install && \
 	 ln -s bash $(WD)/bin/sh ; fi
@@ -42,7 +42,7 @@ stage2:
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f /bin/bashbug ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/bashbug ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH2) && patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr --bindir=/bin --without-bash-malloc --with-installed-readline && \
 	 make && rm /bin/bash && make install ; fi

@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@tar xzvf $(FILE) && cd $(DIR) && \
+	@unpack $(FILE) && cd $(DIR) && \
 	 cd $(NM)-tools && make && cp mksquashfs $(WD)/bin
 
 clean:

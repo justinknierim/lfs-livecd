@@ -101,6 +101,7 @@ lfs-base:
 	@echo "=========================="
 	@echo ""
 	@make unamemod
+	@cp $(ROOT)/scripts/unpack $(WD)/bin
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@if [ ! -f $(PKG)/wget/.pass2 ] ; then make lfs-rm-wget && make lfs-wget ; fi
 	@touch $(PKG)/wget/.pass2
@@ -112,6 +113,7 @@ lfs-base:
 
 extend-lfs:
 	@cp $(WD)/bin/which $(MP)/usr/bin
+	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv3) 'set +h && cd $(ROOT) && make blfs $(chbash2)'
 	#@chroot "$(MP)" $(chenvstrip) 'set +h && cd $(ROOT) && make ch-strip'
 	@make unloadmodule

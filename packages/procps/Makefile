@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/ps ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/ps ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 make -j3 && make install ; fi
 	@make clean
 	 

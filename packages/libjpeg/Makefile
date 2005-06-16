@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libjpeg.so ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libjpeg.so ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --enable-static --enable-shared && \
 	 make -j3 && make install && /sbin/ldconfig ; fi
 	@make clean

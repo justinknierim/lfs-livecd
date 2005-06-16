@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/screen ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/screen ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --with-socket-dir=/var/run/screen --with-sys-screenrc=/etc/screenrc && \
 	 sed -i -e "s@/usr/local/etc/screenrc@/etc/screenrc@" {etc,doc}/* && \
 	 make -j3 && make install && install -m 644 etc/etcscreenrc /etc/screenrc ; fi

@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /etc/protocols ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /etc/protocols ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 make && make install ; fi
 	@make clean
 	 

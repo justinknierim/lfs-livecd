@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /sbin/mke2fs ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mke2fs ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 sed -i -e 's/-DTEST/$(ALL_CFLAGS) &/' lib/e2p/Makefile.in && \
 	 mkdir build && cd build && \
 	 ../configure --prefix=/usr --with-root-prefix="" --enable-elf-shlibs --disable-evms && \

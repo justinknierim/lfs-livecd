@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/nano ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/nano ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-color --enable-multibuffer \
 	 --enable-nanorc && \
 	 make -j3 && make install && \

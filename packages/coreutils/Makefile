@@ -21,7 +21,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD) && make -j3 && make install && \
 	 mv ${WD}/bin/uname ${WD}/bin/uname.real && \
 	 install -m 755 ${MP}${ROOT}/uname/uname ${WD}/bin/ ; fi
@@ -40,7 +40,7 @@ stage2:
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f /bin/ls ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=/usr && \
 	 make -j3 && make install && \

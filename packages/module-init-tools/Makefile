@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /sbin/modprobe ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/modprobe ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix="" --enable-zlib && \
 	 make -j3 DOCBOOKTOMAN="" && make install ; fi
 	@make clean

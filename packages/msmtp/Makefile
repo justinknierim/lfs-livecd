@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/msmtp ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/msmtp ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make -j3 && make install ; fi
 	@make clean

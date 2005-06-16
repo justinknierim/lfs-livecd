@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/man ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/man ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 sed -i 's@-is@&R@g' configure && \
 	 sed -i 's@MANPATH./usr/man@#&@g' src/man.conf.in && \
 	 ./configure -confdir=/etc && make && \

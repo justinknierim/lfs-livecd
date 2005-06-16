@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/slrn ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/slrn ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --with-slrnpull --enable-spool --with-ssl && \
 	 make -j3 && make install && \
 	 cp $(ROOT)/root/.slrnrc /root/ ; fi

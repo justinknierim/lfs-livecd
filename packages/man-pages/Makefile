@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d /usr/share/man/man9 ] ; then tar xjvf $(SRC)/$(FILE) && \
+	@if [ ! -d /usr/share/man/man9 ] ; then unpack $(SRC)/$(FILE) && \
 	 cd $(DIR) && make install ; fi
 	@make clean
 clean:

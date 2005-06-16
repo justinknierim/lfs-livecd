@@ -24,7 +24,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f /usr/bin/mktemp ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/mktemp ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && \
 	 ./configure --prefix=/usr --with-libc && \
 	 make -j3 && make install && make install-tempfile ; fi

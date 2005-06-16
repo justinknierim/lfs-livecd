@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /usr/lib/klibc ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /usr/lib/klibc ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 ln -nsf /usr/src/linux-$(KVERS) linux && make && make install && \
 	 make -C ../../util-linux klibc-losetup && \

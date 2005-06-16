@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/exportfs ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/exportfs ] ; then unpack $(FILE) && cd $(DIR) && \
 	 groupadd -g 65534 nogroup && \
 	 useradd -c nobody -d /home -g nogroup -s /bin/bash -u 65534 nobody && \
 	 ./configure --prefix=/usr --sysconfdir=/etc && \

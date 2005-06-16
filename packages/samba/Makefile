@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/smbmount ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/smbmount ] ; then unpack $(FILE) && cd $(DIR) && \
 	 cd source && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-piddir=/var/run --with-fhs \
 	 --with-smbmount && \

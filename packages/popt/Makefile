@@ -23,7 +23,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 gunzip $(PATCH1).gz ; fi
-	@if [ ! -f /usr/lib/libpopt.a ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libpopt.a ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && \
 	 ./configure --prefix=/usr && \
 	 cp configure.in configure.ac && \

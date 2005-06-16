@@ -19,7 +19,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/ldd ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/ldd ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
 	 --with-binutils=$(WD)/bin --without-gd --without-cvs --with-headers=$(WD)/include --disable-selinux && \
@@ -38,8 +38,8 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL1) && \
 	 mv $(FILE1) $(SRC) ; fi
-	@if [ ! -f /usr/bin/ldd ] ; then tar -xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 tar -xjvf $(SRC)/$(FILE1) && \
+	@if [ ! -f /usr/bin/ldd ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
+	 unpack $(SRC)/$(FILE1) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=/usr --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
 	 --without-cvs --libexecdir=/usr/lib/glibc && PARALLELMFLAGS=-j3 make && \

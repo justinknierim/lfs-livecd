@@ -25,7 +25,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(BELARUSIAN_FILE) ] ; then $(WGET) $(BELARUSIAN_URL) ; fi
-	@if [ ! -f /bin/loadkeys ] ; then tar xjvf $(SRC)/$(FILE) && \
+	@if [ ! -f /bin/loadkeys ] ; then unpack $(SRC)/$(FILE) && \
 	 tar zxvf $(BELARUSIAN_FILE) && \
 	 zcat bellinux/console/keymaps/by2_win.kmap.gz >$(DIR)/data/keymaps/i386/qwerty/by2_win.map && \
 	 echo 'Correcting SOFT SIGN in by2_win keymap' && \

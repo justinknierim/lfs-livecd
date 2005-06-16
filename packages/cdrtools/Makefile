@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(WD)/bin/mkisofs ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/mkisofs ] ; then unpack $(FILE) && cd $(DIR) && \
 	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root && \
 	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root install ; fi
 	@make clean

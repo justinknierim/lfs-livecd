@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkreiserfs ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mkreiserfs ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sbindir=/sbin && \
 	 make -j3 && make install && \
 	 ln -s reiserfsck /sbin/fsck.reiserfs && \

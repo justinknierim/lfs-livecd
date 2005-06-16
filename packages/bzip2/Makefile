@@ -17,7 +17,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/bzip2 ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/bzip2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 make -j3 && make PREFIX=$(WD) install ; fi
 	@make clean
 
@@ -30,7 +30,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/bzip2 ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/bzip2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 make -j3 -f Makefile-libbz2_so && make clean && \
 	 make -j3 && make install && \
 	 cp bzip2-shared /bin/bzip2 && cp -a libbz2.so* /lib && \

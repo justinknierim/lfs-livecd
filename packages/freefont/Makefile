@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(LOCATION)/FreeMono.ttf ] ; then mkdir $(DIR) && cd $(DIR) && \
-	 tar -xzvf ../$(FILE) && \
+	 unpack ../$(FILE) && \
 	 cp sfd/* $(LOCATION) ; fi
 	@make clean
 

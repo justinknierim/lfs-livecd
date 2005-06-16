@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gtbl ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/gtbl ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 PAGE=$(pagesize) ./configure --prefix=/usr && make && make install && \
 	 ln -s soelim /usr/bin/zsoelim && ln -s eqn /usr/bin/geqn && \
 	 ln -s tbl /usr/bin/gtbl ; fi

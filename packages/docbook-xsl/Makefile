@@ -21,7 +21,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /usr/share/xml/docbook/xsl-stylesheets-current ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /usr/share/xml/docbook/xsl-stylesheets-current ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ../install && \
 	 ln -s xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current; fi
 	@make clean

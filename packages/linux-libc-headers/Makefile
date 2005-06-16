@@ -17,7 +17,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d $(WD)/include/asm ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -d $(WD)/include/asm ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 cp -R include/asm-i386 $(WD)/include/asm && cp -R include/linux $(WD)/include ; fi
 	@make clean
 
@@ -30,7 +30,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d /usr/include/asm ] ; then tar xjvf $(SRC)/$(FILE) && \
+	@if [ ! -d /usr/include/asm ] ; then unpack $(SRC)/$(FILE) && \
 	 cd $(DIR) && cp -R include/asm-i386 /usr/include/asm && cp -R include/linux /usr/include && \
 	 chown -R root:root /usr/include/{asm,linux} && \
 	 find /usr/include/{asm,linux} -type d -exec chmod 755 {} \; && \

@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/nALFS ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/nALFS ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --with-libxml2 --with-curl --with-ssl && \
 	 make -j3 && \
 	 make install ; fi

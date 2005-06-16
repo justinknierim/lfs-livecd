@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/xchat ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/xchat ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install ; fi
 	@cp -ra $(ROOT)/root/.xchat2 /root

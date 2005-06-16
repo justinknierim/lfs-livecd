@@ -19,7 +19,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/mount ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/mount ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 sed -i 's@/usr/include@$(WD)/include@g' configure && \
 	 ./configure && make -j3 -C lib && make -j3 -C mount mount umount && \
 	 make -j3 -C text-utils more && cp mount/{,u}mount text-utils/more $(WD)/bin ; fi
@@ -36,7 +36,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /bin/mount ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/mount ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && ./configure && \
 	 make -j3 HAVE_KILL=yes HAVE_SLN=yes && \
@@ -47,7 +47,7 @@ klibc-losetup:
 	@echo ""
 	@echo "=====> Building losetup with klibc"
 	@echo ""
-	@if [ ! -f /usr/lib/klibc/bin/losetup ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/klibc/bin/losetup ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../../klibc/util-linux-2.12q-klibc-1.patch && \
 	 CC="klcc" LDFLAGS="-shared" ./configure && \
 	 make lib/xstrncpy.o lib/getpass.o && make -C mount losetup && \

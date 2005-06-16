@@ -21,7 +21,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/xmllint ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/xmllint ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --with-history && \
 	 make -j3 && make install ; fi
 	@make clean

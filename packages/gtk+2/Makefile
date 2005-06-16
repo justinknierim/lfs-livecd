@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /usr/lib/gtk-2.0 ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /usr/lib/gtk-2.0 ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc && \
 	 make -j3 && make install ; fi
 	@make clean
