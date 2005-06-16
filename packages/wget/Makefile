@@ -16,7 +16,8 @@ prebuild:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then ftpget ; fi
 	@if [ ! -f $(WD)/bin/$(NM) ] ; then \
-	 unpackix=$(WD) --libdir=$(WD)/lib --without-ssl \
+	 unpack $(FILE) && \
+	 ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared && \
 	 make -j3 && make install ; fi
 	@make clean
