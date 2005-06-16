@@ -1,7 +1,7 @@
 NOTE: Items marked with a single star can wait for any time.
       Items marked with a double star should be done before release.
 
-* Package up kernel source and upload to mirrors
+* Package up kernel source and upload to mirrors (will do this after we release, along with branching and tagging in the repo)
 ** i18n READMEs 
 ** nALFS profile
 ** New shutdown scripts to handle unmounts of drives, stopping of services, if they were started, etc.
