@@ -27,7 +27,7 @@ pass1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE1) $(SRC) ; fi
-	if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE1) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE1) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
 	 --disable-nls --enable-shared && \
