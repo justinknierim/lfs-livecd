@@ -1,6 +1,6 @@
 #!/bin/bash
 
-TAR=`which tar` || echo "Error: Cannot find tar on your system" && exit 1
+TAR=`which tar` || exit 1
 VRS=`$TAR --version | head -n 1 | awk '{print $4}' | cut -f2 -d'.'`
 
 if [ -z $1 ] ; then
