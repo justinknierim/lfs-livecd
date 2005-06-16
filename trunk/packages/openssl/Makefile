@@ -22,7 +22,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH) ] ; then $(WD)/bin/$(WGET) $(URL1) ; fi
-	@if [ ! -d /etc/ssl ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /etc/ssl ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 ./config --openssldir=/etc/ssl --prefix=/usr shared && \
 	 sed -i 's/mcpu=pentium/mtune=i486/' Configure && \

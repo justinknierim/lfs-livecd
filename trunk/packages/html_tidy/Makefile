@@ -24,8 +24,8 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(FILE1) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/bin/tidy ] ; then tar xzvf $(FILE) && \
-	 tar xzvf $(FILE1) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/tidy ] ; then unpack $(FILE) && \
+	 unpack $(FILE1) && cd $(DIR) && \
 	 sh build/gnuauto/setup.sh && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install && \

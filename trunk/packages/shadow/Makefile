@@ -24,7 +24,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -d /etc/default ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -d /etc/default ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure --libdir=/lib --enable-shared && \
 	 sed -i 's/groups$$(EXEEXT) //' src/Makefile && \

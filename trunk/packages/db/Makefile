@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/db_stat ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/db_stat ] ; then unpack $(FILE) && cd $(DIR) && \
 	 cd build_unix && \
 	 ../dist/configure --prefix=/usr --enable-compat185 --enable-cxx && \
 	 make -j3 LIBSO_LIBS="-lpthread" LIBXSO_LIBS="-lpthread" && \

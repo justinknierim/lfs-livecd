@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/dialog ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/dialog ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --enable-nls && make && make install ; fi
 	@make clean
 

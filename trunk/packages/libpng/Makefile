@@ -24,7 +24,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/lib/libpng.so ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libpng.so ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 make prefix=/usr ZLIBINC=/usr/include ZLIBLIB=/usr/lib -f scripts/makefile.linux && \
 	 make prefix=/usr install -f scripts/makefile.linux && \

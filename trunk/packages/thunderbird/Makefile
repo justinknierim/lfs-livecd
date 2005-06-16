@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/thunderbird ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/thunderbird ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed 's!@TOPSRCDIR@!$(ROOT)/$(PKG)/$(NM)/mozilla!' ../.mozconfig > .mozconfig && \
 	 make -f client.mk build && make -f client.mk install && \
 	 cd $(ROOT)/$(PKG)/$(NM) ; fi

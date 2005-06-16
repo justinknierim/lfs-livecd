@@ -19,8 +19,8 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/startxfce4 ] ; then tar -xjvf $(FILE) && cd $(DIR)/src && \
-	 for i in `cat ../../list` ; do tar -xzvf $$i.tar.gz && cd $$i && \
+	@if [ ! -f /usr/bin/startxfce4 ] ; then unpack $(FILE) && cd $(DIR)/src && \
+	 for i in `cat ../../list` ; do unpack $$i.tar.gz && cd $$i && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --enable-debug=no --enable-panel --enable-startup-notification --libexecdir=/usr/sbin && \
 	 make -j3 && make install && cd .. ; done ; fi
 	@cp $(ROOT)/root/.xinitrc /root/

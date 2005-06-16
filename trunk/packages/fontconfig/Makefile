@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /etc/fonts ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /etc/fonts ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --disable-docs && \
 	 make -j3 && make install && \
 	 sed -i -e 's/Bitstream Vera/DejaVu/' /etc/fonts/fonts.conf ; fi

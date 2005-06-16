@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkfs.xfs ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/mkfs.xfs ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(DIR)-fix_compile-1.patch && \
 	 sed -i 's/autoconf//' Makefile && \
 	 make && make install ; fi

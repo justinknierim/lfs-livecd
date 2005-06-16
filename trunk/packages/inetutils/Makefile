@@ -28,7 +28,7 @@ stage2:
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f /bin/ping ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/ping ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 ./configure --prefix=/usr --libexecdir=/usr/sbin --sysconfdir=/etc \
 	 --disable-logger --disable-syslogd --disable-whois --disable-servers && \

@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(LOCATION)/DejaVuSansMono-Roman.ttf ] ; then \
-	 tar -xzvf $(FILE) && \
+	 unpack $(FILE) && \
 	 cp $(DIR)/*.ttf $(LOCATION) ; fi
 	@make clean
 

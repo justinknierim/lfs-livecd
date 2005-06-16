@@ -24,7 +24,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /usr/lib/libreadline.so ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/libreadline.so ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 SHLIB_XLDFLAGS=-lncurses && make install && chmod 755 /usr/lib/*.5.0 && \

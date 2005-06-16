@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/links ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/links ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --enable-graphics && \
 	 make -j3 && make install ; fi
 	@make clean

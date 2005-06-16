@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /usr/share/doc/$(DIR) ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /usr/share/doc/$(DIR) ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && make install && \
 	 install -d -m755 /usr/share/doc/$(DIR) && \

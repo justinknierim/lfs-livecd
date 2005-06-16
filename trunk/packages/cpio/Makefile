@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /bin/cpio ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/cpio ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed -i -e "s/invalid_arg/argmatch_invalid/" src/mt.c && \
 	 ./configure CPIO_MT_PROG=mt --prefix=/usr --bindir=/bin --libexecdir=/tmp --with-rmt=/usr/sbin/rmt && \
 	 make -j3 && \

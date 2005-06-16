@@ -21,7 +21,7 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/expect ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/expect ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure --prefix=$(WD) --with-tcl=$(WD)/lib --with-tclinclude=../../tcl/tcl8.4.9 --with-x=no && \
 	 make -j3 && make SCRIPTS="" install ; fi

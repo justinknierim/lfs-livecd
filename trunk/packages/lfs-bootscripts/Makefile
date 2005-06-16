@@ -21,7 +21,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /etc/rc.d/init.d/functions ] ; then tar xjvf ${SRC}/${FILE} && \
+	@if [ ! -f /etc/rc.d/init.d/functions ] ; then unpack ${SRC}/${FILE} && \
 	 cd ${DIR} && make install-livecd && \
 	 install -m 755 lfs/init.d/mountkernfs /etc/rc.d/init.d && \
 	 ln -sf ../init.d/mountkernfs /etc/rc.d/rcsysinit.d/S00mountkernks && \

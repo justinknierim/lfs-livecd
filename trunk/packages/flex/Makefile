@@ -21,7 +21,7 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/flex ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/flex ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
 	@make clean
@@ -37,7 +37,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /usr/bin/flex ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/flex ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
 	 ./configure --prefix=/usr && make -j3 && make install && \
 	 ln -sf libfl.a /usr/lib/libl.a && \

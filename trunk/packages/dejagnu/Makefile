@@ -17,7 +17,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/runtest ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/runtest ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) && make install ; fi
 	@make clean
 

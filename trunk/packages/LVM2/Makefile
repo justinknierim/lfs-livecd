@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/lvm ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/lvm ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr && \
 	 make -j3 && \
 	 make install ; fi

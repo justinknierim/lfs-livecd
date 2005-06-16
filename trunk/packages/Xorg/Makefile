@@ -24,7 +24,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -d /usr/include/X11 ] ; then tar xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -d /usr/include/X11 ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 sed -i '/^SUBDIRS =/s/s etc$$//' programs/Xserver/Xprint/Imakefile && \
 	 pushd config/util && \

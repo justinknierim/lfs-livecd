@@ -19,7 +19,7 @@ klibc-isoinfo:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/klibc/bin/isoinfo ] ; then tar -xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/lib/klibc/bin/isoinfo ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../../klibc/$(NM)-$(VRS)-fixes-1.patch && \
 	 make CC="klcc -shared" -f Makefile.Linux isoinfo && \
 	 install isoinfo /usr/lib/klibc/bin ; fi

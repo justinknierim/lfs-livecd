@@ -17,7 +17,7 @@ pass1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/ld ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --disable-nls && make && \
 	make install && \
@@ -39,7 +39,7 @@ pass2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f .pass2 ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) \
 	 --enable-shared --with-lib-path=$(WD)/lib && \
@@ -67,7 +67,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/ld ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/ld ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=/usr --enable-shared && \
 	 make -j3 tooldir=/usr && \

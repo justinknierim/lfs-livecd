@@ -22,7 +22,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/sbin/pppoe ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/pppoe ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && cd src && \
 	 ./configure && make && \
 	 make install ; fi

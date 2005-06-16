@@ -20,7 +20,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/killall ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /bin/killall ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --exec-prefix="" && \
 	 make -j3 && make install && \
 	 mv /bin/pstree* /usr/bin && ln -sf pstree /usr/bin/pstree.x11 ; fi

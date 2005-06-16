@@ -25,7 +25,7 @@ stage2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /sbin/ip ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /sbin/ip ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure && \
 	 make -j3 SBINDIR=/sbin && make SBINDIR=/sbin install ; fi

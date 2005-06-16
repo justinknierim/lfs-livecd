@@ -21,7 +21,7 @@ stage1:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
 	 ./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX' && \
 	 make -j3 perl utilities && cp perl pod/pod2man $(WD)/bin && \
@@ -37,7 +37,7 @@ stage2:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/perl$(VRS) ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/perl$(VRS) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure.gnu --prefix=/usr -Dpager="/bin/less -isR" && \
 	 make && make install ; fi
 	@make clean

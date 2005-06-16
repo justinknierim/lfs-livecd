@@ -30,7 +30,7 @@ stage2:
 	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
 	@if [ ! -f $(PATCH3) ] ; then $(WGET) $(URL3) ; fi
-	@if [ ! -f /usr/bin/unzip ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/unzip ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && \
 	 patch -Np1 -i ../$(PATCH2) && \
 	 patch -Np1 -i ../$(PATCH3) && \

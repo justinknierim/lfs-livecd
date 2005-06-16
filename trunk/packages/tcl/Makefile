@@ -17,7 +17,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/tclsh ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/tclsh ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 cd unix && ./configure --prefix=$(WD) && make -j3 && make install && ln -s tclsh8.4 $(WD)/bin/tclsh ; fi
 
 clean:

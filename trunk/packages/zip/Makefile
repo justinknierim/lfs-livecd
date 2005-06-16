@@ -19,7 +19,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/zip ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/zip ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed -i -e 's@$$(INSTALL) man/zip.1@$$(INSTALL_PROGRAM) man/zip.1@' unix/Makefile && \
 	 make prefix=/usr -f unix/Makefile generic_gcc && \
 	 make prefix=/usr -f unix/Makefile install ; fi

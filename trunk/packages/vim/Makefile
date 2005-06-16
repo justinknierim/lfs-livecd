@@ -31,8 +31,8 @@ stage2:
 	 mv $(PATCH) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(LANG_PACK) ] ; then $(WGET) $(URL2) && \
 	 mv $(LANG_PACK) $(SRC) ; fi
-	@if [ ! -f /usr/bin/vi ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 tar xjvf $(SRC)/$(LANG_PACK) --strip-components=1 && \
+	@if [ ! -f /usr/bin/vi ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
+	 unpack $(SRC)/$(LANG_PACK) --strip-components=1 && \
 	 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h && \
 	 echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \
@@ -51,8 +51,8 @@ stage3:
 	 mv $(PATCH) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(LANG_PACK) ] ; then $(WGET) $(URL2) && \
 	 mv $(LANG_PACK) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gvim ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
-	 tar xjvf $(SRC)/$(LANG_PACK) --strip-components=1 && \
+	@if [ ! -f /usr/bin/gvim ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
+	 unpack $(SRC)/$(LANG_PACK) --strip-components=1 && \
 	 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h && \
 	 echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h && \
 	 patch -Np1 -i $(SRC)/$(PATCH) && \

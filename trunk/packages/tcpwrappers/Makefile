@@ -25,7 +25,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) ; fi
 	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
-	@if [ ! -f /usr/sbin/tcpd ] ; then tar xzvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/sbin/tcpd ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH1) && \
 	 patch -Np1 -i ../$(PATCH2) && \
 	 make -j3 REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux && \

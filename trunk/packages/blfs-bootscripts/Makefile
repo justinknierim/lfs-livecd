@@ -20,7 +20,7 @@ stage2:
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /etc/rc.d/init.d/nfs-client ] ; then tar -xjvf $(FILE) && cd $(DIR) && \
+	@if [ ! -f /etc/rc.d/init.d/nfs-client ] ; then unpack $(FILE) && cd $(DIR) && \
 	 patch -Np1 -i ../$(PATCH) && \
 	 make install-service-dhcpcd && \
 	 make install-service-pppoe && \

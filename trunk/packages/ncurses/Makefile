@@ -19,7 +19,7 @@ stage1:
 	@echo ""
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/clear ] ; then tar xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f $(WD)/bin/clear ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 ./configure --prefix=$(WD) --with-shared --without-debug --without-ada --enable-overwrite && \
 	 make sources && make -j3 && make install ; fi
 	@make clean
@@ -34,7 +34,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) && bunzip2 $(PATCH).bz2 ; fi
-	@if [ ! -f /usr/bin/clear ] ; then tar -xjvf $(SRC)/$(FILE) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/clear ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 sh ../$(PATCH) && \
 	 ./configure --prefix=/usr --with-shared --without-debug --with-gpm && \
 	 make sources && make -j3 && make install && chmod 755 /usr/lib/*.5.4 && \
