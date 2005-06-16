@@ -47,7 +47,8 @@ pass2:
 	 mv $(PATCH1) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL3) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE2) && cd $(DIR) && \
+	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE1) && \
+	 unpack $(SRC)/$(FILE2) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) --enable-clocale=gnu \
@@ -76,8 +77,9 @@ stage2:
 	 mv $(PATCH3) $(SRC) ; fi
 	@if [ ! -f $(SRC)/$(FILE3) ] ; then $(WGET) $(URL5) && \
 	 mv $(FILE3) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gcc ] ; then unpack $(SRC)/$(FILE2) && \
-	 cd $(DIR) && patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH3) && \
+	@if [ ! -f /usr/bin/gcc ] ; then unpack $(SRC)/$(FILE1) && \
+	 unpack $(SRC)/$(FILE2) && cd $(DIR) && \
+	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH3) && \
 	 sed -i 's/install_to_$$(INSTALL_DEST) //' libiberty/Makefile.in && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib --enable-shared --enable-threads=posix \
