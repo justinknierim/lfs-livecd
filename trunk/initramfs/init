@@ -52,6 +52,8 @@ insmod /lib/unionfs.ko
 mount -w -t unionfs -o dirs=/.tmpfs/.overlay=rw:/.tmpfs/.cdrom=ro:/.tmpfs/.sqfs=ro unionfs /.union
 mount -o move /.tmpfs /.union/dev/shm
 
+ln -s $CDROM /.union/dev/lfs-cd
+
 # Work around unionfs bug that causes tst-cancel16 glibc test to fail in Ch5
 mount -o bind /.union/dev/shm/.tmp /.union/tmp
 
