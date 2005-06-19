@@ -4,18 +4,14 @@
 NM= gcc
 VRS= 3.4.3
 DIR= $(NM)-$(VRS)
-FILE1= $(NM)-core-$(VRS).tar.bz2
-FILE2= $(NM)-g++-$(VRS).tar.bz2
-FILE3= $(NM)-testsuite-$(VRS).tar.bz2
+FILE= $(NM)-$(VRS).tar.bz2
 PATCH1= $(NM)-$(VRS)-no_fixincludes-1.patch
 PATCH2= $(NM)-$(VRS)-specs-2.patch
 PATCH3= $(NM)-$(VRS)-linkonce-1.patch
-URL= $(FTP)/$(NM)/$(FILE1)
-URL1= $(FTP)/$(NM)/$(FILE2)
-URL2= $(FTP)/$(NM)/$(PATCH1)
-URL3= $(FTP)/$(NM)/$(PATCH2)
-URL4= $(FTP)/$(NM)/$(PATCH3)
-URL5= $(FTP)/$(NM)/$(FILE3)
+URL= $(FTP)/$(NM)/$(FILE)
+URL1= $(FTP)/$(NM)/$(PATCH1)
+URL2= $(FTP)/$(NM)/$(PATCH2)
+URL3= $(FTP)/$(NM)/$(PATCH3)
 
 # RULES
 
@@ -25,9 +21,9 @@ pass1:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 1"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE1) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE1) && cd $(DIR) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
 	 --disable-nls --enable-shared && \
@@ -39,16 +35,13 @@ pass2:
 	@echo ""
 	@echo "=====> Building $(NM) Pass 2"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(FILE2) ] ; then $(WGET) $(URL1) && \
-	 mv $(FILE2) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL2) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL3) && \
+	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE1) && \
-	 unpack $(SRC)/$(FILE2) && cd $(DIR) && \
+	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) --enable-clocale=gnu \
@@ -65,20 +58,15 @@ stage2:
 	@echo ""
 	@echo "=====> Building $(NM) in chroot"
 	@echo ""
-	@if [ ! -f $(SRC)/$(FILE1) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(FILE2) ] ; then $(WGET) $(URL1) && \
-	 mv $(FILE2) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL2) && \
+	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
+	 mv $(FILE) $(SRC) ; fi
+	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
 	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL3) && \
+	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
 	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH3) ] ; then $(WGET) $(URL4) && \
+	@if [ ! -f $(SRC)/$(PATCH3) ] ; then $(WGET) $(URL3) && \
 	 mv $(PATCH3) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(FILE3) ] ; then $(WGET) $(URL5) && \
-	 mv $(FILE3) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gcc ] ; then unpack $(SRC)/$(FILE1) && \
-	 unpack $(SRC)/$(FILE2) && cd $(DIR) && \
+	@if [ ! -f /usr/bin/gcc ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH3) && \
 	 sed -i 's/install_to_$$(INSTALL_DEST) //' libiberty/Makefile.in && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
