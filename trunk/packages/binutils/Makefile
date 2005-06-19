@@ -41,7 +41,7 @@ pass2:
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) \
+	 ../$(DIR)/configure --prefix=$(WD) --disable-nls \
 	 --enable-shared --with-lib-path=$(WD)/lib && \
 	 make -j3 && \
 	 make install && \
