@@ -22,8 +22,9 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /sbin/modprobe ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
+	 touch modprobe.conf.5 && \
 	 ./configure --prefix="" --enable-zlib && \
-	 make -j3 DOCBOOKTOMAN="" && make install ; fi
+	 make -j3 && make install ; fi
 	@make clean
 	 
 
