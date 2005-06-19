@@ -22,6 +22,8 @@ stage2:
 	@if [ ! -f /bin/cpio ] ; then unpack $(FILE) && cd $(DIR) && \
 	 sed -i -e "s/invalid_arg/argmatch_invalid/" src/mt.c && \
 	 ./configure CPIO_MT_PROG=mt --prefix=/usr --bindir=/bin --libexecdir=/tmp --with-rmt=/usr/sbin/rmt && \
+	 echo "#define HAVE_SETLOCALE 1" >>config.h && \
+	 echo "#define HAVE_LSTAT 1" >>config.h && \
 	 make -j3 && \
 	 make install ; fi
 	@make clean
