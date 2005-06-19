@@ -11,4 +11,4 @@ NOTE: Items marked with a single star can wait for any time.
 * Find out exact requirements for Intel framebuffer
 * Fonts is xterm *slightly* too big? Any harm in reducing size by a point or two?
 * Get the changes to the bootscripts installation changed upstream so that all we need is a make install-livecd again.
-* Upgrade the scripts to be more fluid, understandable, ie, use of functions
+* Upgrade the scripts to be more fluid, understandable, ie, use of functions (unpack seems to work well, would now like to improve downloading, allow for better use of previously downloaded sources as kept in one local directory and incorporate a logging system) 
