@@ -7,9 +7,9 @@ DIR= $(NM)63
 FILE= $(NM)-$(VRS).tar.bz2
 PATCH= $(NM)-$(VRS)-security_fix-1.patch
 LANG_PACK= $(NM)-$(VRS)-lang.tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH)
-URL2= $(FTP)/$(NM)/$(LANG_PACK)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH)
+URL2= $(HTTP)/$(NM)/$(LANG_PACK)
 
 # RULES
 

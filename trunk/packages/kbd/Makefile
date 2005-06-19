@@ -5,7 +5,7 @@ NM= kbd
 VRS= 1.12
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 PATCH= $(DIR)-backspace-1.patch
 
 BELARUSIAN_FILE= belarusian-0.3.tar.gz

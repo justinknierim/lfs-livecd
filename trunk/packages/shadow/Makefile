@@ -6,8 +6,8 @@ VRS= 4.0.7
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH=${DIR}-fix_lastlog-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1=$(FTP)/$(NM)/$(PATCH)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1=$(HTTP)/$(NM)/$(PATCH)
 
 # RULES
 

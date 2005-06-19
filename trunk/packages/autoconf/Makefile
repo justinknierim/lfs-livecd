@@ -5,8 +5,8 @@ NM= autoconf
 VRS= 2.59
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH1)
 
 # RULES
 

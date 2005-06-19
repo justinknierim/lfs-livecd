@@ -8,10 +8,10 @@ FILE= $(NM)-$(VRS).tar.bz2
 PATCH1= $(NM)-$(VRS)-no_fixincludes-1.patch
 PATCH2= $(NM)-$(VRS)-specs-2.patch
 PATCH3= $(NM)-$(VRS)-linkonce-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
-URL2= $(FTP)/$(NM)/$(PATCH2)
-URL3= $(FTP)/$(NM)/$(PATCH3)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL2= $(HTTP)/$(NM)/$(PATCH2)
+URL3= $(HTTP)/$(NM)/$(PATCH3)
 
 # RULES
 

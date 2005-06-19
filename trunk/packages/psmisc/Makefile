@@ -5,7 +5,7 @@ NM= psmisc
 VRS= 21.6
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 
 # RULES
 

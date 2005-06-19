@@ -5,7 +5,7 @@ NM= groff
 VRS= 1.19.1
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 
 # RULES
 

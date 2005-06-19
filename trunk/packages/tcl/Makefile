@@ -5,7 +5,7 @@ NM= tcl
 VRS= 8.4.9
 DIR= $(NM)$(VRS)
 FILE= $(DIR)-src.tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 
 # RULES
 

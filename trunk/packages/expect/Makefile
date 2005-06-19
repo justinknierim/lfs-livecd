@@ -6,8 +6,8 @@ VRS= 5.43.0
 DIR= $(NM)-5.43
 FILE= $(NM)-$(VRS).tar.bz2
 PATCH= $(NM)-$(VRS)-spawn-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH)
 
 # RULES
 

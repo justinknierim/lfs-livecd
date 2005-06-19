@@ -6,8 +6,8 @@ VRS= 2.3.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 FILE1= $(NM)-linuxthreads-$(VRS).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(FILE1)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(FILE1)
 
 # RULES
 

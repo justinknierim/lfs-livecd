@@ -6,7 +6,7 @@ VRS= 5.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH= $(DIR)-20050319-patch.sh
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 URL1= ftp://invisible-island.net/ncurses/5.4/$(PATCH).bz2
 
 # RULES
