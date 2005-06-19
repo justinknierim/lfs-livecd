@@ -37,7 +37,7 @@ mkdir /.tmpfs/.sqfs
 mkdir -m1777 /.tmpfs/.tmp
 
 mount -r -t iso9660 $CDROM /.tmpfs/.cdrom
-losetup /dev/loop0 /.tmpfs/.cdrom/root.sqfs
+losetup /dev/loop0 /.tmpfs/.cdrom/.root.sqfs
 mount -r -t squashfs /dev/loop0 /.tmpfs/.sqfs
 
 # File locking and mmap don't work well on unionfs 1.0.11, this breaks
