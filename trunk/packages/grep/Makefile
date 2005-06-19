@@ -32,7 +32,7 @@ stage2:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f /bin/grep ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --bindir=/bin --with-included-regex && \
+	 ./configure --prefix=/usr --bindir=/bin && \
 	 make -j3 && make install ; fi
 	@make clean
 	
