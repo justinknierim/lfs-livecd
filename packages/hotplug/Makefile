@@ -6,8 +6,8 @@ VRS= 2004_09_23
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= $(DIR)-try_all_drivers-6.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH1)
 
 # RULES
 

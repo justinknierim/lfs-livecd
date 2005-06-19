@@ -6,8 +6,8 @@ VRS= 1.2.3
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= $(DIR)-some_patch-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH1)
 
 # RULES
 

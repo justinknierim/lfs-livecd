@@ -5,7 +5,7 @@ NM= linux-libc-headers
 VRS= 2.6.11.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 
 # RULES
 

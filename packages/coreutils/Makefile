@@ -7,9 +7,9 @@ DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= $(DIR)-uname-2.patch
 PATCH2= $(DIR)-suppress_uptime_kill_su-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH1)
-URL2= $(FTP)/$(NM)/$(PATCH2)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL2= $(HTTP)/$(NM)/$(PATCH2)
 
 # RULES
 

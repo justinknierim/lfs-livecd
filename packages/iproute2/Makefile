@@ -7,8 +7,8 @@ DATE= 050330
 DIR= $(NM)-$(VRS)
 FILE= $(NM)-$(VRS)-$(DATE).tar.bz2
 PATCH= $(NM)-$(VRS)_$(DATE)-remove_db-1.patch
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(PATCH)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(PATCH)
 
 # RULES
 

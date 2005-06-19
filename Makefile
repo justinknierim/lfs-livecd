@@ -26,8 +26,8 @@ export pagesize := letter
 # an absolute file path.)
 export ROOT := /lfs-livecd
 
-# Ftp server for the lfs-base packages
-export FTP := ftp://ftp.lfs-matrix.net/pub/lfs/lfs-packages/conglomeration
+# Http server for the lfs-base packages
+export HTTP := http://ftp.lfs-matrix.net/pub/lfs/lfs-packages/conglomeration
 
 # Don't edit these!
 export VERSION=x86-6.1-1-pre4

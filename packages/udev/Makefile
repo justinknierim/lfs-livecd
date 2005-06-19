@@ -6,8 +6,8 @@ VRS= 056
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 FILE1= $(NM)-config-3.rules
-URL= $(FTP)/$(NM)/$(FILE)
-URL1= $(FTP)/$(NM)/$(FILE1)
+URL= $(HTTP)/$(NM)/$(FILE)
+URL1= $(HTTP)/$(NM)/$(FILE1)
 
 # RULES
 

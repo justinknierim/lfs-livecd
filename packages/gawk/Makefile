@@ -5,7 +5,7 @@ NM= gawk
 VRS= 3.1.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= $(FTP)/$(NM)/$(FILE)
+URL= $(HTTP)/$(NM)/$(FILE)
 
 # RULES
 
