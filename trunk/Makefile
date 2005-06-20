@@ -176,11 +176,11 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype ch-fontconfig ch-Xorg ch-freefont ch-inputattach \
 	ch-fonts-dejavu ch-update-fontsdir ch-libjpeg ch-libtiff ch-links ch-openssh ch-pkgconfig ch-glib2 \
-	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox ch-thunderbird ch-startup-notification ch-gvim \
-	ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute ch-dialog \
-	ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal \
-	ch-reiser4progs ch-squashfs ch-cpio ch-db ch-postfix ch-mutt ch-msmtp ch-slrn ch-raidtools ch-linux ch-klibc ch-unionfs \
-	ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
+	ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox ch-thunderbird \
+	ch-startup-notification ch-gvim ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap \
+	ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd \
+	ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-slrn \
+	ch-raidtools ch-linux ch-klibc ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -847,14 +847,6 @@ cpio: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
-db: prep-chroot
-	make -C $(PKG)/$@ chroot
-	make unmount
-
-postfix: prep-chroot
-	make -C $(PKG)/$@ chroot
-	make unmount
-
 mutt: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1383,12 +1375,6 @@ ch-squashfs: popdev
 
 ch-cpio: popdev
 	make -C $(PKG)/cpio stage2
-
-ch-db: popdev
-	make -C $(PKG)/db stage2
-
-ch-postfix: popdev
-	make -C $(PKG)/postfix stage2
 
 ch-mutt: popdev
 	make -C $(PKG)/mutt stage2
