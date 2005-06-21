@@ -18,7 +18,7 @@ stage1:
 	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
 	 mv $(FILE) $(SRC) ; fi
 	@if [ ! -f $(WD)/bin/grep ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) --disable-perl-regexp --with-included-regex && \
+	 ./configure --prefix=$(WD) --disable-perl-regexp && \
 	 make -j3 && make install ; fi
 	@make clean
 
