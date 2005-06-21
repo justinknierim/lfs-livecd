@@ -21,7 +21,7 @@ stage2:
 	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
 	@if [ ! -f /usr/bin/slrn ] ; then unpack $(FILE) && cd $(DIR) && \
 	 ./configure --prefix=/usr --sysconfdir=/etc --with-slrnpull \
-	 --with-mta=/usr/bin/msmtp --enable-spool --with-ssl && \
+	 --with-mta="/usr/bin/msmtp -t" --enable-spool --with-ssl && \
 	 make -j3 && make install && \
 	 cp $(ROOT)/root/.slrnrc /root/ ; fi
 	@make clean
