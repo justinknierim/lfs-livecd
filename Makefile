@@ -30,7 +30,7 @@ export ROOT := /lfs-livecd
 export HTTP := http://ftp.lfs-matrix.net/pub/lfs/lfs-packages/conglomeration
 
 # Don't edit these!
-export VERSION=x86-6.1-1-pre4
+export VERSION=x86-6.1-1-rc1
 export HOSTNAME := lfslivecd
 export WD := /tools
 export SRC := /sources
