@@ -2,7 +2,7 @@
 
 # Package versions
 NM= blfs-bootscripts
-VRS= 20050509
+VRS= 20050619
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH=$(DIR)-add-autosshd-1.patch
