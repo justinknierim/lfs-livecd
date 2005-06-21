@@ -7,8 +7,8 @@ DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 PATCH1= squashfs2.1-patch
 URL= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-URL1= http://ftp.roedu.net/pub/mirrors/ftp.namesys.com/pub/reiser4-for-2.6/2.6.11/broken-out
-#URL1= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.11/broken-out
+#URL1= http://ftp.roedu.net/pub/mirrors/ftp.namesys.com/pub/reiser4-for-2.6/2.6.11/broken-out
+URL1= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.11/broken-out
 
 #RULES
 
