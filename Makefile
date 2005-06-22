@@ -180,7 +180,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe ch
 	ch-startup-notification ch-gvim ch-xfce ch-lua ch-ion ch-irssi ch-xchat ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dhcpcd \
 	ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-slrn \
-	ch-raidtools ch-linux ch-klibc ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
+	ch-raidtools ch-eject ch-linux ch-klibc ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts ch-syslinux
 
 # Rules for building tools/stage1
 # These can be called individually, if necessary
@@ -863,6 +863,10 @@ raidtools: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
 
+eject: prep-chroot
+	make -C $(PKG)/$@ chroot
+	make unmount
+
 linux: prep-chroot
 	make -C $(PKG)/$@ chroot
 	make unmount
@@ -1387,6 +1391,9 @@ ch-slrn: popdev
 
 ch-raidtools: popdev
 	make -C $(PKG)/raidtools stage2
+
+ch-eject: popdev
+	make -C $(PKG)/eject stage2
 
 ch-linux: popdev
 	make -C $(PKG)/linux stage2
