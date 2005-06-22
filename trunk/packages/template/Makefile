@@ -31,7 +31,7 @@ stage1:
 # this target is used to enter chroot and recall the ch-package-name
 # target from the top Makefile.
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
 
 # This target is for building the package once we're already inside
 # the chroot environment.
