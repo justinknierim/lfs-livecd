@@ -26,7 +26,7 @@ pass1:
 	@if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
 	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
 	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
-	 --disable-nls --enable-shared && \
+	 --disable-nls --enable-shared --enable-languages=c && \
 	 make -j3 bootstrap && \
 	 make install && ln -s gcc $(WD)/bin/cc ; fi
 	@make clean
