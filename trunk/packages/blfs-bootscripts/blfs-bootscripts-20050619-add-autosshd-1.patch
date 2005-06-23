@@ -1,7 +1,7 @@
 diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd blfs-bootscripts-20050313/blfs/init.d/autosshd
 --- blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd	1970-01-01 05:00:00.000000000 +0500
 +++ blfs-bootscripts-20050313/blfs/init.d/autosshd	2005-05-13 09:07:15.000000000 +0600
-@@ -0,0 +1,26 @@
+@@ -0,0 +1,25 @@
 +#!/bin/sh
 +# Begin $rc_base/init.d/autosshd
 +
@@ -10,8 +10,7 @@ diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd blfs-bootscripts-
 +
 +case "$1" in
 +	start)
-+		if cat /proc/cmdline | grep -q "autosshd"; then
-+			echo "root:lfs" | chpasswd
++		if [ -f /.autosshd ] ; then
 +			/etc/rc.d/init.d/sshd start
 +		fi
 +		;;
