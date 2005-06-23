@@ -1,5 +1,0 @@
-ONBOOT="yes"
-SERVICE="dhcpcd"
-DHCP_START="-t 20"
-DHCP_STOP="-k"
-PRINTALL="yes"

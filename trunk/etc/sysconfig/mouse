@@ -1,3 +1,0 @@
-MDEVICE="/dev/psaux"
-PROTOCOL="imps2"
-GPMOPTS=""

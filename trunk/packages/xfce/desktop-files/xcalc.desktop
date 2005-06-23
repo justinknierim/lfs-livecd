@@ -1,8 +1,0 @@
-[Desktop Entry]
-Type=Application
-Exec=xcalc
-Name=XCalc
-Comment=Scientific calculator
-Comment[ru]=Научный калькулятор
-Terminal=0
-Categories=Application;System
