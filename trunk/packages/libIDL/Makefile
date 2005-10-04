@@ -5,7 +5,7 @@ VRS= 0.8.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= ftp://ftp.gnome/org/pub/GNOME/sources/$(NM)/0.8/$(FILE)
+URL-$(FILE)= ftp://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.8/$(FILE)
 SHA-$(FILE)= 93f5d1b1553189c11f5dec4cc6f633a85bb66a08
 
 # Targets
