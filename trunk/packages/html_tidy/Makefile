@@ -1,12 +1,12 @@
 # HTML Tidy Makefile
 
 NM= tidy
-VRS= 050803
+VRS= 050920
 DIR= $(NM)
 
 FILE= $(NM)_src_$(VRS).tgz
 URL-$(FILE)= http://tidy.sourceforge.net/src/old/$(FILE)
-SHA-$(FILE)= 2f21799a738e8fc41e383cad115f9fd9eb11f425
+SHA-$(FILE)= eb27b64232bf3272f76dbe9b1cc485d6136e1c15
 
 FILE1= $(NM)_docs.tgz
 URL-$(FILE1)= http://tidy.sourceforge.net/docs/$(FILE1)
