@@ -1,29 +1,32 @@
 # isoinfo Makefile
 
-# Package versions
 NM= isoinfo
 VRS= 0.03.02
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= ftp://metalab.unc.edu/pub/Linux/utils/disk-management/$(FILE)
+URL-$(FILE)= ftp://metalab.unc.edu/pub/Linux/utils/disk-management/$(FILE)
+SHA-$(FILE)= 64d4ac5b7a2fe2c1d1787fdb3202634343647d11
 
-#RULES
+PATCH1= $(DIR)-fixes-1.patch
 
-.PHONY: clean chroot klibc-isoinfo
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-klibc-isoinfo:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/klibc/bin/isoinfo ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../../klibc/$(NM)-$(VRS)-fixes-1.patch && \
-	 make CC="klcc -shared" -f Makefile.Linux isoinfo && \
-	 install isoinfo /usr/lib/klibc/bin ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	make CC="klcc -shared" -f Makefile.Linux isoinfo
+	install isoinfo /usr/lib/klibc/bin
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

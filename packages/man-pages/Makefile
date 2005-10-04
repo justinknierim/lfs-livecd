@@ -1,28 +1,28 @@
-# Linux-Libc-Headers Makefile
+# Man-pages Makefile
 
-# Package versions
 NM= man-pages
-VRS= 2.01
+VRS= 2.08
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 9fdd9c61f860ac681199ca14092b83be99aeafc6
 
-# RULES
+# Targets
 
-.PHONY: chroot stage2 clean
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(MKTREE) && make ch-man-pages $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -d /usr/share/man/man9 ] ; then unpack $(SRC)/$(FILE) && \
-	 cd $(DIR) && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	make install
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
 
+.PHONY: clean chroot compile-stage2

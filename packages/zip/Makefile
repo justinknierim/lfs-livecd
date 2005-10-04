@@ -1,29 +1,30 @@
 # Zip Makefile
 
-# Package versions
 NM= zip
 VRS= 2.31
 DIR= $(NM)-$(VRS)
-FILE= $(NM)231.tar.gz
-URL= http://www.mirrorservice.org/sites/ftp.info-zip.org/pub/infozip/src/$(FILE)
 
-#RULES
+FILE= $(NM)231.tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/W-Z/$(FILE)
+SHA-$(FILE)= 9e9a4718a03fa8d4cccd3802916268afeaf588bb
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/zip ] ; then unpack $(FILE) && cd $(DIR) && \
-	 sed -i -e 's@$$(INSTALL) man/zip.1@$$(INSTALL_PROGRAM) man/zip.1@' unix/Makefile && \
-	 make prefix=/usr -f unix/Makefile generic_gcc && \
-	 make prefix=/usr -f unix/Makefile install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	sed -i -e 's@$$(INSTALL) man/zip.1@$$(INSTALL_PROGRAM) man/zip.1@' unix/Makefile
+	make prefix=/usr -f unix/Makefile generic_gcc
+	make prefix=/usr -f unix/Makefile install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

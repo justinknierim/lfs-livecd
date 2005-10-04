@@ -1,30 +1,31 @@
 # File Makefile
 
-# Package versions
 NM= file
-VRS= 4.13
+VRS= 4.15
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 067947db9ad03ffd128214019d209927c93b0d16
 
-# RULES
+# Targets
 
-.PHONY:  clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/file ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

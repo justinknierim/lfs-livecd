@@ -1,59 +1,66 @@
 # Coreutils Makefile
 
-# Package versions
 NM= coreutils
 VRS= 5.2.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 1028755ae0fa9be840576e4837004cf5a9981c45
+
 PATCH1= $(DIR)-uname-2.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 15e872e94319b29c3db4e9454d8d87ff3d51999b
+
 PATCH2= $(DIR)-suppress_uptime_kill_su-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
-URL2= $(HTTP)/$(NM)/$(PATCH2)
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= 29b8d86879d6e654642b51b86766c7b8b2c53066
 
-# RULES
+PATCH3= $(DIR)-echo_posix-1.patch
+URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
+SHA-$(PATCH3)= b160e29015f0f9f252c948010fbb40d48ce0009a
 
-.PHONY: stage1 clean stage2 chroot
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD) && make -j3 && make install && \
-	 mv ${WD}/bin/uname ${WD}/bin/uname.real && \
-	 install -m 755 ${MP}${ROOT}/uname/uname ${WD}/bin/ ; fi
-	@make clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage1:
+	DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD)
+	make $(PM)
+	make install
+	mv ${WD}/bin/uname ${WD}/bin/uname.real 
+	install -m 755 ${MP}${ROOT}/uname/uname ${WD}/bin/
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
-	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f /bin/ls ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
-	 DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=/usr && \
-	 make -j3 && make install && \
-	 $(WD)/bin/mv /usr/bin/{[,basename,cat,chgrp,chmod,chown,cp,dd,df} /bin && \
-	 $(WD)/bin/mv /usr/bin/{date,echo,false,head,hostname,install,ln} /bin && \
-	 $(WD)/bin/mv /usr/bin/{ls,mkdir,mknod,mv,pwd,rm,rmdir,sync} /bin && \
-	 mv /usr/bin/{sleep,stty,test,touch,true,uname} /bin && \
-	 mv /usr/bin/chroot /usr/sbin && \
-	 ln -s ../../bin/install /usr/bin && \
-	 mv /bin/uname /bin/uname.real && \
-	 install -m 755 ${ROOT}/uname/uname /bin/ ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
+	$(std_build)
+	cp $(SRC)/{$(PATCH1),$(PATCH2),$(PATCH3)} $(LFSSRC)/
+
+compile-stage2:
+ifeq ($(LFS-ARCH),x86)
+	patch -Np1 -i ../$(PATCH1)
+endif
+	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
+	DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=/usr
+	make $(PM)
+	make install
+	$(WD)/bin/mv /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+	$(WD)/bin/mv /usr/bin/{false,hostname,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+	mv /usr/bin/{rmdir,stty,sync,true,uname} /bin
+	mv /usr/bin/chroot /usr/sbin
+	mv /usr/bin/{head,sleep} /bin
+	mv /bin/uname /bin/uname.real
+	install -m 755 ${ROOT}/uname/uname /bin/
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

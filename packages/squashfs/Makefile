@@ -1,27 +1,30 @@
 # SquashFS Makefile
 
-# Package versions
 NM= squashfs
-VRS= 2.1
+VRS= 2.2
 DIR= $(NM)$(VRS)
-PATCH=
+
 FILE= $(DIR).tar.gz
-URL= http://easynews.dl.sourceforge.net/sourceforge/squashfs/$(FILE)
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/squashfs/$(FILE)
+SHA-$(FILE)= 086c1e38185d6aaa7b6c490a7eea4c653936d158
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@unpack $(FILE) && cd $(DIR) && \
-	 cd $(NM)-tools && make && cp mksquashfs $(WD)/bin
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	cd $(NM)-tools ; make
+	cd $(NM)-tools ; cp -v mksquashfs $(WD)/bin
+	cp linux-2.6.12/squashfs2.2-patch $(ROOT)/$(PKG)/linux
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

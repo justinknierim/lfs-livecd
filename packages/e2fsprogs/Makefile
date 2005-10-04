@@ -1,33 +1,33 @@
 # E2fsprogs Makefile
 
-# Package versions
 NM= e2fsprogs
-VRS= 1.37
+VRS= 1.38
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 6252152e90c52a8cf158559cd16c0d0ec236c980
 
-# RULES
+# Targets
 
-.PHONY:  clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /sbin/mke2fs ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 sed -i -e 's/-DTEST/$(ALL_CFLAGS) &/' lib/e2p/Makefile.in && \
-	 mkdir build && cd build && \
-	 ../configure --prefix=/usr --with-root-prefix="" --enable-elf-shlibs --disable-evms && \
-	 make && make install && make install-libs ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	mkdir build
+	cd build ; ../configure --prefix=/usr --with-root-prefix="" \
+	 --enable-elf-shlibs --disable-evms
+	cd build ; make
+	cd build ; make install
+	cd build ; make install-libs
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

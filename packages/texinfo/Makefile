@@ -1,38 +1,41 @@
 # Texinfo Makefile
 
-# Package versions
 NM= texinfo
 VRS= 4.8
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
-URL= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
 
-# RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= b19e906f7220294c1e8b087d583c50f5c4d7c420
 
-.PHONY: stage1 clean chroot stage2
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/info ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
-	@make clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage1:
+	./configure --prefix=$(WD)
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/info ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && make -j3 && make install && \
-	 make -j3 TEXMF=/usr/share/texmf install-tex ; fi
-	@make clean	
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	make TEXMF=/usr/share/texmf install-tex
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

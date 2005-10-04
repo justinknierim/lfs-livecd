@@ -1,28 +1,30 @@
 # Joe Makefile
 
-# Package versions
 NM= joe
-VRS= 3.1
+VRS= 3.3
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://easynews.dl.sourceforge.net/sourceforge/joe-editor/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/I-K/$(FILE)
+SHA-$(FILE)= 2e07b494b22a176ceac3742088ddbcc10690e56d
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/joe ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sysconfdir=/etc
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

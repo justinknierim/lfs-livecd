@@ -1,35 +1,37 @@
 # Samba Makefile
 
-# Package versions
 NM= samba
-VRS= 3.0.14a
+VRS= 3.0.20a
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= http://us2.samba.org/samba/ftp/$(FILE)
+URL-$(FILE)= http://us1.samba.org/samba/ftp/old-versions/$(FILE)
+SHA-$(FILE)= f271e3c3eda58cf781018ab14673a15cd3d0b83a
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/smbmount ] ; then unpack $(FILE) && cd $(DIR) && \
-	 cd source && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-piddir=/var/run --with-fhs \
-	 --with-smbmount && \
-	 make && \
-	 make install && \
-	 install -m644 $(ROOT)/etc/samba/smb.conf /etc/samba && \
-	 cd client && \
-	 gcc $(CFLAGS) -static mount.cifs.c -o mount.cifs && \
-	 cp mount.cifs /usr/bin ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	cd source ; ./configure --prefix=/usr --sysconfdir=/etc \
+	 --localstatedir=/var --with-piddir=/var/run --with-fhs \
+	 --with-smbmount --without-sys-quotas --without-quotas
+	cd source ; make
+	mkdir /etc/samba
+	install -m644 $(ROOT)/etc/samba/smb.conf /etc/samba
+	cd source/client ; \
+	 gcc $(CFLAGS) -static mount.cifs.c -o mount.cifs ; \
+	 cp mount.cifs /usr/bin
+	cd source ; make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

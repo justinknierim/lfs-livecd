@@ -1,34 +1,36 @@
 # Sysvinit Makefile
 
-# Package versions
 NM= sysvinit
 VRS= 2.86
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-reexec06-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= e4b8c4ab3b080dd8cc3f29f0c38a32fc7307d8ef
 
-# RULES
+PATCH1= $(DIR)-reexec06-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= d06fd7274e767c1c98be27d1dc4adb135260e479
 
-.PHONY:  clean stage2 chroot
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /sbin/init ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) && \
-	 sed -i 's@Sending processes@& started by init@g' src/init.c && \
-	 ROOT="" make -j3 -C src && ROOT="" make -C src install && \
-	 cp $(ROOT)/etc/inittab /etc ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	sed -i 's@Sending processes@& started by init@g' src/init.c
+	ROOT="" make $(PM) -C src
+	ROOT="" make -C src install
+	cp $(ROOT)/etc/inittab /etc
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

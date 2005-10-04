@@ -1,34 +1,41 @@
 # mutt Makefile
 
-# Package versions
 NM= mutt
 VRS= 1.4.2.1
 DIR= $(NM)-$(VRS)
-FILE= $(DIR)i.tar.gz
-NNTP_PATCH= patch-$(VRS).vvv.nntp
-URL= ftp://ftp.mutt.org/mutt/$(FILE)
-URL1= http://mutt.org.ua/download/mutt-$(VRS)/$(NNTP_PATCH).gz
 
-#RULES
+FILE= $(DIR)i.tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= f56b36f8836ee624633858d903d153e9b6e3afad
 
-.PHONY: clean chroot stage2
+PATCH1= patch-$(VRS).vvv.nntp.gz
+URL-$(PATCH1)= http://mutt.org.ua/download/mutt-$(VRS)/$(PATCH1)
+SHA-$(PATCH1)= ac0ddf0831808b01c67ab27b3e3823ecf1ca131b
+
+PATCH2= $(DIR)-gcc4_fixes-1.patch
+
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(NNTP_PATCH) ] ; then $(WGET) $(URL1) && gunzip $(NNTP_PATCH).gz ; fi
-	-groupadd mail
-	@if [ ! -f /usr/bin/mutt ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(NNTP_PATCH) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --enable-imap --enable-pop --enable-nntp --with-ssl && \
-	 make -j3 && make install && \
-	 install -m600  $(ROOT)/root/.muttrc /root ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	groupadd mail
+	zcat ../$(PATCH1) | patch -Np1
+	patch -Np1 -i ../$(PATCH2)
+	./configure --prefix=/usr --sysconfdir=/etc --enable-imap \
+	 --enable-pop --enable-nntp --with-ssl
+	make $(PM)
+	make install
+	install -m600  $(ROOT)/root/.muttrc /root
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

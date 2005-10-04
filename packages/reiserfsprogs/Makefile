@@ -1,30 +1,32 @@
 # ReiserFS Progs Makefile
 
-# Package versions
 NM= reiserfsprogs
 VRS= 3.6.19
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiserfsprogs/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
+SHA-$(FILE)= f0c0f74272e999e707dafb1e157e9daf5703850e
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkreiserfs ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sbindir=/sbin && \
-	 make -j3 && make install && \
-	 ln -s reiserfsck /sbin/fsck.reiserfs && \
-	 ln -s mkreiserfs /sbin/mkfs.reiserfs ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sbindir=/sbin
+	make $(PM)
+	make install
+	ln -s reiserfsck /sbin/fsck.reiserfs
+	ln -s mkreiserfs /sbin/mkfs.reiserfs
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

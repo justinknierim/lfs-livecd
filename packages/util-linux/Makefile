@@ -1,57 +1,51 @@
 # Util-Linux Makefile
 
-# Package versions
 NM= util-linux
-VRS= 2.12q
+VRS= 2.12r
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-cramfs-1.patch
-URL= http://www.kernel.org/pub/linux/utils/$(NM)/$(FILE)
-URL1= http://www.linuxfromscratch.org/patches/lfs/cvs/testing/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 740b7eb5ae1148b2200b2cd34a0a6c4b0db577e4
 
-# RULES
+PATCH1= $(DIR)-cramfs-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 00f5192493b939c2c996df9c1f3f769abfa3fa8c
 
-.PHONY: stage1 clean chroot stage2 klibc-losetup
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/mount ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 sed -i 's@/usr/include@$(WD)/include@g' configure && \
-	 ./configure && make -j3 -C lib && make -j3 -C mount mount umount && \
-	 make -j3 -C text-utils more && cp mount/{,u}mount text-utils/more $(WD)/bin ; fi
-	@make clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage1:
+	sed -i 's@/usr/include@$(WD)/include@g' configure
+	./configure
+	make -C lib
+	make -C mount mount umount
+	make -C text-utils more
+	cp mount/{,u}mount text-utils/more $(WD)/bin
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /bin/mount ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && ./configure && \
-	 make -j3 HAVE_KILL=yes HAVE_SLN=yes && \
-	 make HAVE_KILL=yes HAVE_SLN=yes install ; fi
-	@make clean
-	
-klibc-losetup:
-	@echo ""
-	@echo "=====> Building losetup with klibc"
-	@echo ""
-	@if [ ! -f /usr/lib/klibc/bin/losetup ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../../klibc/util-linux-2.12q-klibc-1.patch && \
-	 CC="klcc" LDFLAGS="-shared" ./configure && \
-	 make lib/xstrncpy.o lib/getpass.o && make -C mount losetup && \
-	 strip -s mount/losetup && install mount/losetup /usr/lib/klibc/bin ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/$(PATCH1) $(LFSSRC)/
+
+compile-stage2:
+	sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c
+	mkdir -p /var/lib/hwclock
+	patch -Np1 -i ../$(PATCH1)
+	./configure
+	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
+	make HAVE_KILL=yes HAVE_SLN=yes install
+	mv /usr/bin/logger /bin
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

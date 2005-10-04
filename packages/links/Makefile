@@ -1,29 +1,34 @@
 # Links Makefile
 
-# Package versions
 NM= links
-VRS= 2.1pre15
+VRS= 2.1pre17
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= ftp://atrey.karlin.mff.cuni.cz/pub/local/clock/links/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/L/$(FILE)
+SHA-$(FILE)= 2f89de8b8ea797834444f933222ecf7bd2cea84b
 
+# Targets
 
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/links ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --enable-graphics && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+ifeq ($(LFS-ARCH),sparc)
+	./configure --prefix=/usr
+else
+	./configure --prefix=/usr --enable-graphics
+endif
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

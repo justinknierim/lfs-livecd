@@ -1,31 +1,32 @@
 # Grub Makefile
 
-# Package versions
 NM= grub
-VRS= 0.96
+VRS= 0.97
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 51d60ce71a40e6ecf6870b3a96067b7866a2c477
 
-# RULES
+# Targets
 
-.PHONY:  clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/sbin/grub ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+ifeq ($(LFS-ARCH),x86)
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+endif
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

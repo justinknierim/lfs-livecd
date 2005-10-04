@@ -1,30 +1,32 @@
 # Subversion Makefile
 
-# Package versions
 NM= subversion
-VRS= 1.1.3
+VRS= 1.2.3
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= http://subversion.tigris.org/tarballs/$(FILE)
+URL-$(FILE)= http://subversion.tigris.org/downloads/$(FILE)
+SHA-$(FILE)= 513a217ba4a8045ea3daba5c3b0816f80ce0041b
 
+# Targets
 
-
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/svn ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	install -v -d -m755 /usr/share/doc/$(DIR)
+	cp -v -R doc/* /usr/share/doc/$(DIR)
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

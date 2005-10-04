@@ -1,29 +1,29 @@
 # DejaVu fonts Makefile
 
-# Package versions
 NM= dejavu-ttf
-VRS= 1.9
+VRS= 1.14
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://heanet.dl.sourceforge.net/sourceforge/dejavu/$(FILE)
 LOCATION= /usr/X11R6/lib/X11/fonts/TTF
 
-#RULES
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/dejavu/$(FILE)
+SHA-$(FILE)= 51eab6407780e0d5b62395d11e205743c3949a3e
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-fonts-dejavu $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(LOCATION)/DejaVuSansMono-Roman.ttf ] ; then \
-	 unpack $(FILE) && \
-	 cp $(DIR)/*.ttf $(LOCATION) ; fi
-	@make clean
+stage2: Makefile $(FILE) 
+	$(std_build)
+
+compile-stage2:
+	cp -v ./*.ttf $(LOCATION)
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

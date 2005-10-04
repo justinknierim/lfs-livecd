@@ -1,28 +1,30 @@
 # LibUngif Makefile
 
-# Package versions
 NM= libungif
 VRS= 4.1.3
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= http://easynews.dl.sourceforge.net/sourceforge/libungif/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/L/$(FILE)
+SHA-$(FILE)= 04aab31b3e9e719a80320667bc23b3ee35505a34
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libungif.so ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

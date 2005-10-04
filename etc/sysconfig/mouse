@@ -1,3 +1,3 @@
-MDEVICE="/dev/psaux"
+MDEVICE="/dev/input/mice"
 PROTOCOL="imps2"
 GPMOPTS=""

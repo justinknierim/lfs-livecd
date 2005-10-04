@@ -1,33 +1,38 @@
 # Zlib Makefile
 
-# Package versions
 NM= zlib
-VRS= 1.2.2
+VRS= 1.2.3
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
-# RULES
+# Targets
 
-.PHONY: chroot stage2 clean
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/lib/libz.so ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --shared && \
-	 make -j3 && make install && make clean && ./configure --prefix=/usr && \
-	 make -j3 && make install && chmod 644 /usr/lib/libz.a && \
-	 mv /usr/lib/libz.so.* /lib && \
-	 ln -sf ../../lib/libz.so.1 /usr/lib/libz.so ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage2:
+	./configure --prefix=/usr --shared --libdir=/lib
+	make $(PM)
+	make install
+	rm /lib/libz.so
+	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
+	make clean
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	chmod 644 /usr/lib/libz.a
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

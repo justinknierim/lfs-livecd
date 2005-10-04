@@ -1,32 +1,34 @@
 # Nano Makefile
 
-# Package versions
 NM= nano
-VRS= 1.2.4
+VRS= 1.2.5
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://www.nano-editor.org/dist/v1.2/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= a3f332a43abedd5467da8808de90b53ae98fa5e0
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/nano ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --enable-color --enable-multibuffer \
-	 --enable-nanorc && \
-	 make -j3 && make install && \
-	 mkdir -p /usr/share/doc/nano/examples && \
-	 cp nanorc.sample /usr/share/doc/nano/examples && \
-	 cp $(ROOT)/etc/nanorc /etc ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sysconfdir=/etc --enable-color \
+	 --enable-multibuffer --enable-nanorc
+	make $(PM)
+	make install
+	mkdir -p /usr/share/doc/nano/examples
+	cp nanorc.sample /usr/share/doc/nano/examples
+	cp $(ROOT)/etc/nanorc /etc
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

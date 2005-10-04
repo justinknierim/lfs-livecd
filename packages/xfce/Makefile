@@ -1,35 +1,41 @@
 # xfce Makefile
 
-# Package versions
 NM= xfce
 VRS= 4.2.2
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR)-src.tar.bz2
-URL= http://www.us.xfce.org/archive/xfce-4.2.2/fat_tarballs/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/W-Z/$(FILE)
+SHA-$(FILE)= e589ded559cf86fbb92b85711081df0aca00249d
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/startxfce4 ] ; then unpack $(FILE) && cd $(DIR)/src && \
-	 for i in `cat ../../list` ; do unpack $$i.tar.gz && cd $$i && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --enable-debug=no --enable-panel --enable-startup-notification --libexecdir=/usr/sbin && \
-	 make -j3 && make install && cd .. ; done ; fi
-	@cp $(ROOT)/root/.xinitrc /root/
-	@cp desktop-files/* /usr/share/applications
-	-sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
-	-sed -i -e 's/Mozilla/Firefox/' /etc/xdg/xfce4/desktop/menu.xml*
-	-rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
-	-for f in /etc/xdg/xfce4/panel/contents.xml* ; do ./cleanup-panel.pl $$f ; done
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	cd src; for i in `cat ../../list`; \
+	do unpack $$i.tar.gz ; \
+	cd $$i ; ./configure --prefix=/usr --sysconfdir=/etc \
+	 --enable-debug=no --enable-panel --enable-startup-notification \
+	 --libexecdir=/usr/sbin ; \
+	make $(PM) ; \
+	make install ; cd .. ; done 
+	cp $(ROOT)/root/.xinitrc /root/
+	cp ../desktop-files/* /usr/share/applications
+	sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
+	sed -i -e 's/Mozilla/Firefox/' /etc/xdg/xfce4/desktop/menu.xml*
+	rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
+	for f in /etc/xdg/xfce4/panel/contents.xml* ; do ../cleanup-panel.pl $$f ; done
+	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,35 +1,37 @@
 # Mktemp Makefile
 
-# Package versions
 NM= mktemp
 VRS= 1.5
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH1= $(DIR)-add_tempfile-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 57f1fa25c1ac7d564e530d8ccd7594d835cf96ad
 
-# RULES
+PATCH1= $(DIR)-add_tempfile-3.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= c4ca0c1d5993a44bf82c369d60f415e2cf92b95b
 
-.PHONY:  clean stage2 chroot
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f /usr/bin/mktemp ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH1) && \
-	 ./configure --prefix=/usr --with-libc && \
-	 make -j3 && make install && make install-tempfile ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr --with-libc
+	make $(PM)
+	make install
+	make install-tempfile
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

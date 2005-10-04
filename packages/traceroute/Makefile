@@ -1,31 +1,33 @@
 # Traceroute Makefile
 
-# Package versions
 NM= traceroute
 VRS= 1.4a12
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= ftp://ftp.ee.lbl.gov/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/T-V/$(FILE)
+SHA-$(FILE)= c68ec1b09539a8e9655c138031c3090bda92d5f1
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/traceroute ] ; then unpack $(FILE) && cd $(DIR) && \
-	 sed -i -e 's/-o bin/-o root/' Makefile.in && \
-	 ./configure --prefix=/usr && \
-	 make && \
-	 make install && make install-man && \
-	 mv /usr/sbin/traceroute /usr/bin ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	sed -i -e 's/-o bin/-o root/' Makefile.in
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	make install-man
+	mv /usr/sbin/traceroute /usr/bin
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,30 +1,34 @@
 # DocBook XSL Stylesheets Makefile
 
-# Package versions
 NM= docbook-xsl
-VRS= 1.68.1
+VRS= 1.69.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= http://easynews.dl.sourceforge.net/sourceforge/docbook/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= aaabf0e274609134e187a6c36d2be23f3471f507
 
+FILE1= $(NM)-doc-$(VRS).tar.bz2
+URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
+SHA-$(FILE1)= 2844c94d3127a9c517462b6efd9a4a9a38c5d9ba
 
+# Targets
 
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /usr/share/xml/docbook/xsl-stylesheets-current ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ../install && \
-	 ln -s xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current; fi
-	@make clean
+stage2: Makefile $(FILE) $(FILE1)
+	$(std_build)
+
+compile-stage2:
+	cd .. ; unpack $(FILE1)
+	../install
+	ln -s xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

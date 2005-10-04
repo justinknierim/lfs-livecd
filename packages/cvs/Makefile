@@ -1,33 +1,37 @@
 # cvs Makefile
 
-# Package versions
 NM= cvs
 VRS= 1.11.20
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-zlib-1.patch
-URL= https://ccvs.cvshome.org/files/documents/19/861/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
+URL-$(FILE)= $(HTTPBLFS)/A-C/$(FILE)
+SHA-$(FILE)= 47f51a96b5a73e18c96f431f3c494735aa9c0236
 
-#RULES
+PATCH1= $(DIR)-zlib-1.patch
+URL-$(PATCH1)= $(HTTPBLFS)/A-C/$(PATCH1)
+SHA-$(PATCH1)= facc13bda7cc912db51f3994a5fe9f8374837394
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/bin/cvs ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && \
-	 make install ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	install -m755 -d /usr/share/doc/$(DIR)
+	install -m644 doc/cvs{,client}.ps /usr/share/doc/$(DIR)
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

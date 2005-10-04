@@ -1,36 +1,39 @@
 # portmap Makefile
 
-# Package versions
 NM= portmap
 VRS= 5beta
 DIR= $(NM)_$(VRS)
-FILE= $(DIR).tar.gz
+
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= c86be29cbbc136ef34b368b2ee7c9a86558e0ecc
+
 PATCH1= $(NM)-$(VRS)-compilation_fixes-3.patch
+URL-$(PATCH1)= $(HTTPBLFS)/M-P/$(PATCH1)
+SHA-$(PATCH1)= fd70ed5b7aac08421e5a678e4776734b3f26042d
+
 PATCH2= $(NM)-$(VRS)-glibc_errno_fix-1.patch
-URL= ftp://ftp.porcupine.org/pub/security/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH1)
-URL2= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH2)
+URL-$(PATCH2)= $(HTTPBLFS)/M-P/$(PATCH2)
+SHA-$(PATCH2)= f9451c5a81006a6ae21358c9498ac9d26b93ff4e
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
-	@if [ ! -f /sbin/portmap ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH1) && \
-	 patch -Np1 -i ../$(PATCH2) && \
-	 make -j3 && \
-	 make install ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

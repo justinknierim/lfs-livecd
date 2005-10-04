@@ -1,30 +1,31 @@
 # Fontconfig Makefile
 
-# Package versions
 NM= fontconfig
-VRS= 2.3.1
+VRS= 2.3.2
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://fontconfig.org/release/$(FILE)
 
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/F-H/$(FILE)
+SHA-$(FILE)= 4d9eb11ab369b58513b053417f6487b949b1b696
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -d /etc/fonts ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --disable-docs && \
-	 make -j3 && make install && \
-	 sed -i -e 's/Bitstream Vera/DejaVu/' /etc/fonts/fonts.conf ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sysconfdir=/etc --disable-docs
+	make $(PM)
+	make install
+	sed -i -e 's/Bitstream Vera/DejaVu/' /etc/fonts/fonts.conf
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,32 +1,34 @@
 # Expect Makefile
 
-# Package versions
 NM= expect
 VRS= 5.43.0
 DIR= $(NM)-5.43
+
 FILE= $(NM)-$(VRS).tar.bz2
-PATCH= $(NM)-$(VRS)-spawn-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= a73530772f9d735e98175c7807efa8e785c5fa60
 
-# RULES
+PATCH1= $(NM)-$(VRS)-spawn-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= ba903a7d04b4faa13c8b9db75e1537f55f28e82b
 
-.PHONY: stage1 clean
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/expect ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure --prefix=$(WD) --with-tcl=$(WD)/lib --with-tclinclude=../../tcl/tcl8.4.9 --with-x=no && \
-	 make -j3 && make SCRIPTS="" install ; fi
-	@make clean
-	@make -C ../tcl clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+	make -C ../tcl clean
+
+compile-stage1:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
+	--with-tclinclude=$(ROOT)/$(PKG)/tcl/tcl8.4.11 --with-x=no
+	make $(PM)
+	make SCRIPTS="" install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot

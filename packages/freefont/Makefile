@@ -1,29 +1,34 @@
 # FreeFont Makefile
 
-# Package versions
 NM= freefont
 VRS= ttf
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-URL= http://ftp.gnu.org/savannah/files/freefont/$(FILE)
 LOCATION= /usr/X11R6/lib/X11/fonts/TTF
 
-#RULES
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://ftp.gnu.org/savannah/files/freefont/$(FILE)
+SHA-$(FILE)= bace5fc544871a646b63f94d4902be0fceca0b3e
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(LOCATION)/FreeMono.ttf ] ; then mkdir $(DIR) && cd $(DIR) && \
-	 unpack ../$(FILE) && \
-	 cp sfd/* $(LOCATION) ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	mkdir $(DIR) 
+	cd $(DIR) ; unpack ../$(FILE)
+	make -C $(DIR) -f ../Makefile compile-$@
+	make clean
+	touch $@
+
+compile-stage2:
+	cp -v sfd/* $(LOCATION)
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

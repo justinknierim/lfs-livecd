@@ -1,0 +1,16 @@
+#!/bin/sh
+[ "$ACTION" = "add" ] || exit 0
+[ "$PCI_CLASS" = "030000" ] || exit 0
+
+SUB_VENDOR_ID=${PCI_SUBSYS_ID%:*}
+SUB_DEVICE_ID=${PCI_SUBSYS_ID#*:}
+
+VENDOR_ID=${PCI_ID%:*}
+DEVICE_ID=${PCI_ID#*:}
+
+X_DRIVER=`/usr/X11R6/bin/getconfig.pl -b "0x$SUB_DEVICE_ID" -c 0x0300 \
+	-d "0x$DEVICE_ID" -s "0x$SUB_VENDOR_ID" -v "0x$VENDOR_ID" 2>/dev/null`
+if [ -n "$X_DRIVER" ] ; then
+	echo "Using \"$X_DRIVER\" as a video driver"
+	sed -i -e "s/vesa/$X_DRIVER/" /etc/X11/xorg.conf
+fi

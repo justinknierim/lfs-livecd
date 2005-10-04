@@ -1,30 +1,43 @@
 # Unionfs Makefile
 
-# Package versions
 NM= unionfs
-VRS= 1.0.11
+VRS= 1.0.14
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= ftp://ftp.fsl.cs.sunysb.edu/pub/$(NM)/$(FILE)
+URL-$(FILE)= ftp://ftp.fsl.cs.sunysb.edu/pub/$(NM)/$(FILE)
+SHA-$(FILE)= 70b87ec8ae1b5b51b2d7a7b9ef4da80565ee124e
 
-# RULES
+PATCH1= $(DIR)-fix_builtin-1.patch
+PATCH2= $(DIR)-fixes-1.patch
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /lib/modules/$(KVERS)/kernel/fs/unionfs.ko ] ; then unpack $(FILE) && cd $(DIR) && \
-	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG && \
-	 make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG install && \
-	 strip --strip-debug /lib/modules/$(KVERS)/kernel/fs/unionfs.ko ; fi
-	@make clean
-	
+stage2: Makefile $(FILE) 
+	$(std_build) 
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH2)
+	make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG
+	make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG install
+	strip --strip-debug /lib/modules/$(KVERS)/kernel/fs/unionfs.ko
+
+patch-kernel: $(FILE) $(PATCH1)
+	$(std_build)
+	-rm -f $@
+
+compile-patch-kernel:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	./patch-kernel.sh $(ROOT)/$(PKG)/linux/linux-$(KVERS)/
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2 compile-patch-kernel

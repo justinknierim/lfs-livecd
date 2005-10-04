@@ -1,28 +1,30 @@
 # ion Makefile
 
-# Package versions
 NM= ion
 VRS= 2-20040729
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= http://modeemi.cs.tut.fi/~tuomov/ion/dl/$(FILE)
+URL-$(FILE)= http://modeemi.cs.tut.fi/~tuomov/ion/dl/$(FILE)
+SHA-$(FILE)= 92329a392de13dfb79ecd236eeb121a7045327e5
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/ion ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

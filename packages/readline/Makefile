@@ -1,37 +1,40 @@
 # Readline Makefile
 
-# Package versions
 NM= readline
 VRS= 5.0
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-fixes-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 6df316629de417c16a77a444cc456a3ba949951b
 
-# RULES
+PATCH1= $(DIR)-fixes-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 085d0d973d1a39707c26454db1d414957a85e2d0
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "======> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /usr/lib/libreadline.so ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 SHLIB_XLDFLAGS=-lncurses && make install && chmod 755 /usr/lib/*.5.0 && \
-	 mv /usr/lib/lib{readline,history}.so.5* /lib && \
-	 ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so && \
-	 ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr --libdir=/lib
+	make $(PM) SHLIB_XLDFLAGS=-lncurses
+	make install
+	chmod 755 /lib/lib{readline,history}.so*
+	rm /lib/lib{readline,history}.so
+	ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so
+	ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

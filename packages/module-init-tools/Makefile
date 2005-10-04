@@ -1,32 +1,31 @@
 # Module-Init-Tools Makefile
 
-# Package versions
 NM= module-init-tools
 VRS= 3.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= f233cab26208aa7d21a8ca24e4a9712af23a5a1d
 
-# RULES
+# Targets
 
-.PHONY:  clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /sbin/modprobe ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 touch modprobe.conf.5 && \
-	 ./configure --prefix="" --enable-zlib && \
-	 make -j3 && make install ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	touch modprobe.conf.5
+	./configure --prefix="" --enable-zlib
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

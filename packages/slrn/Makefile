@@ -1,30 +1,32 @@
 # slrn Makefile
 
-# Package versions
 NM= slrn
 VRS= 0.9.8.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= http://easynews.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
+SHA-$(FILE)= d8c3755403c9bb19b83123614cda05f94731027f
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/slrn ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sysconfdir=/etc --with-slrnpull \
-	 --with-mta="/usr/bin/msmtp -t" --enable-spool --with-ssl && \
-	 make -j3 && make install && \
-	 cp $(ROOT)/root/.slrnrc /root/ ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sysconfdir=/etc --with-slrnpull \
+	 --with-mta="/usr/bin/msmtp -t" --enable-spool --with-ssl
+	make $(PM)
+	make install
+	cp $(ROOT)/root/.slrnrc /root/
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

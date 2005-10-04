@@ -1,35 +1,36 @@
 # libpng Makefile
 
-# Package versions
 NM= libpng
 VRS= 1.2.8
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-link_to_proper_libs-1.patch
-URL= http://easynews.dl.sourceforge.net/sourceforge/libpng/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
+URL-$(FILE)= $(HTTPBLFS)/L/$(FILE)
+SHA-$(FILE)= b6d73493eea4095166118b298efecb54a8e3d2f5
 
+PATCH1= $(DIR)-link_to_proper_libs-1.patch
+URL-$(PATCH1)= $(HTTPBLFS)/L/$(PATCH1)
+SHA-$(PATCH1)= 24e552875bab65ed200e720c4a58dc92d92ba903
 
+# Targets
 
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f /usr/lib/libpng.so ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) && \
-	 make prefix=/usr ZLIBINC=/usr/include ZLIBLIB=/usr/lib -f scripts/makefile.linux && \
-	 make prefix=/usr install -f scripts/makefile.linux && \
-	 /sbin/ldconfig ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	make prefix=/usr ZLIBINC=/usr/include ZLIBLIB=/usr/lib \
+	 -f scripts/makefile.linux
+	make prefix=/usr install -f scripts/makefile.linux
+	/sbin/ldconfig
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

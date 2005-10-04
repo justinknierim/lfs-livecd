@@ -1,28 +1,30 @@
 # LibIDL Makefile
 
-# Package versions
 NM= libIDL
-VRS= 0.8.4
+VRS= 0.8.5
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= http://ftp.gnome.org/pub/GNOME/sources/libIDL/0.8/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/L/$(FILE)
+SHA-$(FILE)= e48f4935bc15c0c342068169f088af0efc709943
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libIDL-2.so ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

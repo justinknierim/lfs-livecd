@@ -1,39 +1,48 @@
 # Gawk Makefile
 
-# Package versions
 NM= gawk
-VRS= 3.1.4
+VRS= 3.1.5
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 0d5694461f1c32f1eae41a1c0d7ba0939b47e369
 
-# RULES
+PATCH1= $(DIR)-segfault_fix-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 8dde8415d03b1897f50d5b12b6c876feda15e0be
 
-.PHONY: stage1 clean chroot stage2
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/gawk ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
-	@make clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+
+compile-stage1:
+	./configure --prefix=$(WD)
+	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
+	echo "#define HAVE_LC_MESSAGES 1" >> config.h
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gawk ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --libexecdir=/usr/lib && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr --libexecdir=/usr/lib
+	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
+	echo "#define HAVE_LC_MESSAGES 1" >> config.h
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

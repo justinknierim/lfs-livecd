@@ -4,7 +4,7 @@ TAR=`which tar` || exit 1
 VRS=`$TAR --version | head -n 1 | awk '{print $4}' | cut -f2 -d'.'`
 
 if [ -z $1 ] ; then
-	echo "Error: No file specified."
+	echo "Usage: unpack [file] [extra tar parameters]"
 	exit 1
 fi
 
@@ -17,14 +17,14 @@ if [ $VRS -lt 15 ] ; then # This version of tar doesn't support the automatic di
 			  # compression type.
 
 	if echo $1 | grep -q "tar.gz" || echo $1 | grep -q ".tgz" ; then
-		$TAR -xzf $1 || echo "Error: Unpacking of \"$1\" failed."
+		$TAR -xzf "$@" || echo "Error: Unpacking of \"$1\" failed."
 	elif echo $1 | grep -q "tar.bz2" ; then
-		$TAR -xjf $1 || echo "Error: Unpacking of \"$1\" failed."
+		$TAR -xjf "$@" || echo "Error: Unpacking of \"$1\" failed."
 	elif [ `expr "$1" : '.*\(...\)'` = "tar" ] ; then
-		$TAR -xf $1 || echo "Error: Unpacking of \"$1\" failed."
+		$TAR -xf "$@" || echo "Error: Unpacking of \"$1\" failed."
 	else
 		echo "Error: Bad format or unknown compression type"
 	fi
 else
-	$TAR -xf $1 || echo "Error: Unpacking of \"$1\" failed."
+	$TAR -xf "$@" || echo "Error: Unpacking of \"$1\" failed."
 fi

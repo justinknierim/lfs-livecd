@@ -1,2 +1,0 @@
-#!/bin/sh
-/tools/bin/mkisofs -R -l -L -D -o lfs-livecd-20050126.iso -b boot/isolinux/isolinux.bin -c boot/boot.catalog -no-emul-boot -boot-load-size 4 -boot-info-table -V "LFS_CD" ./

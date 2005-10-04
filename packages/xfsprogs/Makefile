@@ -1,29 +1,30 @@
 # XFS Progs Makefile
 
-# Package versions
 NM= xfsprogs
-VRS= 2.6.25
+VRS= 2.6.36
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).src.tar.gz
-URL= ftp://oss.sgi.com/projects/xfs/download/cmd_tars/$(FILE)
+URL-$(FILE)= http://mirrors.sunsite.dk/xfs/download/cmd_tars/$(FILE)
+SHA-$(FILE)= 95f8862f4b8ceadedc517c89a7ba562aeac31e8f
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkfs.xfs ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(DIR)-fix_compile-1.patch && \
-	 sed -i 's/autoconf//' Makefile && \
-	 make && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(DIR)-fix_compile-1.patch
+	make
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

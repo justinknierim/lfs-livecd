@@ -7,8 +7,8 @@ echo $SRCDIR $DSTDIR
 
 rm -rf "$DSTDIR"
 mkdir "$DSTDIR"
-cp -av "$SRCDIR/include" "$SRCDIR/scripts" "$DSTDIR"
-cp -av "$SRCDIR/.config" "$SRCDIR/Makefile" "$SRCDIR/Module.symvers" "$DSTDIR"
+cp -rv "$SRCDIR/include" "$SRCDIR/scripts" "$DSTDIR"
+cp -rv "$SRCDIR/.config" "$SRCDIR/Makefile" "$SRCDIR/Module.symvers" "$DSTDIR"
 ( cd "$SRCDIR" ; find -type d ) | (
 	while read dir ; do
 	    mkdir -p "$DSTDIR/$dir"

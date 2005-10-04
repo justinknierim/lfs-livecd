@@ -1,36 +1,42 @@
 # GPM Makefile
 
-# Package versions
 NM= gpm
 VRS= 1.20.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/F-H/$(FILE)
+SHA-$(FILE)= c48d937e62abb438c2f6439b34ef3332c89af8d1
+
 PATCH1= $(DIR)-segfault-1.patch
+URL-$(PATCH1)= $(HTTPBLFS)/F-H/$(PATCH1)
+SHA-$(PATCH1)= 97fd239c8f95784550ec97933c85a57dae31e3d9
+
 PATCH2= $(DIR)-silent-1.patch
-URL= ftp://arcana.linux.it/pub/gpm/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH1)
-URL2= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH2)
+URL-$(PATCH2)= $(HTTPBLFS)/F-H/$(PATCH2)
+SHA-$(PATCH2)= 38e2e703ccb57becf8dadd0302f2da313932c4eb
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
-	@if [ ! -f /usr/sbin/gpm ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH1) && patch -Np1 -i ../$(PATCH2) && \
-	 CFLAGS="" LDFLAGS="-lm" ./configure --prefix=/usr --sysconfdir=/etc --without-curses && \
-	 make LDFLAGS="-lm" && make install && \
-	 cp conf/gpm-root.conf /etc && /sbin/ldconfig ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	./configure --prefix=/usr --sysconfdir=/etc --without-curses
+	LDFLAGS="-lm" make
+	make install
+	cp conf/gpm-root.conf /etc
+	/sbin/ldconfig
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

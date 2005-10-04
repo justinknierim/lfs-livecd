@@ -1,54 +1,45 @@
 # Flex Makefile
 
-# Package versions
 NM= flex
 VRS= 2.5.31
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-debian_fixes-2.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= c305d08a469625658418cb8f2d66c66fce1b76e5
 
-# RULES
+PATCH1= $(DIR)-debian_fixes-3.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= aafb7a09fa8ffe4d3db0737df6ac39d26f93e072
 
-.PHONY: stage1 clean chroot stage2
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/flex ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
-	@make clean
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /usr/bin/flex ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Z -Np1 -i $(SRC)/$(PATCH) && touch doc/flex.1 && \
-	 ./configure --prefix=/usr && make -j3 && make install && \
-	 ln -sf libfl.a /usr/lib/libl.a && \
-	 echo "#!/bin/sh" > /usr/bin/lex && \
-	 echo "# Begin /usr/bin/lex" >> /usr/bin/lex && \
-	 echo "" >> /usr/bin/lex && \
-	 echo "exec /usr/bin/flex -l \"\$$@\"" >> /usr/bin/lex && \
-	 echo "" >> /usr/bin/lex && \
-	 echo "# End /usr/bin/lex" >> /usr/bin/lex && \
-	 chmod 755 /usr/bin/lex ; fi
-	@make clean
-	
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+
+compile-stage2:
+	patch -Np1 -Z -i ../$(PATCH1)
+	touch doc/flex.1
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	ln -s libfl.a /usr/lib/libl.a
+	echo "#!/bin/sh" > /usr/bin/lex
+	echo "# Begin /usr/bin/lex" >> /usr/bin/lex
+	echo "" >> /usr/bin/lex
+	echo "exec /usr/bin/flex -l \"\$$@\"" >> /usr/bin/lex
+	echo "" >> /usr/bin/lex
+	echo "# End /usr/bin/lex" >> /usr/bin/lex
+	chmod 755 /usr/bin/lex
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

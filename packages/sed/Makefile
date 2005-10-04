@@ -1,37 +1,40 @@
 # Sed Makefile
 
-# Package versions
 NM= sed
 VRS= 4.1.4
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 3e2c884252920cced7b636826bf9a99d7d3e8437
 
-# RULES
+# Targets
 
-.PHONY: stage1 clean chroot stage2
+include $(ROOT)/scripts/functions
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/sed ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
-	@make clean
+stage1: $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage1:
+	./configure --prefix=$(WD)
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo""
-	@echo "=====> Building $(NM) in chroot"
-	@echo""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/sed ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --bindir=/bin && make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	sed -i 's@/doc@&/$(DIR)@' doc/Makefile.in
+	./configure --prefix=/usr --bindir=/bin
+	make $(PM)
+	make install
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

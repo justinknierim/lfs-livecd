@@ -1,33 +1,32 @@
 # Man Makefile
 
-# Package versions
 NM= man
-VRS= 1.5p
+VRS= 1.6b
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= e4b84ca61565314ef1a29a4c1221b6321dbdc278
 
-# RULES
+# Targets
 
-.PHONY:  clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/man ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 sed -i 's@-is@&R@g' configure && \
-	 sed -i 's@MANPATH./usr/man@#&@g' src/man.conf.in && \
-	 ./configure -confdir=/etc && make && \
-	 make install ; fi
-	@make clean
-	 
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	sed -i 's@-is@&R@g' configure
+	sed -i 's@MANPATH./usr/man@#&@g' src/man.conf.in
+	./configure -confdir=/etc
+	make
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

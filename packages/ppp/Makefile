@@ -1,28 +1,32 @@
 # ppp Makefile
 
-# Package versions
 NM= ppp
 VRS= 2.4.3
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://ccache.samba.org/ftp/ppp/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= 7f3840464639f3575d08f9394cfbce65b1956aa8
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/sbin/pppd ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+	cp -a $(ROOT)/etc/ppp /etc
+	chown -R 0:0 /etc/ppp
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,46 +1,46 @@
 # Perl Makefile
 
-# Package versions
 NM= perl
-VRS= 5.8.6
+VRS= 5.8.7
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH= $(DIR)-libc-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= c9477c6fe76b200033694bdc555a0276523d4228
 
-# RULES
+PATCH1= $(DIR)-libc-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= e515154714acdbb1dbdbeb71727649895e26f50d
 
-.PHONY: stage1 clean chroot stage2
+# Targets
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -d $(WD)/lib/perl5/$(VRS) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX' && \
-	 make -j3 perl utilities && cp perl pod/pod2man $(WD)/bin && \
-	 mkdir -p $(WD)/lib/perl5/$(VRS) && cp -R lib/* $(WD)/lib/perl5/$(VRS) ; fi
-	@make clean
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+
+compile-stage1:
+	patch -Np1 -i ../$(PATCH1)
+	./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX'
+	make perl utilities
+	cp perl pod/pod2man $(WD)/bin
+	mkdir -p $(WD)/lib/perl5/$(VRS)
+	cp -R lib/* $(WD)/lib/perl5/$(VRS)
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/perl$(VRS) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure.gnu --prefix=/usr -Dpager="/bin/less -isR" && \
-	 make && make install ; fi
-	@make clean
-	
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure.gnu --prefix=/usr -Dpager="/bin/less -isR"
+	make
+	make install
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

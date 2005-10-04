@@ -1,64 +1,62 @@
 # Vim Makefile
 
-# Package versions
 NM= vim
 VRS= 6.3
 DIR= $(NM)63
+
 FILE= $(NM)-$(VRS).tar.bz2
-PATCH= $(NM)-$(VRS)-security_fix-1.patch
-LANG_PACK= $(NM)-$(VRS)-lang.tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH)
-URL2= $(HTTP)/$(NM)/$(LANG_PACK)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 76f663277140d314ecfafecb0307e832bdbbaf06
 
-# RULES
+FILE2= $(NM)-$(VRS)-lang.tar.bz2
+URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+SHA-$(FILE2)= de6df42164d875ff0cf8b1fb16fb210fd21b6938
 
-.PHONY: clean chroot stage2 stage3
+PATCH1= $(NM)-$(VRS)-security_fix-2.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 97c323f0c6ff807d89e8e3ce64f20101a097f281
+
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 chroot3:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-gvim $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make chroot-gvim $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "======> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(LANG_PACK) ] ; then $(WGET) $(URL2) && \
-	 mv $(LANG_PACK) $(SRC) ; fi
-	@if [ ! -f /usr/bin/vi ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 unpack $(SRC)/$(LANG_PACK) --strip-components=1 && \
-	 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h && \
-	 echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure --prefix=/usr --enable-multibyte && \
-	 make -j3 && make install && \
-	 ln -sf vim /usr/bin/vi ; fi && cp $(ROOT)/etc/vimrc /etc
-	@make clean
+stage2: Makefile $(FILE) $(FILE2) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(FILE2),$(PATCH1)} $(LFSSRC)
 
-stage3:
-	@echo ""
-	@echo "======> Building $(NM) in chroot (stage 3)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(LANG_PACK) ] ; then $(WGET) $(URL2) && \
-	 mv $(LANG_PACK) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gvim ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 unpack $(SRC)/$(LANG_PACK) --strip-components=1 && \
-	 echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h && \
-	 echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure --prefix=/usr --with-features=huge && \
-	 make -j3 && make install && \
-	 ln -sf vim /usr/bin/vi ; fi && cp $(ROOT)/etc/vimrc /etc
-	@make clean
+compile-stage2:
+	unpack ../$(FILE2) --strip-components=1
+	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr --enable-multibyte
+	make $(PM)
+	make install
+	ln -sf vim /usr/bin/vi
+	cp $(ROOT)/etc/vimrc /etc
+
+stage3: Makefile $(FILE) $(FILE2) $(PATCH1)
+	$(std_build)
+
+compile-stage3:
+	unpack ../$(FILE2) --strip-components=1
+	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
+	echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr --with-features=huge
+	make $(PM)
+	make install
+	ln -sf vim /usr/bin/vi
+	cp $(ROOT)/etc/vimrc /etc
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2 compile-stage3

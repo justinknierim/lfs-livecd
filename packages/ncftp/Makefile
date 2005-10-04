@@ -1,29 +1,32 @@
 # ncftp Makefile
 
-# Package versions
 NM= ncftp
 VRS= 3.1.9
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR)-src.tar.bz2
-URL= http://ftp.rge.com/pub/networking/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= 052be99800b740a50b31619ccd65fd4f082a3386
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/$(NM) ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -C libncftp shared && make -C libncftp soinstall && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make -C libncftp shared
+	make -C libncftp soinstall
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

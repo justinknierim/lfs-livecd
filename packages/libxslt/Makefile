@@ -1,30 +1,30 @@
 # libxslt Makefile
 
-# Package versions
 NM= libxslt
-VRS= 1.1.14
+VRS= 1.1.15
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
-URL= http://ftp.gnome.org/pub/GNOME/sources/libxslt/1.1/$(FILE)
 
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://xmlsoft.org/sources/$(FILE)
+SHA-$(FILE)= f0c8ef4809104bf59ebf5b23a637e7dff61a2aa4
 
+# Targets
 
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/xsltproc ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

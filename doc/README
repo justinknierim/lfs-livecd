@@ -1,0 +1,137 @@
+This is version [version] of the official Linux From Scratch LiveCD.
+
+PACKAGES
+================
+Available packages on this cd for your use:
+
+Xorg (X Window System Environment)
+
+Window Managers
+* xfce (default)
+* Ion
+
+Web Tools
+* wget (command line file retriever)
+* curl (command line file retriever)
+* lynx (text web browser)
+* links (text web browser)
+* irssi (console irc client)
+* firefox (graphical web browser)
+* xchat (x-based irc client)
+* msmtp (SMTP client for use with mutt and slrn)
+* mutt (console mail and news reader)
+* thunderbird (graphical mail and news reader)
+* slrn (console news reader)
+
+Text Editors
+* vim
+* nano
+* joe
+
+Network Tools
+* SSH server & client
+* NFS server & client
+* Samba
+* Subversion
+* cvs
+* pppd
+* rp-pppoe
+* dhcpcd
+* ncftp
+* traceroute
+
+Filesystem Programs
+* e2fsprogs
+* reiserfsprogs
+* reiser4progs
+* xfsprogs
+
+Other Programs
+* distcc
+* gpm (console mouse)
+* pciutils
+* raidtools
+
+nALFS & ALFS profile for LFS 6.1
+(A tool for automating a Linux From Scratch installation)
+
+CONFIGURING X
+================
+The Live CD attempts to configure X for your video card automatically. The
+process may fail if you have more than one video card, or if your video card
+doesn't support 24-bit color depth.
+
+You still have to edit /etc/X11/xorg.conf using vim, joe or nano in order to
+configure the keyboard layout and available video modes (otherwise the US
+English keyboard layout and the highest resolution with 60 Hz refresh rate
+will be used). Instructions for doing that are found in the BLFS book, under
+the section Configuring Xorg:
+
+http://www.linuxfromscratch.org/blfs/view/svn/x/installing.html#xorg
+
+When you are finished, run startx.
+
+NOTE: The default Window Manager is xfce which is intuitive and graphically
+pleasing. If you prefer something more minimal, edit the file ~/.xinitrc to
+read 'exec ion' or 'exec twm'.
+
+CUSTOMIZING THE CD CONTENTS
+================
+It is possible to burn a customized version of the official Linux From
+Scratch LiveCD, with your own files added. To do that, follow the
+instructions below.
+
+* Burn the official CD in multi session mode:
+    cdrecord dev=/dev/cdrom -v -multi -tao lfslivecd-x86-1-[version].iso
+
+* Prepare a directory with the files you want to add, delete or change:
+    mkdir second-session && cd second-session
+    vim path/to/new-file
+    vim path/to/file-to-be-changed
+    touch path/to/.wh.file-to-be-deleted
+    cd ..
+
+* Make an image contatining those files:
+    mkisofs -M lfslivecd-x86-6.1-1-[version].iso \
+        -C `cdrecord -msinfo dev=/dev/cdrom` \
+	-R -o second-session.iso second-session
+
+* Append the image you just created to the official Linux From Scratch
+  LiveCD:
+    cdrecord dev=/dev/cdrom -v -multi -tao second-session.iso
+
+
+AUTOSSHD
+================
+It is possible to start the sshd daemon automatically upon boot. To do that,
+you have to customize the CD as described above. Add the following files:
+
+* /.autosshd
+    This is the file that indicates that the sshd daemon should be
+    started automatically. It should be empty.
+
+* /root/.ssh/authorized_keys
+    Add your public key to that file in order to be able to log in.
+    Alternatively, modify /etc/shadow.
+
+* /etc/shadow
+    Edit this file if you want to allow root to login using a password via
+    ssh. It is more secure to use public key based authentication instead.
+
+* /etc/ssh/ssh_host_dsa_key, /etc/ssh/ssh_host_rsa_key
+    Create those files as described in the ssh-keygen(1) manual page. If you
+    don't fo that, random host keys will be generated for you automatically
+    during the boot process. This is less secure, because you can't verify
+    them.
+
+* /etc/sysconfig/network-devices/ifconfig.eth0
+    Configure a known static IP address there, as described in the LFS book,
+    section "7.12. Configuring the network Script".
+
+THANKS
+================
+Special thanks to Alexander Patrakov, Andrew Sanch, Archaic, Matthew Burgess,
+Kevin Fleming, Jim Gifford, Justin Knierim, Robert Connolly, Bruce Dubbs,
+Roel Neefs and the many others in the LFS community whose suggestions & support
+helped create this CD. Also thanks to Gerard Beekmans for the LFS project,
+without which there would be no CD.

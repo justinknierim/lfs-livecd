@@ -1,29 +1,33 @@
 # Screen Makefile
 
-# Package versions
 NM= screen
 VRS= 4.0.2
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-URL= http://ftp.gnu.org/gnu/screen/$(FILE)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
+SHA-$(FILE)= 9a96705ad49ca3437e0ae068a3c8db1b55db83ec
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/screen ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --with-socket-dir=/var/run/screen --with-sys-screenrc=/etc/screenrc && \
-	 sed -i -e "s@/usr/local/etc/screenrc@/etc/screenrc@" {etc,doc}/* && \
-	 make -j3 && make install && install -m 644 etc/etcscreenrc /etc/screenrc ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --with-socket-dir=/var/run/screen \
+	 --with-sys-screenrc=/etc/screenrc
+	sed -i -e "s@/usr/local/etc/screenrc@/etc/screenrc@" {etc,doc}/*
+	make $(PM)
+	make install
+	install -m 644 etc/etcscreenrc /etc/screenrc
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,27 +1,30 @@
 # Dialog Makefile
 
-# Package versions
 NM= dialog
 VRS= 1.0-20050306
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tgz
-URL= ftp://invisible-island.net/dialog/$(FILE)
+URL-$(FILE)= ftp://invisible-island.net/dialog/$(FILE)
+SHA-$(FILE)= c99418b18e0dae9d446b6392bc4804b11d600e3a
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/dialog ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --enable-nls && make && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --enable-nls
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,28 +1,29 @@
 # CDRTools Makefile
 
-# Package versions
 NM= cdrtools
 VRS= 2.01
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= ftp://ftp.berlios.de/pub/cdrecord/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/A-C/$(FILE)
+SHA-$(FILE)= f94cfe51dd512d4e0b9106b986bde12d4f7967ce
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(WD)/bin/mkisofs ] ; then unpack $(FILE) && cd $(DIR) && \
-	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root && \
-	 make -j3 INS_BASE=$(WD) DEFINSUSR=root DEFINSGRP=root install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	make $(PM) INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root
+	make INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

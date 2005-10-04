@@ -33,7 +33,7 @@ diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/sshd blfs-bootscripts-2005
 @@ -13,6 +13,9 @@
  case "$1" in
  	start)
- 		echo "Starting SSH Server..."
+ 		boot_mesg "Starting SSH Server..."
 +		[ -f /etc/ssh/ssh_host_key ] || ssh-keygen -q -t rsa1 -f /etc/ssh/ssh_host_key -N ""
 +		[ -f /etc/ssh/ssh_host_rsa_key ] || ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -N ""
 +		[ -f /etc/ssh/ssh_host_dsa_key ] || ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -N ""

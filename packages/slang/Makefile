@@ -1,31 +1,38 @@
 # Slang Makefile
 
-# Package versions
 NM= slang
 VRS= 1.4.9
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= ftp://space.mit.edu/pub/davis/slang/v1.4/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
+SHA-$(FILE)= 667709eb1bc1b0f68ce36b31204bf8a99d31eefa
 
-#RULES
+PATCH1= $(DIR)-luit-1.patch
+SHA-$(PATCH1)= 9d479948e7d6d387840db8b656b41163d96c1347
 
-.PHONY: clean chroot stage2
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/lib/libslang.so.1.4.9 ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../slang-1.4.9-luit-1.patch && \
-	 ./configure --prefix=/usr && \
-	 make && make install && \
-	 make elf && make install-elf && \
-	 chmod 755 /usr/lib/libslang.so.1.4.9 && /sbin/ldconfig ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=/usr
+	make
+	make install
+	make elf
+	make install-elf
+	chmod 755 /usr/lib/libslang.so.1.4.9
+	/sbin/ldconfig
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

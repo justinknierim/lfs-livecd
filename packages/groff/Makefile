@@ -1,30 +1,34 @@
 # Groff Makefile
 
-# Package versions
 NM= groff
-VRS= 1.19.1
+VRS= 1.19.2
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= b7303af986de7b7c7722c2dbad07844fac6b6343
 
-# RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-$(NM) $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "======> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gtbl ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 PAGE=$(pagesize) ./configure --prefix=/usr && make && make install && \
-	 ln -s soelim /usr/bin/zsoelim && ln -s eqn /usr/bin/geqn && \
-	 ln -s tbl /usr/bin/gtbl ; fi
-	@make clean
+stage2: Makefile $(FILE) 
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage2:
+	PAGE=$(pagesize) ./configure --prefix=/usr
+	make
+	make install
+	ln -s soelim /usr/bin/zsoelim
+	ln -s eqn /usr/bin/geqn
+	ln -s tbl /usr/bin/gtbl
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

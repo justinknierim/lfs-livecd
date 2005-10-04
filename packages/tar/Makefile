@@ -1,44 +1,52 @@
 # Tar Makefile
 
-# Package versions
 NM= tar
 VRS= 1.15.1
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-PATCH=$(DIR)-sparse_fix-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1=$(HTTP)/$(NM)/$(PATCH)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= f861b7524a0867833056dc382e68085234cae6ff
 
-# RULES
+PATCH1= $(DIR)-gcc4_fix_tests-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= ba780e0e88c7993a69d5a498912e135bf16e7df8
 
-.PHONY: stage1 clean chroot stage2
+PATCH2= $(DIR)-sparse_fix-1.patch
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= 269dfcc556b6217d27d043ea623df75e19e3d8c9
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/tar ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) && make -j3 && make install ; fi
-	@make clean
+
+# Targets
+
+include $(ROOT)/scripts/functions
+
+stage1: $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)/
+
+compile-stage1:
+	patch -Np1 -i ../$(PATCH1)
+	./configure --prefix=$(WD)
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH) $(SRC) ; fi
-	@if [ ! -f /bin/tar ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH) && \
-	 ./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin && \
-	 make -j3 && make install ; fi
-	@make clean
-	
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+	$(std_build)
+	cp $(SRC)/$(PATCH2) $(LFSSRC)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
+	make $(PM)
+	make install
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

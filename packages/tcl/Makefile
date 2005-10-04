@@ -1,24 +1,28 @@
 # Tcl Makefile
 
-# Package versions
 NM= tcl
-VRS= 8.4.9
+VRS= 8.4.11
 DIR= $(NM)$(VRS)
+
 FILE= $(DIR)-src.tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 03b03db90de2815266948db4d0380e16ca07348c
 
-# RULES
+# Targets
 
-.PHONY: stage1 clean
+include $(ROOT)/scripts/functions
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/tclsh ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 cd unix && ./configure --prefix=$(WD) && make -j3 && make install && ln -s tclsh8.4 $(WD)/bin/tclsh ; fi
+stage1: $(FILE)
+	$(std_build_noclean)
+	cp $(SRC)/$(FILE) $(LFSSRC)/
+
+compile-stage1:
+	cd unix ; ./configure --prefix=$(WD)
+	cd unix ; make $(PM)
+	cd unix ; make install
+	ln -s tclsh8.4 $(WD)/bin/tclsh
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot

@@ -1,80 +1,74 @@
-# GCC Makefile
+# Gcc Makefile
 
-# Package versions
 NM= gcc
-VRS= 3.4.3
+VRS= 4.0.1
 DIR= $(NM)-$(VRS)
-FILE= $(NM)-$(VRS).tar.bz2
-PATCH1= $(NM)-$(VRS)-no_fixincludes-1.patch
-PATCH2= $(NM)-$(VRS)-specs-2.patch
-PATCH3= $(NM)-$(VRS)-linkonce-1.patch
-URL= $(HTTP)/$(NM)/$(FILE)
-URL1= $(HTTP)/$(NM)/$(PATCH1)
-URL2= $(HTTP)/$(NM)/$(PATCH2)
-URL3= $(HTTP)/$(NM)/$(PATCH3)
 
-# RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 2152cdf8cc49de6eef27c6c34f2880cc774e6fa1
 
-.PHONY: pass1 pass2 clean chroot stage2
+PATCH1= $(DIR)-specs-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
 
-pass1:
-	@echo ""
-	@echo "=====> Building $(NM) Pass 1"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/$(NM) ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) \
-	 --disable-nls --enable-shared --enable-languages=c && \
-	 make -j3 bootstrap && \
-	 make install && ln -s gcc $(WD)/bin/cc ; fi
-	@make clean
+# Targets
 
-pass2:
-	@echo ""
-	@echo "=====> Building $(NM) Pass 2"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
-	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f .pass2 ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH2) && \
-	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib --with-local-prefix=$(WD) --enable-clocale=gnu \
-	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-languages=c,c++ --disable-libstdcxx-pch && \
-	 make -j3 && make install ; fi
-	@make clean
-	@touch .pass2
+include $(ROOT)/scripts/functions
+
+pass1: $(FILE)
+	$(sep_dir_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)/
+
+compile-pass1:
+	../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib \
+	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
+	 --enable-languages=c
+	make $(PM) bootstrap
+	make install
+	ln -s gcc $(WD)/bin/cc
+
+pass2: $(FILE) $(PATCH1)
+	$(sep_dir_build)
+	cp $(SRC)/$(PATCH1) $(LFSSRC)/
+
+compile-pass2:
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} && \
+	 sed 's@\(^NATIVE_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g' \
+	 gcc/Makefile.in.orig > gcc/Makefile.in
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.tmp} && \
+	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
+         > gcc/Makefile.in
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+	../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib \
+	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
+	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
+	 --disable-libstdcxx-pch
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv1) 'cd $(ROOT) && make ch-gcc $(chbash1)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH1) ] ; then $(WGET) $(URL1) && \
-	 mv $(PATCH1) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH2) ] ; then $(WGET) $(URL2) && \
-	 mv $(PATCH2) $(SRC) ; fi
-	@if [ ! -f $(SRC)/$(PATCH3) ] ; then $(WGET) $(URL3) && \
-	 mv $(PATCH3) $(SRC) ; fi
-	@if [ ! -f /usr/bin/gcc ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 patch -Np1 -i $(SRC)/$(PATCH1) && patch -Np1 -i $(SRC)/$(PATCH3) && \
-	 sed -i 's/install_to_$$(INSTALL_DEST) //' libiberty/Makefile.in && \
-	 mkdir ../$(NM)-build && cd ../$(NM)-build && \
-	 ../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib --enable-shared --enable-threads=posix \
-	 --enable-__cxa_atexit --enable-clocale=gnu --enable-languages=c,c++ && \
-	 make -j3 && make install && ln -s ../usr/bin/cpp /lib && ln -s gcc /usr/bin/cc ; fi
-	@make clean	
+stage2: $(FILE)
+	$(sep_dir_build)
+
+compile-stage2:
+	cd ../$(DIR) ; sed -i 's/install_to_$(INSTALL_DEST) //' \
+	 libiberty/Makefile.in
+	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
+	 gcc/Makefile.in
+	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
+	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
+	 --enable-clocale=gnu --enable-languages=c,c++
+	make $(PM)
+	make install
+	ln -sf ../usr/bin/cpp /lib
+	ln -sf gcc /usr/bin/cc
 
 clean:
-	@-rm -rf $(DIR)
-	@-rm -rf $(NM)-build
+	-rm -rf $(DIR)
+	-rm -rf $(NM)-build
+
+.PHONY: compile-pass1 clean chroot compile-pass2 compile-stage2

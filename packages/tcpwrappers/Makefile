@@ -1,36 +1,39 @@
 # tcpwrappers Makefile
 
-# Package versions
 NM= tcpwrappers
 VRS= 7.6
 DIR= tcp_wrappers_$(VRS)
-FILE= $(DIR).tar.gz
+
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/T-V/$(FILE)
+SHA-$(FILE)= 1b76da674d6557542b3cda5c55822ed7f1379127
+
 PATCH1= tcp_wrappers-$(VRS)-shared_lib_plus_plus-1.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH1)
+SHA-$(PATCH1)= 915652d43c57f346d6f0a14eeaf706bbfed98ffa
+
 PATCH2= tcp_wrappers-$(VRS)-gcc34-1.patch
-URL= http://files.ichilton.co.uk/nfs/$(FILE)
-URL1= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH1)
-URL2= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/downloads/tcp_wrappers/$(PATCH2)
+SHA-$(PATCH2)= 33ff5cb9d8d0c6a4baa1b31334613ec4781b4c30
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH1) ] ; then $(WGET) $(URL1) ; fi
-	@if [ ! -f $(PATCH2) ] ; then $(WGET) $(URL2) ; fi
-	@if [ ! -f /usr/sbin/tcpd ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH1) && \
-	 patch -Np1 -i ../$(PATCH2) && \
-	 make -j3 REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux && \
-	 make install ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	make $(PM) REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

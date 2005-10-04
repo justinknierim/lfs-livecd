@@ -1,29 +1,32 @@
 # DocBook XML DTD Makefile
 
-# Package versions
 NM= docbook-xml
 VRS= 4.4
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).zip
-URL= http://www.docbook.org/xml/$(VRS)/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/D-E/$(FILE)
+SHA-$(FILE)= 7c4d91c82ad3747e1b5600c91782758e5d91c22b
 
+# Targets
 
-
-#RULES
-
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /etc/xml/docbook ] ; then mkdir $(DIR) && cd $(DIR) && unzip ../$(FILE) && \
-	 ../install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	mkdir $(DIR)
+	cd $(DIR) ; unzip ../$(FILE)
+	make -C $(DIR) -f ../Makefile compile-$@
+	make clean
+	touch $@
+
+compile-stage2:
+	../install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

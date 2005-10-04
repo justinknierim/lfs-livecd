@@ -1,28 +1,30 @@
 # Pkgconfig Makefile
 
-# Package versions
-NM= pkgconfig
-VRS= 0.15.0
+NM= pkg-config
+VRS= 0.19
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= http://www.freedesktop.org/software/pkgconfig/releases/$(FILE)
+URL-$(FILE)= http://pkgconfig.freedesktop.org/releases/$(FILE)
+SHA-$(FILE)= b09fa43dcc44fe0db8df1c4994a8ff9eab371666
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /usr/bin/pkg-config ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

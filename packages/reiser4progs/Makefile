@@ -1,29 +1,31 @@
 # Reiser4progs Makefile
 
-# Package versions
 NM= reiser4progs
-VRS= 1.0.4
+VRS= 1.0.5
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= http://linuxberg.vc-graz.ac.at/mirror/reiserfs/reiser4progs/$(FILE)
+URL-$(FILE)= http://ftp.namesys.com/pub/reiser4progs/$(FILE) 
+SHA-$(FILE)= c2a173d34a87776da79a13c85b17cd3a14fb3abc
 
-#RULES
+# Targets
 
-.PHONY: clean chroot stage2
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /sbin/mkfs.reiser4 ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --sbindir=/sbin && \
-	 make -j3 && \
-	 make install && ln -s mkfs.reiser4 /sbin/mkreiser4fs ; fi
-	@make clean
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --sbindir=/sbin
+	make $(PM)
+	make install
+	ln -s mkfs.reiser4 /sbin/mkreiser4fs
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

@@ -1,35 +1,38 @@
 # OpenSSL Makefile
 
-# Package versions
 NM= openssl
-VRS= 0.9.7f
+VRS= 0.9.7g
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.gz
-PATCH=  $(DIR)-fix_manpages-1.patch
-URL= http://www.openssl.org/source/$(FILE)
-URL1= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH)
 
-#RULES
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+SHA-$(FILE)= 21c1f51188bed0de902985f6ed334284082cb90d
 
-.PHONY: clean chroot stage2
+PATCH1= $(DIR)-fix_manpages-1.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH1)
+SHA-$(PATCH1)= 723f730aff3c8d493f5e22bcb70734f48cfb41f4
+
+# Targets
+
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WD)/bin/$(WGET) $(URL) ; fi
-	@if [ ! -f $(PATCH) ] ; then $(WD)/bin/$(WGET) $(URL1) ; fi
-	@if [ ! -d /etc/ssl ] ; then unpack $(FILE) && cd $(DIR) && \
-	 patch -Np1 -i ../$(PATCH) && \
-	 ./config --openssldir=/etc/ssl --prefix=/usr shared && \
-	 sed -i 's/mcpu=pentium/mtune=i486/' Configure && \
-	 sed -i 's/mcpu=pentium/mtune=i486/' Makefile && \
-	 make -j3 MANDIR=/usr/share/man && make MANDIR=/usr/share/man install && \
-	 cp -r certs /etc/ssl ; fi
-	@make clean
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	./config --openssldir=/etc/ssl --prefix=/usr shared
+	sed -i 's/mcpu=pentium/mtune=i486/' Configure
+	sed -i 's/mcpu=pentium/mtune=i486/' Makefile
+	make $(PM) MANDIR=/usr/share/man
+	make MANDIR=/usr/share/man install
+	cp -r certs /etc/ssl
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

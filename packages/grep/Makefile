@@ -1,41 +1,39 @@
 # Grep Makefile
 
-# Package versions
 NM= grep
 VRS= 2.5.1a
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.bz2
-URL= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 2cd082775d30be463c0ac674a00595eb56fda22e
 
-# RULES
+# Targets
 
-.PHONY: stage1 clean chroot stage2
+include $(ROOT)/scripts/functions
 
-stage1:
-	@echo ""
-	@echo "=====> Building $(NM)"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f $(WD)/bin/grep ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=$(WD) --disable-perl-regexp && \
-	 make -j3 && make install ; fi
-	@make clean
+stage1: $(FILE)
+	$(std_build) # See the scripts/functions file for functions like this
+	cp $(SRC)/$(FILE) $(LFSSRC) # Copy LFS-Base packages to safe location
+
+compile-stage1:
+	./configure --prefix=$(WD) --disable-perl-regexp
+	make $(PM)
+	make install
 
 chroot:
-	@chroot "$(MP)" $(chenv2) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-post-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(SRC)/$(FILE) ] ; then $(WGET) $(URL) && \
-	 mv $(FILE) $(SRC) ; fi
-	@if [ ! -f /bin/grep ] ; then unpack $(SRC)/$(FILE) && cd $(DIR) && \
-	 ./configure --prefix=/usr --bindir=/bin && \
-	 make -j3 && make install ; fi
-	@make clean
-	
+stage2: Makefile $(FILE) 
+	$(std_build)
+
+compile-stage2:
+	./configure --prefix=/usr --bindir=/bin
+	make $(PM)
+	make install
 
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: compile-stage1 clean chroot compile-stage2

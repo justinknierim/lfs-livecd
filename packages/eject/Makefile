@@ -1,30 +1,31 @@
 # eject Makefile
 
-# Package versions
 NM= eject
 VRS= 2.1.0
 DIR= $(NM)-$(VRS)
+
 FILE= $(DIR).tar.gz
-URL= http://www.ibiblio.org/pub/Linux/utils/disk-management/$(FILE)
+URL-$(FILE)= http://www.ibiblio.org/pub/Linux/utils/disk-management/$(FILE)
+SHA-$(FILE)= 92059323f43093ab9f01690c97fb35f14eff4c53
 
-# RULES
+# Targets
 
-.PHONY: stage1 clean stage2 chroot
+include $(ROOT)/scripts/functions
 
 chroot:
-	@chroot "$(MP)" $(chenv3) 'cd $(ROOT) && make ch-$(NM) $(chbash2)'
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2:
-	@echo ""
-	@echo "=====> Building $(NM) in chroot"
-	@echo ""
-	@if [ ! -f $(FILE) ] ; then $(WGET) $(URL) ; fi
-	@if [ ! -f /bin/eject ] ; then unpack $(FILE) && cd $(DIR) && \
-	 ./bootstrap && \
-	 ./configure --prefix=/usr && \
-	 make -j3 && make install ; fi
-	@make clean
-	 
-# Does what it says
+stage2: Makefile $(FILE) $(PATCH1)
+	$(std_build)
+
+compile-stage2:
+	./bootstrap
+	./configure --prefix=/usr
+	make $(PM)
+	make install
+
 clean:
-	@-rm -rf $(DIR)
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2
