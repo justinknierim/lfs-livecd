@@ -1,12 +1,12 @@
 # ATK Makefile
 
 NM= atk
-VRS= 1.9.1
+VRS= 1.10.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/A-C/$(FILE)
-SHA-$(FILE)= ae8e2410f0fd5731a3b8fc902f0865f42103ffb9
+URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/1.10/$(FILE)
+SHA-$(FILE)= 74d83882dec2e9bd9233d12ae8db97064e7c3fbe
 
 # Targets
 

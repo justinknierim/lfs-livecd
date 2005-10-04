@@ -1,15 +1,12 @@
 # Slang Makefile
 
 NM= slang
-VRS= 1.4.9
+VRS= 2.0.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
-SHA-$(FILE)= 667709eb1bc1b0f68ce36b31204bf8a99d31eefa
-
-PATCH1= $(DIR)-luit-1.patch
-SHA-$(PATCH1)= 9d479948e7d6d387840db8b656b41163d96c1347
+URL-$(FILE)= http://gd.tuwien.ac.at/editors/davis/slang/v2.0/$(FILE)
+SHA-$(FILE)= ac03f76e032973eebef19888606748b335c49cf0
 
 # Targets
 
@@ -19,17 +16,15 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/usr
+	./configure --prefix=/usr --sysconfdir=/etc
 	make
-	make install
 	make elf
 	make install-elf
-	chmod 755 /usr/lib/libslang.so.1.4.9
+	chmod 755 /usr/lib/libslang.so.2.0.4
 	/sbin/ldconfig
 
 clean:
