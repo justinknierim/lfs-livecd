@@ -1,0 +1,42 @@
+# GPM Makefile
+
+NM= gpm
+VRS= 1.20.1
+DIR= $(NM)-$(VRS)
+
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/F-H/$(FILE)
+SHA-$(FILE)= c48d937e62abb438c2f6439b34ef3332c89af8d1
+
+PATCH1= $(DIR)-segfault-1.patch
+URL-$(PATCH1)= $(HTTPBLFS)/F-H/$(PATCH1)
+SHA-$(PATCH1)= 97fd239c8f95784550ec97933c85a57dae31e3d9
+
+PATCH2= $(DIR)-silent-1.patch
+URL-$(PATCH2)= $(HTTPBLFS)/F-H/$(PATCH2)
+SHA-$(PATCH2)= 38e2e703ccb57becf8dadd0302f2da313932c4eb
+
+# Targets
+
+include $(ROOT)/scripts/functions
+
+chroot:
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+	$(std_build)
+
+compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	./configure --prefix=/usr --sysconfdir=/etc --without-curses
+	LDFLAGS="-lm" make
+	make install
+	cp conf/gpm-root.conf /etc
+	/sbin/ldconfig
+
+clean:
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

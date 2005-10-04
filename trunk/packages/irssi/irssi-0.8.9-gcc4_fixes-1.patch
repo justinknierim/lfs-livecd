@@ -1,0 +1,32 @@
+Submitted By: Justin Knierim <justin at linuxfromscratch dot org>
+Date: 2005-09-24
+Initial Package Version: 0.8.9
+Upstream Status: "Fixed"
+Origin: Pawel Sikora <pluto at pld-linux dot org>
+Description: Fixes a compilation problem with gcc-4.0.x as described on http://bugs.irssi.org/?do=details&id=219.
+
+diff -Naur irssi-orig/src/core/misc.h irssi-0.8.9/src/core/misc.h
+--- irssi-orig/src/core/misc.h	2003-01-30 20:10:02.000000000 -0800
++++ irssi-0.8.9/src/core/misc.h	2005-09-24 17:19:14.000000000 -0700
+@@ -1,6 +1,10 @@
+ #ifndef __MISC_H
+ #define __MISC_H
+ 
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ /* `str' should be type char[MAX_INT_STRLEN] */
+ #define ltoa(str, num) \
+ 	g_snprintf(str, sizeof(str), "%d", num)
+diff -Naur irssi-orig/src/perl/module.h irssi-0.8.9/src/perl/module.h
+--- irssi-orig/src/perl/module.h	2001-12-13 17:54:12.000000000 -0800
++++ irssi-0.8.9/src/perl/module.h	2005-09-24 17:20:46.000000000 -0700
+@@ -1,3 +1,7 @@
++#ifdef HAVE_CONFIG_H
++#include "config.h"
++#endif
++
+ #ifdef NEED_PERL_H
+ #  include <EXTERN.h>
+ #  ifndef _SEM_SEMUN_UNDEFINED

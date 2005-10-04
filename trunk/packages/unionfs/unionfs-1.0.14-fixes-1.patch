@@ -1,0 +1,20 @@
+Submitted by: Justin Knierim (justin at linuxfromscratch dot org)
+Date: 2005-09-22
+Initial Package Version: 1.0.14
+Origin: Junjiro Okajima
+Upstream Status: Submitted
+Description: Fixes a off by one error in unionfs which causes
+             instability when a file is overwritten multiple times.
+
+diff -Naur unionfs-orig/inode.c unionfs-1.0.14/inode.c
+--- unionfs-orig/inode.c	2005-09-15 14:55:43.000000000 -0400
++++ unionfs-1.0.14/inode.c	2005-09-22 21:38:14.000000000 -0400
+@@ -45,7 +45,7 @@
+ 	hidden_dentry = dtohd(dentry);
+ 
+ 	/* check if whiteout exists in this branch, i.e. lookup .wh.foo first */
+-	name = KMALLOC(dentry->d_name.len + sizeof(".wh"), GFP_UNIONFS);
++	name = KMALLOC(dentry->d_name.len + sizeof(".wh."), GFP_UNIONFS);
+ 	if (!name) {
+ 		err = -ENOMEM;
+ 		goto out;

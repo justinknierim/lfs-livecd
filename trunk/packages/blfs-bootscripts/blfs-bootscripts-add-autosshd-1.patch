@@ -1,0 +1,62 @@
+diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd blfs-bootscripts-20050313/blfs/init.d/autosshd
+--- blfs-bootscripts-20050313-ORIG/blfs/init.d/autosshd	1970-01-01 05:00:00.000000000 +0500
++++ blfs-bootscripts-20050313/blfs/init.d/autosshd	2005-05-13 09:07:15.000000000 +0600
+@@ -0,0 +1,25 @@
++#!/bin/sh
++# Begin $rc_base/init.d/autosshd
++
++. /etc/sysconfig/rc
++. $rc_functions
++
++case "$1" in
++	start)
++		if [ -f /.autosshd ] ; then
++			/etc/rc.d/init.d/sshd start
++		fi
++		;;
++	stop)
++		if statusproc /usr/sbin/sshd | grep -q "Process ID"
++		then
++			/etc/rc.d/init.d/sshd stop
++		fi
++		;;
++	*)
++		echo "Usage: $0 {start|stop}"
++		exit 1
++		;;
++esac
++
++# End $rc_base/init.d/autosshd
+diff -Naur blfs-bootscripts-20050313-ORIG/blfs/init.d/sshd blfs-bootscripts-20050313/blfs/init.d/sshd
+--- blfs-bootscripts-20050313-ORIG/blfs/init.d/sshd	2004-09-29 10:00:58.000000000 +0600
++++ blfs-bootscripts-20050313/blfs/init.d/sshd	2005-05-13 09:09:05.000000000 +0600
+@@ -13,6 +13,9 @@
+ case "$1" in
+ 	start)
+ 		boot_mesg "Starting SSH Server..."
++		[ -f /etc/ssh/ssh_host_key ] || ssh-keygen -q -t rsa1 -f /etc/ssh/ssh_host_key -N ""
++		[ -f /etc/ssh/ssh_host_rsa_key ] || ssh-keygen -q -t rsa -f /etc/ssh/ssh_host_rsa_key -N ""
++		[ -f /etc/ssh/ssh_host_dsa_key ] || ssh-keygen -q -t dsa -f /etc/ssh/ssh_host_dsa_key -N ""
+ 		loadproc /usr/sbin/sshd
+ 		;;
+ 
+diff -Naur blfs-bootscripts-20050313-ORIG/Makefile blfs-bootscripts-20050313/Makefile
+--- blfs-bootscripts-20050313-ORIG/Makefile	2005-03-07 08:48:33.000000000 +0500
++++ blfs-bootscripts-20050313/Makefile	2005-05-13 09:07:03.000000000 +0600
+@@ -54,6 +54,16 @@
+ 	install -m $(CONFMODE) blfs/sysconfig/autofs.conf $(EXTDIR)/sysconfig/
+ 	ln -sf  ../init.d/autofs $(EXTDIR)/rc.d/rcsysinit.d/S45autofs
+ 
++install-autosshd: create-dirs
++	install -m ${MODE} blfs/init.d/autosshd       ${EXTDIR}/rc.d/init.d/
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc0.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc1.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc2.d/K40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc3.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc4.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc5.d/S40autosshd
++	ln -sf  ../init.d/autosshd ${EXTDIR}/rc.d/rc6.d/K40autosshd
++
+ install-bind: create-dirs
+ 	install -m ${MODE} blfs/init.d/bind       ${EXTDIR}/rc.d/init.d/
+ 	ln -sf  ../init.d/bind ${EXTDIR}/rc.d/rc0.d/K49bind

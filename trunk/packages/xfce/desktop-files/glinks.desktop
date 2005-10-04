@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Exec="links -g"
+Name=Links (graphical)
+Terminal=0
+Comment=Links (graphical)
+Icon=html
+MimeType=text/html
+XClassHintResName=Links
+Categories=Application;Network;

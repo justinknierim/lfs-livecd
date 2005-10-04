@@ -1,0 +1,41 @@
+# xfce Makefile
+
+NM= xfce
+VRS= 4.2.2
+DIR= $(NM)-$(VRS)
+
+FILE= $(DIR)-src.tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/W-Z/$(FILE)
+SHA-$(FILE)= e589ded559cf86fbb92b85711081df0aca00249d
+
+# Targets
+
+include $(ROOT)/scripts/functions
+
+chroot:
+	chroot "$(MP)" $(chenv-blfs) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	cd src; for i in `cat ../../list`; \
+	do unpack $$i.tar.gz ; \
+	cd $$i ; ./configure --prefix=/usr --sysconfdir=/etc \
+	 --enable-debug=no --enable-panel --enable-startup-notification \
+	 --libexecdir=/usr/sbin ; \
+	make $(PM) ; \
+	make install ; cd .. ; done 
+	cp $(ROOT)/root/.xinitrc /root/
+	cp ../desktop-files/* /usr/share/applications
+	sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
+	sed -i -e 's/Mozilla/Firefox/' /etc/xdg/xfce4/desktop/menu.xml*
+	rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
+	for f in /etc/xdg/xfce4/panel/contents.xml* ; do ../cleanup-panel.pl $$f ; done
+	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
+
+clean:
+	-rm -rf $(DIR)
+
+.PHONY: clean chroot compile-stage2

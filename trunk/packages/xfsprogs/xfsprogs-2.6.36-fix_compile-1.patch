@@ -1,0 +1,18 @@
+Submitted By: Jeremy Huntwork <jhuntwork at linuxfromscratch dot org>
+Date: 2005-01-21
+Initial Package Version: 2.6.25
+Upstream Status: Not submitted [Test version]
+Description: Allows xfsprogs to compile cleanly with gcc-3.4.3
+
+diff -Naur xfsprogs-2.6.25.orig/libxfs/xfs_bmap.c xfsprogs-2.6.25/libxfs/xfs_bmap.c
+--- xfsprogs-2.6.25.orig/libxfs/xfs_bmap.c	2004-10-13 00:26:05.000000000 +0000
++++ xfsprogs-2.6.25/libxfs/xfs_bmap.c	2005-01-21 21:30:08.530616880 +0000
+@@ -196,8 +196,6 @@
+ 	}
+ done:
+ #ifdef DEBUG
+-	if (!error)
+-		xfs_bmap_check_leaf_extents(*curp, ip, whichfork);
+ #endif
+ 	*logflagsp = logflags;
+ 	return error;

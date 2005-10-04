@@ -1,0 +1,32 @@
+Submitted By: Justin Knierim <justin at linuxfromscratch dot org>
+Date: 2005-09-24
+Initial Package Version: 1.4.2.1
+Upstream Status: Unknown
+Origin: bugs.mutt.org - Post from user sharninder to Bug 2062/2063
+Description: Fixes compile error when compiled with gcc-4.0.x, basically
+changing how the structure is created.
+
+diff -Naur mutt-orig/keymap.c mutt-1.4.2.1/keymap.c
+--- mutt-orig/keymap.c	2001-10-16 07:29:27.000000000 -0700
++++ mutt-1.4.2.1/keymap.c	2005-09-24 19:34:42.000000000 -0700
+@@ -28,7 +28,7 @@
+ 
+ #include "functions.h"
+ 
+-struct mapping_t Menus[] = {
++struct mapping_t *Menus = {
+  { "alias",	MENU_ALIAS },
+  { "attach",	MENU_ATTACH },
+  { "browser",	MENU_FOLDER },
+diff -Naur mutt-orig/keymap.h mutt-1.4.2.1/keymap.h
+--- mutt-orig/keymap.h	2001-09-11 04:20:34.000000000 -0700
++++ mutt-1.4.2.1/keymap.h	2005-09-24 19:33:32.000000000 -0700
+@@ -80,7 +80,7 @@
+ /* dokey() records the last real key pressed  */
+ extern int LastKey;
+ 
+-extern struct mapping_t Menus[];
++extern struct mapping_t *Menus;
+ 
+ struct binding_t
+ {

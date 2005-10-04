@@ -1,0 +1,14 @@
+" Begin /etc/vimrc
+
+set nocompatible
+set backspace=2
+syntax on
+if (&term == "iterm") || (&term == "putty")
+  set background=dark
+endif
+if (&term == "xterm") || (&term == "xterm-color")
+  set background=light
+endif
+set ruler
+
+" End /etc/vimrc

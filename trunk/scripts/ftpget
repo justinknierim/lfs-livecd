@@ -1,0 +1,13 @@
+#!/bin/sh
+VERS="$1"
+if [ ! -f wget-$1.tar.gz ] ; then
+ftp -n << END
+open ftp.gnu.org
+user anonymous
+passive
+binary
+cd gnu/wget
+get wget-$1.tar.gz
+bye
+END
+fi

@@ -1,0 +1,471 @@
+#
+# Makefiles for automating the LFS LiveCD build
+#
+# Written by Jeremy Huntwork | jhuntwork@linuxfromscratch.org
+# Several additions and edits by Alexander Patrakov, Justin Knierim and
+# Thomas Pegg
+#
+# Version for x86 arch using LFS 6.2
+#
+#==============================================================================
+#
+# Unless otherwise noted, please try to keep all line lengths below 80 chars. 
+#
+
+# Machine architecure, LiveCD version, and Linux kernel version.
+# Edit the ARCH and VERSION variables if you are building for a non-x86 arch.
+#==============================================================================
+export LFS-ARCH := x86
+export VERSION := $(LFS-ARCH)-6.2-pre1
+export KVERS := 2.6.12.5
+
+# Edit this line to match the mount-point of the partition you'll be using to
+# build the cd.
+#==============================================================================
+export MP := /mnt/lfs
+
+# Timezone, obviously ;)
+#==============================================================================
+export timezone := GMT
+
+# Page size for groff
+#==============================================================================
+export pagesize := letter
+
+# Top-level of these Makefiles. Edit this if you've named this directory
+# differently. (The beginning '/' is necessary - this is *not* an absolute file
+# path.)
+#==============================================================================
+export ROOT := /lfs-livecd
+
+# Parallel Build Level
+#==============================================================================
+export PM := -j3
+
+# Default http server for the lfs-base packages
+#==============================================================================
+export HTTP := http://ftp.lfs-matrix.net/pub/lfs/conglomeration
+export HTTPBLFS := http://ftp.lfs-matrix.net/pub/BLFS/SVN
+
+# Directory variables
+#==============================================================================
+export HOSTNAME := lfslivecd
+export WD := /tools
+export SRC := /sources
+export LFSSRC := /lfs-sources
+export PKG := packages
+export MKTREE := $(MP)$(ROOT)
+
+# Environment Variables
+# The following lines need to be all on one line - no newlines.
+#===============================================================================
+export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+
+export lfsbash := set +h && umask 022 && cd $(MKTREE)
+
+export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+
+export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+
+export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
+
+# More Environment Variables
+#==============================================================================
+ifeq ($(LFS-ARCH),x86)
+export CFLAGS := -Os -s -march=i486
+export CXXFLAGS := $(CFLAGS)
+else
+export CFLAGS := -Os -s
+export CXXFLAGS := $(CFLAGS)
+endif
+export chbash-pre-bash := SHELL=$(WD)/bin/bash
+export chbash-post-bash := SHELL=/bin/bash
+export WHICH= $(WD)/bin/which
+export WGET= wget
+
+export BRW= "[0;1m"
+export RED= "[0;31m"
+export GREEN= "[0;32m"
+export ORANGE= "[0;33m"
+export BLUE= "[0;44m"
+export WHITE= "[00m"
+
+FTPGET= $(WD)/bin/ftpget
+WGET_V= 1.10.1
+
+# TARGETS
+#==============================================================================
+#
+# The build starts and ends here, first building the dependency targets,
+# lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
+
+all: test-host lfs-base extend-lfs iso
+	@echo "The livecd, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
+
+test-host:
+	@if [ `whoami` != "root" ] ; then \
+	 echo "You must be logged in as root." && exit 1 ; fi
+
+# This target builds just a base LFS system, minus the kernel and bootscripts
+#==============================================================================
+lfs-base: lfsuser
+	@if [ ! -d $(MP)$(WD)/bin ] ; then mkdir -p $(MP)$(WD)/bin ; fi
+	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
+	@if [ ! -d $(MP)$(LFSSRC) ] ; then mkdir $(MP)$(LFSSRC) ; fi
+	@-ln -nsf $(MP)$(WD) /
+	@-ln -nsf $(MP)$(SRC) /
+	@-ln -nsf $(MP)$(ROOT) /
+	@-ln -nsf $(MP)$(LFSSRC) /
+	@-make unamemod
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
+	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
+	@cp $(ROOT)/scripts/unpack $(WD)/bin
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
+	@touch $(PKG)/wget/.pass2
+	@make prep-chroot
+	@-mkdir $(MP)/bin
+	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
+	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
+	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
+	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
+	 cd $(ROOT) && make pre-bash $(chbash-pre-bash)'
+	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
+	 make post-bash $(chbash-post-bash)'
+	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
+
+extend-lfs: prep-chroot
+	@cp $(WD)/bin/which $(MP)/usr/bin
+	@cp $(ROOT)/scripts/unpack $(MP)/bin
+ifeq ($(LFS-ARCH),sparc)
+	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
+	 make sparc-blfs $(chbash-post-bash)'
+else
+	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
+	 make blfs $(chbash-post-bash)'
+endif
+	@make unmount
+	@touch $@
+
+lfsuser:
+	@-groupadd lfs
+	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+	@touch $@
+
+pre-which:
+	@echo "#!/bin/sh" > $(WHICH)
+	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
+	@chmod 755 $(WHICH)
+
+pre-wget: 
+	@if [ ! -f $(WD)/bin/ftpget ] ; then \
+	 install -m755 $(ROOT)/scripts/ftpget $(WD)/bin/ ; fi
+	@$(MAKE) -C $(PKG)/wget prebuild
+
+unamemod:
+	@if [ ! -d ${WD}/bin ] ; then mkdir ${WD}/bin ; fi
+	@install -m 755 uname/uname ${WD}/bin/
+	@touch $@
+
+tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
+	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
+	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
+	lfs-binutils-pass2 lfs-gawk-scpt lfs-coreutils-scpt \
+	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt \
+	lfs-make-scpt lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt \
+	lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
+	lfs-bash-scpt lfs-m4-scpt lfs-util-linux-scpt lfs-perl-scpt \
+	lfs-wget-scpt lfs-strip
+	@cp /etc/resolv.conf $(WD)/etc
+
+prep-chroot:
+	@-mkdir -p $(MP)/{proc,sys}
+	@-mount -t proc proc $(MP)/proc
+	@-mount -t sysfs sysfs $(MP)/sys
+	@-mount -f -t tmpfs none $(MP)/dev
+	@-mount -f -t tmpfs tmpfs $(MP)/dev/shm
+	@-mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
+	@touch $@
+
+pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages \
+	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-coreutils \
+	ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk \
+	ch-m4 ch-bison ch-gpm ch-ncurses ch-readline ch-vim ch-less ch-groff \
+	ch-sed ch-flex ch-gettext ch-inetutils ch-iproute2 ch-perl ch-texinfo \
+	ch-autoconf ch-automake ch-bash
+
+post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
+	ch-grep ch-grub ch-gzip ch-hotplug ch-man ch-make \
+	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
+	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
+
+blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano ch-joe \
+	ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
+	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
+	ch-fontconfig ch-Xorg ch-freefont ch-inputattach ch-fonts-dejavu \
+	update-fontsdir ch-libjpeg ch-libtiff ch-links ch-openssh \
+	ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-pango ch-atk ch-gtk2 \
+	ch-cvs ch-popt ch-samba ch-libIDL ch-firefox ch-thunderbird \
+	ch-startup-notification chroot-gvim ch-xfce ch-lua ch-ion ch-irssi \
+	ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
+	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \
+	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
+	ch-squashfs ch-cpio ch-mutt ch-msmtp ch-slrn ch-mdadm ch-which \
+	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
+	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile
+ifeq ($(LFS-ARCH),ppc)
+	make ch-yaboot
+endif
+
+sparc-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano \
+	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
+	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-links ch-openssh \
+	ch-pkgconfig ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
+	ch-portmap ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils \
+	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
+	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-slrn \
+	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
+	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts
+
+wget-list:
+	@>wget-list ; \
+	 for DIR in packages/* ; do \
+	    make -C $${DIR} wget-list-entry || echo Never mind. ; \
+	 done ; \
+	 sed -i '/^$$/d' wget-list
+
+# Targets for building packages individually. Useful for troubleshooting.
+# These do not generally get used as part of the script. They're for manual
+# use only ie, 'make [target]'
+#==============================================================================
+
+# The following takes the form 'make lfs-[package name]-only'	
+lfs-%-only: unamemod lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-scpt'"
+
+# The following two take the form 'make lfs-[package name]-only-pass#'	
+lfs-%-only-pass1: unamemod lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass1'"
+
+lfs-%-only-pass2: unamemod lfsuser
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass2'"
+
+# The following takes the form 'make [package name]-only-ch'	
+%-only-ch: prep-chroot
+	make -C $(PKG)/$* chroot
+	make unmount
+
+gvim: prep-chroot
+	make -C $(PKG)/vim chroot3
+	make unmount
+
+# The targets below can be called manually, but are also used by the
+# scripts internally.
+#==============================================================================
+
+createdirs:
+	@-$(WD)/bin/install -d /{bin,boot,dev,etc/opt,home,lib,mnt}
+	@-$(WD)/bin/install -d /{sbin,srv,usr/local,var,opt}
+	@-$(WD)/bin/install -d /root -m 0750
+	@-$(WD)/bin/install -d /tmp /var/tmp -m 1777
+	@-$(WD)/bin/install -d /media/{floppy,cdrom}
+	@-$(WD)/bin/install -d /usr/{bin,include,lib,sbin,share,src}
+	@-$(WD)/bin/ln -s share/{man,doc,info} /usr
+	@-$(WD)/bin/install -d /usr/share/{doc,info,locale,man}
+	@-$(WD)/bin/install -d /usr/share/{misc,terminfo,zoneinfo}
+	@-$(WD)/bin/install -d /usr/share/man/man{1,2,3,4,5,6,7,8}
+	@-$(WD)/bin/install -d /usr/local/{bin,etc,include,lib,sbin,share,src}
+	@-$(WD)/bin/ln -s share/{man,doc,info} /usr/local
+	@-$(WD)/bin/install -d /usr/local/share/{doc,info,locale,man}
+	@-$(WD)/bin/install -d /usr/local/share/{misc,terminfo,zoneinfo}
+	@-$(WD)/bin/install -d /usr/local/share/man/man{1,2,3,4,5,6,7,8}
+	@-$(WD)/bin/install -d /var/{lock,log,mail,run,spool}
+	@-$(WD)/bin/install -d /var/{opt,cache,lib/{misc,locate},local}
+	@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
+	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
+	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
+	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
+	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
+	@-$(WD)/bin/ln -s bash /bin/sh
+
+createfiles:
+	@echo "root:x:0:0:root:/root:/bin/bash" > /etc/passwd
+	@echo "root:x:0:" > /etc/group
+	@echo "bin:x:1:" >> /etc/group
+	@echo "sys:x:2:" >> /etc/group
+	@echo "kmem:x:3:" >> /etc/group
+	@echo "tty:x:4:" >> /etc/group
+	@echo "tape:x:5:" >> /etc/group
+	@echo "daemon:x:6:" >> /etc/group
+	@echo "floppy:x:7:" >> /etc/group
+	@echo "disk:x:8:" >> /etc/group
+	@echo "lp:x:9:" >> /etc/group
+	@echo "dialout:x:10:" >> /etc/group
+	@echo "audio:x:11:" >> /etc/group
+	@echo "video:x:12:" >> /etc/group
+	@echo "utmp:x:13:" >> /etc/group
+	@echo "usb:x:14:" >> /etc/group
+	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
+	@chgrp utmp /var/run/utmp /var/log/lastlog
+	@chmod 664 /var/run/utmp /var/log/lastlog
+	@mv $(WD)/etc/resolv.conf /etc
+
+popdev:
+	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
+	 mknod -m 666 /dev/null c 1 3 ; fi
+	@if ! tail -n 3 /proc/mounts | grep -q "dev tmpfs" ; then \
+	 mount -n -t tmpfs tmpfs /dev ; fi
+	@-mknod -m 662 /dev/console c 5 1
+	@-mknod -m 666 /dev/null c 1 3
+	@-mknod -m 666 /dev/zero c 1 5
+	@-mknod -m 666 /dev/ptmx c 5 2
+	@-mknod -m 666 /dev/tty c 5 0
+	@-mknod -m 444 /dev/random c 1 8
+	@-mknod -m 444 /dev/urandom c 1 9
+	@-chown root:tty /dev/{console,ptmx,tty}
+	@-ln -s /proc/self/fd /dev/fd
+	@-ln -s /proc/self/fd/0 /dev/stdin
+	@-ln -s /proc/self/fd/1 /dev/stdout
+	@-ln -s /proc/self/fd/2 /dev/stderr
+	@-ln -s /proc/kcore /dev/core
+	@-mkdir /dev/pts && mount -t devpts -o gid=4,mode=620 none /dev/pts
+	@-mkdir /dev/shm && mount -t tmpfs none /dev/shm
+
+# Do not call the targets below manually! They are used internally and must be
+# called by other targets.
+#==============================================================================
+
+lfs-%-scpt:
+	$(MAKE) -C $(PKG)/$* stage1
+
+lfs-%-pass1:
+	$(MAKE) -C $(PKG)/$* pass1
+
+lfs-%-pass2:
+	$(MAKE) -C $(PKG)/$* pass2
+
+lfs-adjust-toolchain:
+	$(MAKE) -C $(PKG)/binutils adjust-toolchain
+
+lfs-strip:
+	@-strip --strip-debug $(WD)/lib/*
+	@-strip --strip-unneeded $(WD)/{,s}bin/*
+	@-rm -rf $(WD)/{doc,info,man}
+	@touch $@
+
+ch-%:
+	make -C $(PKG)/$* stage2
+
+re-adjust-toolchain:
+	make -C $(PKG)/binutils re-adjust-toolchain
+
+final-environment:
+	@cp -ra $(ROOT)/etc/sysconfig /etc
+	@-cp $(ROOT)/etc/inputrc /etc
+	@-cp $(ROOT)/etc/bashrc /etc
+	@-cp $(ROOT)/etc/profile /etc
+	@-dircolors -p > /etc/dircolors
+	@-cp $(ROOT)/etc/hosts /etc
+	@-cp $(ROOT)/etc/fstab /etc
+
+update-fontsdir:
+	cd /usr/X11R6/lib/X11/fonts/TTF ; /usr/X11R6/bin/mkfontscale ; \
+	/usr/X11R6/bin/mkfontdir ; /usr/bin/fc-cache -f
+
+chroot-gvim:
+	make -C $(PKG)/vim stage3
+
+# Targets to create the iso
+#==============================================================================
+
+prepiso: unmount
+	@-rm $(MP)/etc/rc.d/rc{2,3,5}.d/{K,S}21xprint
+	@-rm $(MP)/root/.bash_history
+	@>$(MP)/var/log/btmp
+	@>$(MP)/var/log/wtmp
+	@>$(MP)/var/log/lastlog
+	@install -m644 etc/issue $(MP)/etc/issue
+ifeq ($(LFS-ARCH),x86)
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
+endif
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
+	@install -m644 doc/README $(MP)/root/README
+	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
+	@install -m600 root/.bashrc $(MP)/root/.bashrc
+	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
+	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
+	@install -m755 scripts/{net-setup,greeting,livecd-login,ll,shutdown-helper} $(MP)/usr/bin/
+	@cp -ra root $(MP)/etc/skel
+	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
+	@-mkdir $(MP)/iso
+	@cp -rav $(MP)/lfs-sources $(MP)/iso
+	@cp -rav $(MP)/boot $(MP)/iso
+	@touch $@
+
+$(MP)/iso/.root.sqfs:
+	@$(WD)/bin/mksquashfs $(MP) .root.sqfs -info -e \
+	 boot sources lfs-sources tools iso lfs-livecd lost+found tmp proc >sqfs.log 2>&1 && \
+	 mv .root.sqfs $@
+
+iso: prepiso $(MP)/iso/.root.sqfs
+ifeq ($(LFS-ARCH),x86)
+	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l -L -D -o \
+	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
+	-V "lfslivecd-$(VERSION)" ./
+endif
+ifeq ($(LFS-ARCH),ppc)
+	@cd $(MP) ; ./usr/bin/mkisofs -hfs -part \
+	-map $(MKTREE)/$(PKG)/yaboot/map.hfs -no-desktop \
+	-hfs-volid "lfslivecd-$(VERSION)" -V "lfslivecd-$(VERSION)" \
+	-hfs-bless iso/boot -r -v -o $(MKTREE)/lfslivecd-$(VERSION).iso iso \
+	 >$(MKTREE)/iso.log 2>&1
+	@if ! grep -q "Blessing" $(MKTREE)/iso.log ; then \
+	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
+endif
+
+# Targets to clean your tree. 
+#==============================================================================
+
+clean: unmount
+	@-rm -rf $(WD) $(MP)$(WD)
+	@-userdel lfs
+	@-groupdel lfs
+	@-rm -rf /home/lfs
+	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip}
+	@-rm /{$(WD),$(SRC),$(ROOT),$(LFSSRC)}
+	@-rm {sqfs.log,lfs-strip}
+	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
+	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
+	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
+	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
+	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
+	@find $(PKG)/binutils/* -xtype d -exec rm -rf \{} \;
+	@rm -f $(PKG)/wget/prebuild
+	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
+
+scrub: clean
+	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
+	 usr var ; do rm -rf $(MP)/$$i ; done
+	@-rm lfslivecd-$(VERSION).iso
+
+clean_sources:
+	@-rm $(SRC) ; rm -rf $(LFSSRC) $(MP)$(LFSSRC)
+	@find packages/* -xtype l -exec rm -f \{} \;
+
+unmount:
+	@-umount $(MP)/dev/shm
+	@-umount $(MP)/dev/pts
+	@-umount $(MP)/dev
+	@-umount $(MP)/proc
+	@-umount $(MP)/sys
+	@rm -f $(ROOT)/prep-chroot
+
+.PHONY: unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
+	final-environment re-adjust-toolchain ch-% lfs-adjust-toolchain \
+	lfs-%-scpt lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
+	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
+	lfs-rm-wget blfs post-bash pre-bash tools pre-wget pre-which

@@ -1,0 +1,81 @@
+#==============================================================================
+# Functions for use in the LiveCD Makefiles
+#
+# Authors: Jeremy Huntwork, Alexander Patrakov
+# Date  : 2005-07-17
+#==============================================================================
+
+define echo_message
+	@echo $(BRW)
+	@echo ================================================================================
+	@echo $(BRW)$(1) $(ORANGE)$(NM)-$(VRS)$(BRW) for target $(ORANGE)$@$(BRW)
+	@echo ================================================================================$(WHITE)
+endef
+
+define OK
+	@echo $(GREEN)=====================================[ OK ]=====================================$(WHITE)
+endef
+
+define std_build
+	@$(call echo_message, Building)
+        @unpack $(FILE) >$(DIR)-$@.log 2>&1
+        @make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+        @make clean >>$(DIR)-$@.log 2>&1
+        @touch $@
+endef
+
+define std_build_noclean
+	@$(call echo_message, Building)
+        @unpack $(FILE) >$(DIR)-$@.log 2>&1
+        @make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+        @touch $@
+endef
+
+define sep_dir_build
+	@$(call echo_message, Building)
+	@unpack $(FILE) >$(DIR)-$@.log 2>&1
+	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
+	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
+	@$(MAKE) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@make clean >>$(DIR)-$@.log 2>&1
+	@touch $@
+endef
+
+define sep_dir_build_noclean
+	@$(call echo_message,Building)
+	@unpack $(FILE) >$(DIR)-$@.log 2>&1
+	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
+	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
+	@$(MAKE) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@touch $@
+endef
+
+# This takes the form of 'download [filename] [url] [sha1sum]'
+define download
+	@cd $(SRC) ; if [ ! -f $(1) ] ; then $(WGET) $(2) ; \
+	 elif ! echo "$(3)  $(SRC)/$(1)" | sha1sum -c - >/dev/null 2>/dev/null ; then \
+	 $(WGET) -c $(2) ; fi
+	@if echo "$(3)  $(SRC)/$(1)" | sha1sum -c - >/dev/null 2>/dev/null ; then \
+	 echo $(BRW)sha1sum check on $(SRC)/$(1): $(GREEN)[ OK ]$(WHITE); \
+	 else echo $(BRW)sha1sum check on $(SRC)/$(1): $(RED)[ FAILED ]$(WHITE); exit 1 ; fi
+	@ln -sf $(SRC)/$(1) .
+endef
+
+%.gz %.tgz %.bz2 %.zip %.patch %.rules %.ttf:
+	$(call download,$@,$(URL-$@),$(SHA-$@))
+
+wget-list-entry:
+	@echo $(URL-$(FILE)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE1)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE2)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE3)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE4)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE5)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH1)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH2)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH3)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH4)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH5)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH6)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(PATCH7)) >>$(MKTREE)/wget-list
