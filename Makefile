@@ -291,22 +291,8 @@ createdirs:
 	@-$(WD)/bin/ln -s bash /bin/sh
 
 createfiles:
-	@echo "root:x:0:0:root:/root:/bin/bash" > /etc/passwd
-	@echo "root:x:0:" > /etc/group
-	@echo "bin:x:1:" >> /etc/group
-	@echo "sys:x:2:" >> /etc/group
-	@echo "kmem:x:3:" >> /etc/group
-	@echo "tty:x:4:" >> /etc/group
-	@echo "tape:x:5:" >> /etc/group
-	@echo "daemon:x:6:" >> /etc/group
-	@echo "floppy:x:7:" >> /etc/group
-	@echo "disk:x:8:" >> /etc/group
-	@echo "lp:x:9:" >> /etc/group
-	@echo "dialout:x:10:" >> /etc/group
-	@echo "audio:x:11:" >> /etc/group
-	@echo "video:x:12:" >> /etc/group
-	@echo "utmp:x:13:" >> /etc/group
-	@echo "usb:x:14:" >> /etc/group
+	@cp $(WD)/etc/passwd /etc
+	@cp $(WD)/etc/group /etc
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
