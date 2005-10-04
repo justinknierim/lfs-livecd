@@ -26,7 +26,6 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	groupadd mail
 	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH2)
 	./configure --prefix=/usr --sysconfdir=/etc --enable-imap \
