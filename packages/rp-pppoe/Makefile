@@ -26,7 +26,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	sed -i s@/usr/bin/logger@/bin/logger@ \
-	 scripts/adsl-{connect,setup,stop}.in
+	 scripts/pppoe-{connect,setup,stop}.in
 	cd src ; ./configure
 	cd src ; make
 	cd src ; make install
