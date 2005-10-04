@@ -46,11 +46,18 @@ Filesystem Programs
 * reiser4progs
 * xfsprogs
 
+Debugging Programs
+* strace
+
+Boot Loaders (only those applicable to the arch of the LiveCD)
+* grub, lilo, yaboot
+
 Other Programs
 * distcc
 * gpm (console mouse)
 * pciutils
-* raidtools
+* mdadm
+* LVM2
 
 nALFS & ALFS profile for LFS 6.1
 (A tool for automating a Linux From Scratch installation)
