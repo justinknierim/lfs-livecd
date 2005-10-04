@@ -291,8 +291,8 @@ createdirs:
 	@-$(WD)/bin/ln -s bash /bin/sh
 
 createfiles:
-	@cp $(WD)/etc/passwd /etc
-	@cp $(WD)/etc/group /etc
+	@install -m644 -oroot -groot $(WD)/etc/passwd /etc
+	@install -m644 -oroot -groot $(WD)/etc/group /etc
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
