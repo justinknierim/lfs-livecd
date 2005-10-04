@@ -1,16 +1,16 @@
 # RP-pppoe Makefile
 
 NM= rp-pppoe
-VRS= 3.5
+VRS= 3.6
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
-SHA-$(FILE)= 4633964034e9a7819f2dca90068eed62a4d0028d
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://www.roaringpenguin.com/penguin/pppoe/$(FILE)
+SHA-$(FILE)= dccb8496c3a106aa83e40bd13e28547f91224f8d
 
 PATCH1= $(DIR)-iproute2-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/Q-S/$(PATCH1)
-SHA-$(PATCH1)= 1b844a93855a52146832328c0109240c8e297b2a
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 834a565662061bb5dec6850b4630260cce560471
 
 # Targets
 
