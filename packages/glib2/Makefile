@@ -1,12 +1,12 @@
 # Glib Makefile
 
 NM= glib
-VRS= 2.6.6
+VRS= 2.8.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= ftp://ftp.gtk.org/pub/gtk/v2.6/$(FILE)
-SHA-$(FILE)= 6bb8860bd29a83964ee66ad53ae3e4950aa2677f
+URL-$(FILE)= ftp://ftp.gtk.org/pub/gtk/v2.8/$(FILE)
+SHA-$(FILE)= 67b10214dba9e7b8c25b439507238d11d6f1d589
 
 # Targets
 
