@@ -123,6 +123,7 @@ lfs-base: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
+	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
 	@-mkdir $(MP)/bin
 	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
 	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
@@ -292,7 +293,6 @@ createdirs:
 	@-$(WD)/bin/ln -s bash /bin/sh
 
 createfiles:
-	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} /etc
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
