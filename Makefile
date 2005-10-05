@@ -219,14 +219,14 @@ ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
 
-sparc-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-slang ch-nano \
+sparc-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-links ch-openssh \
 	ch-pkgconfig ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
 	ch-portmap ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils \
 	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
-	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-slrn \
+	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin \
 	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
 	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts
 
