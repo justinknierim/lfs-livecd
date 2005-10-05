@@ -422,7 +422,6 @@ clean: unmount
 	@-groupdel lfs
 	@-rm -rf /home/lfs
 	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip}
-	@-rm /{$(WD),$(SRC),$(ROOT),$(LFSSRC)}
 	@-rm {sqfs.log,lfs-strip}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
@@ -432,6 +431,7 @@ clean: unmount
 	@find $(PKG)/binutils/* -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
+	@-rm /{$(WD),$(SRC),$(ROOT),$(LFSSRC)}
 
 scrub: clean
 	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
