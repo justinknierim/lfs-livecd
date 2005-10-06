@@ -1,12 +1,12 @@
 # Gtk+ Makefile
 
 NM= gtk+
-VRS= 2.8.3
+VRS= 2.8.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= ftp://ftp.gtk.org/pub/gtk/v2.8/$(FILE)
-SHA-$(FILE)= 83d4489013311e271543ed4659d36740317fcf8f
+SHA-$(FILE)= 7760e325ddd535fa7e606a047133a6a7cfb71ca4
 
 # Targets
 
