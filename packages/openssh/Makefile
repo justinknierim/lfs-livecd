@@ -28,7 +28,7 @@ compile-stage2:
 	make $(PM)
 	make install-nokeys
 	install -v -m755 -d /usr/share/doc/$(DIR)
-	install -v -m644 INSTALL LICENSE OVERVIEW README* WARNING.RNG \
+	install -v -m644 INSTALL LICENCE OVERVIEW README* WARNING.RNG \
 	 /usr/share/doc/$(DIR)
 
 clean:
