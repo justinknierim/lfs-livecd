@@ -123,6 +123,7 @@ lfs-base: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@touch $(PKG)/wget/.pass2
 	@make prep-chroot
+	@-mkdir $(MP)/etc
 	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
 	@-mkdir $(MP)/bin
 	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
