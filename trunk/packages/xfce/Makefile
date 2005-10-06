@@ -40,7 +40,6 @@ compile-stage2:
 	 --libexecdir=/usr/sbin ; \
 	make $(PM) ; \
 	make install ; cd .. ; done 
-
 	cp $(ROOT)/root/.xinitrc /root/
 	cp ../desktop-files/* /usr/share/applications
 	sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
