@@ -1,11 +1,11 @@
 #
 # Makefiles for automating the LFS LiveCD build
 #
-# Written by Jeremy Huntwork | jhuntwork@linuxfromscratch.org
+# Written by Jeremy Huntwork | jhuntwork AT linuxfromscratch DOT org
 # Several additions and edits by Alexander Patrakov, Justin Knierim and
 # Thomas Pegg
 #
-# Version for x86 arch using LFS 6.2
+# These scripts are published under the GNU General Public License, version 2
 #
 #==============================================================================
 #
