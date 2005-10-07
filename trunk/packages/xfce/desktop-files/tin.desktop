@@ -1,7 +1,7 @@
 [Desktop Entry]
-Name=SLRN
+Name=Tin
 Comment=Read news
-Exec=slrn
+Exec=tom
 Terminal=1
 MultipleArgs=false
 Type=Application
