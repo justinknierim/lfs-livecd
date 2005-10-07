@@ -1,7 +1,7 @@
 This is version [version] of the official Linux From Scratch LiveCD.
 
 PACKAGES
-================
+===========================
 Available packages on this cd for your use:
 
 Xorg (X Window System Environment)
@@ -21,7 +21,7 @@ Web Tools
 * msmtp (SMTP client for use with mutt and slrn)
 * mutt (console mail and news reader)
 * thunderbird (graphical mail and news reader)
-* slrn (console news reader)
+* tin (console news reader)
 
 Text Editors
 * vim
@@ -58,12 +58,14 @@ Other Programs
 * pciutils
 * mdadm
 * LVM2
+* hdparm
+* xlockmore
 
 nALFS & ALFS profile for LFS 6.1
 (A tool for automating a Linux From Scratch installation)
 
 CONFIGURING X
-================
+===========================
 The Live CD attempts to configure X for your video card automatically. The
 process may fail if you have more than one video card, or if your video card
 doesn't support 24-bit color depth.
@@ -83,7 +85,7 @@ pleasing. If you prefer something more minimal, edit the file ~/.xinitrc to
 read 'exec ion' or 'exec twm'.
 
 CUSTOMIZING THE CD CONTENTS
-================
+===========================
 It is possible to burn a customized version of the official Linux From
 Scratch LiveCD, with your own files added. To do that, follow the
 instructions below.
@@ -109,7 +111,7 @@ instructions below.
 
 
 AUTOSSHD
-================
+============================
 It is possible to start the sshd daemon automatically upon boot. To do that,
 you have to customize the CD as described above. Add the following files:
 
@@ -136,7 +138,7 @@ you have to customize the CD as described above. Add the following files:
     section "7.12. Configuring the network Script".
 
 THANKS
-================
+===========================
 Special thanks to Alexander Patrakov, Andrew Sanch, Archaic, Matthew Burgess,
 Kevin Fleming, Jim Gifford, Justin Knierim, Robert Connolly, Bruce Dubbs,
 Roel Neefs and the many others in the LFS community whose suggestions & support
