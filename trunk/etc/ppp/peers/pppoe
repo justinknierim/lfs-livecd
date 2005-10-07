@@ -1,0 +1,10 @@
+plugin rp-pppoe.so
+eth0
+user "jdoe"
+noauth
+hide-password 
+debug
+defaultroute
+noipdefault 
+usepeerdns
+remotename pppoe
