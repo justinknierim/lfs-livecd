@@ -1,113 +1,113 @@
-LFS LiveCD
 
-------------------
+LFS LiveCD Makefiles
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+I.   Introduction
+II.  Using the Makefiles
+  A. 	Configuring the Environment
+  B.    Running the Scripts
+III. Editing the Makefiles
+IV.  End Notes
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 I. Introduction
 
-  There have been many livecds (aka bootcds) made and used within
+  There have been many LiveCDs (aka BootCDs) made and used within
 the LFS community. Of particular note were Chris Lingard's and
 Jeremy Utley's. By some random freak of chance, however, and perhaps a
-bit of persistence on my part, a cd of mine was chosen to be used as the
-'official' LFS cd with the release of LFS 6.0.
+bit of persistence on my part, a CD of mine was chosen to be used as the
+'Official' LFS CD with the release of LFS 6.0.
 
   I based much of my work on the ideas and work of Chris and Jeremy,
-and from suggestions and comments from various LFSers, but the cd has been
-still largely my work.  However, for the idea of an official cd to survive
-and grow within the community, help and ideas need to continue to come
-from more than just one source.
+and from suggestions and comments from various LFS users, but the original
+CD had still been largely my work.  However, for the idea of an official CD
+to survive and grow within the community, help and ideas need to continue to
+come from more than just one source.
 
-  My intention with the LFS livecd project, then, is to devise a
-framework, a usable setting in which others may contribute and build cds
-that live up to the official standard.
+  My intention with the LFS LiveCD project, then, was to devise a
+framework, a usable setting in which others may contribute and build CDs
+that live up to the official standard. Originally, the idea was just to keep
+config files and a list of required packages in a Subversion repository. What
+actually happened was that a fully automated scripting system was devised
+specifically for the purpose of building the LiveCD iso. This allows both an
+easily repeatable way of building the CD and a means to track its configuration
+and history.
 
-------------------
+  Many thanks to all who have contributed to the production of these Makefiles
+(and the CDs they in turn produce) by either suggestions, ideas, support, or
+submitted edits.
 
-II. Software
+	- Jeremy Huntwork
 
-  An official LFS livecd will contain the following software as a minimum:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-An LFS base system
+II. Using the Makefiles
 
-An HTML version of the LFS book
+A. Configuring the Environment
 
-The X Window System Environment
+  You should visually inspect the main Makefile, the one in the same directory
+as this README before attempting to run the scripts. There are a few variables
+that you may want to customize to meet the needs of your own particular setup
+and for the type of CD you are hoping to produce. Here's a list of the main
+variables to look for:
 
-Web Tools
-  * Wget
-  * Lynx
-  * Irssi
-  * Firefox
-  * Xchat
+* LFS-ARCH
+  This variable sets the architecture of the CD you are attempting to build.
+The scripts assume that you are building the CD on such a host as well. At
+this time, possible values are 'x86', 'ppc' or 'sparc'.
 
-Text Editors
-  * Vim
-  * Nano
+* VERSION
+  This variable will be used in various places throughout the build and
+should equal the version of the CD you intend to build. If you are building
+this CD for personal use, you can enter anything here. LFS LiveCD editors will
+follow a specific versioning scheme.
 
-Network Tools
-  * SSH Server and Client
-  * NFS Server and Client
-  * Smbmount (mount.cifs) for Windows shares
-  * Subversion
-  * Dhcpcd (DHCP client)
+* KVERS
+  This is the version of the Linux kernel to include on the CD
 
-Filesystem Programs
-  * Reiserfsprogs
-  * Xfsprogs
+* MP
+  This is the Mount Point, the directory that you will be using to house the
+build as it runs. These scripts (this entire directory and its sub-directories)
+should be placed inside the MP directory and run from there. Default is
+/mnt/lfs.
 
-nALFS - A tool for automating LFS builds
+* ROOT
+  This signifies the root-point of the build scripts. In other words, this
+is the name of the actual directory containing the build scripts. Default is
+/lfs-livecd. If you accept the defaults for both this variable and MP, then
+this directory and all its sub-directories should exist as 'lfs-livecd' within
+the direcotry '/mnt/lfs'. It is important that this variable have a leading
+'/' as it is referenced by the scripts in both the host environment and the
+chroot environment.
 
-------------------
+* PM
+  This is the level of parallel building you want make to use for each
+package. Default is -j3, but you may wish to increase or decrease it slightly
+as the case may be.
 
-III. Building the livecd using these Makefiles
+Any of the other variables could be changed, but that isn't recommended. Some
+of them are crucial to the successful building of the CD, especially the ones
+containing environment variables.
 
-  Before you begin building the livecd, you should make sure of the following:
+B. Running the Scripts
 
-* These Makefiles rely heavily on an active internet connection.
+  Building the CD could be as simple as the following:
 
-* Verify that this directory is called 'lfs-livecd' and is located in the 
-  top of your lfs partition.  For example, if your lfs partition is mounted
-  at /mnt/lfs this directory should be /mnt/lfs/lfs-livecd. You can change
-  the name of this directory if you like, but if you do, be sure to edit the
-  ROOT variable in top-level Makefile to match (include the beginning '/'). 
+mkdir /mnt/lfs
+cd /mnt/lfs
+svn co svn://svn.linuxfromscratch.org/livecd/[path of repo] lfs-livecd
+(or, 'tar -xjf [path to tarball]'if you have downloaded a tarball of these
+scripts)
+cd /mnt/lfs/lfs-livecd
+make
 
-  To start the build, simply run:
+  The above example makes use of the default variables for $(MP) and $(ROOT).
 
-	make
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  If you run into an Error while building, you _should_ be able to resume
-  where you left off after you adjust the build to remove the error. To do
-  this, simply run 'make' again. If for some reason you want to build just
-  one package (at one particular stage of the build) you will need to specify
-  which package to build:
+III. Editing the Makefiles
 
-  1) To build a package for the /tools directory (corresponding to chapter 5
-     in the LFS Book), you would run: make lfs-[package-name]
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  2) To build a package for the final system, (the chroot environment) you
-     would run: make [package-name]
-
-  Following the examples above should properly set up the environment (ie.,
-  switching to the lfs user for packages built for the /tools dir, and entering
-  chroot to build packages for the final system.)
-
-  That is why there are 'double' targets for packages in the main Makefile. One
-  set of targets are targets that you can directly call for the sake of building
-  just that package in the proper environment, and one set of targets
-  (lfs-[package-name]-scpt or ch-[package-name]) are targets that should only be
-  called by the make process internally because they expect the environment to
-  be already set up correctly.
-
-  I have tried to make the Makefiles as build friendly as possible, however
-  this being my first real attempt at scripted builds via Makefiles, there
-  are likely many improvements that could (and should!) be made to them.
-  
-
-------------------
-
-IV. Basic Installation Steps
-
-  I've moved this section from the README and placed it online. You can read
-it here for now: http://www.linuxfromscratch.org/livecd/.
-
-  The purpose of the page linked above is to provide general notes for the
-techniques used in producing the Official LFS LiveCD. 
+IV. End Notes
