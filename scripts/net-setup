@@ -31,17 +31,17 @@ set_dns(){
 
 	# Validate DNS IP addresses
 	unset ERRMSG
-	if [ -n "$F_DNS1" -a "${F_DNS1##?*.?*.?*.?*}" ] || \
-	   [ -n "$F_DNS2" -a "${F_DNS2##?*.?*.?*.?*}" ] || \
-	   [ -n "$F_DNS3" -a "${F_DNS3##?*.?*.?*.?*}" ] ; then
-		ERRMSG="One of the entered IP addresses is not valid."
-        fi
+	for addr in $F_DNS1 $F_DNS2 $F_DNS3 ; do
+	   if [ -n "$addr" -a "${addr##?*.?*.?*.?*}" ] ; then
+		ERRMSG="$addr is not a valid IP address."
+           fi
+	done
 
 	if [ -z "$ERRMSG" ] ; then
 		rm -f /etc/resolv.conf
-		[ -n "$F_DNS1" ] && echo "nameserver $F_DNS1" >> /etc/resolv.conf
-		[ -n "$F_DNS2" ] && echo "nameserver $F_DNS2" >> /etc/resolv.conf
-		[ -n "$F_DNS3" ] && echo "nameserver $F_DNS3" >> /etc/resolv.conf
+		for addr in $F_DNS1 $F_DNS2 $F_DNS3 ; do
+		   [ -n "$addr" ] && echo "nameserver $addr" >> /etc/resolv.conf
+		done
 
 		unset F_DNS1 F_DNS2 F_DNS3 SELECTION DLG_COMMAND ERRMSG
 	else
