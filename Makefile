@@ -15,7 +15,7 @@
 # Machine architecure, LiveCD version, and Linux kernel version.
 # Edit the ARCH and VERSION variables if you are building for a non-x86 arch.
 #==============================================================================
-export LFS-ARCH := sparc
+export LFS-ARCH := x86
 export VERSION := $(LFS-ARCH)-6.2-pre1
 export KVERS := 2.6.12.5
 
@@ -40,7 +40,7 @@ export ROOT := /lfs-livecd
 
 # Parallel Build Level
 #==============================================================================
-export PM := -j2
+export PM := -j3
 
 # Default http server for the lfs-base packages
 #==============================================================================
