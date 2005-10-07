@@ -73,11 +73,15 @@ export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) 
 #==============================================================================
 ifeq ($(LFS-ARCH),x86)
 export CFLAGS := -Os -s -march=i486
-export CXXFLAGS := $(CFLAGS)
-else
-export CFLAGS := -Os -s
-export CXXFLAGS := $(CFLAGS)
 endif
+ifeq ($(LFS-ARCH),sparc)
+export CFLAGS := -Os -s -mcpu=v8 -mtune=v8
+endif
+ifeq ($(LFS-ARCH),ppc)
+export CFLAGS := -Os -s
+endif
+export CXXFLAGS := $(CFLAGS)
+
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which

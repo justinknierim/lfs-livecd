@@ -47,8 +47,11 @@ stage1: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5)
 compile-stage1:
 ifeq ($(LFS-ARCH),sparc)
 	cd ../$(DIR) ; rm -rf nptl*
-endif
+	cd ../$(DIR) ; unpack ../$(FILE1)
+	cd ../$(DIR) ; sed -i 's@mv8@mcpu=v8@' sysdeps/unix/sysv/linux/sparc/sparc32/Makefile
+else
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+endif
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH4)
@@ -72,9 +75,12 @@ stage2: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5) $(PAT
 compile-stage2:
 ifeq ($(LFS-ARCH),sparc)
 	cd ../$(DIR) ; rm -rf nptl*
+	cd ../$(DIR) ; sed -i 's@mv8@mcpu=v8@' sysdeps/unix/sysv/linux/sparc/sparc32/Makefile
 endif
 	cd ../$(DIR) ; unpack ../$(FILE1)
+ifneq ($(LFS-ARCH),sparc)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+endif
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH4)
