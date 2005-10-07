@@ -211,8 +211,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-fontconfig ch-Xorg ch-freefont ch-inputattach ch-fonts-dejavu \
 	update-fontsdir ch-libjpeg ch-libtiff ch-libart_lgpl ch-links \
 	ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-cairo \
-	ch-pango ch-atk ch-gtk2 ch-popt ch-librsvg \
-	ch-cvs ch-samba ch-libIDL ch-firefox ch-thunderbird \
+	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
+	ch-thunderbird ch-librsvg \
 	ch-startup-notification chroot-gvim ch-xfce ch-lua ch-ion ch-irssi \
 	ch-xchat ch-tcpwrappers ch-portmap ch-nfs-utils ch-traceroute \
 	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \

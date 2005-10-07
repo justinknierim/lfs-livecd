@@ -14,7 +14,7 @@ include $(ROOT)/scripts/functions
 
 chroot:
 	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-lib$(NM) $(chbash-post-bash)'
+	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
 	$(std_build)
