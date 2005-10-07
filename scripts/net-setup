@@ -30,21 +30,20 @@ set_dns(){
 	      -e '3s,^,F_DNS3=",' | sed -e 's,$,",'`"
 
 	# Validate DNS IP addresses
-	ERRNUM=0
+	unset ERRMSG
 	if [ -n "$F_DNS1" -a "${F_DNS1##?*.?*.?*.?*}" ] || \
 	   [ -n "$F_DNS2" -a "${F_DNS2##?*.?*.?*.?*}" ] || \
 	   [ -n "$F_DNS3" -a "${F_DNS3##?*.?*.?*.?*}" ] ; then
-                ERRNUM=1
 		ERRMSG="One of the entered IP addresses is not valid."
         fi
 
-	if [ "$ERRNUM" -eq 0 ] ; then
+	if [ -z "$ERRMSG" ] ; then
 		rm -f /etc/resolv.conf
 		[ -n "$F_DNS1" ] && echo "nameserver $F_DNS1" >> /etc/resolv.conf
 		[ -n "$F_DNS2" ] && echo "nameserver $F_DNS2" >> /etc/resolv.conf
 		[ -n "$F_DNS3" ] && echo "nameserver $F_DNS3" >> /etc/resolv.conf
 
-		unset F_DNS1 F_DNS2 F_DNS3 SELECTION DLG_COMMAND ERRNUM ERRMSG
+		unset F_DNS1 F_DNS2 F_DNS3 SELECTION DLG_COMMAND ERRMSG
 	else
 		dialog --title "Validation Error" --msgbox "$ERRMSG" 6 60
 		set_dns;
@@ -54,7 +53,7 @@ set_dns(){
 # Setup IP address, prefix, gateway and broadcast
 set_static_cfg(){
 	# Default values
-	if [ -z "$ERRNUM" ] ; then
+	if [ -z "$ERRMSG" ] ; then
 		F_PREFIX=24
 	fi
 
@@ -73,30 +72,27 @@ set_static_cfg(){
               -e '3s,^,F_BROADCAST=",' -e '4s,^,F_GATEWAY=",' | sed -e 's,$,",'`"
 
         # Validate entries (Must give IP, prefix and broadcast.  Gateway optional.)
-        ERRNUM=0
+        unset ERRMSG
         if [ -n "$F_IPADDR" -a "${F_IPADDR##?*.?*.?*.?*}" ] || \
            [ -n "$F_BROADCAST" -a "${F_BROADCAST##?*.?*.?*.?*}" ] || \
            [ -n "$F_GATEWAY" -a "${F_GATEWAY##?*.?*.?*.?*}" ] ; then
-                ERRNUM=2
 		ERRMSG="One of the entered IP addresses or prefix is not valid."
 	fi
 	if [ "$F_PREFIX" -lt 8 -o "$F_PREFIX" -gt 30 ] ; then
-		ERRNUM=3
 		ERRMSG="The prefix is not valid.  Please enter a value from 8 to 30."
 	fi
 	if [ -z "$F_IPADDR" -o -z "$F_BROADCAST" -o -z "$F_PREFIX" ] ; then
-		ERRNUM=4
 		ERRMSG="Please enter an IP address, broadcast and prefix."		
         fi
 
-        if [ "$ERRNUM" -eq 0 ] ; then
+        if [ -z "$ERRMSG" ] ; then
                 echo "IP=$F_IPADDR" >> $ETHXCFG
 		echo "PREFIX=$F_PREFIX" >> $ETHXCFG
 		echo "BROADCAST=$F_BROADCAST" >> $ETHXCFG
 		[ -n "$F_GATEWAY" ] && echo "GATEWAY=$F_GATEWAY" >> $ETHXCFG
 
                 unset F_IPADDR F_PREFIX F_BROADCAST F_GATEWAY DLG_COMMAND
-                unset SELECTION ERRNUM ERRMSG
+                unset SELECTION ERRMSG
 	else
 		dialog --title "Validation Error" --msgbox "$ERRMSG" 6 60
                 set_static_cfg;
@@ -106,7 +102,7 @@ set_static_cfg(){
 # GPRS Device options
 set_gprs_cfg(){
         # Default values
-        if [ -z "$ERRNUM" ] ; then
+        if [ -z "$ERRMSG" ] ; then
                 F_DEVICE=/dev/ttyS1
                 F_SPEED=115200
 		F_SETTING=1
@@ -127,13 +123,12 @@ set_gprs_cfg(){
               -e '3s,^,F_SPEED=",' -e '4s,^,F_SETTING=",' | sed -e 's,$,",'`"
 
         # Validate entries (All values are required.)
-        ERRNUM=0
+        unset ERRMSG
 	if [ -z "$F_APN" -o -z "$F_DEVICE" -o -z "$F_SPEED" -o -z "$F_SETTING" ] ; then
-		ERRNUM=5
 		ERRMSG="All fields are required to setup your GPRS device."
 	fi
 
-        if [ "$ERRNUM" -eq 0 ] ; then
+        if [ -z "$ERRMSG" ] ; then
 		# Make a backup and restore before changes, so the sed's work correctly.
 		[ -f /etc/ppp/peers/gprs.orig ] || cp /etc/ppp/peers/gprs{,.orig}
 		[ -f /etc/ppp/gprs.chat.orig ] || cp /etc/ppp/gprs.chat{,.orig}
@@ -149,7 +144,7 @@ set_gprs_cfg(){
                        -e "s@\*\*\*1@\*\*\*$F_SETTING@g" /etc/ppp/gprs.chat
 
                 unset F_APN F_DEVICE F_SPEED F_SETTING DLG_COMMAND
-                unset SELECTION ERRNUM ERRMSG
+                unset SELECTION ERRMSG
         else
 		dialog --title "Validation Error" --msgbox "$ERRMSG" 6 60
                 set_gprs_cfg;
@@ -159,7 +154,7 @@ set_gprs_cfg(){
 # Modem Device options
 set_modem_cfg(){
         # Default values
-        if [ -z "$ERRNUM" ] ; then
+        if [ -z "$ERRMSG" ] ; then
                 F_DEVICE=/dev/ttyS1
                 F_SPEED=115200
         fi
@@ -180,13 +175,12 @@ set_modem_cfg(){
               -e '3s,^,F_PASSWORD=",' -e '4s,^,F_DEVICE=",' -e '5s,^,F_SPEED=",' | sed -e 's,$,",'`"
 
         # Validate entries (All values except password are required.)
-        ERRNUM=0
+        unset ERRMSG
         if [ -z "$F_PHONE" -o -z "$F_USERNAME" -o -z "$F_DEVICE" -o -z "$F_SPEED" ] ; then
-                ERRNUM=6
                 ERRMSG="The telephone number, username, device and speed are required fields."
         fi
 
-        if [ "$ERRNUM" -eq 0 ] ; then
+        if [ -z "$ERRMSG" ] ; then
                 # Make a backup and restore before changes, so the sed's work correctly.
                 [ -f /etc/ppp/peers/dialup.orig ] || cp /etc/ppp/peers/dialup{,.orig}
                 cp /etc/ppp/peers/dialup{.orig,}
@@ -199,7 +193,7 @@ set_modem_cfg(){
 		setup_papsecrets;
                 
 		unset F_PHONE F_USERNAME F_PASSWORD F_DEVICE F_SPEED DLG_COMMAND
-                unset SELECTION ERRNUM ERRMSG
+                unset SELECTION ERRMSG
         else
 		dialog --title "Modem Validation Error" --msgbox "$ERRMSG" 6 60
                 set_modem_cfg;
