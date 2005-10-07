@@ -49,7 +49,11 @@ compile-stage2:
 	sh update.sh
 	zcat ../$(PATCH2) | patch -Np1
 	zcat ../$(PATCH3) | patch -Np1
+ifeq ($(LFS-ARCH),sparc)
+	./configure --prefix=/usr --with-shared --without-debug
+else
 	./configure --prefix=/usr --with-shared --without-debug --with-gpm
+endif
 	make sources
 	make $(PM)
 	make install

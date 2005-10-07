@@ -35,7 +35,7 @@ adjust-toolchain:
 	 make -C ld install && \
 	 SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	 gcc -dumpspecs > $$SPECFILE && \
-         sed 's@^/lib/$(LINKER)@$(WD)&@g' $$SPECFILE > tempspecfile && \
+         sed 's@/lib/$(LINKER)@$(WD)&@g' $$SPECFILE > tempspecfile && \
          mv -f tempspecfile $$SPECFILE && unset SPECFILE && \
          GCC_INCLUDEDIR=`dirname $$(gcc -print-libgcc-file-name)`/include && \
 	 find $${GCC_INCLUDEDIR}/* -maxdepth 0 -xtype d -exec rm -rf '{}' \; && \
@@ -44,7 +44,7 @@ adjust-toolchain:
 	 cd .. && make clean ; fi
 	touch $@
 
-pass2: $(FILE)
+pass2: $(FILE) 
 	$(sep_dir_build_noclean)
 
 compile-pass2:
@@ -66,7 +66,7 @@ re-adjust-toolchain:
 	 make -C ld INSTALL=$(WD)/bin/install install && \
 	 SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	 gcc -dumpspecs > $$SPECFILE && \
-	 sed -i 's@^$(WD)/lib/$(LINKER)@/lib/$(LINKER)@g' $$SPECFILE && \
+	 sed -i 's@$(WD)/lib/$(LINKER)@/lib/$(LINKER)@g' $$SPECFILE && \
 	 unset SPECFILE ; fi
 	make clean
 	touch $@
