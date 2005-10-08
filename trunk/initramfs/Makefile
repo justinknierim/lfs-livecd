@@ -16,7 +16,8 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile
-	make compile-$@
+	@make compile-$@
+	@touch $@
 
 compile-stage2: init
 	mkdir -p $(WDIR)/{dev,bin,.tmpfs,.union}
