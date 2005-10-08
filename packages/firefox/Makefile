@@ -33,6 +33,9 @@ compile-stage2:
 	make -f client.mk build
 	make -f client.mk install
 	cp -ra $(ROOT)/root/.mozilla /root
+	mkdir -p /usr/lib/$(NM)-$(VRS)/plugins
+	ln -sf /usr/lib/mozilla/plugins/libmozsvgdec.{so,a} \
+	 /usr/lib/$(NM)-$(VRS)/plugins
 
 clean:
 	-rm -rf $(DIR)
