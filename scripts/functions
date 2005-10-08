@@ -42,7 +42,7 @@ define sep_dir_build
 endef
 
 define sep_dir_build_noclean
-	@$(call echo_message,Building)
+	@$(call echo_message, Building)
 	@unpack $(FILE) >$(DIR)-$@.log 2>&1
 	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
 	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
