@@ -1,12 +1,12 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.0.1
+VRS= 4.0.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 2152cdf8cc49de6eef27c6c34f2880cc774e6fa1
+SHA-$(FILE)= f1b714c6398393d8f7f4ad5be933b462a95b075d
 
 PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
