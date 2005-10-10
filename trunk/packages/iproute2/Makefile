@@ -1,13 +1,12 @@
 # Iproute2 Makefile
 
 NM= iproute2
-VRS= 2.6.11
-DATE= 050330
-DIR= $(NM)-$(VRS)
+DATE= 051007
+DIR= $(NM)-$(DATE)
 
-FILE= $(DIR)-$(DATE).tar.bz2
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 99671963174b31fc3ddac6ea168b2bc31d8f6c98
+SHA-$(FILE)= 1da92131ff9ae59b96beb54f769411a1339dd1b9
 
 # Targets
 
@@ -23,6 +22,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
+	chmod u+x configure
 	./configure
 	make $(PM) SBINDIR=/sbin
 	make SBINDIR=/sbin install
