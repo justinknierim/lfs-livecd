@@ -5,5 +5,3 @@
 *  Update README/documentation for Makefiles
 
 *  Add sudo
-
-*  Update gcc, texinfo, iproute2 to match LFS trunk
