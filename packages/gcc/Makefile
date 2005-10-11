@@ -12,9 +12,91 @@ PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
 
+PATCH40= $(DIR)-posix-1.patch
+URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= b3629af7348869b7d0a18cbfe19aa362aeb48fd1
+
+PATCH41= $(DIR)-cross_search_paths-1.patch
+URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
+SHA-$(PATCH41)= ca4b874774e20da34671acf391e86a3d7c9a9bb3
+
 # Targets
 
 include $(ROOT)/scripts/functions
+
+cross-static: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
+	$(sep_dir_build)
+
+compile-cross-static:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
+	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
+	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
+	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
+	 echo "#define STARTFILE_PREFIX_SPEC \"/tools/lib/\"" >> gcc/config/linux.h
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g" \
+	 gcc/Makefile.in.orig > gcc/Makefile.in
+	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
+	 --target=$(LFS_TARGET) --with-local-prefix=$(WD) --disable-nls \
+	 --disable-shared --disable-threads --enable-languages=c 
+	make $(PM) all-gcc
+	make install-gcc
+
+cross: $(FILE)
+	$(sep_dir_build)
+
+compile-cross:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
+	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
+	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
+	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
+	 echo "#define STARTFILE_PREFIX_SPEC \"/tools/lib/\"" >> gcc/config/linux.h
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
+	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g" \
+ 	 gcc/Makefile.in.orig > gcc/Makefile.in
+	cd ../$(DIR) ; cp gcc/config/t-slibgcc-elf-ver{,.orig} ; \
+	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-slibgcc-elf-ver.orig \
+	 > gcc/config/t-slibgcc-elf-ver
+	cd ../$(DIR) ; cp gcc/config/t-libunwind{,.orig} ; \
+	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-libunwind.orig \
+	 > gcc/config/t-libunwind
+	cd ../$(DIR) ; cp configure{,.orig} ; \
+	 sed '/FLAGS_FOR_TARGET.*\/lib\//s@-B[^ ]*/lib/@@g' configure.orig > configure
+	../$(DIR)/configure --prefix=$(CROSS_WD) --target=$(LFS_TARGET) \
+	 --host=$(LFS_HOST) --disable-multilib --with-local-prefix=$(WD) \
+	 --disable-nls --enable-shared --enable-languages=c,c++ \
+	 --enable-__cxa_atexit --enable-c99 --enable-long-long --enable-threads=posix
+	make $(PM) AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
+	make install
+
+stage1: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
+	$(sep_dir_build)
+
+compile-stage1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
+	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
+	cd ../$(DIR) ; cp gcc/cppdefault.c{,.bak} ; \
+	 sed '/#define STANDARD_INCLUDE_DIR/s@"/usr/include"@0@g' \
+   	 gcc/cppdefault.c.bak > gcc/cppdefault.c
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.bak} ; \
+	 sed 's@\(^NATIVE_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g' \
+   	 gcc/Makefile.in.bak > gcc/Makefile.in
+	cd ../$(DIR) ; cp gcc/mklibgcc.in{,.bak} ; \
+	 sed "s@\./xgcc@/cross-tools/bin/$${CC}@g" \
+   	 gcc/mklibgcc.in.bak > gcc/mklibgcc.in
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.bk2} ; \
+	 sed "/MULTILIBS/s@\$$(GCC_FOR_TARGET)@/cross-tools/bin/$${CC}@g" \
+   	 gcc/Makefile.in.bk2 > gcc/Makefile.in
+	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" ../$(DIR)/configure \
+	 --prefix=$(WD) --libdir=$(WD)/lib64 --build=$(LFS_HOST) \
+	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/lib64 \
+	 --with-local-prefix=$(WD) --enable-long-long --enable-c99 \
+	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
+	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch
+	make AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
+    	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
+	make install
+	ln -s gcc $(WD)/bin/cc
 
 pass1: $(FILE)
 	$(sep_dir_build)
@@ -71,4 +153,5 @@ clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-pass1 clean chroot compile-pass2 compile-stage2
+.PHONY: compile-cross-static compile-cross compile-stage1 compile-pass1 clean chroot \
+ 	compile-pass2 compile-stage2

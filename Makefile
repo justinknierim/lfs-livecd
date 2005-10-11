@@ -16,7 +16,11 @@
 # Edit the ARCH and VERSION variables if you are building for a non-x86 arch.
 #==============================================================================
 export LFS-ARCH := x86
+ifneq ($(LFS-ARCH),x86_64)
 export VERSION := $(LFS-ARCH)-6.2-pre1
+else
+export VERSION := x86_64-CLFS20051009-pre1
+endif
 export KVERS := 2.6.12.5
 
 # Edit this line to match the mount-point of the partition you'll be using to
@@ -55,11 +59,21 @@ export SRC := /sources
 export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
+ifeq ($(LFS-ARCH),x86_64)
+export CROSS_WD=/cross-tools
+endif
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
+ifneq ($(LFS-ARCH),x86_64)
 export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+
+else
+export crossenv := exec env -i HOME=$$HOME CFLAGS='' CXXFLAGS='' LFS=$(MP) LC_ALL=POSIX BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
+
+export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX CC='$(LFS_TARGET)-gcc' CXX='$(LFS_TARGET)-g++' AR='$(LFS_TARGET)-ar' AS='$(LFS_TARGET)-as' RANLIB='$(LFS_TARGET)-ranlib' LD='$(LFS_TARGET)-ld' STRIP='$(LFS_TARGET)-strip' BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
+endif
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 
@@ -80,12 +94,21 @@ endif
 ifeq ($(LFS-ARCH),ppc)
 export CFLAGS := -Os -s
 endif
+ifeq ($(LFS-ARCH),x86_64)
+export CFLAGS := -Os -s
+endif
 export CXXFLAGS := $(CFLAGS)
 
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget
+
+ifeq ($(LFS-ARCH),x86_64)
+export LFS_HOST=x86_64-cross-linux-gnu
+export LFS_TARGET=x86_64-pc-linux-gnu
+export LFS_TARGET32=i686-pc-linux-gnu
+endif 
 
 export BRW= "[0;1m"
 export RED= "[0;31m"
@@ -120,6 +143,7 @@ lfs-base: lfsuser
 	@-ln -nsf $(MP)$(SRC) /
 	@-ln -nsf $(MP)$(ROOT) /
 	@-ln -nsf $(MP)$(LFSSRC) /
+ifneq ($(LFS-ARCH),x86_64)
 	@-make unamemod
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
@@ -138,6 +162,16 @@ lfs-base: lfsuser
 	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
 	 make post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
+else
+	@if [ ! -d $(MP)$(CROSS_WD)/bin ] ; then mkdir -p $(MP)$(CROSS_WD)/bin ; fi
+	@-ln -nsf $(MP)$(CROSS_WD) /
+	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(CROSS_WD) $(MP)$(CROSS_WD) $(CROSS_WD)/bin \
+	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
+	@cp $(ROOT)/scripts/unpack $(WD)/bin
+	@cp $(ROOT)/scripts/unpack $(CROSS_WD)/bin
+	@su - lfs -c "$(crossenv) '$(lfsbash) && $(MAKE) cross-tools'"
+	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
+endif
 
 extend-lfs: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
@@ -162,16 +196,27 @@ pre-which:
 	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
 	@chmod 755 $(WHICH)
 
-pre-wget: 
+pre-wget:
+ifneq ($(LFS-ARCH),x86_64)
 	@if [ ! -f $(WD)/bin/ftpget ] ; then \
 	 install -m755 $(ROOT)/scripts/ftpget $(WD)/bin/ ; fi
 	@$(MAKE) -C $(PKG)/wget prebuild
-
+else
+	@if [ ! -f $(CROSS_WD)/bin/ftpget ] ; then \
+	 install -m755 $(ROOT)/scripts/ftpget $(CROSS_WD)/bin/ ; fi
+	@$(MAKE) -C $(PKG)/wget prebuild
+	@-ln -s $(WD)/bin/wget $(CROSS_WD)/bin
+endif
+	
 unamemod:
 	@if [ ! -d ${WD}/bin ] ; then mkdir ${WD}/bin ; fi
 	@install -m 755 uname/uname ${WD}/bin/
 	@touch $@
 
+cross-tools: pre-which pre-wget lfs-linux-libc-headers-scpt lfs-binutils-cross \
+	lfs-gcc-cross-static lfs-glibc-scpt-32 lfs-glibc-scpt lfs-gcc-cross 
+
+ifneq ($(LFS-ARCH),x86_64)
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
@@ -182,6 +227,11 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-bash-scpt lfs-m4-scpt lfs-util-linux-scpt lfs-perl-scpt \
 	lfs-wget-scpt lfs-strip
 	@cp /etc/resolv.conf $(WD)/etc
+else
+tools: lfs-binutils-scpt lfs-gcc-scpt
+
+endif
+
 
 prep-chroot:
 	@-mkdir -p $(MP)/{proc,sys}
@@ -331,6 +381,18 @@ popdev:
 lfs-%-scpt:
 	$(MAKE) -C $(PKG)/$* stage1
 
+lfs-%-scpt-32:
+	$(MAKE) -C $(PKG)/$* stage1-32
+
+lfs-%-cross:
+	$(MAKE) -C $(PKG)/$* cross
+
+lfs-glibc-headers:
+	$(MAKE) -C $(PKG)/glibc headers
+
+lfs-gcc-cross-static:
+	$(MAKE) -C $(PKG)/gcc cross-static
+
 lfs-%-pass1:
 	$(MAKE) -C $(PKG)/$* pass1
 
@@ -423,6 +485,9 @@ endif
 
 clean: unmount
 	@-rm -rf $(WD) $(MP)$(WD)
+ifeq ($(LFS-ARCH),x86_64)
+	@-rm -rf $(CROSS_WD) $(MP)$(CROSS_WD)
+endif
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
