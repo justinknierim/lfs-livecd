@@ -29,8 +29,17 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD) --without-bash-malloc
+else
+	cp -p Makefile.in Makefile.in.orig
+	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
+	patch -Np1 -i ../$(PATCH1)
+	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+   	 ./configure --prefix=$(WD) --with-curses \
+   	 --without-bash-malloc --host=$(LFS_TARGET)
+endif
 	make
 	make install
 	ln -s bash $(WD)/bin/sh

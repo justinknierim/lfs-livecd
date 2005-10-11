@@ -17,7 +17,15 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --disable-libasprintf --without-csharp
+else
+	echo "am_cv_func_working_getline=yes" >> config.cache
+	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+   	 ./configure --prefix=$(WD) --libdir=$(WD)/lib64 \
+   	 --host=$(LFS_TARGET) --disable-libasprintf \
+   	 --without-csharp --cache-file=config.cache
+endif
 	make
 	make install
 

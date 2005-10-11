@@ -26,13 +26,28 @@ SHA-$(PATCH3)= 3078547c70c63cc03fa9a1ea298aa701771c42eb
 
 include $(ROOT)/scripts/functions
 
+ifneq ($(LFS-ARCH),x86_64)
 stage1: $(FILE)
 	$(std_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
+else
+stage1: $(FILE) $(PATCH1)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)	
+endif
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --with-shared --without-debug \
 	 --without-ada --enable-overwrite
+else
+	bzcat ../$(PATCH1) > update.sh
+	sh update.sh
+	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+   	 ./configure --prefix=$(WD) --with-shared \
+   	 --host=$(LFS_TARGET) --without-debug --without-ada \
+   	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
+endif
 	make sources
 	make $(PM)
 	make install

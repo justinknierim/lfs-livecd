@@ -26,8 +26,14 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)/
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD)
+else
+	echo "am_cv_func_working_getline=yes" >> config.cache
+	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+   	 --host=$(LFS_TARGET) --cache-file=config.cache
+endif
 	make $(PM)
 	make install
 

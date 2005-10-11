@@ -17,7 +17,12 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
+else
+	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+    	 --host=$(LFS_TARGET)
+endif
 	make $(PM)
 	make install
 
