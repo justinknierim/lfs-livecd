@@ -514,6 +514,10 @@ endif
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
+ifeq ($(LFS-ARCH),x86_64)
+	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
+	@rm -f $(PKG)/glibc/headers
+endif
 	@find $(PKG)/binutils/* -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
