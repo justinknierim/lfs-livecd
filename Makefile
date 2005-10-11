@@ -54,8 +54,8 @@ export PM := -j3
 
 # Default http server for the lfs-base packages
 #==============================================================================
-export HTTP := http://ftp.osuosl.org/pub/lfs/conglomeration
-export HTTPBLFS := http://anduin.linuxfromscratch.org/sources/BLFS/SVN
+export HTTP := http://ftp.lfs-matrix.net/pub/lfs/conglomeration
+export HTTPBLFS := http://ftp.lfs-matrix.net/pub/BLFS/SVN
 
 # Directory variables
 #==============================================================================
