@@ -17,6 +17,7 @@ chroot:
 
 stage2: Makefile
 	@make compile-$@
+	@make clean
 	@touch $@
 
 compile-stage2: init
