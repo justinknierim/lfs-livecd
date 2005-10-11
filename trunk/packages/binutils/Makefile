@@ -7,6 +7,14 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
+PATCH40= $(DIR)-posix-1.patch
+URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= 7bd70eb6359d9ed5c1691208dfa321d68c5e1d9c
+
+PATCH41= $(DIR)-genscripts_multilib-1.patch
+URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
+SHA-$(PATCH41)= 1d7cb62e537ddfea800d7790149e3ce74d415928
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -17,6 +25,36 @@ else
 	LINKER=ld-linux.so.2
 endif
 
+cross: $(FILE) $(PATCH40) $(PATCH41)
+	$(sep_dir_build)
+
+compile-cross:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i \
+	 ../$(PATCH41)
+	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
+	--target=$(LFS_TARGET) --with-lib-path=$(WD)/lib \
+	--disable-nls --enable-shared --enable-64-bit-bfd
+	make configure-host
+	make headers -C bfd
+	make $(PM)
+	make install
+	cp -v ../$(DIR)/include/libiberty.h $(WD)/include
+
+stage1: $(FILE) $(PATCH40) $(PATCH41)
+	$(sep_dir_build)
+
+compile-stage1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i \
+	 ../$(PATCH41)
+	CC="${CC} ${BUILD64}" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
+	 --with-lib-path=/tools/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
+	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
+	 --enable-64-bit-bfd
+	make configure-host
+	make headers -C bfd
+	make
+	make install
+	
 pass1: $(FILE)
 	$(sep_dir_build_noclean)
 	cp $(SRC)/$(FILE) $(LFSSRC)
@@ -88,4 +126,4 @@ clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-pass1 clean chroot compile-pass2 compile-stage2
+.PHONY: compile-cross compile-stage1 compile-pass1 clean chroot compile-pass2 compile-stage2

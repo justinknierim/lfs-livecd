@@ -1,12 +1,20 @@
 # Glibc Makefile
 
 NM= glibc
+ifneq ($(LFS-ARCH),x86_64)
 VRS= 2.3.5
+else
+VRS= 20050926
+endif
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+ifneq ($(LFS-ARCH),x86_64)
 SHA-$(FILE)= 465cb1f4708dfa88606379cc1ebecb724c65f027
+else
+SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
+endif
 
 FILE1= $(NM)-linuxthreads-2.3.5.tar.bz2
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
@@ -36,10 +44,35 @@ PATCH6= $(DIR)-gcc4_fix_math_tests-1.patch
 URL-$(PATCH6)= $(HTTP)/$(NM)/$(PATCH6)
 SHA-$(PATCH6)= 32f42c062a3a0bfa651cedf015988537ad88dcaa
 
+PATCH40= $(DIR)-libgcc_eh-1.patch
+URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= 40656faedabfa072c02225ba7d21fc0e76bbacb3
+
+PATCH41= $(DIR)-localedef_segfault-1.patch
+URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
+SHA-$(PATCH41)= ac908ef021764e90443e7cf7d72de87fe6168c38
+
 # Targets
 
 include $(ROOT)/scripts/functions
 
+headers: $(FILE)
+	$(sep_dir_build)
+
+compile-headers:
+	CC=gcc ../$(DIR)/configure --prefix=/tools \
+	--host=$(LFS_TARGET) --build=$(LFS_HOST) --disable-sanity-checks \
+	--enable-kernel=2.6.0 --with-headers=/tools/include \
+	--with-binutils=/cross-tools/$(LFS_TARGET)/bin
+	make install-headers
+	install -v -d /tools/include/bits
+	cp -v bits/stdio_lim.h /tools/include/bits
+	touch /tools/include/gnu/stubs.h
+	cp -v ../$(DIR)/nptl/sysdeps/pthread/pthread.h $(WD)/include
+	cp -v ../$(DIR)/nptl/sysdeps/unix/sysv/linux/x86_64/bits/pthreadtypes.h \
+	 $(WD)/include/bits
+
+ifneq ($(LFS-ARCH),x86_64)
 stage1: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5)
 	$(sep_dir_build)
 	cp $(SRC)/{$(FILE),$(FILE1),$(PATCH1),$(PATCH2),$(PATCH3),$(PATCH4),$(PATCH5)} $(LFSSRC)/
@@ -61,6 +94,43 @@ endif
 	 --without-gd --with-headers=$(WD)/include --without-selinux
 	PARALLELMFLAGS="$(PM)" make
 	touch $(WD)/etc/ld.so.conf
+	PARALLELMFLAGS="$(PM)" make install
+else
+
+stage1: $(FILE) $(PATCH40)
+	$(sep_dir_build)
+
+compile-stage1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
+	echo "libc_cv_forced_unwind=yes" > config.cache
+	echo "libc_cv_c_cleanup=yes" >> config.cache
+	echo "slibdir=/tools/lib64" >> configparms
+	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc" \
+	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
+	../$(DIR)/configure --prefix=$(WD) --host=$(LFS_TARGET) \
+	--build=$(LFS_HOST) --libdir=$(WD)/lib64 --disable-profile \
+	--enable-add-ons --with-tls --enable-kernel=2.6.0 --with-__thread \
+	--with-binutils=$(CROSS_WD)/bin --with-headers=$(WD)/include \
+	--cache-file=config.cache
+	PARALLELMFLAGS="$(PM)" make
+	PARALLELMFLAGS="$(PM)" make install
+endif
+
+stage1-32: $(FILE) $(PATCH40)
+	$(sep_dir_build)
+
+compile-stage1-32:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
+	echo "libc_cv_forced_unwind=yes" > config.cache
+	echo "libc_cv_c_cleanup=yes" >> config.cache
+	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc ${BUILD32}" \
+	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
+	../$(DIR)/configure --prefix=$(WD) --host=$(LFS_TARGET32) \
+	--build=$(LFS_HOST) --disable-profile --enable-add-ons \
+	--with-tls --enable-kernel=2.6.0 --with-__thread \
+	--with-binutils=$(CROSS_WD)/bin --with-headers=$(WD)/include \
+	--cache-file=config.cache
+	PARALLELMFLAGS="$(PM)" make
 	PARALLELMFLAGS="$(PM)" make install
 
 chroot:
@@ -102,4 +172,4 @@ clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-headers compile-stage1 compile-stage1-32 clean chroot compile-stage2

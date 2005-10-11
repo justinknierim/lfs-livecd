@@ -8,13 +8,23 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= e72c9b260995b269c9fb9248ed468c18fb01f3fd
 
+PATCH40= $(DIR)-x86_64_biarch-1.patch
+URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= e29083d611803dc0ae77599d06f21f608f775944
+
 # Targets
 
 include $(ROOT)/scripts/functions
 
+ifneq ($(LFS-ARCH),x86_64)
 stage1: $(FILE)
 	$(std_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
+else
+stage1: $(FILE) $(PATCH40)
+	$(std_build)
+	cp $(SRC)/{$(FILE),$(PATCH40)} $(LFSSRC)
+endif
 
 compile-stage1:
 ifeq ($(LFS-ARCH),x86)
@@ -25,6 +35,13 @@ ifeq ($(LFS-ARCH),ppc)
 endif
 ifeq ($(LFS-ARCH),sparc)
 	cp -Rv include/asm-sparc $(WD)/include/asm
+endif
+ifeq ($(LFS-ARCH),x86_64)
+	patch -Np1 -i ../$(PATCH40)
+	install -d $(WD)/include
+	cp -Rv include/asm-i386 $(WD)/include
+	cp -Rv include/asm-x86_64 $(WD)/include
+	cp -Rv include/asm-x86_64-biarch $(WD)/include/asm
 endif
 	cp -Rv include/linux $(WD)/include
 
