@@ -16,12 +16,18 @@
 # Edit the ARCH and VERSION variables if you are building for a non-x86 arch.
 #==============================================================================
 export LFS-ARCH := x86
+
 ifneq ($(LFS-ARCH),x86_64)
 export VERSION := $(LFS-ARCH)-6.2-pre1
 else
 export VERSION := x86_64-CLFS20051009-pre1
 endif
+
+ifeq ($(LFS-ARCH), sparc)
+export KVERS := 2.6.13.3
+else
 export KVERS := 2.6.12.5
+endif
 
 # Edit this line to match the mount-point of the partition you'll be using to
 # build the cd.
@@ -48,8 +54,8 @@ export PM := -j3
 
 # Default http server for the lfs-base packages
 #==============================================================================
-export HTTP := http://ftp.lfs-matrix.net/pub/lfs/conglomeration
-export HTTPBLFS := http://ftp.lfs-matrix.net/pub/BLFS/SVN
+export HTTP := http://ftp.osuosl.org/pub/lfs/conglomeration
+export HTTPBLFS := http://anduin.linuxfromscratch.org/sources/BLFS/SVN
 
 # Directory variables
 #==============================================================================
@@ -284,7 +290,8 @@ sparc-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
 	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin \
 	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts
+	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+	ch-elftoaout ch-silo
 
 wget-list:
 	@>wget-list ; \
@@ -357,22 +364,22 @@ popdev:
 	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
 	 mknod -m 666 /dev/null c 1 3 ; fi
 	@if ! tail -n 3 /proc/mounts | grep -q "dev tmpfs" ; then \
-	 mount -n -t tmpfs tmpfs /dev ; fi
-	@-mknod -m 662 /dev/console c 5 1
-	@-mknod -m 666 /dev/null c 1 3
-	@-mknod -m 666 /dev/zero c 1 5
-	@-mknod -m 666 /dev/ptmx c 5 2
-	@-mknod -m 666 /dev/tty c 5 0
-	@-mknod -m 444 /dev/random c 1 8
-	@-mknod -m 444 /dev/urandom c 1 9
-	@-chown root:tty /dev/{console,ptmx,tty}
-	@-ln -s /proc/self/fd /dev/fd
-	@-ln -s /proc/self/fd/0 /dev/stdin
-	@-ln -s /proc/self/fd/1 /dev/stdout
-	@-ln -s /proc/self/fd/2 /dev/stderr
-	@-ln -s /proc/kcore /dev/core
-	@-mkdir /dev/pts && mount -t devpts -o gid=4,mode=620 none /dev/pts
-	@-mkdir /dev/shm && mount -t tmpfs none /dev/shm
+	 mount -n -t tmpfs tmpfs /dev && \
+	 mknod -m 662 /dev/console c 5 1 ; \
+	 mknod -m 666 /dev/null c 1 3 ; \
+	 mknod -m 666 /dev/zero c 1 5 ; \
+	 mknod -m 666 /dev/ptmx c 5 2 ; \
+	 mknod -m 666 /dev/tty c 5 0 ; \
+	 mknod -m 444 /dev/random c 1 8 ; \
+	 mknod -m 444 /dev/urandom c 1 9 ; \
+ 	 chown root:tty /dev/{console,ptmx,tty} ; \
+	 ln -s /proc/self/fd /dev/fd ; \
+	 ln -s /proc/self/fd/0 /dev/stdin ; \
+	 ln -s /proc/self/fd/1 /dev/stdout ; \
+	 ln -s /proc/self/fd/2 /dev/stderr ; \
+	 ln -s /proc/kcore /dev/core ; \
+	 mkdir /dev/pts && mount -t devpts -o gid=4,mode=620 none /dev/pts ; \
+	 mkdir /dev/shm && mount -t tmpfs none /dev/shm ; fi
 
 # Do not call the targets below manually! They are used internally and must be
 # called by other targets.
@@ -408,7 +415,7 @@ lfs-strip:
 	@-rm -rf $(WD)/{doc,info,man}
 	@touch $@
 
-ch-%:
+ch-%: popdev
 	make -C $(PKG)/$* stage2
 
 re-adjust-toolchain:
@@ -448,8 +455,12 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
+ifneq ($(LFS-ARCH),sparc)
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
+else
+	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
+endif
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll,shutdown-helper} $(MP)/usr/bin/
 	@cp -ra root $(MP)/etc/skel
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
@@ -465,19 +476,24 @@ $(MP)/iso/.root.sqfs:
 
 iso: prepiso $(MP)/iso/.root.sqfs
 ifeq ($(LFS-ARCH),x86)
-	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l -L -D -o \
+	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
 	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
 endif
 ifeq ($(LFS-ARCH),ppc)
-	@cd $(MP) ; ./usr/bin/mkisofs -hfs -part \
+	@cd $(MP) ; ./usr/bin/mkisofs -hfs -part --allow-leading-dots \
 	-map $(MKTREE)/$(PKG)/yaboot/map.hfs -no-desktop \
 	-hfs-volid "lfslivecd-$(VERSION)" -V "lfslivecd-$(VERSION)" \
 	-hfs-bless iso/boot -r -v -o $(MKTREE)/lfslivecd-$(VERSION).iso iso \
 	 >$(MKTREE)/iso.log 2>&1
 	@if ! grep -q "Blessing" $(MKTREE)/iso.log ; then \
 	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
+endif
+ifeq ($(LFS-ARCH),sparc)
+	@cd $(MP) ; ./usr/bin/mkisofs -v -R -l -D --allow-leading-dots \
+	 -G iso/boot/isofs.b -B ... -r -V "lfslivecd-$(VERSION)" \
+	 -o $(MKTREE)/lfslivecd-$(VERSION).iso iso >$(MKTREE)/iso.log 2>&1
 endif
 
 # Targets to clean your tree. 
