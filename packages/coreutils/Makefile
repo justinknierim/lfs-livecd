@@ -29,11 +29,20 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD)
+else
+	echo "utils_cv_sys_open_max=1024" >> config.cache
+	DEFAULT_POSIX2_VERSION=199209 CC="${CC} ${BUILD64}" \
+	 ./configure --prefix=$(WD) --cache-file=config.cache \
+	 --build=$(LFS_HOST) --target=$(LFS_TARGET)
+endif
 	make $(PM)
 	make install
+ifneq ($(LFS-ARCH),x86_64)
 	mv ${WD}/bin/uname ${WD}/bin/uname.real 
 	install -m 755 ${MP}${ROOT}/uname/uname ${WD}/bin/
+endif
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \

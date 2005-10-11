@@ -25,7 +25,14 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	make $(PM)
+else
+	cp Makefile{,.bak}
+	sed -e 's@^\(all:.*\) test@\1@g' \
+    	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile.bak > Makefile
+	make CC="${CC} ${BUILD64}" AR="${AR}" RANLIB="${RANLIB}"
+endif
 	make PREFIX=$(WD) install
 
 chroot:

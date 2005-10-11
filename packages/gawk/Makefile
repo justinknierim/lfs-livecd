@@ -16,14 +16,25 @@ SHA-$(PATCH1)= 8dde8415d03b1897f50d5b12b6c876feda15e0be
 
 include $(ROOT)/scripts/functions
 
+ifneq ($(LFS-ARCH),x86_64)
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+else
+stage1: $(FILE)
+	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
+endif
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD)
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
+else
+	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+   	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
+endif
 	make $(PM)
 	make install
 

@@ -69,6 +69,11 @@ ifeq ($(LFS-ARCH),x86_64)
 export CROSS_WD=/cross-tools
 endif
 
+ifeq ($(LFS-ARCH),x86_64)
+export LFS_HOST=x86_64-cross-linux-gnu
+export LFS_TARGET=x86_64-pc-linux-gnu
+export LFS_TARGET32=i686-pc-linux-gnu
+endif
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
@@ -109,12 +114,6 @@ export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
 export WGET= wget
-
-ifeq ($(LFS-ARCH),x86_64)
-export LFS_HOST=x86_64-cross-linux-gnu
-export LFS_TARGET=x86_64-pc-linux-gnu
-export LFS_TARGET32=i686-pc-linux-gnu
-endif 
 
 export BRW= "[0;1m"
 export RED= "[0;31m"
@@ -234,7 +233,10 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-wget-scpt lfs-strip
 	@cp /etc/resolv.conf $(WD)/etc
 else
-tools: lfs-binutils-scpt lfs-gcc-scpt
+tools: lfs-binutils-scpt lfs-gcc-scpt lfs-zlib-scpt lfs-gawk-scpt lfs-coreutils-scpt \
+	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
+	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt \
+	lfs-tar-scpt lfs-bash-scpt
 
 endif
 

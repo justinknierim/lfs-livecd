@@ -6,11 +6,21 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
+SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283e
+
 
 # Targets
 
 include $(ROOT)/scripts/functions
+
+stage1: $(FILE)
+	$(std_build)
+
+compile-stage1:
+	CC="${CC} ${BUILD64}" CFLAGS="${CFLAGS} -fPIC" ./configure --prefix=$(WD) \
+	 --shared --libdir=$(WD)/lib64
+	make
+	make install
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
