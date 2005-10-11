@@ -34,8 +34,7 @@ pass2: $(FILE) $(PATCH1)
 
 compile-pass2:
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} && \
-	 sed 's@\(^NATIVE_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g' \
-	 gcc/Makefile.in.orig > gcc/Makefile.in
+	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.tmp} && \
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
          > gcc/Makefile.in
@@ -55,10 +54,11 @@ stage2: $(FILE)
 	$(sep_dir_build)
 
 compile-stage2:
-	cd ../$(DIR) ; sed -i 's/install_to_$(INSTALL_DEST) //' \
+	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
 	 libiberty/Makefile.in
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
 	 gcc/Makefile.in
+	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++
