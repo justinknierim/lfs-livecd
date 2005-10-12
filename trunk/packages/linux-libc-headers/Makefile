@@ -49,10 +49,15 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
+ifneq ($(LFS-ARCH),x86_64)
 stage2: $(FILE)
+else	
+stage2: $(FILE) $(PATCH40)
+endif
 	$(std_build)
 
 compile-stage2:
+ifneq ($(LFS-ARCH),x86_64)
 ifeq ($(LFS-ARCH),x86)
 	cp -Rv include/asm-i386 /usr/include/asm
 endif
@@ -66,6 +71,22 @@ endif
 	chown -R root:root /usr/include/{asm,linux}
 	find /usr/include/{asm,linux} -type d -exec chmod 755 {} \;
 	find /usr/include/{asm,linux} -type f -exec chmod 644 {} \;
+else
+	patch -Np1 -i ../$(PATCH40)
+	cp -Rv include/asm-i386 /usr/include/
+	cp -Rv include/asm-x86_64 /usr/include/
+	cp -Rv include/asm-x86_64-biarch /usr/include/asm
+	cp -Rv include/linux /usr/include
+	cp -Rv include/mtd /usr/include
+	cp -Rv include/sound /usr/include
+	cp -Rv include/scsi /usr/include
+	chown -R root:root \
+	 /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi}
+	find /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi} \
+	 -type d -exec chmod 755 {} \;
+	find /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi} \
+	 -type f -exec chmod 644 {} \;
+endif
 
 clean:
 	-rm -rf $(DIR)

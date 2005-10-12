@@ -23,8 +23,14 @@ stage1: $(FILE) $(PATCH1)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
+ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
 	--with-tclinclude=$(ROOT)/$(PKG)/tcl/tcl8.4.11 --with-x=no
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=$(WD) --with-tcl=$(WD)/lib64 \
+	--with-tclinclude=$(ROOT)/$(PKG)/tcl/tcl8.4.11 --libdir=$(WD)/lib64 \
+	--with-x=no
+endif
 	make $(PM)
 	make SCRIPTS="" install
 
