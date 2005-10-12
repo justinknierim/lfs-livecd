@@ -62,9 +62,9 @@ compile-cross:
 	cd ../$(DIR) ; cp configure{,.orig} ; \
 	 sed '/FLAGS_FOR_TARGET.*\/lib\//s@-B[^ ]*/lib/@@g' configure.orig > configure
 	../$(DIR)/configure --prefix=$(CROSS_WD) --target=$(LFS_TARGET) \
-	 --host=$(LFS_HOST) --disable-multilib --with-local-prefix=$(WD) \
-	 --disable-nls --enable-shared --enable-languages=c,c++ \
-	 --enable-__cxa_atexit --enable-c99 --enable-long-long --enable-threads=posix
+	 --host=$(LFS_HOST) --with-local-prefix=$(WD) --disable-nls \
+	 --enable-shared --enable-languages=c,c++ --enable-__cxa_atexit \
+	 --enable-c99 --enable-long-long --enable-threads=posix
 	make $(PM) AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
 	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
 	make install

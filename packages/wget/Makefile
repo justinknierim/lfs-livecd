@@ -30,8 +30,13 @@ stage1:
 	$(std_build)
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared
+else
+	./configure --prefix=$(WD) --host=$(LFS_TARGET) \
+	 --without-ssl
+endif
 	make $(PM)
 	make install
 

@@ -80,17 +80,21 @@ endif
 ifneq ($(LFS-ARCH),x86_64)
 export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 
+export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+
+export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+
 else
 export crossenv := exec env -i HOME=$$HOME CFLAGS='' CXXFLAGS='' LFS=$(MP) LC_ALL=POSIX BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
 
 export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX CC='$(LFS_TARGET)-gcc' CXX='$(LFS_TARGET)-g++' AR='$(LFS_TARGET)-ar' AS='$(LFS_TARGET)-as' RANLIB='$(LFS_TARGET)-ranlib' LD='$(LFS_TARGET)-ld' STRIP='$(LFS_TARGET)-strip' BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
+
+export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='-m32' BUILD64='-m64' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+
+export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='-m32' BUILD64='-m64' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 endif
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
-
-export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
-
-export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 
 export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog" PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig /bin/bash -c
 
@@ -176,6 +180,15 @@ else
 	@cp $(ROOT)/scripts/unpack $(CROSS_WD)/bin
 	@su - lfs -c "$(crossenv) '$(lfsbash) && $(MAKE) cross-tools'"
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
+	@make prep-chroot
+	@-mkdir $(MP)/etc
+	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
+	@-mkdir $(MP)/bin
+	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
+	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
+	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
+	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
+	 cd $(ROOT) && make x86_64-pre-bash $(chbash-pre-bash)'
 endif
 
 extend-lfs: prep-chroot
@@ -236,8 +249,8 @@ else
 tools: lfs-binutils-scpt lfs-gcc-scpt lfs-zlib-scpt lfs-gawk-scpt lfs-coreutils-scpt \
 	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt \
-	lfs-tar-scpt lfs-bash-scpt
-
+	lfs-tar-scpt lfs-bash-scpt lfs-util-linux-scpt lfs-wget-scpt
+	@cp /etc/resolv.conf $(WD)/etc
 endif
 
 
@@ -261,6 +274,11 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-grep ch-grub ch-gzip ch-hotplug ch-man ch-make \
 	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
+
+x86_64-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
+	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers
+
+x86_64-post-bash:	
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
@@ -355,6 +373,12 @@ createdirs:
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
+ifeq ($(LFS-ARCH),x86_64)
+	@-$(WD)/bin/install -d /{,usr/{,local},opt}/lib64
+	@-$(WD)/bin/install -d /usr/lib/locale
+	@-$(WD)/bin/ln -s ../lib/locale /usr/lib64
+	@-$(WD)/bin/ln -s $(WD)/lib64/libgcc_s.so{,.1} /usr/lib64
+endif
 
 createfiles:
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
@@ -419,6 +443,9 @@ lfs-strip:
 
 ch-%: popdev
 	make -C $(PKG)/$* stage2
+
+ch-%-32: popdev
+	make -C $(PKG)/$* stage2-32
 
 re-adjust-toolchain:
 	make -C $(PKG)/binutils re-adjust-toolchain
@@ -543,7 +570,7 @@ unmount:
 	@rm -f $(ROOT)/prep-chroot
 
 .PHONY: unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
-	final-environment re-adjust-toolchain ch-% lfs-adjust-toolchain \
-	lfs-%-scpt lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
+	final-environment re-adjust-toolchain ch-% ch-%-32 lfs-adjust-toolchain \
+	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
 	lfs-rm-wget blfs post-bash pre-bash tools pre-wget pre-which

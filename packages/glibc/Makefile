@@ -137,6 +137,7 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
+ifneq($(LFS-ARCH),x86_64)
 stage2: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5) $(PATCH6)
 	$(sep_dir_build)
 	cp $(SRC)/$(PATCH6) $(LFSSRC)/
@@ -168,8 +169,44 @@ endif
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
 	cp $(ROOT)/etc/ld.so.conf /etc
 
+else
+
+stage2: $(FILE) $(PATCH41)
+	$(sep_dir_build)
+	cp $(SRC)/$(PATCH41) $(LFSSRC)
+
+compile-stage2:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
+	echo "slibdir=/lib64" >> configparms
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+    	 ../$(DIR)/configure --prefix=/usr \
+    	 --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
+    	 --libexecdir=/usr/lib64/glibc --libdir=/usr/lib64
+	PARALLELMFLAGS="$(PM)" make
+	touch /etc/ld.so.conf
+	PARALLELMFLAGS="$(PM)" make install
+	PARALLELMFLAGS="$(PM)" make localedata/install-locales
+	cp $(ROOT)/etc/nsswitch.conf /etc
+	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
+	cp $(ROOT)/etc/ld.so.conf-x86_64 /etc/ld.so.conf
+endif
+
+stage2-32: $(FILE) $(PATCH41)
+	$(sep_dir_build)
+
+compile-stage2-32:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
+	CC="gcc ${BUILD32}" CXX="g++ ${BUILD32}" \
+    	 ../$(DIR)/configure --prefix=/usr \
+    	 --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
+    	 --libexecdir=/usr/lib/glibc --host=$(LFS_TARGET32)
+	PARALLELMFLAGS="$(PM)" make
+	touch /etc/ld.so.conf
+	PARALLELMFLAGS="$(PM)" make install
+
 clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-headers compile-stage1 compile-stage1-32 clean chroot compile-stage2
+.PHONY: compile-headers compile-stage1 compile-stage1-32 clean chroot compile-stage2 \
+	compile-stage2-32

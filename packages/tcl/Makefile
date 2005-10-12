@@ -17,7 +17,12 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
+ifneq ($(LFS-ARCH),x86_64)
 	cd unix ; ./configure --prefix=$(WD)
+else
+	cd unix ; sed -i 's@\$(prefix)/lib@\$(prefix)/lib64@g' Makefile.in
+	cd unix ; CC="gcc ${BUILD64}" ./configure --prefix=/tools --libdir=/tools/lib64
+endif
 	cd unix ; make $(PM)
 	cd unix ; make install
 	ln -s tclsh8.4 $(WD)/bin/tclsh

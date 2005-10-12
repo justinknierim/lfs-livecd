@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283e
+SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
 
 # Targets
@@ -45,4 +45,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: compile-stage1 clean chroot compile-stage2

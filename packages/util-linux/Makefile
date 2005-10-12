@@ -40,10 +40,17 @@ compile-stage1:
 ifeq ($(LFS-ARCH),sparc)
 	patch -Np1 -i ../$(PATCH31)
 endif
+ifneq ($(LFS-ARCH),x86_64)
 	./configure
 	make -C lib
 	make -C mount mount umount
 	make -C text-utils more
+else
+	CC="${CC} ${BUILD64}" ./configure
+	make ARCH="" CPU="" -C lib
+	make ARCH="" CPU="" -C mount mount umount
+	make ARCH="" CPU="" -C text-utils more
+endif
 	cp mount/{,u}mount text-utils/more $(WD)/bin
 
 chroot:
