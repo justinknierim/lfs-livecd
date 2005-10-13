@@ -9,7 +9,7 @@ SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
 PATCH30= $(DIR)-sparc_tls-1.patch
 URL-$(PATCH30)= $(HTTP)/$(NM)/$(PATCH30)
-SHA-$(PATCH30)=
+SHA-$(PATCH30)= 3a66717c7c9152e15fcbf56b33ec71f2454d4230
 
 PATCH40= $(DIR)-posix-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
