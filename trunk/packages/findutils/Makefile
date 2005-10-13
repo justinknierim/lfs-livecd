@@ -35,8 +35,13 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib/locate \
 	 --localstatedir=/var/lib/locate
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+    	--libexecdir=/usr/lib64/locate --localstatedir=/var/lib/locate
+endif
 	make $(PM)
 	make install
 

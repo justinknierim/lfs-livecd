@@ -152,12 +152,20 @@ stage2: $(FILE)
 compile-stage2:
 	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
 	 libiberty/Makefile.in
+ifndef CROSS
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
 	 gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+    	../$(DIR)/configure --prefix=/usr --libdir=/usr/lib64 \
+    	 --libexecdir=/usr/lib64 --enable-shared --enable-threads=posix \
+    	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
+    	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
+endif
 	make $(PM)
 	make install
 	ln -sf ../usr/bin/cpp /lib

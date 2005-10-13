@@ -31,16 +31,35 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr --shared --libdir=/lib
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" CFLAGS="${CFLAGS} -fPIC" \
+	 ./configure --prefix=/usr --shared --libdir=/lib64
+endif
 	make $(PM)
 	make install
+ifndef CROSS
 	rm /lib/libz.so
 	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
+else
+	rm /lib64/libz.so
+	ln -sf ../../lib64/libz.so.$(VRS) /usr/lib64/libz.so
+endif
 	make clean
+ifndef CROSS
 	./configure --prefix=/usr
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" ./configure \
+    	 --prefix=/usr --libdir=/usr/lib64
+endif
 	make $(PM)
 	make install
+ifndef CROSS
 	chmod 644 /usr/lib/libz.a
+else
+	chmod 644 /usr/lib64/libz.a
+endif
 
 clean:
 	-rm -rf $(DIR)

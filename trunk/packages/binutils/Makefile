@@ -20,6 +20,7 @@ URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= 1d7cb62e537ddfea800d7790149e3ce74d415928
 
 CROSS_DEPS= $(FILE) $(PATCH40) $(PATCH41)
+STAGE2_DEPS= $(FILE)
 
 # Targets
 
@@ -129,11 +130,29 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(FILE)
+ifeq ($(LFS-ARCH),x86_64)
+STAGE2_DEPS+=$(PATCH41)
+endif
+
+ifeq ($(LFS-ARCH),sparc64)
+STAGE2_DEPS+=$(PATCH30) $(PATCH41)
+endif
+
+stage2: $(STAGE2_DEPS)
 	$(sep_dir_build)
 
 compile-stage2:
+ifndef CROSS
 	../$(DIR)/configure --prefix=/usr --enable-shared
+else
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
+endif
+	CC="gcc ${BUILD64}" ../$(DIR)/configure --prefix=/usr \
+    	 --enable-shared --enable-64-bit-bfd --libdir=/usr/lib64
+	make configure-host
+endif
 	make $(PM) tooldir=/usr
 	make tooldir=/usr install
 	cp ../$(DIR)/include/libiberty.h /usr/include

@@ -137,7 +137,7 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-ifneq($(LFS-ARCH),x86_64)
+ifneq ($(LFS-ARCH),x86_64)
 stage2: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5) $(PATCH6)
 	$(sep_dir_build)
 	cp $(SRC)/$(PATCH6) $(LFSSRC)/

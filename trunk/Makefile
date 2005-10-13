@@ -280,7 +280,9 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
 
 x86_64-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
-	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers
+	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
+	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
+	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline
 
 x86_64-post-bash:	
 
@@ -448,11 +450,19 @@ lfs-strip:
 ch-%: popdev
 	make -C $(PKG)/$* stage2
 
-ch-%-32: popdev
-	make -C $(PKG)/$* stage2-32
+ch-glibc-32: popdev
+	make -C $(PKG)/glibc stage2-32
 
 re-adjust-toolchain:
 	make -C $(PKG)/binutils re-adjust-toolchain
+
+adjusting-toolchain:
+	gcc -dumpspecs | \
+	perl -pi -e 's@/tools/lib/ld@/lib/ld@g;' \
+     	 -e 's@/tools/lib64/ld@/lib64/ld@g;' \
+     	 -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
+     	 `dirname $$(gcc --print-libgcc-file-name)`/specs
+	@touch $@ 
 
 final-environment:
 	@cp -ra $(ROOT)/etc/sysconfig /etc
@@ -574,7 +584,7 @@ unmount:
 	@rm -f $(ROOT)/prep-chroot
 
 .PHONY: unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
-	final-environment re-adjust-toolchain ch-% ch-%-32 lfs-adjust-toolchain \
+	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
 	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
 	lfs-rm-wget blfs post-bash pre-bash tools pre-wget pre-which
