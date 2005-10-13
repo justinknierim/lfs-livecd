@@ -28,6 +28,8 @@ ifeq ($(LFS-ARCH),x86_64)
 export VERSION := x86_64-CLFS20051009-pre1
 export CROSS=yes
 export CROSS_WD=/cross-tools
+export 32FLAGS=-m32
+export 64FLAGS=-m64
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
@@ -35,6 +37,8 @@ export VERSION := $(LFS-ARCH)-CLFS20051009-pre1
 export KVERS := 2.6.13.3
 export CROSS=yes
 export CROSS_WD=/cross-tools
+export 32FLAGS=-m32 -mcpu=ultrasparc -mtune=ultrasparc
+export 64FLAGS=-m64 -mcpu=ultrasparc -mtune=ultrasparc
 else
 export KVERS := 2.6.12.5
 endif
@@ -87,13 +91,13 @@ export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS
 export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 
 else
-export crossenv := exec env -i HOME=$$HOME CFLAGS='' CXXFLAGS='' LFS=$(MP) LC_ALL=POSIX BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
+export crossenv := exec env -i HOME=$$HOME CFLAGS='' CXXFLAGS='' LFS=$(MP) LC_ALL=POSIX BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
 
-export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX CC='$(LFS_TARGET)-gcc' CXX='$(LFS_TARGET)-g++' AR='$(LFS_TARGET)-ar' AS='$(LFS_TARGET)-as' RANLIB='$(LFS_TARGET)-ranlib' LD='$(LFS_TARGET)-ld' STRIP='$(LFS_TARGET)-strip' BUILD32='-m32' BUILD64='-m64' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
+export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX CC='$(LFS_TARGET)-gcc' CXX='$(LFS_TARGET)-g++' AR='$(LFS_TARGET)-ar' AS='$(LFS_TARGET)-as' RANLIB='$(LFS_TARGET)-ranlib' LD='$(LFS_TARGET)-ld' STRIP='$(LFS_TARGET)-strip' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
 
-export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='-m32' BUILD64='-m64' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 
-export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='-m32' BUILD64='-m64' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 endif
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
