@@ -20,7 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr --exec-prefix=""
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+   	 --exec-prefix=""
+endif
 	make $(PM)
 	make install
 	mv /bin/pstree* /usr/bin

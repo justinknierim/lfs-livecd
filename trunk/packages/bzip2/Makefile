@@ -46,12 +46,27 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+ifndef CROSS
 	make $(PM) -f Makefile-libbz2_so
 	make clean
 	make $(PM)
+else
+	sed -i -e 's@^\(all:.*\) test@\1@g' \
+    	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile
+	make $(PM) -f Makefile-libbz2_so CC="gcc ${BUILD64}" \
+	 CXX="g++ ${BUILD64}"
+	make clean
+	make CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}"
+endif
 	make install
-	cp bzip2-shared /bin/bzip2 && cp -a libbz2.so* /lib
+	cp bzip2-shared /bin/bzip2
+ifndef CROSS
+	cp -a libbz2.so* /lib
 	ln -s ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
+else
+	cp -a libbz2.so* /lib64
+	ln -s ../../lib/libbz2.so.1.0 /usr/lib64/libbz2.so
+endif
 	rm /usr/bin/{bunzip2,bzcat,bzip2}
 	ln -s bzip2 /bin/bunzip2 && ln -s bzip2 /bin/bzcat
 

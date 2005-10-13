@@ -26,6 +26,12 @@ ifeq ($(LFS-ARCH),x86)
 	make install
 endif
 
+ifeq ($(LFS-ARCH),x86_64)
+	CC="gcc ${BUILD32}" ./configure --prefix=/usr
+	make $(PM)
+	make install
+endif
+
 clean:
 	-rm -rf $(DIR)
 

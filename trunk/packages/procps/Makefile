@@ -20,8 +20,13 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	make $(PM)
 	make install
+else
+	make CC="gcc ${BUILD64}"
+	make install lib64=lib64
+endif
 
 clean:
 	-rm -rf $(DIR)

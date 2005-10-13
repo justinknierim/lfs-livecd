@@ -19,7 +19,7 @@ SHA-$(PATCH31)= 638972c2f2b09cf20aac60ede91e803a96cea4d9
 STAGE1_DEPS = $(FILE)
 STAGE2_DEPS = $(FILE) $(PATCH1)
 
-ifeq ($(LFS-ARCH),sparc)
+ifdef CROSS
 STAGE1_DEPS+= $(PATCH31)
 STAGE2_DEPS+= $(PATCH31)
 endif
@@ -65,10 +65,14 @@ compile-stage2:
 	sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c
 	mkdir -p /var/lib/hwclock
 	patch -Np1 -i ../$(PATCH1)
-ifeq ($(LFS-ARCH),sparc)
+ifdef CROSS
 	patch -Np1 -i ../$(PATCH31)
 endif
+ifndef CROSS
 	./configure
+else
+	CC="gcc ${BUILD64}" ./configure
+endif
 	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
 	make HAVE_KILL=yes HAVE_SLN=yes install
 	mv /usr/bin/logger /bin
