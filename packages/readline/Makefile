@@ -26,13 +26,26 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+ifndef CROSS
 	./configure --prefix=/usr --libdir=/lib
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+   	 ./configure --prefix=/usr --libdir=/lib64
+endif
 	make $(PM) SHLIB_XLDFLAGS=-lncurses
 	make install
+ifndef CROSS
 	chmod 755 /lib/lib{readline,history}.so*
 	rm /lib/lib{readline,history}.so
 	ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so
 	ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so
+else
+	chmod 755 /lib64/lib{readline,history}.so*
+	mv /lib64/lib{readline,history}.a /usr/lib64
+	rm /lib64/lib{readline,history}.so
+	ln -sf ../../lib64/libreadline.so.5 /usr/lib64/libreadline.so
+	ln -sf ../../lib64/libhistory.so.5 /usr/lib64/libhistory.so
+endif
 
 clean:
 	-rm -rf $(DIR)
