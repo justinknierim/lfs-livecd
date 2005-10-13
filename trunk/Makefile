@@ -14,7 +14,7 @@
 
 # Machine architecure, LiveCD version, and Linux kernel version.
 #==============================================================================
-export LFS-ARCH := sparc64
+export LFS-ARCH := x86
 
 ifeq ($(LFS-ARCH),x86)
 export VERSION := $(LFS-ARCH)-6.2-pre1
