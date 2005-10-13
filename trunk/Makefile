@@ -14,7 +14,7 @@
 
 # Machine architecure, LiveCD version, and Linux kernel version.
 #==============================================================================
-export LFS-ARCH := x86
+export LFS-ARCH := sparc64
 
 ifeq ($(LFS-ARCH),x86)
 export VERSION := $(LFS-ARCH)-6.2-pre1
@@ -27,12 +27,14 @@ endif
 ifeq ($(LFS-ARCH),x86_64)
 export VERSION := x86_64-CLFS20051009-pre1
 export CROSS=yes
+export CROSS_WD=/cross-tools
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
 export VERSION := $(LFS-ARCH)-CLFS20051009-pre1
 export KVERS := 2.6.13.3
 export CROSS=yes
+export CROSS_WD=/cross-tools
 else
 export KVERS := 2.6.12.5
 endif
@@ -113,7 +115,6 @@ export CFLAGS := -Os -s
 export LFS_HOST=x86_64-cross-linux-gnu
 export LFS_TARGET=x86_64-pc-linux-gnu
 export LFS_TARGET32=i686-pc-linux-gnu
-export CROSS_WD=/cross-tools
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
@@ -121,7 +122,6 @@ export CFLAGS := -Os -s
 export LFS_HOST=sparc64-cross-linux-gnu
 export LFS_TARGET=sparc64-sun-linux-gnu
 export LFS_TARGET32=sparcv9-sun-linux-gnu
-export CROSS_WD=/cross-tools
 endif
 
 export CXXFLAGS := $(CFLAGS)
