@@ -27,10 +27,19 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	patch -Np1 -Z -i ../$(PATCH1)
 	touch doc/flex.1
+ifndef CROSS
 	./configure --prefix=/usr
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	 --libdir=/usr/lib64
+endif
 	make $(PM)
 	make install
+ifndef CROSS
 	ln -s libfl.a /usr/lib/libl.a
+else
+	ln -s libfl.a /usr/lib64/libl.a
+endif
 	echo "#!/bin/sh" > /usr/bin/lex
 	echo "# Begin /usr/bin/lex" >> /usr/bin/lex
 	echo "" >> /usr/bin/lex

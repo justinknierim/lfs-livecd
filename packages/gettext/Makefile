@@ -37,7 +37,15 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr
+else
+ifeq ($(LFS-ARCH),x86_64)
+	sed -i -e '2iexit 77' autoconf-lib-link/tests/rpath-3*[ef]
+endif
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	 ./configure --prefix=/usr --libdir=/usr/lib64
+endif
 	make
 	make install
 

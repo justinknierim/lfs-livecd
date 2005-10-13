@@ -21,8 +21,13 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin \
 	 --sysconfdir=/etc
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	 --bindir=/bin --sysconfdir=/etc
+endif
 	make $(PM)
 	make install
 
