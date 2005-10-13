@@ -193,6 +193,9 @@ else
 	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
 	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
 	 cd $(ROOT) && make x86_64-pre-bash $(chbash-pre-bash)'
+	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
+	 make x86_64-post-bash $(chbash-post-bash)'
+	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 endif
 
 extend-lfs: prep-chroot
@@ -286,7 +289,13 @@ x86_64-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
 	ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
 	ch-perl ch-iproute2 ch-texinfo ch-autoconf ch-automake ch-bash
 
-x86_64-post-bash:	
+x86_64-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
+	ch-grep ch-gzip ch-man ch-make ch-module-init-tools ch-patch ch-procps \
+	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
+	ch-hotplug
+ifeq ($(LFS-ARCH),x86_64)
+	make ch-grub
+endif
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \

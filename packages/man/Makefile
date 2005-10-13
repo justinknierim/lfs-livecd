@@ -22,7 +22,11 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i 's@-is@&R@g' configure
 	sed -i 's@MANPATH./usr/man@#&@g' src/man.conf.in
+ifndef CROSS
 	./configure -confdir=/etc
+else
+	CC="gcc ${BUILD64}" ./configure -confdir=/etc
+endif
 	make
 	make install
 

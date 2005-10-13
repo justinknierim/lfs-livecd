@@ -20,7 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure --libdir=/lib --enable-shared
+else
+	CC="gcc ${BUILD64}" ./configure --libdir=/lib64 \
+   	 --enable-shared
+endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	sed -i '/groups/d' man/Makefile
 	make $(PM)
@@ -31,9 +36,15 @@ compile-stage2:
 	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' \
 	     etc/login.defs.linux > /etc/login.defs
 	mv /usr/bin/passwd /bin
+ifndef CROSS
 	mv /lib/libshadow.*a /usr/lib
 	rm /lib/libshadow.so
 	ln -sf ../../lib/libshadow.so.0 /usr/lib/libshadow.so
+else
+	mv /lib64/libshadow.*a /usr/lib64
+	rm /lib64/libshadow.so
+	ln -sf ../../lib64/libshadow.so.0 /usr/lib64/libshadow.so
+endif
 	mkdir -p /etc/default
 	pwconv
 	grpconv

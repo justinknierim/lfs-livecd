@@ -34,7 +34,11 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr
+endif
 	make $(PM)
 	make install
 

@@ -48,7 +48,12 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+   	 --bindir=/bin --libexecdir=/usr/sbin
+endif
 	make $(PM)
 	make install
 

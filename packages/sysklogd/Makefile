@@ -25,7 +25,11 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i $(SRC)/$(PATCH1)
+ifndef CROSS
 	make $(PM)
+else
+	make $(PM) CC="gcc ${BUILD64}"
+endif
 	make install
 	cp -ra $(ROOT)/etc/syslog.conf /etc
 

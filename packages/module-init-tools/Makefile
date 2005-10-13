@@ -21,7 +21,11 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	touch modprobe.conf.5
+ifndef CROSS
 	./configure --prefix="" --enable-zlib
+else
+	CC="gcc ${BUILD64}" ./configure --prefix="" --enable-zlib
+endif
 	make $(PM)
 	make install
 

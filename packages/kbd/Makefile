@@ -46,10 +46,14 @@ compile-stage2:
 	sed -i -e 's/\(50 = 0x.\)A/\1C/' data/keymaps/i386/qwerty/by2_win.map
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH3)
-ifeq ($(LFS-ARCH),sparc)
+ifeq ($(LFS-ARCH),sparc64)
 	patch -Np1 -i ../$(PATCH2)
 endif
+ifndef CROSS
 	./configure
+else
+	CC="gcc ${BUILD64}" ./configure
+endif
 	make $(PM)
 	make install
 

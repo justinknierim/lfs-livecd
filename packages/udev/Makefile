@@ -24,7 +24,12 @@ stage2: Makefile $(FILE) $(CONFIG1)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	make EXTRAS=extras/run_directory/
+else
+	make CC="gcc ${BUILD64}" LD="gcc ${BUILD64}" \
+	 EXTRAS=extras/run_directory/
+endif
 	# DESTDIR avoids killing an existing udevd and starting a new one
 	make EXTRAS=extras/run_directory/ DESTDIR=/ install
 	# Udev-070 Makefile has a bug here

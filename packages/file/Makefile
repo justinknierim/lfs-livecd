@@ -21,7 +21,12 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
+ifndef CROSS
 	./configure --prefix=/usr
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+  	 --libdir=/usr/lib64
+endif
 	make $(PM)
 	make install
 

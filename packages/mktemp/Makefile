@@ -26,7 +26,11 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+ifndef CROSS
 	./configure --prefix=/usr --with-libc
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr --with-libc
+endif
 	make $(PM)
 	make install
 	make install-tempfile
