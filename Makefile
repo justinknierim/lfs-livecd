@@ -26,11 +26,13 @@ endif
 
 ifeq ($(LFS-ARCH),x86_64)
 export VERSION := x86_64-CLFS20051009-pre1
+export CROSS=yes
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
 export VERSION := $(LFS-ARCH)-CLFS20051009-pre1
 export KVERS := 2.6.13.3
+export CROSS=yes
 else
 export KVERS := 2.6.12.5
 endif
@@ -75,7 +77,7 @@ export MKTREE := $(MP)$(ROOT)
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 
 export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
@@ -112,7 +114,6 @@ export LFS_HOST=x86_64-cross-linux-gnu
 export LFS_TARGET=x86_64-pc-linux-gnu
 export LFS_TARGET32=i686-pc-linux-gnu
 export CROSS_WD=/cross-tools
-export CROSS=yes
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
@@ -121,7 +122,6 @@ export LFS_HOST=sparc64-cross-linux-gnu
 export LFS_TARGET=sparc64-sun-linux-gnu
 export LFS_TARGET32=sparcv9-sun-linux-gnu
 export CROSS_WD=/cross-tools
-export CROSS=yes
 endif
 
 export CXXFLAGS := $(CFLAGS)
