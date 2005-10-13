@@ -13,11 +13,11 @@ URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
 
 PATCH40= $(DIR)-posix-1.patch
-URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+URL-$(PATCH40)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= b3629af7348869b7d0a18cbfe19aa362aeb48fd1
 
 PATCH41= $(DIR)-cross_search_paths-1.patch
-URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
+URL-$(PATCH41)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= ca4b874774e20da34671acf391e86a3d7c9a9bb3
 
 # Targets
@@ -30,15 +30,29 @@ cross-static: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
 compile-cross-static:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
 	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
+ifeq ($(LFS-ARCH),x86_64)
 	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
 	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
-	 echo "#define STARTFILE_PREFIX_SPEC \"/tools/lib/\"" >> gcc/config/linux.h
-	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g" \
+	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
+endif
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; \
+	 for i in linux.h linux64.h ; do \
+	   echo " " >> gcc/config/sparc/$$i ; \
+	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/sparc/$$i ; \
+	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/sparc/$$i ; \
+	 done
+endif
+	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
 	 gcc/Makefile.in.orig > gcc/Makefile.in
 	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
 	 --target=$(LFS_TARGET) --with-local-prefix=$(WD) --disable-nls \
-	 --disable-shared --disable-threads --enable-languages=c 
+	 --disable-shared --disable-threads --enable-languages=c
+ifeq ($(LFS-ARCH),sparc64)
+	make $(PM) CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" all-gcc
+else
 	make $(PM) all-gcc
+endif
 	make install-gcc
 
 cross: $(FILE)
