@@ -1,7 +1,7 @@
 # Glibc Makefile
 
 NM= glibc
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 VRS= 2.3.5
 else
 VRS= 20050926
@@ -9,10 +9,11 @@ endif
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
+ifndef CROSS
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-ifneq ($(LFS-ARCH),x86_64)
 SHA-$(FILE)= 465cb1f4708dfa88606379cc1ebecb724c65f027
 else
+URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
 SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
 endif
 
@@ -44,17 +45,27 @@ PATCH6= $(DIR)-gcc4_fix_math_tests-1.patch
 URL-$(PATCH6)= $(HTTP)/$(NM)/$(PATCH6)
 SHA-$(PATCH6)= 32f42c062a3a0bfa651cedf015988537ad88dcaa
 
+PATCH30= $(DIR)-sparc_tls-1.patch
+URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
+SHA-$(PATCH30)= 5100d3728f58bc40f7f61de10c0b7a202b876aa5
+
 PATCH40= $(DIR)-libgcc_eh-1.patch
-URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
-SHA-$(PATCH40)= 40656faedabfa072c02225ba7d21fc0e76bbacb3
+URL-$(PATCH40)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= 19da4462ee85bc3c0e494d83f459394653a646e2
 
 PATCH41= $(DIR)-localedef_segfault-1.patch
-URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
+URL-$(PATCH41)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= ac908ef021764e90443e7cf7d72de87fe6168c38
+
+STAGE1-32_DEPS= $(FILE) $(PATCH40)
 
 # Targets
 
 include $(ROOT)/scripts/functions
+
+ifeq ($(LFS-ARCH),sparc64)
+STAGE1-32_DEPS+= $(PATCH30) $(PATCH41)
+endif
 
 headers: $(FILE)
 	$(sep_dir_build)
@@ -116,14 +127,17 @@ compile-stage1:
 	PARALLELMFLAGS="$(PM)" make install
 endif
 
-stage1-32: $(FILE) $(PATCH40)
+stage1-32: $(STAGE1-32_DEPS)
 	$(sep_dir_build)
 
 compile-stage1-32:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30) ; patch -Np1 -i ../$(PATCH41)
+endif
 	echo "libc_cv_forced_unwind=yes" > config.cache
 	echo "libc_cv_c_cleanup=yes" >> config.cache
-	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc ${BUILD32}" \
+	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc $(32FLAGS)" \
 	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
 	../$(DIR)/configure --prefix=$(WD) --host=$(LFS_TARGET32) \
 	--build=$(LFS_HOST) --disable-profile --enable-add-ons \
