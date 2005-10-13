@@ -8,23 +8,35 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= e72c9b260995b269c9fb9248ed468c18fb01f3fd
 
+PATCH30= $(DIR)-sparc_biarch-1.patch
+URL-$(PATCH30)= $(HTTP)/$(NM)/$(PATCH30)
+SHA-$(PATCH30)= 7581a8221f70dbf0ab2b56d7db4eda14bc076aeb
+
+PATCH31= $(DIR)-sparc_conflicts-1.patch
+URL-$(PATCH31)= $(HTTP)/$(NM)/$(PATCH31)
+SHA-$(PATCH31)= 6243129a647fe9f09bc4a30545365695898a5744
+
 PATCH40= $(DIR)-x86_64_biarch-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= e29083d611803dc0ae77599d06f21f608f775944
+
+STAGE1_DEPS= $(FILE)
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-ifneq ($(LFS-ARCH),x86_64)
-stage1: $(FILE)
-	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
-else
-stage1: $(FILE) $(PATCH40)
-	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH40)} $(LFSSRC)
+ifeq ($(LFS-ARCH),x86_64)
+STAGE1_DEPS+= $(PATCH40)
 endif
+
+ifeq ($(LFS-ARCH),sparc64)
+STAGE1_DEPS+= $(PATCH30) $(PATCH31)
+endif
+
+stage1: $(STAGE1_DEPS)
+	$(std_build)
+	for i in $(STAGE1_DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
 
 compile-stage1:
 ifeq ($(LFS-ARCH),x86)
@@ -33,8 +45,13 @@ endif
 ifeq ($(LFS-ARCH),ppc)
 	cp -Rv include/asm-ppc $(WD)/include/asm
 endif
-ifeq ($(LFS-ARCH),sparc)
-	cp -Rv include/asm-sparc $(WD)/include/asm
+ifeq ($(LFS-ARCH),sparc64)
+	patch -Np1 -i ../$(PATCH30)
+	patch -Np1 -i ../$(PATCH31)
+	install -d $(WD)/include
+	cp -Rv include/asm-sparc $(WD)/include
+	cp -Rv include/asm-sparc64 $(WD)/include
+	cp -Rv include/asm-sparc-biarch $(WD)/include/asm
 endif
 ifeq ($(LFS-ARCH),x86_64)
 	patch -Np1 -i ../$(PATCH40)
