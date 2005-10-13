@@ -12,16 +12,18 @@
 # Unless otherwise noted, please try to keep all line lengths below 80 chars. 
 #
 
-# Machine architecure, LiveCD version, and Linux kernel version.
+# Machine architecure, LiveCD version, and specific arch variables.
 #==============================================================================
 export LFS-ARCH := x86
 
 ifeq ($(LFS-ARCH),x86)
 export VERSION := $(LFS-ARCH)-6.2-pre1
+export CFLAGS := -Os -s -march=i486
 endif
 
 ifeq ($(LFS-ARCH),ppc)
 export VERSION := $(LFS-ARCH)-6.2-pre1
+export CFLAGS := -Os -s
 endif
 
 ifeq ($(LFS-ARCH),x86_64)
@@ -30,6 +32,10 @@ export CROSS=yes
 export CROSS_WD=/cross-tools
 export 32FLAGS=-m32
 export 64FLAGS=-m64
+export CFLAGS := -Os -s
+export LFS_HOST=x86_64-cross-linux-gnu
+export LFS_TARGET=x86_64-pc-linux-gnu
+export LFS_TARGET32=i686-pc-linux-gnu
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
@@ -39,6 +45,10 @@ export CROSS=yes
 export CROSS_WD=/cross-tools
 export 32FLAGS=-m32 -mcpu=ultrasparc -mtune=ultrasparc
 export 64FLAGS=-m64 -mcpu=ultrasparc -mtune=ultrasparc
+export CFLAGS := -Os -s
+export LFS_HOST=sparc64-cross-linux-gnu
+export LFS_TARGET=sparc64-sun-linux-gnu
+export LFS_TARGET32=sparcv9-sun-linux-gnu
 else
 export KVERS := 2.6.12.5
 endif
@@ -106,28 +116,6 @@ export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) 
 
 # More Environment Variables
 #==============================================================================
-ifeq ($(LFS-ARCH),x86)
-export CFLAGS := -Os -s -march=i486
-endif
-
-ifeq ($(LFS-ARCH),ppc)
-export CFLAGS := -Os -s
-endif
-
-ifeq ($(LFS-ARCH),x86_64)
-export CFLAGS := -Os -s
-export LFS_HOST=x86_64-cross-linux-gnu
-export LFS_TARGET=x86_64-pc-linux-gnu
-export LFS_TARGET32=i686-pc-linux-gnu
-endif
-
-ifeq ($(LFS-ARCH),sparc64)
-export CFLAGS := -Os -s
-export LFS_HOST=sparc64-cross-linux-gnu
-export LFS_TARGET=sparc64-sun-linux-gnu
-export LFS_TARGET32=sparcv9-sun-linux-gnu
-endif
-
 export CXXFLAGS := $(CFLAGS)
 
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
