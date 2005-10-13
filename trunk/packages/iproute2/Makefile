@@ -24,7 +24,11 @@ compile-stage2:
 	sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
 	chmod u+x configure
 	./configure
+ifndef CROSS
 	make $(PM) SBINDIR=/sbin
+else
+	make $(PM) CC="gcc ${BUILD64}" SBINDIR=/sbin
+endif
 	make SBINDIR=/sbin install
 
 clean:

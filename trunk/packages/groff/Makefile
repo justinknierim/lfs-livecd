@@ -21,7 +21,12 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
+ifndef CROSS
 	PAGE=$(pagesize) ./configure --prefix=/usr
+else
+	PAGE=$(pagesize) CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	 ./configure --prefix=/usr --libdir=/usr/lib64
+endif
 	make
 	make install
 	ln -s soelim /usr/bin/zsoelim

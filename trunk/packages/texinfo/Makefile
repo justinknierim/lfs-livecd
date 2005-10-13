@@ -36,7 +36,11 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+ifndef CROSS
 	./configure --prefix=/usr
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr
+endif
 	make $(PM)
 	make install
 	make TEXMF=/usr/share/texmf install-tex

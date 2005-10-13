@@ -35,7 +35,12 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i 's@/doc@&/$(DIR)@' doc/Makefile.in
+ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin
+else
+	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	 --bindir=/bin
+endif
 	make $(PM)
 	make install
 

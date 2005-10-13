@@ -36,7 +36,12 @@ compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	patch -Np1 -i ../$(PATCH1)
+ifndef CROSS
 	./configure --prefix=/usr --enable-multibyte
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	 ./configure --prefix=/usr --enable-multibyte
+endif
 	make $(PM)
 	make install
 	ln -sf vim /usr/bin/vi

@@ -49,7 +49,16 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifndef CROSS
 	./configure.gnu --prefix=/usr -Dpager="/bin/less -isR"
+else
+	sed -i 's@\$${prefix}/lib@\$${prefix}/lib64@g' hints/linux.sh
+	patch -Np1 -i ../$(PATCH40)
+	chmod u+w hints/linux.sh
+	echo "installstyle=\"lib64/perl5\"" >> hints/linux.sh
+	./configure.gnu --prefix=/usr -Dpager="/bin/less -isR" \
+	 -Dcc="gcc ${BUILD64}"
+endif
 	make
 	make install
 

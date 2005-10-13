@@ -58,8 +58,14 @@ compile-stage2:
 	 Makefile.in
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
 	 --with-installed-readline
+else
+	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+    	 ./configure --prefix=/usr --bindir=/bin \
+    	 --without-bash-malloc --with-installed-readline
+endif
 	make $(PM)
 	make install
 
