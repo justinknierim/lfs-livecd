@@ -1,48 +1,26 @@
 # Ncurses Makefile
 
 NM= ncurses
-VRS= 5.4
+VRS= 5.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= e4911dd9688a8e3ebf5faa97efd2eb9790b0c1d9
-
-PATCH1= $(DIR)-20050827-patch.sh.bz2
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 7da2e2ae84d49466ff777b4d815318391776e21b
-
-# Just for $(PATCH3) not to fail
-PATCH2= $(DIR)-20050903.patch.gz
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= 7012562cf189879484addcaacb128cefb8f89c72
-
-# Fix for double Gpm_Open()
-PATCH3= $(DIR)-20050910.patch.gz
-URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
-SHA-$(PATCH3)= 3078547c70c63cc03fa9a1ea298aa701771c42eb
+SHA-$(FILE)= 3283b776e69134aa49147b66619e01d29bc50714
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-ifneq ($(LFS-ARCH),x86_64)
 stage1: $(FILE)
 	$(std_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
-else
-stage1: $(FILE) $(PATCH1)
-	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)	
-endif
 
 compile-stage1:
 ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --with-shared --without-debug \
 	 --without-ada --enable-overwrite
 else
-	bzcat ../$(PATCH1) > update.sh
-	sh update.sh
 	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
    	 ./configure --prefix=$(WD) --with-shared \
    	 --host=$(LFS_TARGET) --without-debug --without-ada \
@@ -60,10 +38,6 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	bzcat ../$(PATCH1) > update.sh
-	sh update.sh
-	zcat ../$(PATCH2) | patch -Np1
-	zcat ../$(PATCH3) | patch -Np1
 ifeq ($(LFS-ARCH),sparc)
 	./configure --prefix=/usr --with-shared --without-debug
 else
@@ -79,6 +53,5 @@ endif
 
 clean:
 	-rm -rf $(DIR)
-	rm -f update.sh 
 
 .PHONY: compile-stage1 clean chroot compile-stage2
