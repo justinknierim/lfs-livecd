@@ -13,17 +13,23 @@
 #
 
 # Machine architecure, LiveCD version, and Linux kernel version.
-# Edit the ARCH and VERSION variables if you are building for a non-x86 arch.
 #==============================================================================
 export LFS-ARCH := x86
 
-ifneq ($(LFS-ARCH),x86_64)
+ifeq ($(LFS-ARCH),x86)
 export VERSION := $(LFS-ARCH)-6.2-pre1
-else
+endif
+
+ifeq ($(LFS-ARCH),ppc)
+export VERSION := $(LFS-ARCH)-6.2-pre1
+endif
+
+ifeq ($(LFS-ARCH),x86_64)
 export VERSION := x86_64-CLFS20051009-pre1
 endif
 
-ifeq ($(LFS-ARCH), sparc)
+ifeq ($(LFS-ARCH),sparc64)
+export VERSION := $(LFS-ARCH)-CLFS20051009-pre1
 export KVERS := 2.6.13.3
 else
 export KVERS := 2.6.12.5
@@ -65,15 +71,7 @@ export SRC := /sources
 export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
-ifeq ($(LFS-ARCH),x86_64)
-export CROSS_WD=/cross-tools
-endif
 
-ifeq ($(LFS-ARCH),x86_64)
-export LFS_HOST=x86_64-cross-linux-gnu
-export LFS_TARGET=x86_64-pc-linux-gnu
-export LFS_TARGET32=i686-pc-linux-gnu
-endif
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
@@ -103,15 +101,29 @@ export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) 
 ifeq ($(LFS-ARCH),x86)
 export CFLAGS := -Os -s -march=i486
 endif
-ifeq ($(LFS-ARCH),sparc)
-export CFLAGS := -Os -s -mcpu=v8 -mtune=v8
-endif
+
 ifeq ($(LFS-ARCH),ppc)
 export CFLAGS := -Os -s
 endif
+
 ifeq ($(LFS-ARCH),x86_64)
 export CFLAGS := -Os -s
+export LFS_HOST=x86_64-cross-linux-gnu
+export LFS_TARGET=x86_64-pc-linux-gnu
+export LFS_TARGET32=i686-pc-linux-gnu
+export CROSS_WD=/cross-tools
+export CROSS=yes
 endif
+
+ifeq ($(LFS-ARCH),sparc64)
+export CFLAGS := -Os -s
+export LFS_HOST=sparc64-cross-linux-gnu
+export LFS_TARGET=sparc64-sun-linux-gnu
+export LFS_TARGET32=sparcv9-sun-linux-gnu
+export CROSS_WD=/cross-tools
+export CROSS=yes
+endif
+
 export CXXFLAGS := $(CFLAGS)
 
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
@@ -136,7 +148,7 @@ WGET_V= 1.10.1
 # lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
 
 all: test-host lfs-base extend-lfs iso
-	@echo "The livecd, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
+	@echo "The LiveCD, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
 
 test-host:
 	@if [ `whoami` != "root" ] ; then \
@@ -152,7 +164,7 @@ lfs-base: lfsuser
 	@-ln -nsf $(MP)$(SRC) /
 	@-ln -nsf $(MP)$(ROOT) /
 	@-ln -nsf $(MP)$(LFSSRC) /
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	@-make unamemod
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
@@ -194,9 +206,9 @@ endif
 extend-lfs: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
-ifeq ($(LFS-ARCH),sparc)
+ifeq ($(LFS-ARCH),sparc64)
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make sparc-blfs $(chbash-post-bash)'
+	 make sparc64-blfs $(chbash-post-bash)'
 else
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
@@ -215,7 +227,7 @@ pre-which:
 	@chmod 755 $(WHICH)
 
 pre-wget:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	@if [ ! -f $(WD)/bin/ftpget ] ; then \
 	 install -m755 $(ROOT)/scripts/ftpget $(WD)/bin/ ; fi
 	@$(MAKE) -C $(PKG)/wget prebuild
@@ -234,7 +246,7 @@ unamemod:
 cross-tools: pre-which pre-wget lfs-linux-libc-headers-scpt lfs-binutils-cross \
 	lfs-gcc-cross-static lfs-glibc-scpt-32 lfs-glibc-scpt lfs-gcc-cross 
 
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
@@ -301,7 +313,7 @@ ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
 
-sparc-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
+sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-links ch-openssh \
@@ -373,7 +385,7 @@ createdirs:
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
-ifeq ($(LFS-ARCH),x86_64)
+ifdef CROSS
 	@-$(WD)/bin/install -d /{,usr/{,local},opt}/lib64
 	@-$(WD)/bin/install -d /usr/lib/locale
 	@-$(WD)/bin/ln -s ../lib/locale /usr/lib64
@@ -484,7 +496,7 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-ifneq ($(LFS-ARCH),sparc)
+ifneq ($(LFS-ARCH),sparc64)
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
 else
@@ -519,7 +531,7 @@ ifeq ($(LFS-ARCH),ppc)
 	@if ! grep -q "Blessing" $(MKTREE)/iso.log ; then \
 	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
 endif
-ifeq ($(LFS-ARCH),sparc)
+ifeq ($(LFS-ARCH),sparc64)
 	@cd $(MP) ; ./usr/bin/mkisofs -v -R -l -D --allow-leading-dots \
 	 -G iso/boot/isofs.b -B ... -r -V "lfslivecd-$(VERSION)" \
 	 -o $(MKTREE)/lfslivecd-$(VERSION).iso iso >$(MKTREE)/iso.log 2>&1
@@ -530,7 +542,7 @@ endif
 
 clean: unmount
 	@-rm -rf $(WD) $(MP)$(WD)
-ifeq ($(LFS-ARCH),x86_64)
+ifdef CROSS
 	@-rm -rf $(CROSS_WD) $(MP)$(CROSS_WD)
 endif
 	@-userdel lfs
@@ -543,7 +555,7 @@ endif
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
-ifeq ($(LFS-ARCH),x86_64)
+ifdef CROSS
 	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
 	@rm -f $(PKG)/glibc/headers
 endif
