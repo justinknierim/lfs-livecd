@@ -103,10 +103,10 @@ endif
 	cp -Rv include/sound /usr/include
 	cp -Rv include/scsi /usr/include
 	chown -R root:root \
-	 /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi}
-	find /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi} \
+	 /usr/include/{asm,asm-sparc,asm-sparc64,linux,mtd,sound,scsi}
+	find /usr/include/{asm,asm-sparc,asm-sparc64,linux,mtd,sound,scsi} \
 	 -type d -exec chmod 755 {} \;
-	find /usr/include/{asm,asm-i386,asm-x86_64,linux,mtd,sound,scsi} \
+	find /usr/include/{asm,asm-sparc,asm-sparc64,linux,mtd,sound,scsi} \
 	 -type f -exec chmod 644 {} \;
 endif
 
