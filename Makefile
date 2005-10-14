@@ -192,9 +192,9 @@ else
 	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
 	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
 	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
-	 cd $(ROOT) && make x86_64-pre-bash $(chbash-pre-bash)'
+	 cd $(ROOT) && make cross-pre-bash $(chbash-pre-bash)'
 	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
-	 make x86_64-post-bash $(chbash-post-bash)'
+	 make cross-post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 endif
 
@@ -239,7 +239,7 @@ unamemod:
 	@touch $@
 
 cross-tools: pre-which pre-wget lfs-linux-libc-headers-scpt lfs-binutils-cross \
-	lfs-gcc-cross-static lfs-glibc-scpt-32 lfs-glibc-scpt lfs-gcc-cross 
+	lfs-gcc-cross-static lfs-glibc-scpt-32 lfs-glibc-scpt lfs-gcc-cross
 
 ifndef CROSS
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
@@ -282,14 +282,14 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
 
-x86_64-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
+cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt stop lfs-expect-scpt \
 	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
 	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
 	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline \
 	ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
 	ch-perl ch-iproute2 ch-texinfo ch-autoconf ch-automake ch-bash
 
-x86_64-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
+cross-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-grep ch-gzip ch-man ch-make ch-module-init-tools ch-patch ch-procps \
 	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
 	ch-hotplug
