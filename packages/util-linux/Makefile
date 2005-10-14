@@ -30,17 +30,14 @@ include $(ROOT)/scripts/functions
 
 stage1: $(STAGE1_DEPS)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
-ifeq ($(LFS-ARCH),sparc)
-	cp $(SRC)/$(PATCH31) $(LFSSRC)
-endif
+	for i in $(STAGE1_DEPS) ; do cp $(SRC)/$$i $(LFS-SRC) ; done
 
 compile-stage1:
 	sed -i 's@/usr/include@$(WD)/include@g' configure
-ifeq ($(LFS-ARCH),sparc)
+ifeq ($(LFS-ARCH),sparc64)
 	patch -Np1 -i ../$(PATCH31)
 endif
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure
 	make -C lib
 	make -C mount mount umount

@@ -17,7 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
 else
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
