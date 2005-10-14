@@ -27,7 +27,7 @@ ifeq ($(LFS-ARCH),x86)
 endif
 
 ifeq ($(LFS-ARCH),x86_64)
-	CC="gcc ${BUILD32}" ./configure --prefix=/usr
+	CC="gcc $(32FLAGS)" ./configure --prefix=/usr
 	make $(PM)
 	make install
 endif

@@ -30,7 +30,7 @@ ifndef CROSS
 	ROOT="" make $(PM) -C src
 else
 	ROOT="" make -C src clobber
-	ROOT="" make -C src CC="gcc ${BUILD64}"
+	ROOT="" make -C src CC="gcc $(64FLAGS)"
 endif
 	ROOT="" make -C src install
 	cp $(ROOT)/etc/inittab /etc

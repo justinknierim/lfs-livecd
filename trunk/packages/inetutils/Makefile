@@ -37,7 +37,7 @@ ifndef CROSS
 	--disable-logger --disable-syslogd \
 	--disable-whois --disable-servers
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
 	--libexecdir=/usr/sbin --sysconfdir=/etc --localstatedir=/var \
 	--disable-logger --disable-syslogd --disable-whois \
 	--disable-servers

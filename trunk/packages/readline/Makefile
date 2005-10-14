@@ -29,7 +29,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --libdir=/lib
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
    	 ./configure --prefix=/usr --libdir=/lib64
 endif
 	make $(PM) SHLIB_XLDFLAGS=-lncurses

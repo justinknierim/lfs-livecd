@@ -34,7 +34,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --shared --libdir=/lib
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" CFLAGS="${CFLAGS} -fPIC" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" CFLAGS="${CFLAGS} -fPIC" \
 	 ./configure --prefix=/usr --shared --libdir=/lib64
 endif
 	make $(PM)
@@ -50,7 +50,7 @@ endif
 ifndef CROSS
 	./configure --prefix=/usr
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" ./configure \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" ./configure \
     	 --prefix=/usr --libdir=/usr/lib64
 endif
 	make $(PM)

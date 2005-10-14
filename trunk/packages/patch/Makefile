@@ -20,7 +20,7 @@ compile-stage1:
 ifneq ($(LFS-ARCH),x86_64)
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
 else
-	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
     	 --host=$(LFS_TARGET)
 endif
 	make $(PM)
@@ -37,7 +37,7 @@ compile-stage2:
 ifndef CROSS
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=/usr
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
 endif
 	make $(PM)
 	make install

@@ -50,7 +50,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
    	 --libexecdir=/usr/lib64
 endif
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h

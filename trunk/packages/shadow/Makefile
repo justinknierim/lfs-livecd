@@ -23,7 +23,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --libdir=/lib --enable-shared
 else
-	CC="gcc ${BUILD64}" ./configure --libdir=/lib64 \
+	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \
    	 --enable-shared
 endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile

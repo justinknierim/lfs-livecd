@@ -27,7 +27,7 @@ compile-stage2:
 ifndef CROSS
 	make EXTRAS=extras/run_directory/
 else
-	make CC="gcc ${BUILD64}" LD="gcc ${BUILD64}" \
+	make CC="gcc $(64FLAGS)" LD="gcc $(64FLAGS)" \
 	 EXTRAS=extras/run_directory/
 endif
 	# DESTDIR avoids killing an existing udevd and starting a new one

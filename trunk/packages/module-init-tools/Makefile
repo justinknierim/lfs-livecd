@@ -24,7 +24,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix="" --enable-zlib
 else
-	CC="gcc ${BUILD64}" ./configure --prefix="" --enable-zlib
+	CC="gcc $(64FLAGS)" ./configure --prefix="" --enable-zlib
 endif
 	make $(PM)
 	make install

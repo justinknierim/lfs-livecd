@@ -29,7 +29,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --with-libc
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr --with-libc
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr --with-libc
 endif
 	make $(PM)
 	make install

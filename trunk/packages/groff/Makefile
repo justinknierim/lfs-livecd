@@ -24,7 +24,7 @@ compile-stage2:
 ifndef CROSS
 	PAGE=$(pagesize) ./configure --prefix=/usr
 else
-	PAGE=$(pagesize) CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	PAGE=$(pagesize) CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
 	 ./configure --prefix=/usr --libdir=/usr/lib64
 endif
 	make

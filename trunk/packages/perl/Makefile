@@ -57,7 +57,7 @@ else
 	chmod u+w hints/linux.sh
 	echo "installstyle=\"lib64/perl5\"" >> hints/linux.sh
 	./configure.gnu --prefix=/usr -Dpager="/bin/less -isR" \
-	 -Dcc="gcc ${BUILD64}"
+	 -Dcc="gcc $(64FLAGS)"
 endif
 	make
 	make install
