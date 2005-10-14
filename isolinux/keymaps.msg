@@ -4,7 +4,7 @@ azerty:
 azerty be-latin1 fr-latin1 fr-latin9 fr fr-pc wangbe wangbe2
 
 dvorak:
-ANSI-dvorak dvorak-l dvorak dvorak-r
+ANSI-dvorak dvorak-l dvorak/dvorak dvorak-r
 
 fgGIod:
 tr_f-latin5 trf
