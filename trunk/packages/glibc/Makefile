@@ -57,14 +57,14 @@ PATCH41= $(DIR)-localedef_segfault-1.patch
 URL-$(PATCH41)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= ac908ef021764e90443e7cf7d72de87fe6168c38
 
-STAGE1-32_DEPS= $(FILE) $(PATCH40)
+STAGE1_DEPS= $(FILE) $(PATCH40)
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
 ifeq ($(LFS-ARCH),sparc64)
-STAGE1-32_DEPS+= $(PATCH30) $(PATCH41)
+STAGE1_DEPS+= $(PATCH30) $(PATCH41)
 endif
 
 headers: $(FILE)
@@ -83,19 +83,13 @@ compile-headers:
 	cp -v ../$(DIR)/nptl/sysdeps/unix/sysv/linux/x86_64/bits/pthreadtypes.h \
 	 $(WD)/include/bits
 
-ifneq ($(LFS-ARCH),x86_64)
+ifndef	CROSS
 stage1: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5)
 	$(sep_dir_build)
 	cp $(SRC)/{$(FILE),$(FILE1),$(PATCH1),$(PATCH2),$(PATCH3),$(PATCH4),$(PATCH5)} $(LFSSRC)/
 
 compile-stage1:
-ifeq ($(LFS-ARCH),sparc)
-	cd ../$(DIR) ; rm -rf nptl*
-	cd ../$(DIR) ; unpack ../$(FILE1)
-	cd ../$(DIR) ; sed -i 's@mv8@mcpu=v8@' sysdeps/unix/sysv/linux/sparc/sparc32/Makefile
-else
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
-endif
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH4)
@@ -108,15 +102,18 @@ endif
 	PARALLELMFLAGS="$(PM)" make install
 else
 
-stage1: $(FILE) $(PATCH40)
+stage1: $(STAGE1_DEPS)
 	$(sep_dir_build)
 
 compile-stage1:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30) ; patch -Np1 -i ../$(PATCH41)
+endif
 	echo "libc_cv_forced_unwind=yes" > config.cache
 	echo "libc_cv_c_cleanup=yes" >> config.cache
-	echo "slibdir=/tools/lib64" >> configparms
-	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc" \
+	echo "slibdir=$(WD)/lib64" >> configparms
+	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc $(64FLAGS)" \
 	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
 	../$(DIR)/configure --prefix=$(WD) --host=$(LFS_TARGET) \
 	--build=$(LFS_HOST) --libdir=$(WD)/lib64 --disable-profile \
@@ -127,7 +124,7 @@ compile-stage1:
 	PARALLELMFLAGS="$(PM)" make install
 endif
 
-stage1-32: $(STAGE1-32_DEPS)
+stage1-32: $(STAGE1_DEPS)
 	$(sep_dir_build)
 
 compile-stage1-32:
