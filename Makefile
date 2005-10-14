@@ -27,7 +27,7 @@ export CFLAGS := -Os -s
 endif
 
 ifeq ($(LFS-ARCH),x86_64)
-export VERSION := x86_64-CLFS20051009-pre1
+export VERSION := x86_64-CRS051009-pre1
 export CROSS=yes
 export CROSS_WD=/cross-tools
 export 32FLAGS=-m32
@@ -201,12 +201,18 @@ endif
 extend-lfs: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
+ifndef CROSS
+	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
+	 make blfs $(chbash-post-bash)'
+else
 ifeq ($(LFS-ARCH),sparc64)
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make sparc64-blfs $(chbash-post-bash)'
-else
+endif
+ifeq ($(LFS-ARCH),x86_64)
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make blfs $(chbash-post-bash)'
+	 make x86_64-blfs $(chbash-post-bash)'
+endif
 endif
 	@make unmount
 	@touch $@
@@ -292,7 +298,7 @@ cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt stop lfs-expect-scpt 
 cross-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-grep ch-gzip ch-man ch-make ch-module-init-tools ch-patch ch-procps \
 	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
-	ch-hotplug
+	ch-hotplug final-environment
 ifeq ($(LFS-ARCH),x86_64)
 	make ch-grub
 endif
@@ -317,6 +323,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
+
+x86_64-blfs: ch-lfs-bootscripts ch-squashfs ch-cpio ch-linux ch-ctags ch-unionfs \
+	ch-initramfs ch-cdrtools ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
@@ -511,19 +520,27 @@ ifeq ($(LFS-ARCH),x86)
 	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
+ifeq ($(LFS-ARCH),x86_64)
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
+endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
+ifneq ($(LFS-ARCH),x86_64)
 ifneq ($(LFS-ARCH),sparc64)
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
 else
 	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
 endif
+endif
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll,shutdown-helper} $(MP)/usr/bin/
 	@cp -ra root $(MP)/etc/skel
+ifndef CROSS
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
+endif
 	@-mkdir $(MP)/iso
 	@cp -rav $(MP)/lfs-sources $(MP)/iso
 	@cp -rav $(MP)/boot $(MP)/iso
@@ -531,11 +548,17 @@ endif
 
 $(MP)/iso/.root.sqfs:
 	@$(WD)/bin/mksquashfs $(MP) .root.sqfs -info -e \
-	 boot sources lfs-sources tools iso lfs-livecd lost+found tmp proc >sqfs.log 2>&1 && \
+	 boot cross-tools sources lfs-sources tools iso lfs-livecd lost+found tmp proc >sqfs.log 2>&1 && \
 	 mv .root.sqfs $@
 
 iso: prepiso $(MP)/iso/.root.sqfs
 ifeq ($(LFS-ARCH),x86)
+	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
+	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
+	-V "lfslivecd-$(VERSION)" ./
+endif
+ifeq ($(LFS-ARCH),x86_64)
 	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
 	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \

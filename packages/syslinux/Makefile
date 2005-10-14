@@ -24,6 +24,11 @@ ifeq ($(LFS-ARCH),x86)
 	cp -v isolinux.bin /boot/isolinux
 	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
 endif
+ifeq ($(LFS-ARCH),x86_64)
+	cp -v isolinux.bin /boot/isolinux
+	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
+endif
+
 
 clean:
 	-rm -rf $(DIR)
