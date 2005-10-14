@@ -55,17 +55,27 @@ else
 endif
 	make install-gcc
 
-cross: $(FILE)
+cross: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
 	$(sep_dir_build)
 
 compile-cross:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
 	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
+ifeq ($(LFS-ARCH),x86_64)
 	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
 	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
-	 echo "#define STARTFILE_PREFIX_SPEC \"/tools/lib/\"" >> gcc/config/linux.h
+	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
+endif
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; \
+	 for i in linux.h linux64.h ; do \
+	   echo " " >> gcc/config/sparc/$$i ; \
+	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
+	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
+	 done
+endif	    
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
-	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g" \
+	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
  	 gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/config/t-slibgcc-elf-ver{,.orig} ; \
 	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-slibgcc-elf-ver.orig \
@@ -79,8 +89,15 @@ compile-cross:
 	 --host=$(LFS_HOST) --with-local-prefix=$(WD) --disable-nls \
 	 --enable-shared --enable-languages=c,c++ --enable-__cxa_atexit \
 	 --enable-c99 --enable-long-long --enable-threads=posix
+ifeq ($(LFS-ARCH),sparc64)
+	make $(PM) CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
+	 CXXFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
+	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
+else
 	make $(PM) AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
 	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
+endif
 	make install
 
 stage1: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
