@@ -17,7 +17,7 @@ $(FILE):
 	$(call download,$(FILE),NULL,$(SHA))
 	
 
-prebuild: Makefile $(FILE)
+prebuild: $(FILE)
 	$(std_build)
 
 compile-prebuild:

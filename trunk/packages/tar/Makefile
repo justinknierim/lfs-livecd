@@ -26,7 +26,7 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)/
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD)
 else

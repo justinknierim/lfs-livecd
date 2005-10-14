@@ -17,7 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure --prefix=$(WD) --disable-libasprintf --without-csharp
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache

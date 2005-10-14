@@ -17,7 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC) # Copy LFS-Base packages to safe location
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure --prefix=$(WD) --disable-perl-regexp
 else
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
