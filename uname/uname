@@ -9,8 +9,6 @@ fi
 
 if echo `$REAL -m` | grep -q "i*86" ; then
 	$REAL "$@" | sed 's/[56]86/486/'
-elif echo `$REAL -m` | grep -q "sparc" ; then
-	$REAL "$@" | sed 's/sparc64/sparc/'
 else
 	$REAL "$@"
 fi
