@@ -21,12 +21,12 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC) 
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure --prefix=$(WD)
 else
 	cp configure{,.bak}
 	sed "s@nm conftest@$(LFS_TARGET)-&@" configure.bak > configure
-	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
 	 --host=$(LFS_TARGET)
 endif
 	make $(PM)
