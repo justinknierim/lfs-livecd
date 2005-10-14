@@ -39,7 +39,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --enable-multibyte
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
 	 ./configure --prefix=/usr --enable-multibyte
 endif
 	make $(PM)

@@ -17,11 +17,11 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure --prefix=$(WD)
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
    	 --host=$(LFS_TARGET) --cache-file=config.cache
 endif
 	make $(PM)
@@ -39,7 +39,7 @@ ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib/locate \
 	 --localstatedir=/var/lib/locate
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
     	--libexecdir=/usr/lib64/locate --localstatedir=/var/lib/locate
 endif
 	make $(PM)

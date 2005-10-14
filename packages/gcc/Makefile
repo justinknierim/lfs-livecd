@@ -184,7 +184,7 @@ ifndef CROSS
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
     	../$(DIR)/configure --prefix=/usr --libdir=/usr/lib64 \
     	 --libexecdir=/usr/lib64 --enable-shared --enable-threads=posix \
     	 --enable-__cxa_atexit --enable-c99 --enable-long-long \

@@ -27,7 +27,7 @@ compile-stage2:
 ifndef CROSS
 	make $(PM) SBINDIR=/sbin
 else
-	make $(PM) CC="gcc ${BUILD64}" SBINDIR=/sbin
+	make $(PM) CC="gcc $(64FLAGS)" SBINDIR=/sbin
 endif
 	make SBINDIR=/sbin install
 

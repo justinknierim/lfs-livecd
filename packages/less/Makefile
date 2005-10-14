@@ -25,7 +25,7 @@ ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin \
 	 --sysconfdir=/etc
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
 	 --bindir=/bin --sysconfdir=/etc
 endif
 	make $(PM)

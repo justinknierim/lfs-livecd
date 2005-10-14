@@ -25,7 +25,7 @@ compile-stage2:
 ifndef CROSS
 	./configure -confdir=/etc
 else
-	CC="gcc ${BUILD64}" ./configure -confdir=/etc
+	CC="gcc $(64FLAGS)" ./configure -confdir=/etc
 endif
 	make
 	make install

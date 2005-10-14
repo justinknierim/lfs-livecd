@@ -21,7 +21,7 @@ ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --with-shared --without-debug \
 	 --without-ada --enable-overwrite
 else
-	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --with-shared \
    	 --host=$(LFS_TARGET) --without-debug --without-ada \
    	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
@@ -41,7 +41,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --with-shared --without-debug --with-gpm
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
    	 ./configure --prefix=/usr --libdir=/lib64 --with-shared --without-debug
 endif
 	make sources

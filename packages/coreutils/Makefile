@@ -64,7 +64,7 @@ endif
 ifndef CROSS
 	DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=/usr
 else
-	CC="gcc ${BUILD64}" DEFAULT_POSIX2_VERSION=199209 \
+	CC="gcc $(64FLAGS)" DEFAULT_POSIX2_VERSION=199209 \
 	 ./configure --prefix=/usr
 endif
 	make $(PM)

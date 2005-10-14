@@ -192,7 +192,7 @@ stage2: $(FILE) $(PATCH41)
 compile-stage2:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
 	echo "slibdir=/lib64" >> configparms
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
     	 ../$(DIR)/configure --prefix=/usr \
     	 --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
     	 --libexecdir=/usr/lib64/glibc --libdir=/usr/lib64
@@ -210,7 +210,7 @@ stage2-32: $(FILE) $(PATCH41)
 
 compile-stage2-32:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
-	CC="gcc ${BUILD32}" CXX="g++ ${BUILD32}" \
+	CC="gcc $(32FLAGS)" CXX="g++ $(32FLAGS)" \
     	 ../$(DIR)/configure --prefix=/usr \
     	 --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
     	 --libexecdir=/usr/lib/glibc --host=$(LFS_TARGET32)

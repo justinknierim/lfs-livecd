@@ -28,7 +28,7 @@ compile-stage2:
 ifndef CROSS
 	make $(PM)
 else
-	make $(PM) CC="gcc ${BUILD64}"
+	make $(PM) CC="gcc $(64FLAGS)"
 endif
 	make install
 	cp -ra $(ROOT)/etc/syslog.conf /etc

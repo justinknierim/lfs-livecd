@@ -53,10 +53,10 @@ ifndef CROSS
 else
 	sed -i -e 's@^\(all:.*\) test@\1@g' \
     	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile
-	make $(PM) -f Makefile-libbz2_so CC="gcc ${BUILD64}" \
-	 CXX="g++ ${BUILD64}"
+	make $(PM) -f Makefile-libbz2_so CC="gcc $(64FLAGS)" \
+	 CXX="g++ $(64FLAGS)"
 	make clean
-	make CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}"
+	make CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)"
 endif
 	make install
 	cp bzip2-shared /bin/bzip2

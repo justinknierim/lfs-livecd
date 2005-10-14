@@ -23,7 +23,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --exec-prefix=""
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
    	 --exec-prefix=""
 endif
 	make $(PM)

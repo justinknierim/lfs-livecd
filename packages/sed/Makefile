@@ -20,7 +20,7 @@ compile-stage1:
 ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD)
 else
-	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
    	 --host=$(LFS_TARGET)
 endif
 	make $(PM)
@@ -38,7 +38,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
 	 --bindir=/bin
 endif
 	make $(PM)

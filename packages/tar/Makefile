@@ -31,7 +31,7 @@ ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD)
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="${CC} ${BUILD64}" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
    	 --host=$(LFS_TARGET) --cache-file=config.cache
 endif
 	make $(PM)
@@ -51,7 +51,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
    	 --bindir=/bin --libexecdir=/usr/sbin
 endif
 	make $(PM)

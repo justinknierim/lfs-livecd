@@ -21,7 +21,7 @@ ifneq ($(LFS-ARCH),x86_64)
 	./configure --prefix=$(WD) --disable-libasprintf --without-csharp
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --libdir=$(WD)/lib64 \
    	 --host=$(LFS_TARGET) --disable-libasprintf \
    	 --without-csharp --cache-file=config.cache
@@ -43,7 +43,7 @@ else
 ifeq ($(LFS-ARCH),x86_64)
 	sed -i -e '2iexit 77' autoconf-lib-link/tests/rpath-3*[ef]
 endif
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
 	 ./configure --prefix=/usr --libdir=/usr/lib64
 endif
 	make

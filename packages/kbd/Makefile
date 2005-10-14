@@ -52,7 +52,7 @@ endif
 ifndef CROSS
 	./configure
 else
-	CC="gcc ${BUILD64}" ./configure
+	CC="gcc $(64FLAGS)" ./configure
 endif
 	make $(PM)
 	make install

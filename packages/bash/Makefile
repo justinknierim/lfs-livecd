@@ -36,7 +36,7 @@ else
 	cp -p Makefile.in Makefile.in.orig
 	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
 	patch -Np1 -i ../$(PATCH1)
-	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" \
+	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --with-curses \
    	 --without-bash-malloc --host=$(LFS_TARGET)
 endif
@@ -62,7 +62,7 @@ ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
 	 --with-installed-readline
 else
-	CC="gcc ${BUILD64}" CXX="g++ ${BUILD64}" \
+	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
     	 ./configure --prefix=/usr --bindir=/bin \
     	 --without-bash-malloc --with-installed-readline
 endif

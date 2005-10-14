@@ -46,7 +46,7 @@ ifneq ($(LFS-ARCH),x86_64)
 	make -C mount mount umount
 	make -C text-utils more
 else
-	CC="${CC} ${BUILD64}" ./configure
+	CC="$${CC} $(64FLAGS)" ./configure
 	make ARCH="" CPU="" -C lib
 	make ARCH="" CPU="" -C mount mount umount
 	make ARCH="" CPU="" -C text-utils more
@@ -71,7 +71,7 @@ endif
 ifndef CROSS
 	./configure
 else
-	CC="gcc ${BUILD64}" ./configure
+	CC="gcc $(64FLAGS)" ./configure
 endif
 	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
 	make HAVE_KILL=yes HAVE_SLN=yes install

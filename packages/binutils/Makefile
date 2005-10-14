@@ -63,7 +63,7 @@ compile-stage1:
 ifeq ($(LFS-ARCH),sparc64)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
 endif
-	CC="${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
+	CC="$${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
 	 --with-lib-path=$(WD)/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
 	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
 	 --enable-64-bit-bfd
@@ -149,7 +149,7 @@ else
 ifeq ($(LFS-ARCH),sparc64)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
 endif
-	CC="gcc ${BUILD64}" ../$(DIR)/configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ../$(DIR)/configure --prefix=/usr \
     	 --enable-shared --enable-64-bit-bfd --libdir=/usr/lib64
 	make configure-host
 endif

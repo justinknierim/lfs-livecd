@@ -30,7 +30,7 @@ compile-stage2:
 ifndef CROSS
 	./configure --prefix=/usr
 else
-	CC="gcc ${BUILD64}" ./configure --prefix=/usr \
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
 	 --libdir=/usr/lib64
 endif
 	make $(PM)
