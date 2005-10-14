@@ -113,19 +113,26 @@ compile-stage1:
 	 sed 's@\(^NATIVE_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g' \
    	 gcc/Makefile.in.bak > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/mklibgcc.in{,.bak} ; \
-	 sed "s@\./xgcc@/cross-tools/bin/$${CC}@g" \
+	 sed "s@\./xgcc@/$(CROSS_WD)/bin/$${CC}@g" \
    	 gcc/mklibgcc.in.bak > gcc/mklibgcc.in
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.bk2} ; \
-	 sed "/MULTILIBS/s@\$$(GCC_FOR_TARGET)@/cross-tools/bin/$${CC}@g" \
+	 sed "/MULTILIBS/s@\$$(GCC_FOR_TARGET)@$(CROSS_WD)/bin/$${CC}@g" \
    	 gcc/Makefile.in.bk2 > gcc/Makefile.in
-	CC="${CC} ${BUILD64}" CXX="${CXX} ${BUILD64}" ../$(DIR)/configure \
+	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" ../$(DIR)/configure \
 	 --prefix=$(WD) --libdir=$(WD)/lib64 --build=$(LFS_HOST) \
 	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/lib64 \
 	 --with-local-prefix=$(WD) --enable-long-long --enable-c99 \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch
+ifeq ($(LFS-ARCH),sparc64)
+	make CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
+	 CXXFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
+	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
+	 LS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
+else
 	make AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-    	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
+    	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
+endif
 	make install
 	ln -s gcc $(WD)/bin/cc
 
