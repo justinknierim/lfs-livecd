@@ -362,6 +362,12 @@ gvim: prep-chroot
 	make -C $(PKG)/vim chroot3
 	make unmount
 
+# The following takes the form 'make [package name]-clean'
+# Cleans the build directory of a single package.
+
+%-clean:
+	make -C $(PKG)/$* clean
+
 # The targets below can be called manually, but are also used by the
 # scripts internally.
 #==============================================================================
