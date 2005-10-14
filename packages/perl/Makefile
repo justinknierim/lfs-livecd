@@ -24,7 +24,7 @@ stage1: $(FILE) $(PATCH1)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
-ifeq ($(LFS-ARCH),x86_64)
+ifdef CROSS
 	sed -i 's@\$${prefix}/lib@\$${prefix}/lib64@g' hints/linux.sh
 	patch -Np1 -i ../$(PATCH40)
 	chmod u+w hints/linux.sh
@@ -33,7 +33,7 @@ endif
 	./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX'
 	make perl utilities
 	cp perl pod/pod2man $(WD)/bin
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	mkdir -p $(WD)/lib/perl5/$(VRS)
 	cp -R lib/* $(WD)/lib/perl5/$(VRS)
 else

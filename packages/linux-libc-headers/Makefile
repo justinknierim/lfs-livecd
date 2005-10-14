@@ -21,6 +21,7 @@ URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= e29083d611803dc0ae77599d06f21f608f775944
 
 STAGE1_DEPS= $(FILE)
+STAGE2_DEPS= $(FILE)
 
 # Targets
 
@@ -28,10 +29,12 @@ include $(ROOT)/scripts/functions
 
 ifeq ($(LFS-ARCH),x86_64)
 STAGE1_DEPS+= $(PATCH40)
+STAGE2_DEPS+= $(PATCH40)
 endif
 
 ifeq ($(LFS-ARCH),sparc64)
 STAGE1_DEPS+= $(PATCH30) $(PATCH31)
+STAGE2_DEPS+= $(PATCH30) $(PATCH31)
 endif
 
 stage1: $(STAGE1_DEPS)
@@ -66,33 +69,35 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-ifneq ($(LFS-ARCH),x86_64)
-stage2: $(FILE)
-else	
-stage2: $(FILE) $(PATCH40)
-endif
+stage2: $(STAGE2_DEPS)
 	$(std_build)
 
 compile-stage2:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 ifeq ($(LFS-ARCH),x86)
 	cp -Rv include/asm-i386 /usr/include/asm
 endif
 ifeq ($(LFS-ARCH),ppc)
 	cp -Rv include/asm-ppc /usr/include/asm
 endif
-ifeq ($(LFS-ARCH),sparc)
-	cp -Rv include/asm-sparc /usr/include/asm
-endif
 	cp -Rv include/linux /usr/include
 	chown -R root:root /usr/include/{asm,linux}
 	find /usr/include/{asm,linux} -type d -exec chmod 755 {} \;
 	find /usr/include/{asm,linux} -type f -exec chmod 644 {} \;
 else
+ifeq ($(LFS-ARCH),x86_64)
 	patch -Np1 -i ../$(PATCH40)
 	cp -Rv include/asm-i386 /usr/include/
 	cp -Rv include/asm-x86_64 /usr/include/
 	cp -Rv include/asm-x86_64-biarch /usr/include/asm
+endif
+ifeq ($(LFS-ARCH),sparc64)
+	patch -Np1 -i ../$(PATCH30)
+	patch -Np1 -i ../$(PATCH31)
+	cp -Rv include/asm-sparc /usr/include/
+	cp -Rv include/asm-sparc64 /usr/include/
+	cp -Rv include/asm-sparc-biarch /usr/include/asm
+endif
 	cp -Rv include/linux /usr/include
 	cp -Rv include/mtd /usr/include
 	cp -Rv include/sound /usr/include
