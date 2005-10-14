@@ -70,8 +70,8 @@ ifeq ($(LFS-ARCH),sparc64)
 	cd ../$(DIR) ; \
 	 for i in linux.h linux64.h ; do \
 	   echo " " >> gcc/config/sparc/$$i ; \
-	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
-	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
+	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/sparc/$$i ; \
+	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/sparc/$$i
 	 done
 endif	    
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
