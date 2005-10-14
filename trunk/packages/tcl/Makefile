@@ -17,7 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	cd unix ; ./configure --prefix=$(WD)
 else
 	cd unix ; sed -i 's@\$(prefix)/lib@\$(prefix)/lib64@g' Makefile.in
