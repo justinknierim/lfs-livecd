@@ -17,7 +17,7 @@ stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	CC="${CC} ${BUILD64}" CFLAGS="${CFLAGS} -fPIC" ./configure --prefix=$(WD) \
+	CC="$${CC} $(64FLAGS)" CFLAGS="${CFLAGS} -fPIC" ./configure --prefix=$(WD) \
 	 --shared --libdir=$(WD)/lib64
 	make
 	make install

@@ -33,7 +33,7 @@ ifndef CROSS
 	DEFAULT_POSIX2_VERSION=199209 ./configure --prefix=$(WD)
 else
 	echo "utils_cv_sys_open_max=1024" >> config.cache
-	DEFAULT_POSIX2_VERSION=199209 CC="${CC} ${BUILD64}" \
+	DEFAULT_POSIX2_VERSION=199209 CC="$${CC} $(64FLAGS)" \
 	 ./configure --prefix=$(WD) --cache-file=config.cache \
 	 --build=$(LFS_HOST) --target=$(LFS_TARGET)
 endif

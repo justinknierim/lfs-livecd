@@ -30,7 +30,7 @@ stage1:
 	$(std_build)
 
 compile-stage1:
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared
 else
