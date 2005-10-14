@@ -42,6 +42,9 @@ compile-stage2:
 ifeq ($(LFS-ARCH),x86)
 	if [ ! -d /boot/isolinux ] ; then mkdir /boot/isolinux ; fi
 endif
+ifeq ($(LFS-ARCH),x86_64)
+	if [ ! -d /boot/isolinux ] ; then mkdir /boot/isolinux ; fi
+endif
 ifneq ($(LFS-ARCH),sparc)
 	zcat ../$(PATCH1) > ../reiser4.patch
 	patch -Np1 -i ../reiser4.patch
@@ -63,6 +66,9 @@ endif
 	make modules_install
 ifeq ($(LFS-ARCH),x86)
 	cp -v arch/i386/boot/bzImage /boot/isolinux/linux
+endif
+ifeq ($(LFS-ARCH),x86_64)
+	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 endif
 ifeq ($(LFS-ARCH),ppc)
 	cp -v vmlinux /boot/linux
