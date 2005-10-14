@@ -63,13 +63,13 @@ compile-stage1:
 ifeq ($(LFS-ARCH),sparc64)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
 endif
-	CC="${CC} ${BUILD64}" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
-	 --with-lib-path=/tools/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
+	CC="${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
+	 --with-lib-path=$(WD)/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
 	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
 	 --enable-64-bit-bfd
 	make configure-host
 	make headers -C bfd
-	make
+	make $(PM)
 	make install
 	
 pass1: $(FILE)
