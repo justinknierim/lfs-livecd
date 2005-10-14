@@ -112,6 +112,9 @@ ifeq ($(LFS-ARCH),sparc64)
 endif
 	echo "libc_cv_forced_unwind=yes" > config.cache
 	echo "libc_cv_c_cleanup=yes" >> config.cache
+ifeq ($(LFS-ARCH),sparc64)
+	echo "libc_cv_sparc64_tls=yes" >> config.cache
+endif
 	echo "slibdir=$(WD)/lib64" >> configparms
 	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc $(64FLAGS)" \
 	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
