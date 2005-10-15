@@ -4,9 +4,9 @@ NM= xfsprogs
 VRS= 2.6.36
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).src.tar.gz
-URL-$(FILE)= http://mirrors.sunsite.dk/xfs/download/cmd_tars/$(FILE)
-SHA-$(FILE)= 95f8862f4b8ceadedc517c89a7ba562aeac31e8f
+FILE= $(DIR).src.tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= e05d9390bfdb53e34be0a30ae495afc02ca08bad
 
 # Targets
 
