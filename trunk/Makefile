@@ -604,7 +604,7 @@ endif
 	@find $(PKG)/binutils/* -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
-	@-rm /{$(WD),$(SRC),$(ROOT),$(LFSSRC)}
+	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
 
 scrub: clean
 	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
