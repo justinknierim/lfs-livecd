@@ -1,10 +1,10 @@
 # Wget Makefile
 
 NM= wget
-VRS= 1.10.1
+VRS= 1.10.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-SHA= 63249e837a02eb946b887a610ccc7be4ab41d0bc
+SHA= a258357297959964fd42fed6afa1a4cce9069980
 
 # Targets
 
