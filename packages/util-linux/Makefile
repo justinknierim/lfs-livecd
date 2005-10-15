@@ -30,7 +30,7 @@ include $(ROOT)/scripts/functions
 
 stage1: $(STAGE1_DEPS)
 	$(std_build)
-	for i in $(STAGE1_DEPS) ; do cp $(SRC)/$$i $(LFS-SRC) ; done
+	for i in $(STAGE1_DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
 
 compile-stage1:
 	sed -i 's@/usr/include@$(WD)/include@g' configure

@@ -58,6 +58,7 @@ URL-$(PATCH41)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH4
 SHA-$(PATCH41)= ac908ef021764e90443e7cf7d72de87fe6168c38
 
 STAGE1_DEPS= $(FILE) $(PATCH40)
+STAGE2_DEPS= $(FILE) $(PATCH41)
 
 # Targets
 
@@ -65,6 +66,7 @@ include $(ROOT)/scripts/functions
 
 ifeq ($(LFS-ARCH),sparc64)
 STAGE1_DEPS+= $(PATCH30) $(PATCH41)
+STAGE2_DEPS+= $(PATCH30)
 endif
 
 headers: $(FILE)
@@ -151,21 +153,14 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-ifneq ($(LFS-ARCH),x86_64)
+ifndef CROSS
 stage2: $(FILE) $(FILE1) $(PATCH1) $(PATCH2) $(PATCH3) $(PATCH4) $(PATCH5) $(PATCH6)
 	$(sep_dir_build)
 	cp $(SRC)/$(PATCH6) $(LFSSRC)/
 	touch $@
 
 compile-stage2:
-ifeq ($(LFS-ARCH),sparc)
-	cd ../$(DIR) ; rm -rf nptl*
-	cd ../$(DIR) ; sed -i 's@mv8@mcpu=v8@' sysdeps/unix/sysv/linux/sparc/sparc32/Makefile
-endif
 	cd ../$(DIR) ; unpack ../$(FILE1)
-ifneq ($(LFS-ARCH),sparc)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
-endif
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH4)
@@ -184,13 +179,15 @@ endif
 	cp $(ROOT)/etc/ld.so.conf /etc
 
 else
-
-stage2: $(FILE) $(PATCH41)
+stage2: $(STAGE2_DEPS)
 	$(sep_dir_build)
-	cp $(SRC)/$(PATCH41) $(LFSSRC)
+	for i in $(STAGE2_DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
 
 compile-stage2:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
+endif
 	echo "slibdir=/lib64" >> configparms
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
     	 ../$(DIR)/configure --prefix=/usr \
@@ -198,25 +195,28 @@ compile-stage2:
     	 --libexecdir=/usr/lib64/glibc --libdir=/usr/lib64
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
-	PARALLELMFLAGS="$(PM)" make install
+	make install
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales
 	cp $(ROOT)/etc/nsswitch.conf /etc
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
 	cp $(ROOT)/etc/ld.so.conf-x86_64 /etc/ld.so.conf
 endif
 
-stage2-32: $(FILE) $(PATCH41)
+stage2-32: $(STAGE2_DEPS)
 	$(sep_dir_build)
 
 compile-stage2-32:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
+ifeq ($(LFS-ARCH),sparc64)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
+endif
 	CC="gcc $(32FLAGS)" CXX="g++ $(32FLAGS)" \
     	 ../$(DIR)/configure --prefix=/usr \
     	 --disable-profile --enable-add-ons --enable-kernel=2.6.0 \
     	 --libexecdir=/usr/lib/glibc --host=$(LFS_TARGET32)
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
-	PARALLELMFLAGS="$(PM)" make install
+	make install
 
 clean:
 	-rm -rf $(DIR)
