@@ -1,12 +1,12 @@
 # cairo Makefile
 
 NM= cairo
-VRS= 1.0.0
+VRS= 1.0.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= ftp://ftp.fu-berlin.de/unix/linux/mirrors/gentoo/distfiles/$(FILE)
-SHA-$(FILE)= abc50d6a657cba15b3956c8c3aaea080b71172bb
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= b16997f0f5c89f2b314bcb744e920610808ebc64
 
 # Targets
 
