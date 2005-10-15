@@ -1,16 +1,16 @@
 # OpenSSL Makefile
 
 NM= openssl
-VRS= 0.9.7g
+VRS= 0.9.7h
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
-SHA-$(FILE)= 21c1f51188bed0de902985f6ed334284082cb90d
+SHA-$(FILE)= 2e59d045c6100cbd966184fd8fe63644e07cb2b3
 
 PATCH1= $(DIR)-fix_manpages-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH1)
-SHA-$(PATCH1)= 723f730aff3c8d493f5e22bcb70734f48cfb41f4
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 7640f69ecbe701fd4b71e0d0329d9fffbcc52607
 
 # Targets
 
