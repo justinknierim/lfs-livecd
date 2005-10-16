@@ -1,12 +1,12 @@
 # LibXML2 Makefile
 
 NM= libxml2
-VRS= 2.6.21
+VRS= 2.6.22
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://xmlsoft.org/sources/$(FILE)
-SHA-$(FILE)= e8d572f53659561de03079af999a9c1134346c94
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 3f920523136d51b246569977df70e6893d925dd5
 
 # Targets
 
