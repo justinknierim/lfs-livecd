@@ -130,8 +130,6 @@ export ORANGE= "[0;33m"
 export BLUE= "[0;44m"
 export WHITE= "[00m"
 
-FTPGET= $(WD)/bin/ftpget
-WGET_V= 1.10.1
 
 # TARGETS
 #==============================================================================
@@ -228,16 +226,11 @@ pre-which:
 	@chmod 755 $(WHICH)
 
 pre-wget:
-ifndef CROSS
-	@if [ ! -f $(WD)/bin/ftpget ] ; then \
-	 install -m755 $(ROOT)/scripts/ftpget $(WD)/bin/ ; fi
-	@$(MAKE) -C $(PKG)/wget prebuild
-else
-	@if [ ! -f $(CROSS_WD)/bin/ftpget ] ; then \
-	 install -m755 $(ROOT)/scripts/ftpget $(CROSS_WD)/bin/ ; fi
-	@$(MAKE) -C $(PKG)/wget prebuild
+	@make -C $(PKG)/wget prebuild
+ifdef CROSS
 	@-ln -s $(WD)/bin/wget $(CROSS_WD)/bin
 endif
+	@touch $@
 	
 unamemod:
 	@if [ ! -d ${WD}/bin ] ; then mkdir ${WD}/bin ; fi
@@ -288,7 +281,7 @@ post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
 
-cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt stop lfs-expect-scpt \
+cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
 	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
 	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
 	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline \
@@ -590,8 +583,8 @@ endif
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip}
-	@-rm {sqfs.log,lfs-strip}
+	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip,}
+	@-rm {sqfs.log,lfs-strip,pre-wget}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
@@ -627,4 +620,4 @@ unmount:
 	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
 	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
-	lfs-rm-wget blfs post-bash pre-bash tools pre-wget pre-which
+	lfs-rm-wget blfs post-bash pre-bash tools pre-which
