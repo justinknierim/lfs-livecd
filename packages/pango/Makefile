@@ -1,12 +1,12 @@
 # Pango Makefile
 
 NM= pango
-VRS= 1.10.0
+VRS= 1.10.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= ftp://ftp.gtk.org/pub/gtk/v2.8/$(FILE)
-SHA-$(FILE)= 09a00c228725afc281b4332d3a22f8c098f4ed80
+SHA-$(FILE)= bb409d61f5e236b473b2b619843d7f754050b81d
 
 # Targets
 
