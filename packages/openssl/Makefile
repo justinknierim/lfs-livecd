@@ -25,9 +25,15 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+ifneq ($(LFS-ARCH),sparc64)
 	./config --openssldir=/etc/ssl --prefix=/usr shared
+ifneq ($(LFS-ARCH),ppc)
 	sed -i 's/mcpu=pentium/mtune=i486/' Configure
 	sed -i 's/mcpu=pentium/mtune=i486/' Makefile
+endif
+else
+	./Configure --openssldir=/etc/ssl --prefix=/usr linux64-sparcv9 shared
+endif
 	make $(PM) MANDIR=/usr/share/man
 	make MANDIR=/usr/share/man install
 	cp -r certs /etc/ssl

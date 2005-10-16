@@ -4,20 +4,18 @@ NM= wget
 VRS= 1.10.2
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
-SHA= a258357297959964fd42fed6afa1a4cce9069980
+URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
+SHA-$(FILE)= a258357297959964fd42fed6afa1a4cce9069980
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-$(FILE):
-	cd $(SRC) ; ftpget $(VRS)
-# The only reason for using download below is to check the sha1sum, and create
-# the link to the file since at this point we already have the tarball.
-	$(call download,$(FILE),NULL,$(SHA))
-	
+ftpget:
+	@if ! which wget >/dev/null 2>&1 ; then cd $(SRC) ; \
+	 $(ROOT)/scripts/ftpget $(VRS) ; fi
 
-prebuild: $(FILE)
+prebuild: ftpget $(FILE)
 	$(std_build)
 
 compile-prebuild:
@@ -26,7 +24,7 @@ compile-prebuild:
 	make $(PM)
 	make install
 
-stage1:
+stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:

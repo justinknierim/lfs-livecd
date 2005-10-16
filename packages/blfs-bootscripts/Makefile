@@ -25,7 +25,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	make install-service-dhcpcd
 	make install-service-pppoe
-ifneq ($(LFS-ARCH),sparc)
+ifneq ($(LFS-ARCH),sparc64)
 	make install-gpm
 endif
 	make install-autosshd
