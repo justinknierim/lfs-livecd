@@ -8,7 +8,7 @@ FILE= $(NM)-$(VRS)-source.tar.bz2
 URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/firefox/releases/$(VRS)/source/$(FILE)
 SHA-$(FILE)= ac7549f609db8dbea6db33b2ffb3ae546eea64df
 
-PATCH1= $(NM)-1.0.6-gcc4-1.patch
+PATCH1= $(NM)-$(VRS)-gcc4-1.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= c918d248059e4f5f2f60c2f87ed3c2ebe6a91f7f
 
