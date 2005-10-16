@@ -20,7 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifeq ($(LFS-ARCH),sparc64)
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
+	 --libdir=/usr/lib64
+else
 	./configure --prefix=/usr
+endif
 	make $(PM)
 	make install
 

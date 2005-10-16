@@ -37,6 +37,11 @@ endif
 	make $(PM) MANDIR=/usr/share/man
 	make MANDIR=/usr/share/man install
 	cp -r certs /etc/ssl
+ifeq ($(LFS-ARCH),sparc64)
+	mv /usr/lib/libcrypto.* /usr/lib64/
+	mv /usr/lib/libssl.* /usr/lib64
+	ldconfig
+endif
 
 clean:
 	-rm -rf $(DIR)
