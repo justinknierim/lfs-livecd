@@ -15,17 +15,17 @@ SHA-$(BELARUSIAN_FILE)= c0026a915fff58cdc3b68bb57de4eec35a220c43
 PATCH1= $(DIR)-backspace-1.patch
 SHA-$(PATCH1)= 39e332e42d5145dfc47786dba5eff63cda91d0ba
 
-PATCH2= $(DIR)-sparc_kbdrate-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= 3fe2f0e6a311b8a580f09472dae1b1abbbb7ad21
+PATCH30= $(DIR)-sparc_kbdrate-1.patch
+URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
+SHA-$(PATCH30)= 3fe2f0e6a311b8a580f09472dae1b1abbbb7ad21
 
 PATCH3= $(DIR)-gcc4_fixes-1.patch
 URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
 SHA-$(PATCH3)= 93ec9885a79ff79088f1533ec52f1a87dae69500
 
 STAGE2-DEPS = $(FILE) $(BELARUSIAN_FILE) $(PATCH1) $(PATCH3)
-ifeq ($(LFS-ARCH),sparc)
-STAGE2-DEPS += $(PATCH2)
+ifeq ($(LFS-ARCH),sparc64)
+STAGE2-DEPS += $(PATCH30)
 endif
 
 # Targets
@@ -47,7 +47,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH3)
 ifeq ($(LFS-ARCH),sparc64)
-	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH30)
 endif
 ifndef CROSS
 	./configure

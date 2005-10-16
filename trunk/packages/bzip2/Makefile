@@ -65,7 +65,7 @@ ifndef CROSS
 	ln -s ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
 else
 	cp -a libbz2.so* /lib64
-	ln -s ../../lib/libbz2.so.1.0 /usr/lib64/libbz2.so
+	ln -s ../../lib64/libbz2.so.1.0 /usr/lib64/libbz2.so
 endif
 	rm /usr/bin/{bunzip2,bzcat,bzip2}
 	ln -s bzip2 /bin/bunzip2 && ln -s bzip2 /bin/bzcat

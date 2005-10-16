@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),sparc)
+ifeq ($(LFS-ARCH),sparc64)
 	./configure --prefix=/usr
 else
 	./configure --prefix=/usr --enable-graphics
