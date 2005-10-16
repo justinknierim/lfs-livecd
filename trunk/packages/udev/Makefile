@@ -8,9 +8,9 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= ec9b92524a0b7b4e0c6d787d5cb6ee55ae72b607
 
-CONFIG1= $(NM)-config-3.rules
+CONFIG1= $(NM)-config-4.rules
 URL-$(CONFIG1)= $(HTTP)/$(NM)/$(CONFIG1)
-SHA-$(CONFIG1)= ad947b94db2c2d7d56ecf0aaabc8af4a0094a964
+SHA-$(CONFIG1)= 569afe7608bc3058d42948280b778fcacd1d8c96
 
 # Targets
 

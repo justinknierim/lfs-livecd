@@ -1,12 +1,12 @@
 # libtiff Makefile
 
 NM= tiff
-VRS= 3.7.3
+VRS= 3.7.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/T-V/$(FILE)
-SHA-$(FILE)= bb20753e990441d4a6da5d83ebf65c26f001be2c
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 84c6fdc1c798c09b6831f870da20119d79d3b6d1
 
 # Targets
 
