@@ -46,7 +46,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --with-ssl
+	./configure --prefix=/usr --sysconfdir=/etc --with-ssl
 	make $(PM)
 	make install
 
