@@ -8,7 +8,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
-
 # Targets
 
 include $(ROOT)/scripts/functions
