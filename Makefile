@@ -302,7 +302,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
 	ch-fontconfig ch-Xorg ch-freefont ch-inputattach ch-fonts-dejavu \
 	update-fontsdir ch-libjpeg ch-libtiff ch-libart_lgpl ch-links \
-	ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib2 ch-w3m ch-cairo \
+	ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib ch-imlib2 \
+	ch-gc ch-w3m ch-cairo \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
 	ch-thunderbird ch-librsvg \
 	ch-startup-notification chroot-gvim ch-xfce ch-lua ch-ion ch-irssi \
