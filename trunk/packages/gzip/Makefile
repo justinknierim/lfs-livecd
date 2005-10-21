@@ -38,6 +38,7 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
+	cp $(SRC)/$(PATCH1) $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
