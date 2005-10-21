@@ -14,6 +14,7 @@ Web Tools
 * wget (command line file retriever)
 * curl (command line file retriever)
 * lynx (text web browser)
+* w3m (text web browser)
 * links (text web browser)
 * irssi (console irc client)
 * firefox (graphical web browser)

@@ -132,7 +132,7 @@ channels = (
   { name = "#irssi"; chatnet = "ircnet"; autojoin = "No"; },
   { name = "#irssi"; chatnet = "freenode"; autojoin = "No"; },
   { name = "silc"; chatnet = "silc"; autojoin = "No"; },
-  { name = "#lfs-support"; chatnet = "lfs"; autojoin = "yes"; }
+  { name = "#lfs-support"; chatnet = "lfs"; autojoin = "yes"; },
   { name = "#lfs"; chatnet = "lfs"; autojoin = "yes"; }
 );
 
