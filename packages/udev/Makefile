@@ -22,6 +22,7 @@ chroot:
 
 stage2: Makefile $(FILE) $(CONFIG1)
 	$(std_build)
+	cp $(SRC)/{$(FILE),$(CONFIG1)} $(LFSSRC)
 
 compile-stage2:
 ifndef CROSS
