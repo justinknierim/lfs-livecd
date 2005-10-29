@@ -14,72 +14,31 @@
 
 # Machine architecure, LiveCD version, and specific arch variables.
 #==============================================================================
-export LFS-ARCH := x86
 
-ifeq ($(LFS-ARCH),x86)
-export VERSION := $(LFS-ARCH)-6.2-pre1
-export CFLAGS := -Os -s -march=i486
-endif
+# Place your personal customizations in Makefile.personal
+# instead of editing this Makefile.
+# Makefile.personal is deliberately not in SVN.
 
-ifeq ($(LFS-ARCH),ppc)
-export VERSION := $(LFS-ARCH)-6.2-pre1
-export CFLAGS := -Os -s
-endif
+-include Makefile.personal
 
-ifeq ($(LFS-ARCH),x86_64)
-export VERSION := x86_64-CRS051009-pre1
-export CROSS=yes
-export CROSS_WD=/cross-tools
-export 32FLAGS=-m32
-export 64FLAGS=-m64
-export CFLAGS := -Os -s
-export LFS_HOST=x86_64-cross-linux-gnu
-export LFS_TARGET=x86_64-pc-linux-gnu
-export LFS_TARGET32=i686-pc-linux-gnu
-endif
+# LFS-ARCH: architecture for which the CD should be built.
+# MP:       mount point
+# timezone: default timezone
+# pagesize: paper size for groff.
+#           In utf8-newmake branch, create /etc/papersize instead
+# ROOT:     name of this directory, as seen from chroot
+# PM:       Parallel Build Level
+# HTTP:     Default http server for the lfs-base packages
+# HTTPBLFS: Default http server for the BLFS packages
 
-ifeq ($(LFS-ARCH),sparc64)
-export VERSION := $(LFS-ARCH)-CLFS20051009-pre1
-export KVERS := 2.6.13.3
-export CROSS=yes
-export CROSS_WD=/cross-tools
-export 32FLAGS=-m32 -mcpu=ultrasparc -mtune=ultrasparc
-export 64FLAGS=-m64 -mcpu=ultrasparc -mtune=ultrasparc
-export CFLAGS := -Os -s
-export LFS_HOST=sparc64-cross-linux-gnu
-export LFS_TARGET=sparc64-sun-linux-gnu
-export LFS_TARGET32=sparcv9-sun-linux-gnu
-else
-export KVERS := 2.6.12.5
-endif
-
-# Edit this line to match the mount-point of the partition you'll be using to
-# build the cd.
-#==============================================================================
-export MP := /mnt/lfs
-
-# Timezone, obviously ;)
-#==============================================================================
-export timezone := GMT
-
-# Page size for groff
-#==============================================================================
-export pagesize := letter
-
-# Top-level of these Makefiles. Edit this if you've named this directory
-# differently. (The beginning '/' is necessary - this is *not* an absolute file
-# path.)
-#==============================================================================
-export ROOT := /lfs-livecd
-
-# Parallel Build Level
-#==============================================================================
-export PM := -j3
-
-# Default http server for the lfs-base packages
-#==============================================================================
-export HTTP := http://ftp.lfs-matrix.net/pub/lfs/conglomeration
-export HTTPBLFS := http://ftp.lfs-matrix.net/pub/BLFS/SVN
+export LFS-ARCH ?= x86
+export MP ?= /mnt/lfs
+export timezone ?= GMT
+export pagesize ?= letter
+export ROOT ?= /lfs-livecd
+export PM ?= -j3
+export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
+export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/BLFS/SVN
 
 # Directory variables
 #==============================================================================
@@ -89,6 +48,10 @@ export SRC := /sources
 export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
+
+include cross/vars.$(LFS-ARCH)
+
+export KVERS ?= 2.6.12.5
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.

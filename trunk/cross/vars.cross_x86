@@ -1,0 +1,9 @@
+export VERSION := x86-CRS051009-pre1
+export CROSS := yes
+export CROSS_WD := /cross-tools
+export 32FLAGS := -march=i486
+export CFLAGS := -Os -s
+export LIB_MAYBE64 := lib
+export LFS_HOST := i486-cross-linux-gnu
+export LFS_TARGET := i486-pc-linux-gnu
+export KERNEL_ARCH := i386
