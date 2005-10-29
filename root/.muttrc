@@ -7,6 +7,7 @@ set use_from=yes
 set envelope_from=yes
 set sendmail="/usr/bin/msmtp"
 set sort=threads
+set header_cache="~/.mutt_headers"
 
 #color normal white default
 color hdrdefault red default
