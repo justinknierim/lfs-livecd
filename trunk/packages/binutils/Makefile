@@ -7,10 +7,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
-PATCH30= $(DIR)-sparc_tls-1.patch
-URL-$(PATCH30)= $(HTTP)/$(NM)/$(PATCH30)
-SHA-$(PATCH30)= 3a66717c7c9152e15fcbf56b33ec71f2454d4230
-
 PATCH40= $(DIR)-posix-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= 7bd70eb6359d9ed5c1691208dfa321d68c5e1d9c
@@ -19,59 +15,45 @@ PATCH41= $(DIR)-genscripts_multilib-1.patch
 URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= 1d7cb62e537ddfea800d7790149e3ce74d415928
 
-CROSS_DEPS= $(FILE) $(PATCH40) $(PATCH41)
-STAGE2_DEPS= $(FILE)
+include $(CROSSVARS)
+
+DEPS= $(FILE) $(PATCHES)
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-ifeq ($(LFS-ARCH),ppc)
-	LINKER=ld.so.1
-else
-	LINKER=ld-linux.so.2
-endif
+LINKER ?= ld-linux.so.2
 
-ifeq ($(LFS-ARCH),sparc64)
-CROSS_DEPS+= $(PATCH30)
-endif
-
-cross: $(CROSS_DEPS)
+cross: $(DEPS)
 	$(sep_dir_build)
 
 compile-cross:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i \
-	 ../$(PATCH41)
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
-endif
-	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
-	--target=$(LFS_TARGET) --with-lib-path=$(WD)/lib \
-	--disable-nls --enable-shared --enable-64-bit-bfd
+	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
+	../$(DIR)/configure --prefix=$(CROSS_WD) \
+	 --target=$(LFS_TARGET) \
+	 --with-lib-path=$(WD)/lib \
+	 --disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
 	make configure-host
 	make headers -C bfd
 	make $(PM)
 	make install
 	cp -v ../$(DIR)/include/libiberty.h $(WD)/include
 
-stage1: $(CROSS_DEPS)
+stage1: $(DEPS)
 	$(sep_dir_build)
 
 compile-stage1:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i \
-	 ../$(PATCH41)
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
-endif
-	CC="$${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/lib64 \
-	 --with-lib-path=$(WD)/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
-	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
-	 --enable-64-bit-bfd
+	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
+	../$(DIR)/configure --prefix=$(WD) --with-lib-path=$(WD)/lib \
+	 --target=$(LFS_TARGET) \
+	 --disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
 	make configure-host
 	make headers -C bfd
 	make $(PM)
 	make install
-	
+
+# fIXME: copy this file for cross-case also
 pass1: $(FILE)
 	$(sep_dir_build_noclean)
 	cp $(SRC)/$(FILE) $(LFSSRC)
@@ -130,27 +112,13 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-ifeq ($(LFS-ARCH),x86_64)
-STAGE2_DEPS+=$(PATCH41)
-endif
-
-ifeq ($(LFS-ARCH),sparc64)
-STAGE2_DEPS+=$(PATCH30) $(PATCH41)
-endif
-
-stage2: $(STAGE2_DEPS)
+stage2: $(DEPS)
 	$(sep_dir_build)
 
 compile-stage2:
+	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
+	../$(DIR)/configure --enable-shared $(ENABLE-64-BIT-BFD)
 ifndef CROSS
-	../$(DIR)/configure --prefix=/usr --enable-shared
-else
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH41)
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
-endif
-	CC="gcc $(64FLAGS)" ../$(DIR)/configure --prefix=/usr \
-    	 --enable-shared --enable-64-bit-bfd --libdir=/usr/lib64
 	make configure-host
 endif
 	make $(PM) tooldir=/usr

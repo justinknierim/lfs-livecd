@@ -6,7 +6,7 @@ export 32FLAGS := -m32 -mcpu=ultrasparc -mtune=ultrasparc
 export 64FLAGS := -m64 -mcpu=ultrasparc -mtune=ultrasparc
 export CFLAGS := -Os -s
 export LIB_MAYBE64 := lib64
-export LFS_HOST := sparc64-cross-linux-gnu
+export LFS_HOST ?= sparc64-cross-linux-gnu
 export LFS_TARGET := sparc64-sun-linux-gnu
 export LFS_TARGET32 := sparcv9-sun-linux-gnu
 export KERNEL_ARCH := sparc64
