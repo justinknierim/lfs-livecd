@@ -1,0 +1,8 @@
+PATCH40= $(DIR)-x86_64_biarch-1.patch
+URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
+SHA-$(PATCH40)= e29083d611803dc0ae77599d06f21f608f775944
+
+PATCHES= $(PATCH40)
+
+LLH_ASMS := asm-i386 asm-x86_64
+LLH_ASM := asm-x86_64-biarch

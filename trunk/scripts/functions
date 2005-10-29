@@ -19,7 +19,7 @@ endef
 define std_build
 	@$(call echo_message, Building)
         @unpack $(FILE) >$(DIR)-$@.log 2>&1
-        @make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+        @make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
         @make clean >>$(DIR)-$@.log 2>&1
         @touch $@
 endef
@@ -27,7 +27,7 @@ endef
 define std_build_noclean
 	@$(call echo_message, Building)
         @unpack $(FILE) >$(DIR)-$@.log 2>&1
-        @make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+        @make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
         @touch $@
 endef
 
@@ -36,7 +36,7 @@ define sep_dir_build
 	@unpack $(FILE) >$(DIR)-$@.log 2>&1
 	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
 	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
-	@$(MAKE) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@make CROSSVARS=../$(CROSSVARS) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
 	@make clean >>$(DIR)-$@.log 2>&1
 	@touch $@
 endef
@@ -46,7 +46,7 @@ define sep_dir_build_noclean
 	@unpack $(FILE) >$(DIR)-$@.log 2>&1
 	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
 	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
-	@$(MAKE) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@make CROSSVARS=../$(CROSSVARS) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
 	@touch $@
 endef
 
