@@ -49,7 +49,9 @@ export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
 
-include cross/vars.$(LFS-ARCH)
+export CROSSVARS := cross/vars.$(LFS-ARCH)
+
+include $(CROSSVARS)
 
 export KVERS ?= 2.6.12.5
 
