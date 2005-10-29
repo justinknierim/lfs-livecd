@@ -49,13 +49,13 @@ ifneq ($(LFS-ARCH),sparc64)
 else
 	unpack ../$(PATCH1)
 	for i in `cat broken-out/serie` ; do \
-		patch -Np1 -i broken-out/$$i.patch ; \
+	  patch -Np1 -i broken-out/$$i.patch ; \
 	done
 endif
 	patch -Np1 -i ../$(PATCH2)
 	cd $(ROOT) ; make -C $(PKG)/unionfs patch-kernel
 	make mrproper
-	cp $(ROOT)/linux/config.$(LFS-ARCH) .config
+	cp ../config.$(LFS-ARCH) .config
 	make $(PM)
 	make modules_install
 ifeq ($(LFS-ARCH),x86)
