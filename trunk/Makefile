@@ -560,7 +560,7 @@ ifdef CROSS
 	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
 	@rm -f $(PKG)/glibc/headers
 endif
-	@echo find $(PKG)/binutils/* ! -name vars -xtype d -exec rm -rf \{} \;
+	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
 	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
