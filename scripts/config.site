@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# This file is not used for now and kept only for history
+
 test "$prefix" = NONE && prefix=/usr
 
 if [ ${CROSS} = "yes" ]
