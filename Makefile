@@ -283,7 +283,8 @@ ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
 
-x86_64-blfs: ch-lfs-bootscripts ch-squashfs ch-cpio ch-linux ch-ctags ch-unionfs \
+x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-curl \
+	ch-zip ch-unzip ch-lynx ch-lfs-bootscripts ch-squashfs ch-cpio ch-linux ch-ctags ch-unionfs \
 	ch-initramfs ch-cdrtools ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
@@ -559,6 +560,7 @@ endif
 ifdef CROSS
 	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
 	@rm -f $(PKG)/glibc/headers
+	@rm -f adjusting-toolchain
 endif
 	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
