@@ -20,6 +20,8 @@ PATCH41= $(DIR)-cross_search_paths-1.patch
 URL-$(PATCH41)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH41)
 SHA-$(PATCH41)= ca4b874774e20da34671acf391e86a3d7c9a9bb3
 
+include $(CROSSVARS)
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -30,29 +32,16 @@ cross-static: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
 compile-cross-static:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
 	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
-ifeq ($(LFS-ARCH),x86_64)
-	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
-	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
-	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
-endif
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; \
-	 for i in linux.h linux64.h ; do \
-	   echo " " >> gcc/config/sparc/$$i ; \
-	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/sparc/$$i ; \
-	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/sparc/$$i ; \
-	 done
-endif
+	cd ../$(DIR) ; for HEADER in $(STARTFILE_PREFIX_SPEC_HEADERS) ; do \
+	 echo " " >> $$HEADER ; \
+	 echo "#undef STARTFILE_PREFIX_SPEC" >> $$HEADER ; \
+	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> $$HEADER ; done
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
 	 gcc/Makefile.in.orig > gcc/Makefile.in
 	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
 	 --target=$(LFS_TARGET) --with-local-prefix=$(WD) --disable-nls \
-	 --disable-shared --disable-threads --enable-languages=c
-ifeq ($(LFS-ARCH),sparc64)
-	make $(PM) CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" all-gcc
-else
-	make $(PM) all-gcc
-endif
+	 --disable-shared --disable-threads --enable-languages=c 
+	make $(PM) $(EXTRA_FLAGS_FOR_TOOLS) all-gcc
 	make install-gcc
 
 cross: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
@@ -61,19 +50,10 @@ cross: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
 compile-cross:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
 	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
-ifeq ($(LFS-ARCH),x86_64)
-	cd ../$(DIR) ; echo " " >> gcc/config/linux.h ; \
-	 echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/linux.h ; \
-	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/linux.h
-endif
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; \
-	 for i in linux.h linux64.h ; do \
-	   echo " " >> gcc/config/sparc/$$i ; \
-	   echo "#undef STARTFILE_PREFIX_SPEC" >> gcc/config/sparc/$$i ; \
-	   echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> gcc/config/sparc/$$i ; \
-	 done
-endif	    
+	cd ../$(DIR) ; for HEADER in $(STARTFILE_PREFIX_SPEC_HEADERS) ; do \
+	 echo " " >> $$HEADER ; \
+	 echo "#undef STARTFILE_PREFIX_SPEC" >> $$HEADER ; \
+	 echo "#define STARTFILE_PREFIX_SPEC \"$(WD)/lib/\"" >> $$HEADER ; done
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
 	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
 	 gcc/Makefile.in.orig > gcc/Makefile.in
@@ -89,15 +69,8 @@ endif
 	 --host=$(LFS_HOST) --with-local-prefix=$(WD) --disable-nls \
 	 --enable-shared --enable-languages=c,c++ --enable-__cxa_atexit \
 	 --enable-c99 --enable-long-long --enable-threads=posix
-ifeq ($(LFS-ARCH),sparc64)
-	make $(PM) CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
-	 CXXFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
-	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
-else
 	make $(PM) AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
-endif
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(EXTRA_FLAGS_FOR_TOOLS)
 	make install
 
 stage1: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
@@ -119,20 +92,14 @@ compile-stage1:
 	 sed "/MULTILIBS/s@\$$(GCC_FOR_TARGET)@$(CROSS_WD)/bin/$${CC}@g" \
 	 gcc/Makefile.in.bk2 > gcc/Makefile.in
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" ../$(DIR)/configure \
-	 --prefix=$(WD) --libdir=$(WD)/lib64 --build=$(LFS_HOST) \
-	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/lib64 \
+	 --prefix=$(WD) --libdir=$(WD)/$(LIB_MAYBE64) --build=$(LFS_HOST) \
+	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/$(LIB_MAYBE64) \
 	 --with-local-prefix=$(WD) --enable-long-long --enable-c99 \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch
-ifeq ($(LFS-ARCH),sparc64)
-	make CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
-	 CXXFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" \
-	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
-else
 	make AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
-endif
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" \
+	 $(EXTRA_FLAGS_FOR_TOOLS) $(PM)
 	make install
 	ln -s gcc $(WD)/bin/cc
 
@@ -185,8 +152,8 @@ ifndef CROSS
 	 --enable-clocale=gnu --enable-languages=c,c++
 else
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	../$(DIR)/configure --prefix=/usr --libdir=/usr/lib64 \
-	 --libexecdir=/usr/lib64 --enable-shared --enable-threads=posix \
+	../$(DIR)/configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64) \
+	 --libexecdir=/usr/$(LIB_MAYBE64) --enable-shared --enable-threads=posix \
 	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
 	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
 endif
