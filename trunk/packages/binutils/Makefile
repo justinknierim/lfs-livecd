@@ -30,10 +30,9 @@ cross: $(DEPS)
 
 compile-cross:
 	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	../$(DIR)/configure --prefix=$(CROSS_WD) \
-	 --target=$(LFS_TARGET) \
-	 --with-lib-path=$(WD)/lib \
-	 --disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
+	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
+	--target=$(LFS_TARGET) --with-lib-path=$(WD)/lib \
+	--disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
 	make configure-host
 	make headers -C bfd
 	make $(PM)
@@ -45,9 +44,10 @@ stage1: $(DEPS)
 
 compile-stage1:
 	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	../$(DIR)/configure --prefix=$(WD) --with-lib-path=$(WD)/lib \
-	 --target=$(LFS_TARGET) \
-	 --disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
+	CC="$${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/$(LIB_MAYBE64) \
+	 --with-lib-path=$(WD)/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
+	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
+	 $(ENABLE-64-BIT-BFD)
 	make configure-host
 	make headers -C bfd
 	make $(PM)
@@ -117,8 +117,11 @@ stage2: $(DEPS)
 
 compile-stage2:
 	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	../$(DIR)/configure --enable-shared $(ENABLE-64-BIT-BFD)
 ifndef CROSS
+	../$(DIR)/configure --prefix=/usr --enable-shared
+else
+	CC="gcc $(64FLAGS)" ../$(DIR)/configure --prefix=/usr \
+	 --enable-shared $(ENABLE-64-BIT-BFD) --libdir=/usr/$(LIB_MAYBE64)
 	make configure-host
 endif
 	make $(PM) tooldir=/usr

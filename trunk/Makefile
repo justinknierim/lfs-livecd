@@ -54,7 +54,6 @@ export CROSSVARS := vars/vars.$(LFS-ARCH)
 include $(CROSSVARS)
 
 export KVERS ?= 2.6.12.5
-export CONFIG_SITE := $(ROOT)/scripts/config.site
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
