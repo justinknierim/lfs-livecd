@@ -76,7 +76,7 @@ ifeq ($(LFS-ARCH),sparc64)
 endif	    
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
 	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
- 	 gcc/Makefile.in.orig > gcc/Makefile.in
+	 gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/config/t-slibgcc-elf-ver{,.orig} ; \
 	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-slibgcc-elf-ver.orig \
 	 > gcc/config/t-slibgcc-elf-ver
@@ -108,16 +108,16 @@ compile-stage1:
 	 patch -Np1 -i ../$(PATCH40) ; patch -Np1 -i ../$(PATCH41)
 	cd ../$(DIR) ; cp gcc/cppdefault.c{,.bak} ; \
 	 sed '/#define STANDARD_INCLUDE_DIR/s@"/usr/include"@0@g' \
-   	 gcc/cppdefault.c.bak > gcc/cppdefault.c
+	 gcc/cppdefault.c.bak > gcc/cppdefault.c
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.bak} ; \
 	 sed 's@\(^NATIVE_SYSTEM_HEADER_DIR =\).*@\1 /tools/include@g' \
-   	 gcc/Makefile.in.bak > gcc/Makefile.in
+	 gcc/Makefile.in.bak > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/mklibgcc.in{,.bak} ; \
 	 sed "s@\./xgcc@/$(CROSS_WD)/bin/$${CC}@g" \
-   	 gcc/mklibgcc.in.bak > gcc/mklibgcc.in
+	 gcc/mklibgcc.in.bak > gcc/mklibgcc.in
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.bk2} ; \
 	 sed "/MULTILIBS/s@\$$(GCC_FOR_TARGET)@$(CROSS_WD)/bin/$${CC}@g" \
-   	 gcc/Makefile.in.bk2 > gcc/Makefile.in
+	 gcc/Makefile.in.bk2 > gcc/Makefile.in
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" ../$(DIR)/configure \
 	 --prefix=$(WD) --libdir=$(WD)/lib64 --build=$(LFS_HOST) \
 	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/lib64 \
@@ -131,7 +131,7 @@ ifeq ($(LFS-ARCH),sparc64)
 	 LS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
 else
 	make AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-    	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
 endif
 	make install
 	ln -s gcc $(WD)/bin/cc
@@ -157,7 +157,7 @@ compile-pass2:
 	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.tmp} && \
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
-         > gcc/Makefile.in
+	 > gcc/Makefile.in
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 	../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib \
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
@@ -185,10 +185,10 @@ ifndef CROSS
 	 --enable-clocale=gnu --enable-languages=c,c++
 else
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-    	../$(DIR)/configure --prefix=/usr --libdir=/usr/lib64 \
-    	 --libexecdir=/usr/lib64 --enable-shared --enable-threads=posix \
-    	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
-    	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
+	../$(DIR)/configure --prefix=/usr --libdir=/usr/lib64 \
+	 --libexecdir=/usr/lib64 --enable-shared --enable-threads=posix \
+	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
+	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
 endif
 	make $(PM)
 	make install
