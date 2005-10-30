@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	 ./configure --prefix=/usr
+	 ./configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64)
 	make $(PM)
 	make install
 	find docs -name "Makefile*" -o -name "*.1" -o -name "*.3" | xargs rm

@@ -12,6 +12,15 @@ PATCH1= $(DIR)-fix_manpages-1.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 7640f69ecbe701fd4b71e0d0329d9fffbcc52607
 
+PATCH40= $(DIR)-allow_lib64-1.patch
+URL-$(PATCH40)= http://linuxfromscratch.org/~thomasp/x86_64-livecd/$(PATCH40)
+SHA-$(PATCH40)= 26ce4198986c9c46b8ae2c85918f831f550cee88
+
+include $(CROSSVARS)
+
+CONFIG ?= ./config
+DEPS= $(FILE) $(PATCHES)
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -20,28 +29,19 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(DEPS)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-ifneq ($(LFS-ARCH),sparc64)
-	./config --openssldir=/etc/ssl --prefix=/usr shared
-ifneq ($(LFS-ARCH),ppc)
+	for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
+	$(CONFIG) --openssldir=/etc/ssl --prefix=/usr $(SSL_TARGET) shared
+ifeq ($(LFS-ARCH),x86)
 	sed -i 's/mcpu=pentium/mtune=i486/' Configure
 	sed -i 's/mcpu=pentium/mtune=i486/' Makefile
 endif
-else
-	./Configure --openssldir=/etc/ssl --prefix=/usr linux64-sparcv9 shared
-endif
-	make $(PM) MANDIR=/usr/share/man
-	make MANDIR=/usr/share/man install
+	make $(PM) $(LIBDIR_OVERRIDE) MANDIR=/usr/share/man
+	make $(LIBDIR_OVERRIDE) MANDIR=/usr/share/man install
 	cp -r certs /etc/ssl
-ifeq ($(LFS-ARCH),sparc64)
-	mv /usr/lib/libcrypto.* /usr/lib64/
-	mv /usr/lib/libssl.* /usr/lib64
-	ldconfig
-endif
 
 clean:
 	-rm -rf $(DIR)
