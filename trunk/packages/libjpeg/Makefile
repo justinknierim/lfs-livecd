@@ -5,7 +5,7 @@ VRS= 6b
 DIR= jpeg-$(VRS)
 
 FILE= jpegsrc.v$(VRS).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/I-K/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 9064e88e8c8bde13fb7ba809f3b84fa0737a981d
 
 # Targets

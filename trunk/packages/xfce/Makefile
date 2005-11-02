@@ -5,7 +5,7 @@ VRS= 4.2.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/W-Z/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= e589ded559cf86fbb92b85711081df0aca00249d
 
 PATCH1= $(DIR)-message-1.patch

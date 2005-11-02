@@ -5,15 +5,15 @@ VRS= 5beta
 DIR= $(NM)_$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= c86be29cbbc136ef34b368b2ee7c9a86558e0ecc
 
 PATCH1= $(NM)-$(VRS)-compilation_fixes-3.patch
-URL-$(PATCH1)= $(HTTPBLFS)/M-P/$(PATCH1)
+URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= fd70ed5b7aac08421e5a678e4776734b3f26042d
 
 PATCH2= $(NM)-$(VRS)-glibc_errno_fix-1.patch
-URL-$(PATCH2)= $(HTTPBLFS)/M-P/$(PATCH2)
+URL-$(PATCH2)= $(HTTPBLFS)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= f9451c5a81006a6ae21358c9498ac9d26b93ff4e
 
 # Targets

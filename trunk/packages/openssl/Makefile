@@ -5,11 +5,11 @@ VRS= 0.9.7h
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 2e59d045c6100cbd966184fd8fe63644e07cb2b3
 
 PATCH1= $(DIR)-fix_manpages-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
+URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 7640f69ecbe701fd4b71e0d0329d9fffbcc52607
 
 PATCH40= $(DIR)-allow_lib64-1.patch

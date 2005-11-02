@@ -5,11 +5,11 @@ VRS= 1.69.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= aaabf0e274609134e187a6c36d2be23f3471f507
 
 FILE1= $(NM)-doc-$(VRS).tar.bz2
-URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
+URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
 SHA-$(FILE1)= 2844c94d3127a9c517462b6efd9a4a9a38c5d9ba
 
 # Targets

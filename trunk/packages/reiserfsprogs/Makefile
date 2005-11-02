@@ -5,7 +5,7 @@ VRS= 3.6.19
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/Q-S/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= f0c0f74272e999e707dafb1e157e9daf5703850e
 
 # Targets

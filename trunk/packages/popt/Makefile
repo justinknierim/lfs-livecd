@@ -5,11 +5,11 @@ VRS= 1.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(NM)_$(VRS).orig.tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 5b9248195f3623a0fa88f3bf4d68aef4cabd619f
 
 PATCH1= $(NM)_$(VRS)-5.diff.bz2
-URL-$(PATCH1)= $(HTTPBLFS)/M-P/$(PATCH1)
+URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 774d7b2ea41128ca8b46bc834f3de1052c4fb9dc
 
 # Targets

@@ -38,7 +38,7 @@ export pagesize ?= letter
 export ROOT ?= /lfs-livecd
 export PM ?= -j3
 export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
-export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/BLFS/SVN
+export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
 
 # Directory variables
 #==============================================================================
