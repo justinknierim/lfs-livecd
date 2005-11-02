@@ -5,7 +5,7 @@ VRS= 4.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).zip
-URL-$(FILE)= $(HTTPBLFS)/D-E/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 7c4d91c82ad3747e1b5600c91782758e5d91c22b
 
 # Targets

@@ -1,12 +1,12 @@
 # BLFS Bootscripts Makefile
 
 NM= blfs-bootscripts
-VRS= 20050910
+VRS= 20051018
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 9fa8932329962cfa9227ab1c3b5d7aead8866610
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= e0ba95cf8294b139e08f70ac42942b2f4f132cae
 
 PATCH1=$(NM)-add-autosshd-1.patch
 

@@ -5,11 +5,11 @@ VRS= 1.0.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/M-P/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= dd84793fbfb88098da4242ec70844604652602c4
 
 PATCH1= $(DIR)-gcc4-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
+URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 9ccb151f6270aff4c5346ccc6ba50d5e7577ca65
 
 # Targets

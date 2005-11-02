@@ -5,11 +5,11 @@ VRS= 1.2.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/L/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= b6d73493eea4095166118b298efecb54a8e3d2f5
 
 PATCH1= $(DIR)-link_to_proper_libs-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/L/$(PATCH1)
+URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 24e552875bab65ed200e720c4a58dc92d92ba903
 
 # Targets
