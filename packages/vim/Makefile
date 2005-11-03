@@ -1,20 +1,16 @@
 # Vim Makefile
 
 NM= vim
-VRS= 6.3
-DIR= $(NM)63
+VRS= 6.4
+DIR= $(NM)64
 
 FILE= $(NM)-$(VRS).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 76f663277140d314ecfafecb0307e832bdbbaf06
+SHA-$(FILE)= 4ecc16d704b303db25c52c6bc33ab65e661ace93
 
 FILE2= $(NM)-$(VRS)-lang.tar.bz2
 URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
-SHA-$(FILE2)= de6df42164d875ff0cf8b1fb16fb210fd21b6938
-
-PATCH1= $(NM)-$(VRS)-security_fix-2.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 97c323f0c6ff807d89e8e3ce64f20101a097f281
+SHA-$(FILE2)= 91ac269d6dbeff880b38d6b955a112bb591b62d7
 
 # Targets
 
@@ -28,14 +24,13 @@ chroot3:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make chroot-gvim $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE2) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE2)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(FILE2),$(PATCH1)} $(LFSSRC)
+	cp $(SRC)/{$(FILE),$(FILE2)} $(LFSSRC)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
-	patch -Np1 -i ../$(PATCH1)
 ifndef CROSS
 	./configure --prefix=/usr --enable-multibyte
 else
@@ -54,7 +49,6 @@ compile-stage3:
 	unpack ../$(FILE2) --strip-components=1
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h
-	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --with-features=huge
 	make $(PM)
 	make install

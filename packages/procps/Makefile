@@ -1,12 +1,12 @@
 # Procps Makefile
 
 NM= procps
-VRS= 3.2.5
+VRS= 3.2.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 188d0ccd6c7a655ae556fe1078c346cda1aca164
+SHA-$(FILE)= 74fe5e5fdb84d6dad6688d007a276c5c1e18a0be
 
 # Targets
 

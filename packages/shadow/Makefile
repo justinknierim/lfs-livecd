@@ -1,12 +1,16 @@
 # Shadow Makefile
 
 NM= shadow
-VRS= 4.0.12
+VRS= 4.0.13
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= cf54e6803d35a55ab8ed2df649f07c82d3a75b2c
+SHA-$(FILE)= 0f605460c7826d7974089faf793ee2a973c9a176
+
+PATCH1= $(DIR)-configure_fix-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= e1bebfb21e574985db2433cbf2606ea13cd6972f
 
 # Targets
 
@@ -16,12 +20,13 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
+	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage2:
 ifndef CROSS
+	patch -Np1 -i ../$(PATCH1)
 	./configure --libdir=/lib --enable-shared
 else
 	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \

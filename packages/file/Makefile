@@ -1,12 +1,12 @@
 # File Makefile
 
 NM= file
-VRS= 4.15
+VRS= 4.16
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 067947db9ad03ffd128214019d209927c93b0d16
+SHA-$(FILE)= aa99ab8e29d5833787e63d6380a4a03104df2554
 
 # Targets
 
