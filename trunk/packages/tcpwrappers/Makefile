@@ -10,7 +10,7 @@ SHA-$(FILE)= 1b76da674d6557542b3cda5c55822ed7f1379127
 
 PATCH1= tcp_wrappers-$(VRS)-shared_lib_plus_plus-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/tcp_wrappers/$(PATCH1)
-SHA-$(PATCH1)= 915652d43c57f346d6f0a14eeaf706bbfed98ffa
+SHA-$(PATCH1)= 3a695742d0ca38872a2672c1f0a0c038b81c2552
 
 PATCH2= tcp_wrappers-$(VRS)-gcc34-1.patch
 URL-$(PATCH2)= $(HTTPBLFS)/tcp_wrappers/$(PATCH2)

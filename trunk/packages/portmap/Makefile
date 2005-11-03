@@ -10,11 +10,11 @@ SHA-$(FILE)= c86be29cbbc136ef34b368b2ee7c9a86558e0ecc
 
 PATCH1= $(NM)-$(VRS)-compilation_fixes-3.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= fd70ed5b7aac08421e5a678e4776734b3f26042d
+SHA-$(PATCH1)= b7a2f3828026309fccc3e688d4e0dfe328163a54
 
 PATCH2= $(NM)-$(VRS)-glibc_errno_fix-1.patch
 URL-$(PATCH2)= $(HTTPBLFS)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= f9451c5a81006a6ae21358c9498ac9d26b93ff4e
+SHA-$(PATCH2)= 6de7af3aae51d03bd5781767e0b6b09b36eeaee5
 
 # Targets
 
