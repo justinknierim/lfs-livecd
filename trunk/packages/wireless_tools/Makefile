@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	make PREFIX=/usr
-	make install
+	make PREFIX=/usr install
 
 clean:
 	-rm -rf $(DIR)
