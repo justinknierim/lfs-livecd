@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= f0c0f74272e999e707dafb1e157e9daf5703850e
+SHA-$(FILE)= 615b070b05b4330a8ac45a7d3c985c7d34ebde8e
 
 # Targets
 
