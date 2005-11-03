@@ -1,16 +1,16 @@
 # Udev Makefile
 
 NM= udev
-VRS= 070
+VRS= 071
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= ec9b92524a0b7b4e0c6d787d5cb6ee55ae72b607
+SHA-$(FILE)= 99554141df9d8333eeeb37276ada5cdafb080e3c
 
-CONFIG1= $(NM)-config-4.rules
+CONFIG1= $(NM)-config-5.rules
 URL-$(CONFIG1)= $(HTTP)/$(NM)/$(CONFIG1)
-SHA-$(CONFIG1)= 569afe7608bc3058d42948280b778fcacd1d8c96
+SHA-$(CONFIG1)= 648115cb81e7507488d151e79fd297abd680aa02
 
 # Targets
 
@@ -36,7 +36,6 @@ endif
 	# Udev-070 Makefile has a bug here
 	install -m755 extras/run_directory/udev_run_hotplugd /sbin
 	cp $(SRC)/$(CONFIG1) /etc/udev/rules.d/25-lfs.rules
-	echo 'RUN+="/sbin/udev_run_hotplugd"' >>/etc/udev/rules.d/25-lfs.rules
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
 
