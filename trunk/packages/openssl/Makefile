@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 2e59d045c6100cbd966184fd8fe63644e07cb2b3
+SHA-$(FILE)= 97f947f60b8da7076109344cfddaad77804708dd
 
 PATCH1= $(DIR)-fix_manpages-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
