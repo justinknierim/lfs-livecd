@@ -40,7 +40,7 @@ endif
 	sed -e 's@#MD5_CRYPT_ENAB.no@MD5_CRYPT_ENAB yes@' \
 	     -e 's@/var/spool/mail@/var/mail@' \
 	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' \
-	     etc/login.defs.linux > /etc/login.defs
+	     etc/login.defs > /etc/login.defs
 	mv /usr/bin/passwd /bin
 ifndef CROSS
 	mv /lib/libshadow.*a /usr/lib
