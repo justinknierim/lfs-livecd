@@ -8,9 +8,9 @@ FILE= $(NM)_src_$(VRS).tgz
 URL-$(FILE)= http://tidy.sourceforge.net/src/old/$(FILE)
 SHA-$(FILE)= 4bd9268da375a6e51bc028c643d65c53b07e1795
 
-FILE1= $(NM)_docs.tgz
-URL-$(FILE1)= http://tidy.sourceforge.net/docs/$(FILE1)
-SHA-$(FILE1)= b243d7910ce2fe57a8df27ff8f775e6d397c732d
+FILE1= $(NM)_docs_050705.tar.bz2
+URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
+SHA-$(FILE1)= 290b703519b8a398f98bfcc1fc655b87b5a7ee78
 
 # Targets
 
