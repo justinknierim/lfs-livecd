@@ -5,7 +5,7 @@ VRS= 5.19
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.tux.org/~bagleyd/latest/$(FILE)
+URL-$(FILE)= http://www.tux.org/pub/X-Windows/xlockmore/$(FILE)
 SHA-$(FILE)= bd925bac3c8bfbe73eb7023bed1c7d8864ff73aa
 
 # Targets
