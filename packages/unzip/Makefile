@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= b48f6b6446c31d3ebc163d134a2500b7fef57047
+SHA-$(FILE)= d3d0b410f51b98dae3b056b5e9768fccb1402beb
 
 PATCH1= $(DIR)-fix_Makefile-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
