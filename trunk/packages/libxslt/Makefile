@@ -4,9 +4,9 @@ NM= libxslt
 VRS= 1.1.15
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://xmlsoft.org/sources/$(FILE)
-SHA-$(FILE)= f0c8ef4809104bf59ebf5b23a637e7dff61a2aa4
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLSF)/$(NM)/$(FILE)
+SHA-$(FILE)= 73ecb3e0bbcb879b1b345e4691ddff2841439cdf
 
 # Targets
 
