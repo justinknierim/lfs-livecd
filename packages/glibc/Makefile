@@ -11,7 +11,7 @@ DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 ifndef CROSS
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 465cb1f4708dfa88606379cc1ebecb724c65f027
+SHA-$(FILE)= 82d0487419f1bdbf2dee439c344e89d6af47e558
 else
 URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
 SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
@@ -19,7 +19,7 @@ endif
 
 FILE1= $(NM)-linuxthreads-2.3.6.tar.bz2
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
-SHA-$(FILE1)= bfc44a76a708f905fe9c414162d5efcd3d47355f
+SHA-$(FILE1)= 10190168bf948556afdfff46f87f9208402d810f
 
 PATCH30= $(DIR)-sparc_tls-1.patch
 URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
