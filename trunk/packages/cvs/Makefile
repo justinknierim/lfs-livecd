@@ -1,16 +1,16 @@
 # cvs Makefile
 
 NM= cvs
-VRS= 1.11.20
+VRS= 1.11.21
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 47f51a96b5a73e18c96f431f3c494735aa9c0236
+SHA-$(FILE)= d114ed2943a4027f1277b04f57867a2e09a1f432
 
 PATCH1= $(DIR)-zlib-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= facc13bda7cc912db51f3994a5fe9f8374837394
+SHA-$(PATCH1)= 0d20bab8a6b6e419a8c900d082b487ad6a3aec38
 
 # Targets
 
@@ -29,7 +29,7 @@ compile-stage2:
 	make $(PM)
 	make install
 	install -m755 -d /usr/share/doc/$(DIR)
-	install -m644 doc/cvs{,client}.ps /usr/share/doc/$(DIR)
+	install -m644 doc/*.pdf /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
