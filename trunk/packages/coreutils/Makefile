@@ -1,12 +1,12 @@
 # Coreutils Makefile
 
 NM= coreutils
-VRS= 5.92
+VRS= 5.93
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 933f305183844d8a350a2294d96b73f73090717d
+SHA-$(FILE)= 56d983bfb20d04ff298677e7e795956f0d44ea6f
 
 PATCH1= $(DIR)-uname-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

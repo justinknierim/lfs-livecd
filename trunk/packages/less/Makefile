@@ -22,11 +22,10 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifndef CROSS
-	./configure --prefix=/usr --bindir=/bin \
-	 --sysconfdir=/etc
+	./configure --prefix=/usr --sysconfdir=/etc
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --bindir=/bin --sysconfdir=/etc
+	 --sysconfdir=/etc
 endif
 	make $(PM)
 	make install
