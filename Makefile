@@ -12,9 +12,6 @@
 # Unless otherwise noted, please try to keep all line lengths below 80 chars. 
 #
 
-# Machine architecure, LiveCD version, and specific arch variables.
-#==============================================================================
-
 # Place your personal customizations in Makefile.personal
 # instead of editing this Makefile.
 # Makefile.personal is deliberately not in SVN.
@@ -111,13 +108,12 @@ test-host:
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
-lfs-base: lfsuser
+lfs-base: lfsuser ln-root
 	@if [ ! -d $(MP)$(WD)/bin ] ; then mkdir -p $(MP)$(WD)/bin ; fi
 	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
 	@if [ ! -d $(MP)$(LFSSRC) ] ; then mkdir $(MP)$(LFSSRC) ; fi
 	@-ln -nsf $(MP)$(WD) /
 	@-ln -nsf $(MP)$(SRC) /
-	@-ln -nsf $(MP)$(ROOT) /
 	@-ln -nsf $(MP)$(LFSSRC) /
 ifndef CROSS
 	@-make unamemod
@@ -160,6 +156,9 @@ else
 	 make cross-post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 endif
+
+ln-root:
+	@-ln -nsf $(MP)$(ROOT) /
 
 extend-lfs: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
@@ -300,7 +299,7 @@ sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
 	ch-elftoaout ch-silo
 
-wget-list:
+wget-list: ln-root
 	@>wget-list ; \
 	 for DIR in packages/* ; do \
 	    make -C $${DIR} wget-list-entry || echo Never mind. ; \
