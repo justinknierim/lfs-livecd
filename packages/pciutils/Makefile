@@ -1,12 +1,12 @@
 # PCI Utilities Makefile
 
 NM= pciutils
-VRS= 2.1.11
+VRS= 2.2.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= fa561d97033d8992d2b20c5ca928e6a2ac9ebcfb
+SHA-$(FILE)= 4157acd035dc78b2a198d242c3975f289771b484
 
 # Targets
 
@@ -22,6 +22,9 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	make PREFIX=/usr
 	make PREFIX=/usr install
+	install -m 755 -d /usr/include/pci
+	install -m 644 lib/*.h /usr/include/pci
+	install -m 644 lib/libpci.a /usr/lib
 	update-pciids
 
 clean:
