@@ -1,12 +1,12 @@
 # Man-pages Makefile
 
 NM= man-pages
-VRS= 2.11
+VRS= 2.13
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a1c39042593418bcbe703037842950784998d9e7
+SHA-$(FILE)= 85eca68ecf1ea9a0eb04d05880874932b2190d94
 
 # Targets
 

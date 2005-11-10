@@ -108,7 +108,7 @@ pass1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-pass1:
-	../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib \
+	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
 	 --enable-languages=c
 	make $(PM) bootstrap
@@ -126,7 +126,7 @@ compile-pass2:
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
 	 > gcc/Makefile.in
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
-	../$(DIR)/configure --prefix=$(WD) --libexecdir=$(WD)/lib \
+	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
 	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
 	 --disable-libstdcxx-pch

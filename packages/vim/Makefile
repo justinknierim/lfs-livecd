@@ -38,7 +38,7 @@ else
 	 ./configure --prefix=/usr --enable-multibyte
 endif
 	make $(PM)
-	make install
+	make HELPSUBLOC=/usr/share/doc/vim-6.4 install
 	ln -sf vim /usr/bin/vi
 	cp $(ROOT)/etc/vimrc /etc
 

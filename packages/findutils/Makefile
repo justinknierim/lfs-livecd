@@ -36,11 +36,11 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifndef CROSS
-	./configure --prefix=/usr --libexecdir=/usr/lib/locate \
+	./configure --prefix=/usr --libexecdir=/usr/lib/findutils \
 	 --localstatedir=/var/lib/locate
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-    	--libexecdir=/usr/lib64/locate --localstatedir=/var/lib/locate
+    	--libexecdir=/usr/lib64/findutils --localstatedir=/var/lib/locate
 endif
 	make $(PM)
 	make install

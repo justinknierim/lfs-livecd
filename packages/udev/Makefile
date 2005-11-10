@@ -31,10 +31,7 @@ else
 	make CC="gcc $(64FLAGS)" LD="gcc $(64FLAGS)" \
 	 EXTRAS=extras/run_directory/
 endif
-	# DESTDIR avoids killing an existing udevd and starting a new one
-	make EXTRAS=extras/run_directory/ DESTDIR=/ install
-	# Udev-070 Makefile has a bug here
-	install -m755 extras/run_directory/udev_run_hotplugd /sbin
+	make DESTDIR=/ EXTRAS=extras/run_directory/ install
 	cp $(SRC)/$(CONFIG1) /etc/udev/rules.d/25-lfs.rules
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
