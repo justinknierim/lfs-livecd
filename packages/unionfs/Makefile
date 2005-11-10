@@ -1,17 +1,12 @@
 # Unionfs Makefile
 
 NM= unionfs
-VRS= 1.0.14
+VRS= 1.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= ftp://ftp.fsl.cs.sunysb.edu/pub/$(NM)/$(FILE)
-SHA-$(FILE)= 70b87ec8ae1b5b51b2d7a7b9ef4da80565ee124e
-
-PATCH1= $(DIR)-fix_builtin-1.patch
-PATCH2= $(DIR)-fixes-1.patch
-
-PATCH40= unionfs-1.0.13-amd64.patch
+SHA-$(FILE)= ca384dafb3a01dbce6ebbb9ebe9cf2049baff994
 
 # Targets
 
@@ -25,21 +20,15 @@ stage2: Makefile $(FILE)
 	$(std_build) 
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH2)
-ifeq ($(LFS-ARCH),x86_64)
-	patch -Np1 -i ../$(PATCH40)
-endif
 	make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG
 	make KVERS=$(KVERS) PREFIX=/usr EXTRACFLAGS=-DNODEBUG install
 	strip --strip-debug /lib/modules/$(KVERS)/kernel/fs/unionfs.ko
 
-patch-kernel: $(FILE) $(PATCH1)
+patch-kernel: $(FILE)
 	$(std_build)
 	-rm -f $@
 
 compile-patch-kernel:
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
 	./patch-kernel.sh $(ROOT)/$(PKG)/linux/linux-$(KVERS)/
 
 clean:
