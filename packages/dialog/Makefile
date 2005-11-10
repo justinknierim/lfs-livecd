@@ -1,12 +1,12 @@
 # Dialog Makefile
 
 NM= dialog
-VRS= 1.0-20050306
+VRS= 1.0-20051107
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tgz
 URL-$(FILE)= ftp://invisible-island.net/dialog/$(FILE)
-SHA-$(FILE)= c99418b18e0dae9d446b6392bc4804b11d600e3a
+SHA-$(FILE)= d5d80f43c08dcdc44224da8fedd83d77e6943b3f
 
 # Targets
 
