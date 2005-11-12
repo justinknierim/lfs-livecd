@@ -11,7 +11,7 @@
 
 user_pref("browser.preferences.lastpanel", 0);
 user_pref("browser.search.selectedEngine", "Google");
-user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-6.1-HTML/index.html");
+user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-trunk-HTML/index.html");
 user_pref("browser.startup.homepage_override.mstone", "rv:1.7.7");
 user_pref("extensions.disabledObsolete", true);
 user_pref("extensions.lastAppVersion", "1.0");

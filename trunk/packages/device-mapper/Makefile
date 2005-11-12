@@ -23,6 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr
 	make $(PM)
 	make install
+	install -m644 lib/ioctl/libdevmapper.a /usr/lib
 
 clean:
 	-rm -rf $(DIR)
