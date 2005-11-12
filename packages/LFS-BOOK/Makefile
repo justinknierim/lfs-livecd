@@ -17,8 +17,9 @@ chroot:
 
 stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co -q $(URL) $(DIR)
-	@cd $(DIR) ; make BASEDIR=/usr/share/$(DIR)
+	@svn co -q $(URL) $(NM)
+	@cd $(NM) ; make BASEDIR=../$(DIR)
+	cp -av $(DIR) /usr/share
 	@sed -i \
 	 's@file:///.*index.html@file:///usr/share/$(DIR)/index.html@' \
 	 $(FIREFOX_CONFIG)
@@ -28,6 +29,6 @@ stage2: Makefile
 	@touch $@
 
 clean:
-	-rm -rf $(DIR)
+	-rm -rf $(NM) $(DIR)
 
 .PHONY: clean chroot compile-stage2
