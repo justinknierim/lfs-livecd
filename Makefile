@@ -563,8 +563,9 @@ ifdef CROSS
 	@rm -f adjusting-toolchain
 endif
 	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
-	@rm -f $(PKG)/wget/prebuild
-	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
+	@rm -f $(PKG)/wget/{prebuild,.pass2}
+	@rm -f $(PKG)/binutils/{a.out,dummy.c,.specstest}
+	@rm -f initramfs/stage2
 	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
 
 scrub: clean
