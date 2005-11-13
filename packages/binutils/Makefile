@@ -68,7 +68,7 @@ compile-pass1:
 adjust-toolchain:
 	echo 'main(){}' > dummy.c && cc dummy.c && \
 	 readelf -l a.out > .specstest
-	if ! cat .specstest | grep -q $(WD) ; then cd $(NM)-build && \
+	if ! grep -q $(WD) .specstest ; then cd $(NM)-build && \
 	 make -C ld install && \
 	 SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	 gcc -dumpspecs > $$SPECFILE && \
@@ -99,7 +99,7 @@ chroot-re-adjust-toolchain:
 re-adjust-toolchain:
 	echo 'main(){}' > dummy.c && cc dummy.c && \
 	 readelf -l a.out > .specstest
-	if cat .specstest | grep -q $(WD) ; then cd $(NM)-build && \
+	if grep -q $(WD) .specstest ; then cd $(NM)-build && \
 	 make -C ld INSTALL=$(WD)/bin/install install && \
 	 SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	 gcc -dumpspecs > $$SPECFILE && \
