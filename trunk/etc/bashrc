@@ -9,7 +9,7 @@ BOLD="\[\033[0;38m\]"
 WHITE="\[\033[00m\]"
 
 # Prompt
-if [ $UID = 0 ] ; then
+if [ $EUID -eq 0 ] ; then
 	PS1="$BOLD\h:$RED\u | $BOLD\D{%c} $RED| \w\n$BOLD\\$ $WHITE"
 else
 	PS1="$BOLD\h:$GREEN\u | $BOLD\D{%c} $GREEN| \w\n$BOLD\\$ $WHITE"
