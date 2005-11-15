@@ -5,14 +5,14 @@ eval $(dircolors -b /etc/dircolors)
 RED="\[\033[0;31m\]"
 GREEN="\[\033[0;32m\]"
 ORANGE="\[\033[0;33m\]"
-BRWHITE="\[\033[0;38m\]"
+BOLD="\[\033[0;38m\]"
 WHITE="\[\033[00m\]"
 
 # Prompt
 if [ $UID = 0 ] ; then
-	PS1="$BRWHITE\h:$RED\u | $BRWHITE\D{%c} $RED| $GREEN\w$BRWHITE\n$WHITE\\$ "
+	PS1="$BOLD\h:$RED\u | $BOLD\D{%c} $RED| \w\n$BOLD\\$ $WHITE"
 else
-	PS1="$BRWHITE\h:$GREEN\u | $BRWHITE\D{%c} $GREEN| \w\n$BRWHITE\\$ $WHITE"
+	PS1="$BOLD\h:$GREEN\u | $BOLD\D{%c} $GREEN| \w\n$BOLD\\$ $WHITE"
 fi
 
 export PS1
