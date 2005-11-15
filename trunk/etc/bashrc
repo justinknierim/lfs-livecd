@@ -9,7 +9,7 @@ BRWHITE="\[\033[0;38m\]"
 WHITE="\[\033[00m\]"
 
 # Prompt
-if [ `whoami` = "root" ] ; then
+if [ $UID = 0 ] ; then
 	PS1="$BRWHITE\h:$RED\u | $BRWHITE\D{%c} $RED| $GREEN\w$BRWHITE\n$WHITE\\$ "
 else
 	PS1="$BRWHITE\h:$GREEN\u | $BRWHITE\D{%c} $GREEN| \w\n$BRWHITE\\$ $WHITE"
