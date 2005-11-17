@@ -68,7 +68,8 @@ else
 	ln -s ../../lib64/libbz2.so.1.0 /usr/lib64/libbz2.so
 endif
 	rm /usr/bin/{bunzip2,bzcat,bzip2}
-	ln -s bzip2 /bin/bunzip2 && ln -s bzip2 /bin/bzcat
+	ln -s bzip2 /bin/bunzip2
+	ln -s bzip2 /bin/bzcat
 
 clean:
 	-rm -rf $(DIR)
