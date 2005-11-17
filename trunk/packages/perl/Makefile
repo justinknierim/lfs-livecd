@@ -30,7 +30,7 @@ ifdef CROSS
 	chmod u+w hints/linux.sh
 	echo "installstyle=\"lib64/perl5\"" >> hints/linux.sh
 endif
-	./configure.gnu --prefix=$(WD) -Dstatic_ext='IO Fcntl POSIX'
+	./configure.gnu --prefix=$(WD) -Dstatic_ext='Data/Dumper Fcntl IO POSIX'
 	make perl utilities
 	cp perl pod/pod2man $(WD)/bin
 ifndef CROSS
@@ -50,7 +50,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifndef CROSS
-	./configure.gnu --prefix=/usr -Dpager="/bin/less -isR"
+	./configure.gnu --prefix=/usr -Dpager="/usr/bin/less -isR"
 else
 	sed -i 's@\$${prefix}/lib@\$${prefix}/lib64@g' hints/linux.sh
 	patch -Np1 -i ../$(PATCH40)

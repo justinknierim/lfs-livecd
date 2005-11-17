@@ -18,16 +18,20 @@ stage1: $(FILE)
 
 compile-stage1:
 ifndef CROSS
-	./configure --prefix=$(WD) --disable-libasprintf --without-csharp
+	cd gettext-tools
+	./configure --prefix=$(WD) --disable-shared
+	make -C lib
+	make -C src msgfmt
+	cp -v src/msgfmt $(WD)/bin
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --libdir=$(WD)/lib64 \
    	 --host=$(LFS_TARGET) --disable-libasprintf \
    	 --without-csharp --cache-file=config.cache
-endif
 	make
 	make install
+endif
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
