@@ -18,11 +18,10 @@ stage1: $(FILE)
 
 compile-stage1:
 ifndef CROSS
-	cd gettext-tools
-	./configure --prefix=$(WD) --disable-shared
-	make -C lib
-	make -C src msgfmt
-	cp -v src/msgfmt $(WD)/bin
+	cd $(NM)-tools ; ./configure --prefix=$(WD) --disable-shared
+	cd $(NM)-tools ; make -C lib
+	cd $(NM)-tools ; make -C src msgfmt
+	cd $(NM)-tools ; cp -v src/msgfmt $(WD)/bin
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
