@@ -49,7 +49,8 @@ endif
 	make install
 ifndef CROSS
 	chmod 755 /usr/lib/*.$(VRS)
-	chmod 644 /usr/lib/libncurses++.a && mv /usr/lib/libncurses.so.5* /lib
+	chmod 644 /usr/lib/libncurses++.a
+	mv /usr/lib/libncurses.so.5* /lib
 	ln -sf ../../lib/libncurses.so.5 /usr/lib/libncurses.so
 	ln -sf libncurses.so /usr/lib/libcurses.so
 else
