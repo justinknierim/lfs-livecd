@@ -42,7 +42,7 @@ endif
 	ln -sf vim /usr/bin/vi
 	cp $(ROOT)/etc/vimrc /etc
 
-stage3: Makefile $(FILE) $(FILE2) $(PATCH1)
+stage3: Makefile $(FILE) $(FILE2)
 	$(std_build)
 
 compile-stage3:
