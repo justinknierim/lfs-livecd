@@ -1,20 +1,12 @@
 # xfce Makefile
 
 NM= xfce
-VRS= 4.2.2
+VRS= 4.2.3.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= e589ded559cf86fbb92b85711081df0aca00249d
-
-PATCH1= $(DIR)-message-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH1)
-SHA-$(PATCH1)= 2d88093ce453fc549cbc33e86c9bf8151b0494e2
-
-PATCH2= $(DIR)-textclip-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH2)
-SHA-$(PATCH2)= ffd924c943d12f7d1e581edb2fc702bbeeab9743
+URL-$(FILE)= http://www.xfce.org/archive/$(DIR)/fat_tarballs/$(FILE)
+SHA-$(FILE)= d60827c2b0087e11575440ae53f18cb7d225ad7b
 
 # Targets
 
@@ -24,17 +16,13 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
 	cd src; for i in `cat ../../list`; \
 	do unpack $$i.tar.gz ; \
 	cd $$i ; \
-	 if [ "$$i" = "xfce-mcs-plugins-4.2.2" ] ; then \
-	 patch -Np1 -i ../../../$(PATCH1) ; fi ; \
-	 if [ "$$i" = "libxfcegui4-4.2.2" ] ; then \
-	 patch -Np1 -i ../../../$(PATCH2) ; fi ; \
 	 ./configure --prefix=/usr --sysconfdir=/etc \
 	 --enable-debug=no --enable-panel --enable-startup-notification \
 	 --libexecdir=/usr/sbin ; \

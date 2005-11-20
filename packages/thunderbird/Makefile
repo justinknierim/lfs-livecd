@@ -17,9 +17,9 @@ PATCH2= $(NM)-1.0.6-fixes-1.patch
 URL-$(PATCH2)= http://www.linuxfromscratch.org/blfs/downloads/svn/$(PATCH2)
 SHA-$(PATCH2)= e8798ebb7e638a7f1045ff103f75935ed61f0ef4
 
-PATCH3= $(NM)-1.0.6-locale-1.patch
-URL-$(PATCH3)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH3)
-SHA-$(PATCH3)= c8ac0c5aaf5d98a5b0830ead6eb6e35a109f6b5b
+PATCH50= $(NM)-1.0.6-locale-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= c8ac0c5aaf5d98a5b0830ead6eb6e35a109f6b5b
 
 # Targets
 
@@ -29,7 +29,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH50)
 	$(std_build)
 
 compile-stage2:
@@ -37,7 +37,7 @@ compile-stage2:
 	 ../.mozconfig > .mozconfig
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
-	patch -Np1 -i ../$(PATCH3)
+	patch -Np1 -i ../$(PATCH50)
 	make -f client.mk build
 	make -f client.mk install
 	cd $(ROOT)/$(PKG)/$(NM)

@@ -12,6 +12,10 @@ PATCH1= $(NM)-$(VRS)-gcc4-1.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= c918d248059e4f5f2f60c2f87ed3c2ebe6a91f7f
 
+PATCH50= $(NM)-$(VRS)-locale-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= 0844835d2ed8c38fb7f34db3d1352b78399a24ce
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -20,7 +24,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
 	$(std_build)
 
 compile-stage2:
@@ -30,10 +34,10 @@ compile-stage2:
 	sed -i 's@dist_bin"$$moz_libdir"@&\n    run_moz="$$dist_bin/run-mozilla.sh"@' \
 	 browser/app/mozilla.in
 	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH50)
 	make -f client.mk build
 	make -f client.mk install
 	cp -ra $(ROOT)/root/.mozilla /root
-	mkdir -p /usr/lib/$(NM)-$(VRS)/plugins
 	ln -sf /usr/lib/mozilla/plugins/libmozsvgdec.{so,a} \
 	 /usr/lib/$(NM)-$(VRS)/plugins
 
