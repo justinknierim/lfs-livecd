@@ -4,7 +4,7 @@ INPUTRC=/etc/inputrc
 
 G_FILENAME_ENCODING=@locale
 
-XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.68.1/catalog.xml /etc/xml/catalog"
+XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog"
 
 PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 
