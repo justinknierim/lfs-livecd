@@ -20,7 +20,7 @@ prebuild: ftpget $(FILE)
 
 compile-prebuild:
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
-	 --enable-static --disable-shared
+	 --enable-static --disable-shared --disable-nls
 	make $(PM)
 	make install
 
@@ -30,7 +30,7 @@ stage1: $(FILE)
 compile-stage1:
 ifndef CROSS
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
-	 --enable-static --disable-shared
+	 --enable-static --disable-shared --disable-nls
 else
 	./configure --prefix=$(WD) --host=$(LFS_TARGET) \
 	 --without-ssl
