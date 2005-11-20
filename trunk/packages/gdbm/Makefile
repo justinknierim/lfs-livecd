@@ -4,9 +4,9 @@ NM= gdbm
 VRS= 1.8.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
-SHA-$(FILE)= a0296b1986a99cb9ec0dc3b17ea99aec76e9b760
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 1ebe2b2e75f67790fb9bf3bd18ddee7b618cfe41
 
 # Targets
 
