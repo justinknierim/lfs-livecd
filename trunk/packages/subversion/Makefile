@@ -5,7 +5,7 @@ VRS= 1.2.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://subversion.tigris.org/downloads/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 513a217ba4a8045ea3daba5c3b0816f80ce0041b
 
 # Targets
