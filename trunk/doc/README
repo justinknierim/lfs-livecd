@@ -7,8 +7,7 @@ Available packages on this cd for your use:
 Xorg (X Window System Environment)
 
 Window Managers
-* xfce (default)
-* Ion
+* xfce 
 
 Web Tools
 * wget (command line file retriever)
