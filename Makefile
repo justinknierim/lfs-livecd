@@ -270,7 +270,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-gc ch-w3m ch-cairo \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
 	ch-thunderbird ch-librsvg \
-	ch-startup-notification chroot-gvim ch-xfce ch-lua ch-ion ch-irssi \
+	ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo ch-XML-Parser \
+	ch-Terminal ch-lua ch-ion ch-irssi \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute \
 	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \
