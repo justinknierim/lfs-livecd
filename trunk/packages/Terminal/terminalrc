@@ -1,0 +1,12 @@
+# HACK: we don't use the Bitstream Vera font below for non-latin1,
+# we rely upon its substitutions
+
+[Configuration]
+CommandUpdateRecords=FALSE
+FontName=Bitstream Vera Sans Mono 14
+MiscCursorBlinks=TRUE
+ShortcutsNoMenukey=TRUE
+ShortcutsNoMnemonics=TRUE
+TitleInitial=LFS LiveCD
+HelperWebbrowser=firefox
+HelperMailreader=thunderbird
