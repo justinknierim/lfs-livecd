@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i "s|\$$(datadir)/@PACKAGE@|&-6.5|" doc/Makefile.in
+	sed -i "s|\$$(datadir)/@PACKAGE@|&-$(VRS)|" doc/Makefile.in
 	./configure --prefix=/usr --datadir=/usr/share/doc --enable-cplusplus
 	make $(PM)
 	make install
