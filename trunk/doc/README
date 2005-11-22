@@ -39,6 +39,7 @@ Network Tools
 * dhcpcd
 * ncftp
 * traceroute
+* rsync
 
 Filesystem Programs
 * e2fsprogs
@@ -63,6 +64,10 @@ Other Programs
 
 nALFS & ALFS profile for LFS 6.1
 (A tool for automating a Linux From Scratch installation)
+
+jhalfs
+(A tool for extracting commands from the Linux From Scratch book and creating
+Makefiles that can download, check and build each LFS package for you.)
 
 CONFIGURING X
 ===========================
