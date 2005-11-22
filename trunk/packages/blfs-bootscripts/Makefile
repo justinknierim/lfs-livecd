@@ -35,6 +35,7 @@ endif
 	install -m754 blfs/init.d/nfs-server /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/nfs-client /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/iptables /etc/rc.d/init.d/ 
+	install -m754 blfs/init.d/rsync /etc/rc.d/init.d/ 
 
 clean:
 	-rm -rf $(DIR)
