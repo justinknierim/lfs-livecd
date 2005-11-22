@@ -12,10 +12,6 @@ define echo_message
 	@echo ================================================================================$(WHITE)
 endef
 
-define OK
-	@echo $(GREEN)=====================================[ OK ]=====================================$(WHITE)
-endef
-
 define std_build
 	@$(call echo_message, Building)
         @unpack $(FILE) >$(DIR)-$@.log 2>&1
