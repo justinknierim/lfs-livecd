@@ -1,13 +1,18 @@
 # DejaVu fonts Makefile
 
 NM= dejavu-ttf
-VRS= 1.14
+VRS= 2.0
 DIR= $(NM)-$(VRS)
 LOCATION= /usr/X11R6/lib/X11/fonts/TTF
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/dejavu/$(FILE)
-SHA-$(FILE)= 51eab6407780e0d5b62395d11e205743c3949a3e
+SHA-$(FILE)= dd3025cf27282fb0c5b9579f5546a8c549efe874
+
+# Post-release bugfix for 2.0, should be unneeded after 2.1
+FILE1= DejaVuSansMono-BoldOb.ttf
+URL-$(FILE1)= http://www.srnet.cz/~stepan/temp/.dejavu/$(FILE1)
+SHA-$(FILE1)= afcfd07ee07cf3d1d24c80e4909af83f21329be1
 
 # Targets
 
@@ -17,11 +22,12 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) 
+stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
 
 compile-stage2:
 	cp -v ./*.ttf $(LOCATION)
+	cp -v ../$(FILE1) $(LOCATION)
 
 clean:
 	-rm -rf $(DIR)

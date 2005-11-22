@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --libexecdir=/usr/sbin
 	make $(PM)
 	make install
-	mkdir /etc/xdg/Terminal
+	mkdir -p /etc/xdg/Terminal
 	install -m644 ../terminalrc /etc/xdg/Terminal/terminalrc
 
 clean:
