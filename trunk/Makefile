@@ -273,7 +273,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
 	ch-XML-Parser ch-Terminal ch-irssi \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
-	ch-traceroute ch-rsync ch-jhalfs \
+	ch-traceroute ch-rsync ch-jhalfs ch-sudo \
 	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-squashfs ch-cpio ch-gdbm ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
