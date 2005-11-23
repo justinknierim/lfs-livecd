@@ -13,8 +13,11 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile
-	svn co svn://linuxfromscratch.org/ALFS/jhalfs/branches/$(VRS) $(DIR)
-	$(std_build)
+	@$(call echo_message, Building)
+	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/branches/$(VRS) $(DIR)
+	@make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@make clean >>$(DIR)-$@.log 2>&1
+	@touch $@
 
 compile-stage2:
 	make install
