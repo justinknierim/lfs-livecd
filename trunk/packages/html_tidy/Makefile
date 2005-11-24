@@ -1,16 +1,16 @@
 # HTML Tidy Makefile
 
 NM= tidy
-VRS= 051013
+VRS= 051026
 DIR= $(NM)
 
-FILE= $(NM)_src_$(VRS).tgz
-URL-$(FILE)= http://tidy.sourceforge.net/src/old/$(FILE)
-SHA-$(FILE)= 4bd9268da375a6e51bc028c643d65c53b07e1795
+FILE= $(NM)_src_$(VRS).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= fe1f4316e0584670dfb47de386319895c31ea451
 
-FILE1= $(NM)_docs_050705.tar.bz2
+FILE1= $(NM)_docs_051020.tar.bz2
 URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 290b703519b8a398f98bfcc1fc655b87b5a7ee78
+SHA-$(FILE1)= 274dc5093ad53045478ba39accec2c411f14c643
 
 # Targets
 

@@ -4,9 +4,9 @@ NM= sudo
 VRS= 1.6.8p12
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.courtesan.com/sudo/dist/$(FILE)
-SHA-$(FILE)= a79631e9e1c0d0d3f2aa88ae685628e5fde61982
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= a8a2bfaf3912717cad30805e2debf58f5f95244b
 
 # Targets
 
