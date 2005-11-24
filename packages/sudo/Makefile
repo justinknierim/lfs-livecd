@@ -20,8 +20,9 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
-	make $(PM)
+	./configure --prefix=/usr --libexecdir=/usr/lib \
+	 --enable-noargs-shell --with-ignore-dot --with-all-insults
+	make
 	make install
 
 clean:
