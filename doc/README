@@ -87,7 +87,7 @@ When you are finished, run startx.
 
 NOTE: The default Window Manager is xfce which is intuitive and graphically
 pleasing. If you prefer something more minimal, edit the file ~/.xinitrc to
-read 'exec ion' or 'exec twm'.
+read 'exec twm'.
 
 CUSTOMIZING THE CD CONTENTS
 ===========================
