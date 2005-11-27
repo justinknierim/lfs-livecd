@@ -17,10 +17,6 @@ URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
 SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
 endif
 
-FILE1= $(NM)-linuxthreads-2.3.6.tar.bz2
-URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 10190168bf948556afdfff46f87f9208402d810f
-
 PATCH30= $(DIR)-sparc_tls-1.patch
 URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
 SHA-$(PATCH30)= 5100d3728f58bc40f7f61de10c0b7a202b876aa5
@@ -62,9 +58,9 @@ compile-headers:
 	 $(WD)/include/bits
 
 ifndef	CROSS
-stage1: $(FILE) $(FILE1)
+stage1: $(FILE) 
 	$(sep_dir_build)
-	cp $(SRC)/{$(FILE),$(FILE1)} $(LFSSRC)/
+	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
@@ -125,20 +121,17 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 ifndef CROSS
-stage2: $(FILE) $(FILE1)
+stage2: $(FILE) 
 	$(sep_dir_build)
 	touch $@
 
 compile-stage2:
-	cd ../$(DIR) ; unpack ../$(FILE1)
 	../$(DIR)/configure --prefix=/usr --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
 	PARALLELMFLAGS="$(PM)" make install
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales
-	make -C ../$(DIR)/linuxthreads/man
-	make -C ../$(DIR)/linuxthreads/man install
 	cp $(ROOT)/etc/nsswitch.conf /etc
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
 	cp $(ROOT)/etc/ld.so.conf /etc
