@@ -1,2 +1,3 @@
-LFS-6.2 PPC LiveCD
+LFS PPC LiveCD
+Version:
 ===========================================

@@ -28,7 +28,7 @@ compile-stage2:
 	cp ../ofboot.b /boot/
 	cp /usr/lib/yaboot/yaboot /boot/
 	cp ../yaboot.conf /boot/
-	cp ../boot.msg /boot/
+	sed 's|Version:.*|Version: $(VERSION)|' ../boot.msg >/boot/boot.msg
 
 clean:
 	-rm -rf $(DIR)

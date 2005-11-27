@@ -21,12 +21,12 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifeq ($(LFS-ARCH),x86)
-	cp -v isolinux.bin /boot/isolinux
-	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
+	cp -v isolinux.bin /boot/
+	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/
 endif
 ifeq ($(LFS-ARCH),x86_64)
-	cp -v isolinux.bin /boot/isolinux
-	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
+	cp -v isolinux.bin /boot/
+	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/
 endif
 
 

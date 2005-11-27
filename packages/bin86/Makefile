@@ -17,7 +17,9 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
+ifneq ($(LFS-ARCH),ppc)
 	$(std_build)
+endif
 
 compile-stage2:
 	make PREFIX=/usr
