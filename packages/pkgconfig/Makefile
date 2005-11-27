@@ -1,12 +1,12 @@
 # Pkgconfig Makefile
 
 NM= pkg-config
-VRS= 0.19
+VRS= 0.20
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://pkgconfig.freedesktop.org/releases/$(FILE)
-SHA-$(FILE)= b09fa43dcc44fe0db8df1c4994a8ff9eab371666
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 1e1368a2e00e81012aafa22d06cf15a520db81cd
 
 # Targets
 
