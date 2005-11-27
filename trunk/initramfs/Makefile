@@ -42,19 +42,8 @@ compile-stage2: init
 	$(MK) -m 660 $(WDIR)/dev/sr6 b 11 6
 	$(MK) -m 660 $(WDIR)/dev/sr7 b 11 7
 	$(MK) -m 660 $(WDIR)/dev/loop0 b 7 0
-	cd $(WDIR); find . | cpio -o -H newc | gzip -9 > ../initramfs_data.cpio.gz
-ifeq ($(LFS-ARCH),x86)
-	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
-endif
-ifeq ($(LFS-ARCH),x86_64)
-	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
-endif
-ifeq ($(LFS-ARCH),ppc)
-	$(CP) initramfs_data.cpio.gz /boot/
-endif
-ifeq ($(LFS-ARCH),sparc64)
-	$(CP) initramfs_data.cpio.gz /boot/
-endif
+	cd $(WDIR); find . | cpio -o -H newc | gzip -9 > ../initramfs_data_cpio.gz
+	$(CP) initramfs_data_cpio.gz /boot/
 	rm -rf temp
 
 init:

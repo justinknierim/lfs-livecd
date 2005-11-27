@@ -20,7 +20,9 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE) $(PATCH1)
+ifneq ($(LFS-ARCH),ppc)
 	$(std_build)
+endif
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
