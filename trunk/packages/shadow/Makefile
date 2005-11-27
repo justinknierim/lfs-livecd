@@ -33,7 +33,7 @@ else
    	 --enable-shared
 endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
-	sed -i '/groups/d' man/Makefile
+	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	make $(PM)
 	make install
 	cp etc/{limits,login.access} /etc

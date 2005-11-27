@@ -1,12 +1,12 @@
 # Findutils Makefile
 
 NM= findutils
-VRS= 4.2.25
+VRS= 4.2.26
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 233a6615bdbbcebc396cc989abc3e06cb27d9f28
+SHA-$(FILE)= 872184285ddb6ca7cb14e0c4c5c6b0bd0629541b
 
 # Targets
 
