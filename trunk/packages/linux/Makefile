@@ -68,5 +68,6 @@ endif
 
 clean:
 	-rm -rf $(DIR)
+	-rm reiser4.patch
 
 .PHONY: clean chroot compile-stage2

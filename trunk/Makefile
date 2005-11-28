@@ -558,10 +558,12 @@ endif
 	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip,}
 	@-rm {sqfs.log,lfs-strip,pre-wget}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
+	@-rm $(PKG)/initramfs/stage2
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
+	@find $(PKG)/*/ -type l -exec rm -fr \{} \;
 ifdef CROSS
 	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
 	@rm -f $(PKG)/glibc/headers

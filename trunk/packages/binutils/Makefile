@@ -104,7 +104,7 @@ re-adjust-toolchain:
 	 SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	 gcc -dumpspecs > $$SPECFILE && \
 	 sed -i 's@$(WD)/lib/$(LINKER)@/lib/$(LINKER)@g' $$SPECFILE && \
-	 unset SPECFILE ; fi
+	 unset SPECFILE ; rm .specstest ; fi
 	make clean
 	touch $@
 
