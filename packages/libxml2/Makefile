@@ -8,6 +8,8 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 3f920523136d51b246569977df70e6893d925dd5
 
+include $(CROSSVARS)
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -20,12 +22,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),sparc64)
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	  --libdir=/usr/lib64 --with-history
-else
-	./configure --prefix=/usr --with-history
-endif
+	$(ARCH_CC) ./configure --prefix=/usr --with-history $(EXTRA_CONF)
 	make $(PM)
 	make install
 
