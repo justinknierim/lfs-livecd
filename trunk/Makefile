@@ -285,8 +285,9 @@ ifeq ($(LFS-ARCH),ppc)
 endif
 
 x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-curl \
-	ch-zip ch-unzip ch-lynx ch-lfs-bootscripts ch-squashfs ch-cpio ch-linux ch-ctags ch-unionfs \
-	ch-initramfs ch-cdrtools ch-syslinux
+	ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
+	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-squashfs ch-cpio \
+	ch-linux ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
