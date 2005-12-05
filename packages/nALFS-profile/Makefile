@@ -1,12 +1,12 @@
 # nALFS profile Makefile
 
 NM= profile
-VRS= LFS-6.1
+VRS= LFS-SVN
 DIR= $(VRS)
 
 FILE= $(NM)-$(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/profiles/stable/$(FILE)
-SHA-$(FILE)= e4be78e5de2e71ba7b48013483142aa62fc7283f
+URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/profiles/lfs/svn/$(FILE)
+SHA-$(FILE)= 1938839673d967647c78d27ea5d27a67caf07dd3
 
 # Targets
 
