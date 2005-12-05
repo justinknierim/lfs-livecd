@@ -96,7 +96,7 @@ Scratch LiveCD, with your own files added. To do that, follow the
 instructions below.
 
 * Burn the official CD in multi session mode:
-    cdrecord dev=/dev/cdrom -v -multi -tao lfslivecd-x86-1-[version].iso
+    cdrecord dev=/dev/cdrom -v -multi -tao lfslivecd-[version].iso
 
 * Prepare a directory with the files you want to add, delete or change:
     mkdir second-session && cd second-session
@@ -106,7 +106,7 @@ instructions below.
     cd ..
 
 * Make an image contatining those files:
-    mkisofs -M lfslivecd-x86-6.1-1-[version].iso \
+    mkisofs -M lfslivecd-[version].iso \
         -C `cdrecord -msinfo dev=/dev/cdrom` \
 	-R -o second-session.iso second-session
 
