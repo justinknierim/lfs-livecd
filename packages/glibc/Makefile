@@ -58,7 +58,7 @@ compile-headers:
 	 $(WD)/include/bits
 
 ifndef	CROSS
-stage1: $(FILE) 
+stage1: $(FILE)
 	$(sep_dir_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
@@ -121,7 +121,7 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 ifndef CROSS
-stage2: $(FILE) 
+stage2: $(FILE)
 	$(sep_dir_build)
 	touch $@
 

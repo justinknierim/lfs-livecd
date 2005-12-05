@@ -16,3 +16,8 @@ else
 fi
 
 export PS1
+
+if [ "`locale charmap 2>/dev/null`" = "UTF-8" ]
+then
+	stty iutf8
+fi
