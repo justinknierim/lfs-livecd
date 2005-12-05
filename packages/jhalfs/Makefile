@@ -14,7 +14,7 @@ chroot:
 
 stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/branches/$(VRS) $(DIR)
+	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/tags/$(VRS) $(DIR)
 	@make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
 	@make clean >>$(DIR)-$@.log 2>&1
 	@touch $@
