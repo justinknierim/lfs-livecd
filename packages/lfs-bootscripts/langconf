@@ -10,7 +10,7 @@ if [ ! -z "$LANG" ] ; then
 	exit 0
 fi
 
-LOCALES=`cat /boot/locales*.msg | grep _ | \
+LOCALES=`cat /boot/isolinux/locales*.msg | grep _ | \
     sed 's, ,\n,g' | grep -v '^$' | sort`
 
 ARGS="C Default "
@@ -32,7 +32,7 @@ echo "LANG=$LANG_SELECTED" >>/etc/environment
 echo "LANG=$LANG_SELECTED ; export LANG" >>/etc/sysconfig/rc
 echo "LANG=$LANG_SELECTED ; export LANG" >>/etc/profile
 
-KEYMAPS=`cat /boot/keymaps.msg | grep -v ':' | grep -v '\[' | sort`
+KEYMAPS=`cat /boot/isolinux/keymaps.msg | grep -v ':' | grep -v '\[' | sort`
 ARGS="Default \"\" "
 for K in $KEYMAPS ; do
 	ARGS="$ARGS $K \"\" "

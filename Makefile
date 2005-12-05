@@ -279,9 +279,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-squashfs ch-cpio ch-gdbm ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
-	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile ch-parted
+	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile
 ifeq ($(LFS-ARCH),ppc)
-	make ch-yaboot ch-hfsutils ch-mac-fdisk
+	make ch-yaboot
 endif
 
 x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-curl \
@@ -479,15 +479,12 @@ prepiso: unmount
 	@>$(MP)/var/log/lastlog
 	@install -m644 etc/issue $(MP)/etc/issue
 ifeq ($(LFS-ARCH),x86)
-	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/boot.msg
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
 ifeq ($(LFS-ARCH),x86_64)
-	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/boot.msg
-endif
-ifeq ($(LFS-ARCH),ppc)
-	@install -m644 isolinux/{locale*.msg,keymap*.msg} ${MP}/boot/
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m644 doc/README $(MP)/root/README
@@ -498,7 +495,6 @@ ifneq ($(LFS-ARCH),sparc64)
 	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
 	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
 else
-	@install -m644 isolinux/{locale*.msg,keymap*.msg} ${MP}/boot/
 	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
 endif
 endif
@@ -522,13 +518,13 @@ $(MP)/iso/.root.sqfs:
 iso: prepiso $(MP)/iso/.root.sqfs
 ifeq ($(LFS-ARCH),x86)
 	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
-	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux.bin \
+	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
 endif
 ifeq ($(LFS-ARCH),x86_64)
 	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
-	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux.bin \
+	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
 endif
