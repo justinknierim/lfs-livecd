@@ -22,9 +22,9 @@ ifndef CROSS
 	 --without-ada --enable-overwrite
 else
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-   	 ./configure --prefix=$(WD) --with-shared \
-   	 --host=$(LFS_TARGET) --without-debug --without-ada \
-   	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
+	 ./configure --prefix=$(WD) --with-shared \
+	 --host=$(LFS_TARGET) --without-debug --without-ada \
+	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
 endif
 	make sources
 	make $(PM)
@@ -34,34 +34,36 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+# The non-wide library is for commercial software only => not for the Live CD
 ifndef CROSS
-	./configure --prefix=/usr --with-shared --without-debug --with-gpm
+	./configure --prefix=/usr --with-shared \
+	    --without-debug --enable-widec --without-cxx-binding
 else
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-   	 ./configure --prefix=/usr --libdir=/lib64 --with-shared --without-debug
+	    ./configure --prefix=/usr --libdir=/usr/lib64 --with-shared \
+	    --without-debug --enable-widec --without-cxx-binding
 endif
+	# FIXME: still needed?
 	make sources
 	make $(PM)
 	make install
-ifndef CROSS
-	chmod 755 /usr/lib/*.$(VRS)
-	chmod 644 /usr/lib/libncurses++.a
-	mv /usr/lib/libncurses.so.5* /lib
-	ln -sf ../../lib/libncurses.so.5 /usr/lib/libncurses.so
-	ln -sf libncurses.so /usr/lib/libcurses.so
-else
-	mv /lib64/lib{panel,menu,form,ncurses,ncurses++}.a /usr/lib64
-	rm /lib64/lib{ncurses,menu,panel,form}.so
-	ln -sf ../../lib64/libncurses.so.5 /usr/lib64/libncurses.so
-	ln -sf ../../lib64/libmenu.so.5 /usr/lib64/libmenu.so
-	ln -sf ../../lib64/libpanel.so.5 /usr/lib64/libpanel.so
-	ln -sf ../../lib64/libform.so.5 /usr/lib64/libform.so
-	chmod 755 /lib64/lib{panel,menu,form,ncurses}.so.$(VRS)
-endif
+	chmod 755 /usr/$(LIB_MAYBE54)/*.$(VRS)
+	mv /usr/$(LIB_MAYBE64)/libncursesw.so.5* /$(LIB_MAYBE64)
+	ln -sf ../../$(LIB_MAYBE64)/libncursesw.so.5 /usr/$(LIB_MAYBE64)/libncursesw.so
+	for lib in curses ncurses form panel menu ; do \
+	  rm -f /usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
+	  echo "INPUT(-l$${lib}w)" >/usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
+	  ln -sf lib$${lib}w.a /usr/$(LIB_MAYBE64)/lib$${lib}.a ; \
+	 done
+	rm -f /usr/$(LIB_MAYBE64)/libcursesw.so
+	echo "INPUT(-lncursesw)" >/usr/$(LIB_MAYBE64)/libcursesw.so
+	ln -sf libncurses.so /usr/$(LIB_MAYBE64)/libcurses.so
+	ln -sf libncursesw.a /usr/$(LIB_MAYBE64)/libcursesw.a
+	ln -sf libncurses.a /usr/$(LIB_MAYBE64)/libcurses.a
 
 clean:
 	-rm -rf $(DIR)

@@ -39,6 +39,8 @@ else
 endif
 	make $(PM)
 	make install
+	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
+	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sf vim /usr/bin/vi
 	cp $(ROOT)/etc/vimrc /etc
 
@@ -52,6 +54,8 @@ compile-stage3:
 	./configure --prefix=/usr --with-features=huge
 	make $(PM)
 	make install
+	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
+	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sf vim /usr/bin/vi
 	cp $(ROOT)/etc/vimrc /etc
 

@@ -1,22 +1,22 @@
-# Man Makefile
+# Groff Makefile
 
-NM= man
-VRS= 1.6b
+NM= groff
+VRS= 1.19.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= e4b84ca61565314ef1a29a4c1221b6321dbdc278
+SHA-$(FILE)= b7303af986de7b7c7722c2dbad07844fac6b6343
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
 chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+	chroot "$(MP)" $(chenv-pre-bash) \
+	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) 
 	echo "This package is needed only for non-UTF-8 builds"
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
