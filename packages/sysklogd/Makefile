@@ -30,7 +30,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH50)
 ifndef CROSS
 	make $(PM)
 else
