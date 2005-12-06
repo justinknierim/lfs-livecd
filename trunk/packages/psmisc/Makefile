@@ -25,7 +25,7 @@ ifndef CROSS
 	./configure --prefix=/usr --exec-prefix=""
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-   	 --exec-prefix=""
+	 --exec-prefix=""
 endif
 	make $(PM)
 	make install

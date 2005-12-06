@@ -17,6 +17,12 @@ URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
 SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
 endif
 
+ifndef CROSS
+FILE2= $(NM)-libidn-$(VRS).tar.bz2
+URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+SHA-$(FILE2)= 95d3a98495d4bd7138149fd312db88da56e735db
+endif
+
 PATCH30= $(DIR)-sparc_tls-1.patch
 URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
 SHA-$(PATCH30)= 5100d3728f58bc40f7f61de10c0b7a202b876aa5
@@ -31,6 +37,8 @@ SHA-$(PATCH41)= ac908ef021764e90443e7cf7d72de87fe6168c38
 
 STAGE1_DEPS= $(FILE) $(PATCH40)
 STAGE2_DEPS= $(FILE) $(PATCH41)
+
+PATCH50= $(DIR)-supported_locales-2.patch
 
 # Targets
 
@@ -58,11 +66,12 @@ compile-headers:
 	 $(WD)/include/bits
 
 ifndef	CROSS
-stage1: $(FILE)
+stage1: $(FILE) $(FILE2)
 	$(sep_dir_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)/
+	cp $(SRC)/{$(FILE),$(FILE2)} $(LFSSRC)/
 
 compile-stage1:
+	cd ../$(DIR) ; unpack ../$(FILE2)
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
 	 --without-gd --with-headers=$(WD)/include --without-selinux
@@ -126,6 +135,13 @@ stage2: $(FILE)
 	touch $@
 
 compile-stage2:
+	cd ../$(DIR) ; unpack ../$(FILE2)
+# The vi_VN.TCVN locale doesn't work, testcase: "LC_ALL=vi_VN.TCVN bash"
+# Result: the prompt never comes back, CPU utilization is 100%
+# (this may be a bash bug)
+	sed -i '/vi_VN.TCVN/d' ../$(DIR)/localedata/SUPPORTED
+# LiveCD specific locale additions
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH50)
 	../$(DIR)/configure --prefix=/usr --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc
 	PARALLELMFLAGS="$(PM)" make
@@ -146,6 +162,17 @@ compile-stage2:
 ifeq ($(LFS-ARCH),sparc64)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30)
 endif
+# FIXME: is the following still true?
+# The no_NO alias doesn't work, testcase: "LC_ALL=no_NO locale"
+# Result: locale: Cannot set LC_CTYPE to default locale: No such file or directory
+# The solution is to use the nb_NO locale instead of no_NO
+	sed -i '/no_NO/d' ../$(DIR)/intl/locale.alias
+# The vi_VN.TCVN locale doesn't work, testcase: "LC_ALL=vi_VN.TCVN bash"
+# Result: the prompt never comes back, CPU utilization is 100%
+# (this may be a bash bug)
+	sed -i '/vi_VN.TCVN/d' ../$(DIR)/localedata/SUPPORTED
+# LiveCD specific locale additions
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH50)
 	echo "slibdir=/lib64" >> configparms
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
     	 ../$(DIR)/configure --prefix=/usr \

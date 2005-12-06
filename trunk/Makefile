@@ -236,12 +236,13 @@ prep-chroot:
 pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-coreutils \
 	ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk \
-	ch-m4 ch-bison ch-gpm ch-ncurses ch-readline ch-vim ch-less ch-groff \
+	ch-m4 ch-bison ch-gpm ch-ncurses ch-readline ch-vim ch-less \
+	ch-gdbm ch-groff ch-groff-1.19 \
 	ch-sed ch-flex ch-gettext ch-inetutils ch-iproute2 ch-perl ch-texinfo \
 	ch-autoconf ch-automake ch-bash
 
 post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
-	ch-grep ch-grub ch-gzip ch-hotplug ch-man ch-make \
+	ch-grep ch-grub ch-gzip ch-hotplug ch-man ch-man-db ch-make \
 	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
 
@@ -249,11 +250,12 @@ cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
 	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
 	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
 	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline \
-	ch-vim ch-m4 ch-bison ch-less ch-groff ch-sed ch-flex ch-gettext ch-inetutils \
+	ch-vim ch-m4 ch-bison ch-less ch-gdbm ch-groff ch-groff-1.19 ch-sed \
+	ch-flex ch-gettext ch-inetutils \
 	ch-perl ch-iproute2 ch-texinfo ch-autoconf ch-automake ch-bash
 
 cross-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
-	ch-grep ch-gzip ch-man ch-make ch-module-init-tools ch-patch ch-procps \
+	ch-grep ch-gzip ch-man ch-man-db ch-make ch-module-init-tools ch-patch ch-procps \
 	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
 	ch-hotplug final-environment
 ifeq ($(LFS-ARCH),x86_64)
@@ -276,7 +278,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo \
 	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-	ch-squashfs ch-cpio ch-gdbm ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
+	ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
 	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile

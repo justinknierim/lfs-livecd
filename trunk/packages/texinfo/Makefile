@@ -13,6 +13,10 @@ PATCH1= $(DIR)-tempfile_fix-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= ac721310cbe17f1661173598954d20484be6c767
 
+PATCH50= $(DIR)-multibyte-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= cb7f2c85a6f0ed73e8c4d1772e20b886a8c0de96
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -30,12 +34,13 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
 	$(std_build)
-	cp $(SRC)/$(PATCH1) $(LFSSRC)
+	cp $(SRC)/{$(PATCH1),$(PATCH50)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH50)
 ifndef CROSS
 	./configure --prefix=/usr
 else
