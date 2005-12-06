@@ -51,7 +51,7 @@ endif
 	make sources
 	make $(PM)
 	make install
-	chmod 755 /usr/$(LIB_MAYBE54)/*.$(VRS)
+	chmod 755 /usr/$(LIB_MAYBE64)/*.$(VRS)
 	mv /usr/$(LIB_MAYBE64)/libncursesw.so.5* /$(LIB_MAYBE64)
 	ln -sf ../../$(LIB_MAYBE64)/libncursesw.so.5 /usr/$(LIB_MAYBE64)/libncursesw.so
 	for lib in curses ncurses form panel menu ; do \
