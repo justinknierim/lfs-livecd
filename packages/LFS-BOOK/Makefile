@@ -4,6 +4,12 @@ NM= LFS-BOOK
 VRS= trunk
 DIR= $(NM)-$(VRS)-HTML
 
+# Ensure sources match LFS book for "trunk".  Update along with LFS packages.
+ifeq ($(VRS),trunk)
+REV= 7197
+REVPARM= -r $(REVISION)
+endif
+
 URL= svn://svn.linuxfromscratch.org/LFS/$(VRS)/BOOK
 FIREFOX_CONFIG= $(ROOT)/root/.mozilla/firefox/2qwpcv2u.default/prefs.js
 
@@ -17,7 +23,7 @@ chroot:
 
 stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co -q $(URL) $(NM)
+	@svn co -q $(REVPARM) $(URL) $(NM)
 	@cd $(NM) ; make BASEDIR=../$(DIR)
 	cp -av $(DIR) /usr/share
 	@sed -i \
