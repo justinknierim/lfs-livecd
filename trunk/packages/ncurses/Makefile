@@ -8,6 +8,10 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 3283b776e69134aa49147b66619e01d29bc50714
 
+PATCH50= $(DIR)-fixes-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= 617e1de363a6dc2cfcaf5eaafd78cfe01ab34f48
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -34,11 +38,13 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH50)
 	$(std_build)
+	cp $(SRC)/$(PATCH50) $(LFSSRC)
 
 compile-stage2:
 # The non-wide library is for commercial software only => not for the Live CD
+	patch -Np1 -i ../$(PATCH50)
 ifndef CROSS
 	./configure --prefix=/usr --with-shared \
 	    --without-debug --enable-widec --without-cxx-binding
