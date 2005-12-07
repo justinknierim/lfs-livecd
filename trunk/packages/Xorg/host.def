@@ -11,4 +11,11 @@
 #define XprtServer		NO
 #define BuildXprintClients	NO
 
+/* Courier confuses font substitution logic in VTE for greek letters */
+#define BuildType1Fonts		NO
+
+/* Strictly speaking, TrueType fonts that come with the X server
+   don't add any Unicode coverage. I keep them because some people
+   prefer Luxi, but that font is useless for me -- Alexander E. Patrakov */
+
 /* End Xorg host.def file */

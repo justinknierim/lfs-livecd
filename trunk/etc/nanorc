@@ -108,7 +108,7 @@ color yellow "\<(true|false|null)\>"
 color blue "//.*"
 color blue start="/\*" end="\*/"
 color brightblue start="/\*\*" end="\*/"
-color brightgreen,brightgreen "[ 	]+$"
+color brightgreen,green "[ 	]+$"
 
 ## Here is an example for your .nanorc
 ##
@@ -140,7 +140,7 @@ color brightgreen "\[<bool>\]"
 color yellow "<i>"
 color cyan "<str>"
 color brightred "Section" "EndSection" "SubSection" "EndSubSection"
-color yellow "\<(InputDevice|Screen|Identifier|FontPath|RgbPath|ModulePath|Load|Driver|Device|Option|VendorName|ModelName|HorizSync|VertRefresh|Modeline|DisplaySize|BoardName|Monitor|DefaultDepth|)\>
+color yellow "\<(InputDevice|Screen|Identifier|FontPath|RgbPath|ModulePath|Load|Driver|Device|Option|VendorName|ModelName|HorizSync|VertRefresh|Modeline|DisplaySize|BoardName|Monitor|DefaultDepth|)\>"
 color brightblue "^#.*" "^;.*" "^!.*" "[[:space:]]#.*" "[[\t]]#.*"
 
 syntax "bash" "\.sh$"

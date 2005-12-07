@@ -1,12 +1,12 @@
 # Nano Makefile
 
 NM= nano
-VRS= 1.2.5
+VRS= 1.3.9
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= e78d9c3f7795aca3b4e03eb5cea00c4490a4fb44
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://www.nano-editor.org/dist/v1.3/$(FILE)
+SHA-$(FILE)= 3ed5fce2637a36c8053e6cf36f0f4ec8c0cd6dff
 
 # Targets
 
@@ -25,7 +25,7 @@ compile-stage2:
 	make $(PM)
 	make install
 	mkdir -p /usr/share/doc/nano/examples
-	cp nanorc.sample /usr/share/doc/nano/examples
+	cp doc/nanorc.sample /usr/share/doc/nano/examples
 	cp $(ROOT)/etc/nanorc /etc
 
 clean:

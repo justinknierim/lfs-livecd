@@ -20,7 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --enable-nls
+	./configure --prefix=/usr --enable-nls \
+	    --enable-widec --with-ncursesw
 	make $(PM)
 	make install
 

@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib \
 	    --enable-nls --with-ssl --enable-charset-choice \
-	    --enable-locale-charset
+	    --enable-locale-charset --with-screen=ncursesw
 	make $(PM)
 	make install
 	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg

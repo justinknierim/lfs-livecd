@@ -1,12 +1,12 @@
-# Links Makefile
+# libidn Makefile
 
-NM= links
-VRS= 2.1pre17
+NM= libidn
+VRS= 0.5.19
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 2f89de8b8ea797834444f933222ecf7bd2cea84b
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://josefsson.org/libidn/releases/$(FILE)
+SHA-$(FILE)= 5ae48379a40e7e6976c680d4fd1d977224d6c589
 
 # Targets
 
@@ -20,11 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),sparc64)
-	./configure --prefix=/usr
-else
-	./configure --prefix=/usr --enable-graphics
-endif
+	 @./configure --prefix=/usr
 	make $(PM)
 	make install
 
