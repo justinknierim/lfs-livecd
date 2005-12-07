@@ -263,12 +263,13 @@ ifeq ($(LFS-ARCH),x86_64)
 endif
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
-	ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
+	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
 	ch-fontconfig ch-Xorg ch-freefont ch-inputattach ch-fonts-dejavu \
-	update-fontsdir ch-libjpeg ch-libtiff ch-libart_lgpl ch-links \
-	ch-openssh ch-pkgconfig ch-glib2 ch-libungif ch-imlib ch-imlib2 \
+	ch-fonts-kochi ch-fonts-arphic ch-fonts-baekmuk \
+	update-fontsdir ch-libjpeg ch-libtiff ch-libart_lgpl \
+	ch-openssh ch-glib2 ch-libungif ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-cairo \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
 	ch-thunderbird ch-librsvg \
@@ -286,16 +287,16 @@ ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
 
-x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-curl \
+x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl \
 	ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
 	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-squashfs ch-cpio \
 	ch-linux ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
-	ch-joe ch-screen ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
+	ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-links ch-openssh \
-	ch-pkgconfig ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh \
+	ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
 	ch-portmap ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils \
 	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
 	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin \

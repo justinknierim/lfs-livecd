@@ -24,6 +24,10 @@ endif
 
 PATCH2= squashfs2.2-patch
 
+PATCH50= $(NM)-2.6.12.5-utf8_input-2.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= 72b51b7cf6b5eeecf79a07d3778670c64011397c
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -32,9 +36,9 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)/
+	cp $(SRC)/{$(FILE),$(PATCH50)} $(LFSSRC)/
 
 compile-stage2:
 ifeq ($(LFS-ARCH),x86)
@@ -54,6 +58,7 @@ else
 endif
 	patch -Np1 -i ../$(PATCH2)
 	cd $(ROOT) ; make -C $(PKG)/unionfs patch-kernel
+	patch -Np1 -i ../$(PATCH50)
 	make mrproper
 	cp ../config.$(LFS-ARCH) .config
 	make $(PM)
@@ -74,6 +79,5 @@ endif
 
 clean:
 	-rm -rf $(DIR)
-	-rm reiser4.patch
 
 .PHONY: clean chroot compile-stage2

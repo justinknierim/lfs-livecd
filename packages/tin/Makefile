@@ -21,7 +21,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	./configure --prefix=/usr --enable-included-msgs \
-	 --with-mailer=/usr/bin/msmtp \
+	 --with-screen=ncursesw --with-mailer=/usr/bin/msmtp \
 	 --enable-nntp-only --disable-pgp-gpg --disable-printing
 	make $(PM) build
 	make install

@@ -26,7 +26,7 @@ stage2: Makefile $(FILE) $(FILE1)
 compile-stage2:
 	cd .. ; unpack $(FILE1)
 	../install
-	ln -s xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current
+	ln -sf xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current
 
 clean:
 	-rm -rf $(DIR)

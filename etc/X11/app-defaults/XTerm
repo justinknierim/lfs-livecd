@@ -70,7 +70,7 @@
 *vtMenu*altscreen*Label:  Show Alternate Screen
 
 ! The fonts below are not used at all on this CD
-! because of "locale mode" and Xft
+! because of "locale mode"
 *fontMenu.Label:  VT Fonts
 *fontMenu*fontdefault*Label:	Default
 *fontMenu*font1*Label:	Unreadable
@@ -96,7 +96,7 @@
 *fontMenu*utf8-mode*Label:	UTF-8
 
 *VT100.utf8Fonts.font2:	-misc-fixed-medium-r-normal--8-80-75-75-c-50-iso10646-1
-*VT100.utf8Fonts.font:	-misc-fixed-medium-r-semicondensed--13-120-75-75-c-60-iso10646-1
+*VT100.utf8Fonts.font:	-misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
 *VT100.utf8Fonts.font3:	-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso10646-1
 *VT100.utf8Fonts.font4:	-misc-fixed-medium-r-normal--13-120-75-75-c-80-iso10646-1
 *VT100.utf8Fonts.font5:	-misc-fixed-medium-r-normal--18-120-100-100-c-90-iso10646-1
@@ -122,8 +122,11 @@
 ! LiveCD specific customizations are below this line
 
 *VT100*locale: true
-*VT100*faceName: Monospace
 *title: LFS LiveCD
+*background: black
+*foreground: white
 *VT100*scrollBar: true
 *VT100*scrollKey: true
 *VT100*rightScrollBar: true
+*ptyInitialErase: true
+*backarrowKeyIsErase: true
