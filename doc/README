@@ -14,18 +14,17 @@ Web Tools
 * curl (command line file retriever)
 * lynx (text web browser)
 * w3m (text web browser)
-* links (text web browser)
-* irssi (console irc client)
+* irssi (console irc client, unstable version)
 * firefox (graphical web browser)
 * xchat (x-based irc client)
-* msmtp (SMTP client for use with mutt and slrn)
+* msmtp (SMTP client for use with mutt and tin)
 * mutt (console mail and news reader)
 * thunderbird (graphical mail and news reader)
 * tin (console news reader)
 
 Text Editors
 * vim
-* nano
+* nano (unstable version)
 * joe
 
 Network Tools
@@ -76,10 +75,9 @@ process may fail if you have more than one video card, or if your video card
 doesn't support 24-bit color depth.
 
 You still have to edit /etc/X11/xorg.conf using vim, joe or nano in order to
-configure the keyboard layout and available video modes (otherwise the US
-English keyboard layout and the highest resolution with 60 Hz refresh rate
-will be used). Instructions for doing that are found in the BLFS book, under
-the section Configuring Xorg:
+configure the available video modes (otherwise the highest resolution with
+60 Hz refresh rate will be used). Instructions for doing that are found in
+the BLFS book, under the section Configuring Xorg:
 
 http://www.linuxfromscratch.org/blfs/view/svn/x/installing.html#xorg
 
@@ -141,6 +139,48 @@ you have to customize the CD as described above. Add the following files:
 * /etc/sysconfig/network-devices/ifconfig.eth0
     Configure a known static IP address there, as described in the LFS book,
     section "7.12. Configuring the network Script".
+
+INTERNATIONALIZATION
+================
+It is possible to specify the locale using the bootloader prompt, like this:
+
+  linux LANG=es_ES@euro
+
+The CD tries to guess the proper screen font and keymap based on this
+information. If the guess is wrong, you can override it by adding the
+following parameters:
+
+  KEYMAP: specifies the console keymap(s) to load (actually the arguments to
+  the "loadkeys" program separated by the "+" sign), e.g: KEYMAP=es+euro1
+
+  LEGACY_CHARSET: sometimes a ready-made UTF-8 keymap is not available and
+  must be obtained by converting an existing keymap from this charset to UTF-8.
+  E.g.: LEGACY_CHARSET=iso-8859-15
+  This parameter is not used in non-UTF-8 locales.
+
+  FONT: specifies the screen font to set (actually, the arguments to the
+  "setfont" program separated by the "+" sign), e.g:
+  FONT=LatArCyrHeb-16+-m+8859-15
+
+  XKEYMAP: the keymap to use with X window system, e.g. XKEYMAP=us_intl
+
+Alternatively, these items can be configured interactively using dialog-based
+interface if the locale is not specified on the boot prompt.
+
+For some locales (e.g. lv_LV.ISO-8859-13) there is no valid console keymap,
+but there is a keymap for X. In this case, the only solution is to use X.
+Languages that need special input method software (e.g. Chinese, Japanese
+and Korean) are not supported yet.
+
+While this CD configures the LANG environment variable, console font and
+keymap for you, it's your responsibility to configure other locale-dependent
+parameters manually. You may want to configure character sets for SAMBA in
+/etc/samba/smb.conf, and to explicitly specify the "iocharset" and "codepage"
+options when mounting filesystems with Windows origin (e.g., vfat and isofs).
+
+The CD contains TrueType fonts that cover the orthography of most of European
+and some Asian languages. No additional configuration is required in order to
+use these fonts.
 
 THANKS
 ===========================
