@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-noargs-shell --with-ignore-dot --with-all-insults
 	make
-	make install
+	env -i PATH=$$PATH make install
 
 clean:
 	-rm -rf $(DIR)
