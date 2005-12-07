@@ -21,6 +21,7 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
+	sed -i s/sane/cooked/ lfs/init.d/functions
 	make install-livecd
 	install -m 755 lfs/init.d/mountkernfs /etc/rc.d/init.d
 	ln -sf ../init.d/mountkernfs /etc/rc.d/rcsysinit.d/S00mountkernfs
@@ -32,6 +33,8 @@ compile-stage2:
 	ln -sf ../init.d/clkconf /etc/rc.d/rcsysinit.d/S59clkconf
 	install -m 755 ../langconf /etc/rc.d/init.d/
 	ln -sf ../init.d/langconf /etc/rc.d/rcsysinit.d/S69langconf
+	mkdir -p /etc/langconf
+	install -m 644 ../*.dat /etc/langconf
 	install -m 755 ../console /etc/rc.d/init.d/
 	rm -f /etc/rc.d/rc0.d/S99halt
 	rm -f /etc/rc.d/rc6.d/S99reboot
