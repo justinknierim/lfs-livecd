@@ -19,6 +19,7 @@ chroot:
 stage2: Makefile $(FILE) 
 	echo "This package is needed only for non-UTF-8 builds"
 	cp $(SRC)/$(FILE) $(LFSSRC)
+	@touch $@
 
 clean:
 	-rm -rf $(DIR)
