@@ -16,6 +16,9 @@ SHA-$(FILE1)= 2c9c97b6576af6dddedca75cfadf431d5aa53fda
 
 include $(ROOT)/scripts/functions
 
+$(FILE1):
+	$(call download,$@,$(URL-$@),$(SHA-$@))
+
 chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
