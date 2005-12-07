@@ -4,7 +4,7 @@ FILES="/lib/libc.so.6
 /lib/_LINKER_
 /lib/libreadline.so.5.0
 /lib/libhistory.so.5.0
-/lib/libncurses.so.5
+/lib/libncursesw.so.5
 /lib/libdl.so.2
 /lib/libblkid.so.1
 /lib/libuuid.so.1
