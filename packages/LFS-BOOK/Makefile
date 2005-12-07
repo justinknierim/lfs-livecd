@@ -27,7 +27,7 @@ chroot:
 
 stage2: Makefile $(PATCH50)
 	@$(call echo_message, Building)
-	@echo svn co -q $(REVPARM) $(URL) $(NM)
+	@svn co -q $(REVPARM) $(URL) $(NM)
 	@cd $(NM) ; make BASEDIR=../$(DIR)
 	cp -av $(DIR) /usr/share
 	@sed -i \
