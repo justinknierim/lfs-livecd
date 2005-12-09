@@ -19,7 +19,8 @@ endif
 
 ifndef CROSS
 FILE2= $(NM)-libidn-$(VRS).tar.bz2
-URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+#URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+URL-$(FILE2)= http://ftp.gnu.org/gnu/glibc/$(FILE2)
 SHA-$(FILE2)= 95d3a98495d4bd7138149fd312db88da56e735db
 endif
 
