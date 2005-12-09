@@ -5,8 +5,14 @@ eval $(dircolors -b /etc/dircolors)
 RED="\[\033[0;31m\]"
 GREEN="\[\033[0;32m\]"
 ORANGE="\[\033[0;33m\]"
-BOLD="\[\033[0;38m\]"
 WHITE="\[\033[00m\]"
+
+case $TERM in
+	xterm*)
+		BOLD=$WHITE ;;
+	*)
+		BOLD="\[\033[0;38m\]" ;;
+esac
 
 # Prompt
 if [ $EUID -eq 0 ] ; then
