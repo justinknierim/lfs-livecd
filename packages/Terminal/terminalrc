@@ -1,9 +1,6 @@
-# HACK: we use the DejaVu font below only for languages it supports,
-# and rely upon fontconfig to do the proper font substitution otherwise.
-
 [Configuration]
 CommandUpdateRecords=FALSE
-FontName=DejaVu Sans Mono 14
+FontName=Monospace 12
 MiscCursorBlinks=TRUE
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
