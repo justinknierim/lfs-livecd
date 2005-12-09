@@ -16,9 +16,9 @@ esac
 
 # Prompt
 if [ $EUID -eq 0 ] ; then
-	PS1="$BOLD\h:$RED\u | $BOLD\D{%c} $RED| \w$WHITE\n$BOLD\\$ $WHITE"
+	PS1="$BOLD\h:$RED\u | $BOLD\`date +%c\` $RED| \w$WHITE\n$BOLD\\$ $WHITE"
 else
-	PS1="$BOLD\h:$GREEN\u | $BOLD\D{%c} $GREEN| \w$WHITE\n$BOLD\\$ $WHITE"
+	PS1="$BOLD\h:$GREEN\u | $BOLD\`date +%c\` $GREEN| \w$WHITE\n$BOLD\\$ $WHITE"
 fi
 
 export PS1
