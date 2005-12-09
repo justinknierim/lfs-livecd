@@ -35,7 +35,7 @@ ifndef CROSS
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr --enable-mb-groff --disable-setuid
 endif
-	make $(PM)
+	make
 	make install
 
 clean:
