@@ -13,9 +13,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
 SHA-$(FILE)= 19c8c83e6ee29dd6041dae0daf1c1d0debd3d32a
 
-PATCH= groff_1.18.1.1-8.diff.gz
-URL-$(PATCH)= http://ftp.debian.org/debian/pool/main/g/$(NM)/$(PATCH)
-SHA-$(PATCH)= 6423b528127de74e3242428d8e3c102f40e966d1
+PATCH= groff_1.18.1.1-8.diff.bz2
+URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
+SHA-$(PATCH)= 8fb3c709b2a4009ff1e09e6c06c42b4fbdc49624
 
 # Targets
 
@@ -30,7 +30,7 @@ stage2: Makefile $(FILE) $(PATCH)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	zcat ../$(PATCH) | patch -Np1
+	bzcat ../$(PATCH) | patch -Np1
 	sed -i 's,2010,002D,' font/devutf8/R.proto
 	sed -i 's,2212,002D,' font/devutf8/R.proto
 ifndef CROSS
