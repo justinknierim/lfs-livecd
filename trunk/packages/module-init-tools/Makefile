@@ -1,12 +1,12 @@
 # Module-Init-Tools Makefile
 
 NM= module-init-tools
-VRS= 3.2.1
+VRS= 3.2.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f982949eaba759b28ec2cccec9a3625b2c58a299
+SHA-$(FILE)= b51e8ac170be23a1f2e301a1dddd47a47ec2186a
 
 # Targets
 
