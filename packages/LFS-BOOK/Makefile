@@ -6,16 +6,16 @@ DIR= $(NM)-$(VRS)-HTML
 
 # Ensure sources match LFS book for "trunk".  Update along with LFS packages.
 ifeq ($(VRS),trunk)
-REV= 7197
+REV= 7207
 REVPARM= -r $(REV)
 endif
 
 URL= svn://svn.linuxfromscratch.org/LFS/$(VRS)/BOOK
 FIREFOX_CONFIG= $(ROOT)/root/.mozilla/firefox/2qwpcv2u.default/prefs.js
 
-PATCH50= lfs_book-r7197-utf8-1.patch
+PATCH50= lfs_book-r7207-utf8-1.patch
 URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
-SHA-$(PATCH50)= d2e25ffee4860d06958bb228c431e13c9e42caf9
+SHA-$(PATCH50)= c99d627085ab118b6f2bc8a359f1d4cf2b5ad07c
 
 # Targets
 

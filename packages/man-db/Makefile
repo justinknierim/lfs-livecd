@@ -16,8 +16,9 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	mv man/de{_DE.88591,}
