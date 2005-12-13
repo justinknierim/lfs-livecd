@@ -1,41 +1,31 @@
 # Bash Makefile
 
 NM= bash
-VRS= 3.0
+VRS= 3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= eaa39bae5dccf44a48593858009fb3dc01d4346a
+SHA-$(FILE)= 35e8f7eadded3be38df2eb8ac8db094109339d5e
 
 FILE1 = $(NM)-doc-$(VRS).tar.bz2
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
-SHA-$(FILE1)= ffb7d4920becfc0acc5a4068ab5b5f09300733cf
-
-PATCH1= $(DIR)-avoid_WCONTINUED-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 3ea7cf640d5bcf5e442654986e53e6a796ba996e
-
-PATCH2= $(DIR)-fixes-3.patch
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= f5dc122edaac230856d208a5787a3b346959a034
+SHA-$(FILE1)= 21084bf998eb11b9c30cd6dac72471ee980cc893
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE) $(PATCH1)
+stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 ifndef CROSS
-	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD) --without-bash-malloc
 else
 	cp -p Makefile.in Makefile.in.orig
 	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
-	patch -Np1 -i ../$(PATCH1)
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --with-curses \
    	 --without-bash-malloc --host=$(LFS_TARGET)
@@ -48,16 +38,14 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
-	cp $(SRC)/{$(PATCH2),$(FILE1)} $(LFSSRC)/
+	cp $(SRC)/$(FILE1) $(LFSSRC)/
 
 compile-stage2:
 	unpack ../$(FILE1)
 	sed -i "s|htmldir = @htmldir@|htmldir = /usr/share/doc/bash-3.0|" \
 	 Makefile.in
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
 ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
 	 --with-installed-readline
