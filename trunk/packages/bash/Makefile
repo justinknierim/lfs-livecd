@@ -44,7 +44,7 @@ stage2: Makefile $(FILE) $(FILE1)
 
 compile-stage2:
 	unpack ../$(FILE1)
-	sed -i "s|htmldir = @htmldir@|htmldir = /usr/share/doc/bash-3.0|" \
+	sed -i "s|htmldir = @htmldir@|htmldir = /usr/share/doc/$(DIR)|" \
 	 Makefile.in
 ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
