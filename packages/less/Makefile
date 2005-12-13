@@ -1,12 +1,12 @@
 # Less Makefile 
 
 NM= less
-VRS= 382
+VRS= 394
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= bc10f7d68152725cc7836a75437ac7e1163860de
+SHA-$(FILE)= e8d5cdbd1fbf6fe9bc32e54e2ce957c2ebf68eb5
 
 # Targets
 

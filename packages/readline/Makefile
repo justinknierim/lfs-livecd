@@ -1,20 +1,12 @@
 # Readline Makefile
 
 NM= readline
-VRS= 5.0
+VRS= 5.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 6df316629de417c16a77a444cc456a3ba949951b
-
-PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 085d0d973d1a39707c26454db1d414957a85e2d0
-
-PATCH50= $(DIR)-redhat_fixes-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
-SHA-$(PATCH50)= e3840c242c397e3b8a777043de72e56d8cfa7f18
+SHA-$(FILE)= 06fb3e314e43140f8d7d1b5ce1d8cc3f6af151f3
 
 # Targets
 
@@ -24,20 +16,18 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
+stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH50)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH50)
 ifndef CROSS
 	./configure --prefix=/usr --libdir=/lib
 else
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
    	 ./configure --prefix=/usr --libdir=/lib64
 endif
-	make $(PM) SHLIB_XLDFLAGS=-lncurses
+	make $(PM) SHLIB_LIBS=-lncurses
 	make install
 ifndef CROSS
 	chmod 755 /lib/lib{readline,history}.so*

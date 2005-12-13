@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --sbindir=/sbin
 	make $(PM)
 	make install
-	ln -s mkfs.reiser4 /sbin/mkreiser4fs
+	ln -sf mkfs.reiser4 /sbin/mkreiser4fs
 
 clean:
 	-rm -rf $(DIR)

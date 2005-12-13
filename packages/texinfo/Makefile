@@ -9,9 +9,9 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= b19e906f7220294c1e8b087d583c50f5c4d7c420
 
-PATCH1= $(DIR)-tempfile_fix-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= ac721310cbe17f1661173598954d20484be6c767
+PATCH1= $(DIR)-tempfile_fix-2.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH1)
+SHA-$(PATCH1)= c995a67be7a57bd984ec708f4ff71dbe74cbae36
 
 PATCH50= $(DIR)-multibyte-1.patch
 URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
