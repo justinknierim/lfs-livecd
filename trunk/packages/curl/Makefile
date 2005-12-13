@@ -1,12 +1,12 @@
 # Curl Makefile
 
 NM= curl
-VRS= 7.15.0
+VRS= 7.15.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 5c4d5b57e180d419a311f5fbbc104aac4d3f3a83
+SHA-$(FILE)= 2b94192557954bba396bfbb980feed17aadc6295
 
 # Targets
 
