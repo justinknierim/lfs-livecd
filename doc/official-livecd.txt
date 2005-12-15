@@ -1,0 +1,101 @@
+AUTHOR: Alexander E. Patrakov <patrakov at ums dot usu dot ru>
+
+DATE: 2005-12-15
+
+LICENSE: GNU General Public License, version 2 or later
+
+SYNOPSIS: Design and history of the official LFS LiveCD
+
+DESCRIPTION:
+This hint documents design choices made while developing
+the official LFS LiveCD. This is not a step-by-step guide.
+
+PREREQUISITES:
+Ability to build LFS and BLFS and script the build process
+Working knowledge of C, ability to read and understand documentation
+
+HINT:
+
+I. DIFFERENCES BETWEEN A LIVE CD AND A REGULAR SYSTEM
+
+Any Linux live CD contains a Linux system and a special boot loader designed
+for running it from a CD-ROM. The fact that the root file system is stored
+on a CD leads to the following consequences:
+
+1. The device which holds the system is not known in advance.
+
+Some people have their CD-ROM as /dev/hdc, others use /dev/hdd or even /dev/sda.
+This means that one cannot pass a fixed "root=..." argument to the kernel
+in the boot loader configuration.
+
+2. The hardware on the target system is not known in advance.
+
+In order to be useful for building the LFS system, the official LiveCD must
+be able to boot from a CD drive connected to any IDE or SCSI controller and
+also recognize all hard disks in the target system.
+
+3. The CD is read-only.
+
+The iso9660 filesystem used on CD-ROMs is read-only. However, some programs
+require a writeable location to store their settings. Some mechanism must
+exist that provides such scratch space.
+
+4. The CD size is limited to 700 MB.
+
+A bare-bones LFS system takes approximately 300 megabytes, even after stripping.
+The official LFS LiveCD must also contain LFS sources, this takes 150 MB more.
+Thus, without compression, at most 250 megabytes are left for additional BLFS
+software that makes the CD more comfortable.
+
+5. The CD must be configurable in order to fit different user needs.
+
+When a user builds his [B]LFS system, he/she edits the configuration files
+according to personal requirements. Other user may be uncomfortable with
+the first user's settings. Thus, a live CD should contain some default
+settings that work for most people. Sometimes (e.g. when keyboard layouts
+are concerned) it is not possible. In such cases, an easy configuration
+mechanism should exist.
+
+The points outlined above are discussed in more detail in the next parts
+of the hint.
+
+II. The boot loader
+
+One of the boot loaders capable of booting a Linux kernel from a CD-ROM is
+isolinux, part of the Syslinux package. Syslinux is available at:
+
+http://syslinux.zytor.com/
+
+The official LFS LiveCD uses a precompiled isolinux.bin file because some
+time ago the syslinux maintainer advised against recompiling syslinux from
+source. In order to build isolinux from source, nasm is needed. Issue the
+following commands to rebuild the isolinux.bin file:
+
+make spotless        # removes all precompiled files
+make isolinux.bin    # or just "make" if you want other programs in the package
+
+This "isolinux.bin" file should end up in the /boot/isolinux directory on the
+LiveCD, together with the isolinux.cfg configuration file, the kernel image
+("linux") and the initramfs image ("initramfs_data.cpio.gz", discussed in the
+next section). The isolinux.cfg file on the official LFS LiveCD contains the
+following:
+
+serial 0
+default linux
+prompt 1
+timeout 600
+display boot.msg
+F1 options.msg
+
+label linux
+  kernel linux
+  append initrd=initramfs_data_cpio.gz
+
+The meaning of each configuration option is described in the syslinux.doc file
+in the syslinux source tarball.
+
+{plan: document: why the timeout, old insecure autosshd, how to load an
+initramfs, why initramfs_data_cpio.gz and not initramfs_data.cpio.gz}
+
+CHANGELOG:
+{place the SVN changelog here just before the official release}
