@@ -1,12 +1,12 @@
 # libidn Makefile
 
 NM= libidn
-VRS= 0.5.20
+VRS= 0.6.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://josefsson.org/libidn/releases/$(FILE)
-SHA-$(FILE)= 42b5795bdf58e39d24e57297f383c8a3e54dca64
+SHA-$(FILE)= 5bbb329524ca4e44febd42a3554404692cc4035a
 
 # Targets
 
