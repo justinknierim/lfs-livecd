@@ -10,8 +10,6 @@ PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 
 WWW_HOME="/usr/share/LFS-BOOK-trunk-HTML/index.html"
 
-NNTPSERVER=news.linuxfromscratch.org
-
 TERMCMD=Terminal
 
 XMODIFIERS=@im=SCIM
