@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifndef CROSS
-	./configure --prefix="" --enable-zlib --mandir=/usr/share/man
+	./configure --prefix=/ --enable-zlib
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/ --enable-zlib
 endif
