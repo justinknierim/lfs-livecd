@@ -33,7 +33,7 @@ ifndef CROSS
 	./configure --prefix=$(WD)
 else
 	echo "utils_cv_sys_open_max=1024" >> config.cache
-	DEFAULT_POSIX2_VERSION=199209 CC="$${CC} $(64FLAGS)" \
+	CC="$${CC} $(64FLAGS)" \
 	 ./configure --prefix=$(WD) --cache-file=config.cache \
 	 --build=$(LFS_HOST) --target=$(LFS_TARGET)
 endif
@@ -64,8 +64,7 @@ endif
 ifndef CROSS
 	./configure --prefix=/usr
 else
-	CC="gcc $(64FLAGS)" DEFAULT_POSIX2_VERSION=199209 \
-	 ./configure --prefix=/usr
+	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
 endif
 	make $(PM)
 	make install

@@ -8,6 +8,8 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
+include $(CROSSVARS)
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -30,35 +32,17 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
-	./configure --prefix=/usr --shared --libdir=/lib
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" CFLAGS="${CFLAGS} -fPIC" \
-	 ./configure --prefix=/usr --shared --libdir=/lib64
-endif
+
+	$(ARCH_CC) $(ARCH_CFLAGS) ./configure --prefix=/usr --shared --libdir=/$(LIB_MAYBE64)
 	make $(PM)
 	make install
-ifndef CROSS
-	rm /lib/libz.so
-	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
-else
-	rm /lib64/libz.so
-	ln -sf ../../lib64/libz.so.$(VRS) /usr/lib64/libz.so
-endif
+	rm /$(LIB_MAYBE64)/libz.so
+	ln -sf ../../$(LIB_MAYBE64)/libz.so.$(VRS) /usr/$(LIB_MAYBE64)/libz.so
 	make clean
-ifndef CROSS
-	./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" ./configure \
-    	 --prefix=/usr --libdir=/usr/lib64
-endif
+	$(ARCH_CC) ./configure --prefix=/usr $(EXTRA_CONF)
 	make $(PM)
 	make install
-ifndef CROSS
-	chmod 644 /usr/lib/libz.a
-else
-	chmod 644 /usr/lib64/libz.a
-endif
+	chmod 644 /usr/$(LIB_MAYBE64)/libz.a
 
 clean:
 	-rm -rf $(DIR)

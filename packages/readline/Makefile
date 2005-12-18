@@ -29,18 +29,11 @@ else
 endif
 	make $(PM) SHLIB_LIBS=-lncurses
 	make install
-ifndef CROSS
-	chmod 755 /lib/lib{readline,history}.so*
-	rm /lib/lib{readline,history}.so
-	ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so
-	ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so
-else
-	chmod 755 /lib64/lib{readline,history}.so*
-	mv /lib64/lib{readline,history}.a /usr/lib64
-	rm /lib64/lib{readline,history}.so
-	ln -sf ../../lib64/libreadline.so.5 /usr/lib64/libreadline.so
-	ln -sf ../../lib64/libhistory.so.5 /usr/lib64/libhistory.so
-endif
+	chmod 755 /$(LIB_MAYBE64)/lib{readline,history}.so*
+	mv /$(LIB_MAYBE64)/lib{readline,history}.a /usr/$(LIB_MAYBE64)
+	rm /$(LIB_MAYBE64)/lib{readline,history}.so
+	ln -sf ../../$(LIB_MAYBE64)/libreadline.so.5 /usr/$(LIB_MAYBE64)/libreadline.so
+	ln -sf ../../$(LIB_MAYBE64)/libhistory.so.5 /usr/$(LIB_MAYBE64)/libhistory.so
 
 clean:
 	-rm -rf $(DIR)

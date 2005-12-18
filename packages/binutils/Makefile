@@ -27,6 +27,7 @@ LINKER ?= ld-linux.so.2
 
 cross: $(DEPS)
 	$(sep_dir_build)
+	for i in $(DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
 
 compile-cross:
 	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
@@ -34,7 +35,6 @@ compile-cross:
 	--target=$(LFS_TARGET) --with-lib-path=$(WD)/lib \
 	--disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
 	make configure-host
-	make headers -C bfd
 	make $(PM)
 	make install
 	cp -v ../$(DIR)/include/libiberty.h $(WD)/include
@@ -49,7 +49,6 @@ compile-stage1:
 	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
 	 $(ENABLE-64-BIT-BFD)
 	make configure-host
-	make headers -C bfd
 	make $(PM)
 	make install
 

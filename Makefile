@@ -386,6 +386,9 @@ createfiles:
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
+ifdef CROSS
+	@chmod 600 /var/log/btmp
+endif
 	@mv $(WD)/etc/resolv.conf /etc
 
 popdev:

@@ -24,11 +24,13 @@ compile-stage1:
 ifndef CROSS
 	./configure --prefix=$(WD) --without-bash-malloc
 else
-	cp -p Makefile.in Makefile.in.orig
+	cp Makefile.in Makefile.in.orig
 	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
+	echo "ac_cv_func_setvbuf_reversed=no" >> config.cache
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
    	 ./configure --prefix=$(WD) --with-curses \
-   	 --without-bash-malloc --host=$(LFS_TARGET)
+   	 --without-bash-malloc --host=$(LFS_TARGET) \
+	 --cache-file=config.cache
 endif
 	make
 	make install

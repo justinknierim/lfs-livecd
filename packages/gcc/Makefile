@@ -28,6 +28,7 @@ include $(ROOT)/scripts/functions
 
 cross-static: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
 	$(sep_dir_build)
+	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH40),$(PATCH41)} $(LFSSRC)
 
 compile-cross-static:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1) ; \
@@ -57,12 +58,6 @@ compile-cross:
 	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} ; \
 	 sed "s@\(^CROSS_SYSTEM_HEADER_DIR =\).*@\1 $(WD)/include@g" \
 	 gcc/Makefile.in.orig > gcc/Makefile.in
-	cd ../$(DIR) ; cp gcc/config/t-slibgcc-elf-ver{,.orig} ; \
-	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-slibgcc-elf-ver.orig \
-	 > gcc/config/t-slibgcc-elf-ver
-	cd ../$(DIR) ; cp gcc/config/t-libunwind{,.orig} ; \
-	 sed '/^SHLIB_LC = /s@-lc@@' gcc/config/t-libunwind.orig \
-	 > gcc/config/t-libunwind
 	cd ../$(DIR) ; cp configure{,.orig} ; \
 	 sed '/FLAGS_FOR_TARGET.*\/lib\//s@-B[^ ]*/lib/@@g' configure.orig > configure
 	../$(DIR)/configure --prefix=$(CROSS_WD) --target=$(LFS_TARGET) \
@@ -93,7 +88,7 @@ compile-stage1:
 	 gcc/Makefile.in.bk2 > gcc/Makefile.in
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" ../$(DIR)/configure \
 	 --prefix=$(WD) --libdir=$(WD)/$(LIB_MAYBE64) --build=$(LFS_HOST) \
-	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) --libexecdir=$(WD)/$(LIB_MAYBE64) \
+	 --host=$(LFS_TARGET) --target=$(LFS_TARGET) \
 	 --with-local-prefix=$(WD) --enable-long-long --enable-c99 \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch

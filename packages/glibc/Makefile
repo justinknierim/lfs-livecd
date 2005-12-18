@@ -4,7 +4,7 @@ NM= glibc
 ifndef CROSS
 VRS= 2.3.6
 else
-VRS= 20050926
+VRS= 20051107
 endif
 DIR= $(NM)-$(VRS)
 
@@ -14,7 +14,7 @@ URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 82d0487419f1bdbf2dee439c344e89d6af47e558
 else
 URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
-SHA-$(FILE)= 47753ac9e13fd955c77c3e2b2bbb278d009dcbc5
+SHA-$(FILE)= 9c7f190eb9d590a33384a24c3772bd3a13355575
 endif
 
 ifndef CROSS
@@ -54,14 +54,16 @@ headers: $(FILE)
 	$(sep_dir_build)
 
 compile-headers:
-	CC=gcc ../$(DIR)/configure --prefix=/tools \
+	cd ../$(DIR) ; cp configure{,.orig} ; sed -e 's/3.4/3.[0-9]/g' \
+	 configure.orig > configure
+	CC=gcc ../$(DIR)/configure --prefix=$(WD) \
 	--host=$(LFS_TARGET) --build=$(LFS_HOST) --disable-sanity-checks \
-	--enable-kernel=2.6.0 --with-headers=/tools/include \
-	--with-binutils=/cross-tools/$(LFS_TARGET)/bin
+	--enable-kernel=2.6.0 --with-headers=$(WD)/include \
+	--with-binutils=$(CROSS_WD)/$(LFS_TARGET)/bin
 	make install-headers
-	install -v -d /tools/include/bits
-	cp -v bits/stdio_lim.h /tools/include/bits
-	touch /tools/include/gnu/stubs.h
+	install -v -d $(WD)/include/bits
+	cp -v bits/stdio_lim.h $(WD)/include/bits
+	touch $(WD)/include/gnu/stubs.h
 	cp -v ../$(DIR)/nptl/sysdeps/pthread/pthread.h $(WD)/include
 	cp -v ../$(DIR)/nptl/sysdeps/unix/sysv/linux/x86_64/bits/pthreadtypes.h \
 	 $(WD)/include/bits
