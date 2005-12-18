@@ -19,16 +19,15 @@ include $(ROOT)/scripts/functions
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
-	make -C ../tcl clean
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
 ifndef CROSS
 	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
-	--with-tclinclude=$(ROOT)/$(PKG)/tcl/tcl8.4.11 --with-x=no
+	--with-tclinclude=$(WD)/include --with-x=no
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=$(WD) --with-tcl=$(WD)/lib64 \
-	--with-tclinclude=$(ROOT)/$(PKG)/tcl/tcl8.4.11 --libdir=$(WD)/lib64 \
+	--with-tclinclude=$(WD)/include --libdir=$(WD)/lib64 \
 	--with-x=no
 endif
 	make $(PM)
