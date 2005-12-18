@@ -60,13 +60,8 @@ else
 endif
 	make install
 	cp bzip2-shared /bin/bzip2
-ifndef CROSS
-	cp -a libbz2.so* /lib
-	ln -s ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so
-else
-	cp -a libbz2.so* /lib64
-	ln -s ../../lib64/libbz2.so.1.0 /usr/lib64/libbz2.so
-endif
+	cp -a libbz2.so* /$(LIB_MAYBE64)
+	ln -s ../../$(LIB_MAYBE64)/libbz2.so.1.0 /usr/$(LIB_MAYBE64)/libbz2.so
 	rm /usr/bin/{bunzip2,bzcat,bzip2}
 	ln -s bzip2 /bin/bunzip2
 	ln -s bzip2 /bin/bzcat

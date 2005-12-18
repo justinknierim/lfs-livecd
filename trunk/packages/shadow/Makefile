@@ -25,8 +25,8 @@ stage2: Makefile $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	patch -Np1 -i ../$(PATCH1)
+ifndef CROSS
 	./configure --libdir=/lib --enable-shared
 else
 	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \
@@ -42,15 +42,9 @@ endif
 	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' \
 	     etc/login.defs > /etc/login.defs
 	mv /usr/bin/passwd /bin
-ifndef CROSS
-	mv /lib/libshadow.*a /usr/lib
-	rm /lib/libshadow.so
-	ln -sf ../../lib/libshadow.so.0 /usr/lib/libshadow.so
-else
-	mv /lib64/libshadow.*a /usr/lib64
-	rm /lib64/libshadow.so
-	ln -sf ../../lib64/libshadow.so.0 /usr/lib64/libshadow.so
-endif
+	mv /$(LIB_MAYBE64)/libshadow.*a /usr/$(LIB_MAYBE64)
+	rm /$(LIB_MAYBE64)/libshadow.so
+	ln -sf ../../$(LIB_MAYBE64)/libshadow.so.0 /usr/$(LIB_MAYBE64)/libshadow.so
 	mkdir -p /etc/default
 	pwconv
 	grpconv

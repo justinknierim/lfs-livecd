@@ -19,18 +19,15 @@ stage1: $(FILE)
 compile-stage1:
 ifndef CROSS
 	cd $(NM)-tools ; ./configure --prefix=$(WD) --disable-shared
+else
+	cd $(NM)-tools ; echo "am_cv_func_working_getline=yes" >> config.cache
+	cd $(NM)-tools ; CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
+   	 ./configure --prefix=$(WD) --host=$(LFS_TARGET) --disable-shared \
+	 --cache-file=config.cache
+endif
 	cd $(NM)-tools ; make -C lib
 	cd $(NM)-tools ; make -C src msgfmt
 	cd $(NM)-tools ; cp -v src/msgfmt $(WD)/bin
-else
-	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-   	 ./configure --prefix=$(WD) --libdir=$(WD)/lib64 \
-   	 --host=$(LFS_TARGET) --disable-libasprintf \
-   	 --without-csharp --cache-file=config.cache
-	make
-	make install
-endif
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \

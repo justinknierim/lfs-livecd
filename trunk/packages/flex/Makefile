@@ -35,11 +35,7 @@ else
 endif
 	make $(PM)
 	make install
-ifndef CROSS
-	ln -s libfl.a /usr/lib/libl.a
-else
-	ln -s libfl.a /usr/lib64/libl.a
-endif
+	ln -s libfl.a /usr/$(LIB_MAYBE64)/libl.a
 	echo "#!/bin/sh" > /usr/bin/lex
 	echo "# Begin /usr/bin/lex" >> /usr/bin/lex
 	echo "" >> /usr/bin/lex

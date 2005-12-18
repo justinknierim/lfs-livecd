@@ -29,6 +29,9 @@ else
 endif
 	make $(PM)
 	make install
+ifdef CROSS
+	mv /usr/bin/less /bin
+endif
 
 clean:
 	-rm -rf $(DIR)

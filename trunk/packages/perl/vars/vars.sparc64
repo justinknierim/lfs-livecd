@@ -1,0 +1,1 @@
+EXTRA_CONF=-Dcc="gcc $(32FLAGS)"

@@ -36,7 +36,6 @@ ifndef CROSS
 else
 	make $(PM) CC="gcc $(64FLAGS)"
 endif
-	make $(PM)
 	make install
 	cp -ra $(ROOT)/etc/syslog.conf /etc
 

@@ -12,6 +12,8 @@ FILE1= $(NM)_docs_051020.tar.bz2
 URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
 SHA-$(FILE1)= 274dc5093ad53045478ba39accec2c411f14c643
 
+include $(CROSSVARS) 
+
 # Targets
 
 include $(ROOT)/scripts/functions

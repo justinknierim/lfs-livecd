@@ -34,15 +34,13 @@ stage1: $(STAGE1_DEPS)
 
 compile-stage1:
 	sed -i 's@/usr/include@$(WD)/include@g' configure
-ifeq ($(LFS-ARCH),sparc64)
-	patch -Np1 -i ../$(PATCH31)
-endif
 ifndef CROSS
 	./configure
 	make -C lib
 	make -C mount mount umount
 	make -C text-utils more
 else
+	patch -Np1 -i ../$(PATCH31)
 	CC="$${CC} $(64FLAGS)" ./configure
 	make ARCH="" CPU="" -C lib
 	make ARCH="" CPU="" -C mount mount umount

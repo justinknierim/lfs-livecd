@@ -57,10 +57,11 @@ ifeq ($(LFS-ARCH),sparc64)
 endif
 ifndef CROSS
 	./configure
+	make $(PM)
 else
 	CC="gcc $(64FLAGS)" ./configure
+	make $(PM) CC="gcc $(64FLAGS)"
 endif
-	make $(PM)
 	make install
 	# Turkish fixup
 	cp /usr/share/kbd/consoletrans/cp857_to_uni.trans /usr/share/kbd/unimaps/cp857.uni

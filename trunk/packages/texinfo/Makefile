@@ -26,7 +26,11 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
+ifndef CROSS
 	./configure --prefix=$(WD)
+else	
+	CC="gcc $(64FLAGS)" ./configure --prefix=$(WD)
+endif
 	make $(PM)
 	make install
 

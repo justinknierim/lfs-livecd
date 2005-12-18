@@ -39,6 +39,10 @@ compile-stage2:
 	cp -Rv include/$(LLH_ASM) /usr/include/asm
 	for ASM in $(LLH_ASMS) ; do cp -Rv include/$$ASM /usr/include/ ; done
 	cp -Rv include/linux /usr/include
+ifdef CROSS
+	cp -Rv include/mtd /usr/include
+	cp -Rv include/scsi /usr/include
+endif
 	chown -R root:root /usr/include
 	find /usr/include -type d -exec chmod 755 {} \;
 	find /usr/include -type f -exec chmod 644 {} \;
