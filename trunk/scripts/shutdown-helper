@@ -2,8 +2,8 @@
 
 FILES="/lib/libc.so.6
 /lib/_LINKER_
-/lib/libreadline.so.5.0
-/lib/libhistory.so.5.0
+/lib/libreadline.so.5
+/lib/libhistory.so.5
 /lib/libncursesw.so.5
 /lib/libdl.so.2
 /lib/libblkid.so.1
