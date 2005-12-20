@@ -1,12 +1,12 @@
 # irssi Makefile
 
 NM= irssi
-VRS= 0.8.10-rc6
+VRS= 0.8.10
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://irssi.org/files/$(FILE)
-SHA-$(FILE)= 87c5ec8da11686e3eadb95fa5d7b25655add37bf
+SHA-$(FILE)= 055eef31ed7a52e30d9a63d803306570c7cd3393
 
 # Targets
 
