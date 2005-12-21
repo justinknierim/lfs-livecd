@@ -33,6 +33,8 @@ else
 endif
 	make DESTDIR=/ EXTRAS=extras/run_directory/ install
 	cp $(SRC)/$(CONFIG1) /etc/udev/rules.d/25-lfs.rules
+	cp ../10-wait_for_sysfs.rules /etc/udev/rules.d/
+	cp ../50-network.rules /etc/udev/rules.d/
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
 
