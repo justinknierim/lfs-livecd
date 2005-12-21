@@ -140,6 +140,9 @@ you have to customize the CD as described above. Add the following files:
     Configure a known static IP address there, as described in the LFS book,
     section "7.12. Configuring the network Script".
 
+* /etc/udev/rules.d/50-network.rules
+    Create an empty file in order to prevent udev from running dhcpcd.
+
 INTERNATIONALIZATION
 ================
 It is possible to specify the locale using the bootloader prompt, like this:
