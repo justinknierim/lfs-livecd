@@ -510,7 +510,7 @@ else
 endif
 endif
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/
-	@sed 's|_LINKER_|$(LINKER)|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
+	@sed -e 's|_LINKER_|$(LINKER)|' -e 's|/lib/|/$(LIB_MAYBE64)/|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
 	@chmod 755 $(MP)/usr/bin/shutdown-helper
 	@cp -ra root $(MP)/etc/skel
 ifndef CROSS
