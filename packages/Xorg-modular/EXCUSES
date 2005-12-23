@@ -1,2 +1,8 @@
 applewmproto: relevant only for Mac OS. Not installed by X.org 6.9.0
+printproto: LFS LiveCD doesn't support printing
 windowswmproto: relevant only for MS Windows. Not installed by X.org 6.9.0
+libAppleWM: relevant only for Mac OS. Not installed by X.org 6.9.0
+libWindowsWM: relevant only for MS Windows. Not installed by X.org 6.9.0
+libXp: LFS LiveCD doesn't support printing
+libXprintUtil: LFS LiveCD doesn't support printing
+libXprintAppUtil: LFS LiveCD doesn't support printing
