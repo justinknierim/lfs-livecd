@@ -1,0 +1,2 @@
+applewmproto: relevant only for Mac OS. Not installed by X.org 6.9.0
+windowswmproto: relevant only for MS Windows. Not installed by X.org 6.9.0
