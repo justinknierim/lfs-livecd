@@ -22,7 +22,7 @@ download: SHA1SUMS $(FILE1) $(FILE2)
 	ln -sf `awk '/^[^#]/{print "/$(SRC)/"$$2 }' SHA1SUMS` .
 	@touch $@
 
-stage2: Makefile download symlinks utils proto lib
+stage2: Makefile download symlinks utils proto lib apps drv
 	@touch $@
 
 symlinks: Makefile
@@ -55,6 +55,27 @@ lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
 	Y-libXrandr Y-libXres Y-libXScrnSaver Y-libXTrap Y-libXtst Y-libXv \
 	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm \
 	Y-libdrm Y-mesa
+	@touch $@
+
+apps:	Y-xbitmaps \
+	N-appres Y-bdftopcf N-beforelight N-bitmap N-editres N-fonttosfnt \
+	N-fslsfonts N-fstobdf Y-iceauth N-ico N-lbxproxy N-listres N-luit \
+	N-mkcfm Y-mkfontdir Y-mkfontscale N-oclock N-pclcomp N-proxymngr \
+	Y-rgb N-rstart Y-scripts Y-sessreg Y-setxkbmap N-showfont Y-smproxy \
+	N-twm N-viewres N-x11perf Y-xauth N-xbiff Y-xcalc N-xclipboard \
+	N-xclock N-xcmsdb N-xconsole Y-xcursorgen N-xdbedizzy N-xditview \
+	N-xdm Y-xdpyinfo Y-xdriinfo N-xedit N-xev N-xeyes N-xf86dga N-xfd \
+	N-xfindproxy N-xfontsel N-xfs N-xfsinfo N-xfwp Y-xgamma N-xgc \
+	Y-xhost Y-xinit Y-xkbcomp N-xkbevd N-xkbprint Y-xkbutils Y-xkill \
+	N-xload N-xlogo N-xlsatoms Y-xlsclients Y-xlsfonts Y-xmag N-xman \
+	N-xmessage N-xmh Y-xmodmap N-xmore N-xphelloworld N-xplsprinters \
+	N-xpr N-xprehashprinterlist N-xprop Y-xrandr Y-xrdb Y-xrefresh \
+	N-xrx Y-xset Y-xsetmode Y-xsetpointer Y-xsetroot N-xsm N-xstdcmap \
+	N-xtrap Y-xvidtune N-xvinfo Y-xwd N-xwininfo Y-xwud \
+	Y-xcursor-themes Y-xkbdata
+	@touch $@
+
+drv:	Y-xorg-server
 	@touch $@
 
 N-%:
@@ -102,3 +123,16 @@ compile-y-mesa:
 	bin/installmesa /usr
 	mkdir -p /usr/lib/xorg/modules/dri
 	install -v lib/*dri* /usr/lib/xorg/modules/dri
+
+compile-y-xorg-server:
+	unpack ../$(FILE2)
+	# Extra safety measure, due to "test: too many arguments" messages
+	# May well be just an unnecessary precaution
+	autoreconf --force --install --verbose
+	sed -i -e '1i#include <linux/types.h>' hw/xfree86/os-support/linux/lnx_agp.c
+	./configure --help
+	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2)
+	make $(PM)
+	make DESTDIR=$(ROOT)/debug/xorg-server install
+	make install
+
