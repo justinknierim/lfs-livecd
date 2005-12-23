@@ -129,7 +129,10 @@ compile-y-xorg-server:
 	# Extra safety measure, due to "test: too many arguments" messages
 	# May well be just an unnecessary precaution
 	autoreconf --force --install --verbose
+	# Fix build failure
 	sed -i -e '1i#include <linux/types.h>' hw/xfree86/os-support/linux/lnx_agp.c
+	# 100 dpi is more appropriate for today's displays as a guess
+	sed -i -e '/DPI/s,75,100,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	./configure --help
 	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2)
 	make $(PM)
