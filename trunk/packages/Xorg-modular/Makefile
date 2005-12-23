@@ -2,9 +2,21 @@ NM= X.org
 VRS= X11R7.0
 URLBASE= http://xorg.freedesktop.org/releases/$(VRS)/src/everything/
 
+LIBDRM_VRS= 2.0
+FILE1= libdrm-$(LIBDRM_VRS).tar.gz
+DIR1= libdrm-$(LIBDRM_VRS)
+SHA-$(FILE1)= 679d4b74b93a429bfd28ab4a01b0c80ffdc9ab1c
+URL-$(FILE1)= http://dri.freedesktop.org/libdrm/$(FILE1)
+
+MESA_VRS= 6.4.1
+FILE2= MesaLib-$(MESA_VRS).tar.bz2
+DIR2= Mesa-$(MESA_VRS)
+SHA-$(FILE2)= efb70276ccd9cd13dbd7d5e581213a5ca3e4ef25
+URL-$(FILE2)= http://easynews.dl.sourceforge.net/sourceforge/mesa3d/$(FILE2)
+
 include $(ROOT)/scripts/functions
 
-download: SHA1SUMS
+download: SHA1SUMS $(FILE1) $(FILE2)
 	awk '/^[^#]/{print $$2}' SHA1SUMS | ( cd $(SRC) ; wget -c -nc -B $(URLBASE) -i /dev/stdin )
 	cat SHA1SUMS | ( cd $(SRC) ; sha1sum -c - ) >download.log
 	ln -sf `awk '/^[^#]/{print "/$(SRC)/"$$2 }' SHA1SUMS` .
@@ -41,7 +53,8 @@ lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
 	Y-libXevie Y-libXfont Y-libXfontcache Y-libXft Y-libXi Y-libXinerama \
 	Y-libxkbfile Y-libxkbui N-libXprintUtil N-libXprintAppUtil \
 	Y-libXrandr Y-libXres Y-libXScrnSaver Y-libXTrap Y-libXtst Y-libXv \
-	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm
+	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm \
+	Y-libdrm Y-mesa
 	@touch $@
 
 N-%:
@@ -59,6 +72,20 @@ y-%:
 	make CROSSVARS=../$(CROSSVARS) -C `basename $(FILE) .tar.bz2` -f ../Makefile compile-$@
 	rm -rf `basename $(FILE) .tar.bz2`
 
+Y-libdrm:
+	@$(call echo_message, Building)
+	@unpack $(FILE1) >$@.log 2>&1
+	@make CROSSVARS=../$(CROSSVARS) -C $(DIR1) -f ../Makefile compile-y-libdrm >$@.log 2>&1
+	@rm -rf $(DIR1)
+	@touch $@
+
+Y-mesa:
+	@$(call echo_message, Building)
+	@unpack $(FILE2) >$@.log 2>&1
+	@make CROSSVARS=../$(CROSSVARS) -C $(DIR2) -f ../Makefile compile-y-mesa >$@.log 2>&1
+	@rm -rf $(DIR2)
+	@touch $@
+
 compile-y-%:
 	# Extra safety measure, due to "test: too many arguments" messages
 	# May well be just an unnecessary precaution
@@ -68,3 +95,10 @@ compile-y-%:
 	make $(PM)
 	make DESTDIR=$(ROOT)/debug/$* install
 	make install
+
+compile-y-mesa:
+	# FIXME x86_64
+	make linux-dri-x86 OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/xorg/modules/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
+	bin/installmesa /usr
+	mkdir -p /usr/lib/xorg/modules/dri
+	install -v lib/*dri* /usr/lib/xorg/modules/dri
