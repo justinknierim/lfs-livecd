@@ -10,7 +10,7 @@ download: SHA1SUMS
 	ln -sf `awk '/^[^#]/{print "/$(SRC)/"$$2 }' SHA1SUMS` .
 	@touch $@
 
-stage2: Makefile download symlinks utils proto
+stage2: Makefile download symlinks utils proto lib
 	@touch $@
 
 symlinks: Makefile
@@ -26,12 +26,22 @@ utils: Y-util-macros
 proto:	N-applewmproto Y-bigreqsproto \
 	Y-compositeproto Y-damageproto Y-dmxproto Y-evieext Y-fixesproto \
 	Y-fontcacheproto Y-fontsproto Y-glproto \
-	Y-inputproto Y-kbproto Y-printproto Y-randrproto Y-recordproto \
+	Y-inputproto Y-kbproto N-printproto Y-randrproto Y-recordproto \
 	Y-renderproto Y-resourceproto Y-scrnsaverproto Y-trapproto \
 	Y-videoproto N-windowswmproto Y-xcmiscproto Y-xextproto \
 	Y-xf86bigfontproto Y-xf86dgaproto Y-xf86driproto Y-xf86miscproto \
 	Y-xf86rushproto Y-xf86vidmodeproto Y-xineramaproto \
 	Y-xproto Y-xproxymanagementprotocol
+	@touch $@
+
+lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
+	N-libWindowsWM Y-libdmx Y-libfontenc Y-libFS Y-libICE Y-liblbxutil \
+	Y-liboldX Y-libSM Y-libXt Y-libXmu Y-libXpm N-libXp Y-libXaw \
+	Y-libXfixes Y-libXcomposite Y-libXrender Y-libXdamage Y-libXcursor \
+	Y-libXevie Y-libXfont Y-libXfontcache Y-libXft Y-libXi Y-libXinerama \
+	Y-libxkbfile Y-libxkbui N-libXprintUtil N-libXprintAppUtil \
+	Y-libXrandr Y-libXres Y-libXScrnSaver Y-libXTrap Y-libXtst Y-libXv \
+	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm
 	@touch $@
 
 N-%:
@@ -41,7 +51,7 @@ N-%:
 
 Y-%: SHA1SUMS
 	@$(call echo_message, Building)
-	@make y-$* FILE=`awk '/ $*/{print $$2}' SHA1SUMS` >$@.log 2>&1
+	@make y-$* FILE=`awk '/ $*-/{print $$2}' SHA1SUMS` >$@.log 2>&1
 	@touch $@
 
 y-%:
@@ -53,6 +63,7 @@ compile-y-%:
 	# Extra safety measure, due to "test: too many arguments" messages
 	# May well be just an unnecessary precaution
 	autoreconf --force --install --verbose
+	./configure --help
 	./configure --prefix=/usr --localstatedir=/var
 	make $(PM)
 	make DESTDIR=$(ROOT)/debug/$* install
