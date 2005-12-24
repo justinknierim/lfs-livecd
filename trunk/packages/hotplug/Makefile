@@ -32,7 +32,7 @@ compile-stage2:
 	touch /var/log/hotplug/events
 	echo eepro100 >>/etc/hotplug/blacklist
 	echo 8139cp >>/etc/hotplug/blacklist
-	mkdir /etc/hotplug.d/pci
+	mkdir -p /etc/hotplug.d/pci
 	install -m755 ../detect-video.hotplug /etc/hotplug.d/pci
 	mkdir -p /lib/firmware
 
