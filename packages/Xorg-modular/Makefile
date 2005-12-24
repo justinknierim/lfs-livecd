@@ -75,7 +75,30 @@ apps:	Y-xbitmaps \
 	Y-xcursor-themes Y-xkbdata
 	@touch $@
 
-drv:	Y-xorg-server
+drv:	Y-xorg-server N-xf86-input-aiptek Y-xf86-input-evdev N-xf86-input-ur98 \
+	N-xf86-input-acecad N-xf86-input-calcomp N-xf86-input-citron \
+	N-xf86-input-digitaledge N-xf86-input-dmc N-xf86-input-dynapro \
+	N-xf86-input-elo2300 N-xf86-input-elographics N-xf86-input-fpit \
+	N-xf86-input-jamstudio N-xf86-input-joystick Y-xf86-input-keyboard \
+	N-xf86-input-magellan N-xf86-input-magictouch N-xf86-input-microtouch \
+	Y-xf86-input-mouse N-xf86-input-mutouch N-xf86-input-palmax \
+	N-xf86-input-penmount N-xf86-input-spaceorb N-xf86-input-summa \
+	N-xf86-input-tek4957 N-xf86-input-void \
+	N-xf86-video-wsfb N-xf86-video-sunffb N-xf86-video-sisusb \
+	N-xf86-video-v4l Y-xf86-video-apm Y-xf86-video-ark Y-xf86-video-ati \
+	Y-xf86-video-chips Y-xf86-video-cirrus Y-xf86-video-cyrix \
+	N-xf86-video-dummy Y-xf86-video-fbdev \
+	Y-xf86-video-glint Y-xf86-video-i128 Y-xf86-video-i740 \
+	Y-xf86-video-i810 Y-xf86-video-imstt Y-xf86-video-mga \
+	Y-xf86-video-neomagic Y-xf86-video-newport Y-xf86-video-nsc \
+	Y-xf86-video-nv Y-xf86-video-rendition Y-xf86-video-s3 \
+	Y-xf86-video-s3virge Y-xf86-video-savage Y-xf86-video-siliconmotion \
+	Y-xf86-video-sis N-xf86-video-sunbw2 N-xf86-video-suncg14 \
+	N-xf86-video-suncg3 N-xf86-video-suncg6 N-xf86-video-sunleo \
+	N-xf86-video-suntcx Y-xf86-video-tdfx Y-xf86-video-tga \
+	Y-xf86-video-trident Y-xf86-video-tseng Y-xf86-video-vesa \
+	Y-xf86-video-vga Y-xf86-video-via Y-xf86-video-vmware \
+	Y-xf86-video-voodoo
 	@touch $@
 
 N-%:

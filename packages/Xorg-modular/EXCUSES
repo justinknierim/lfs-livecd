@@ -66,3 +66,38 @@ xtrap: useless sample clients
 xvinfo: produces some information about the XVideo extension
 xvinfo: will be re-added on request
 xwininfo: debugging tool, will be re-added on request
+xf86-input-aiptek: only keyboards and mice are supported on this CD
+xf86-input-ur98: only keyboards and mice are supported on this CD
+xf86-input-acecad: only keyboards and mice are supported on this CD
+xf86-input-calcomp: only keyboards and mice are supported on this CD
+xf86-input-citron: only keyboards and mice are supported on this CD
+xf86-input-digitaledge: only keyboards and mice are supported on this CD
+xf86-input-dmc: only keyboards and mice are supported on this CD
+xf86-input-dynapro: only keyboards and mice are supported on this CD
+xf86-input-elo2300: only keyboards and mice are supported on this CD
+xf86-input-elographics: only keyboards and mice are supported on this CD
+xf86-input-fpit: only keyboards and mice are supported on this CD
+xf86-input-hyperpen: only keyboards and mice are supported on this CD
+xf86-input-jamstudio: only keyboards and mice are supported on this CD
+xf86-input-joystick: only keyboards and mice are supported on this CD
+xf86-input-magellan: only keyboards and mice are supported on this CD
+xf86-input-magictouch: only keyboards and mice are supported on this CD
+xf86-input-microtouch: only keyboards and mice are supported on this CD
+xf86-input-mutouch: only keyboards and mice are supported on this CD
+xf86-input-palmax: only keyboards and mice are supported on this CD
+xf86-input-penmount: only keyboards and mice are supported on this CD
+xf86-input-spaceorb: only keyboards and mice are supported on this CD
+xf86-input-summa: only keyboards and mice are supported on this CD
+xf86-input-tek4957: only keyboards and mice are supported on this CD
+xf86-input-void: only keyboards and mice are supported on this CD
+xf86-video-wsfb: BSD-specific
+xf86-video-sunffb: SPARC-specific
+xf86-video-sisusb: requires /dev/sisusbvga, no kernel support
+xf86-video-v4l: no kernel support on the CD
+xf86-video-dummy: dummy video card, won't display anything
+xf86-video-sunbw2: SPARC-specific
+xf86-video-suncg14: SPARC-specific
+xf86-video-suncg3: SPARC-specific
+xf86-video-suncg6: SPARC-specific
+xf86-video-sunleo: SPARC-specific
+xf86-video-suntcx: SPARC-specific
