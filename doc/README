@@ -83,10 +83,6 @@ http://www.linuxfromscratch.org/blfs/view/svn/x/installing.html#xorg
 
 When you are finished, run startx.
 
-NOTE: The default Window Manager is xfce which is intuitive and graphically
-pleasing. If you prefer something more minimal, edit the file ~/.xinitrc to
-read 'exec twm'.
-
 CUSTOMIZING THE CD CONTENTS
 ===========================
 It is possible to burn a customized version of the official Linux From
