@@ -187,3 +187,5 @@ compile-y-xorg-server:
 	make DESTDIR=$(ROOT)/debug/xorg-server install
 	make install
 
+clean:
+	rm -rf *-*/ Y-* N-* download symlinks utils proto lib apps drv fonts
