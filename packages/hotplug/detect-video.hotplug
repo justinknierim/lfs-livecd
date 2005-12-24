@@ -8,7 +8,7 @@ SUB_DEVICE_ID=${PCI_SUBSYS_ID#*:}
 VENDOR_ID=${PCI_ID%:*}
 DEVICE_ID=${PCI_ID#*:}
 
-X_DRIVER=`/usr/X11R6/bin/getconfig.pl -b "0x$SUB_DEVICE_ID" -c 0x0300 \
+X_DRIVER=`/usr/bin/getconfig.pl -b "0x$SUB_DEVICE_ID" -c 0x0300 \
 	-d "0x$DEVICE_ID" -s "0x$SUB_VENDOR_ID" -v "0x$VENDOR_ID" 2>/dev/null`
 if [ -n "$X_DRIVER" ] ; then
 	echo "Using \"$X_DRIVER\" as a video driver"
