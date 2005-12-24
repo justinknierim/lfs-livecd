@@ -3,7 +3,7 @@
 NM= dejavu-ttf
 VRS= 2.0
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/X11R6/lib/X11/fonts/TTF
+LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/dejavu/$(FILE)

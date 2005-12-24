@@ -8,6 +8,7 @@ libXprintUtil: LFS LiveCD doesn't support printing
 libXprintAppUtil: LFS LiveCD doesn't support printing
 appres: X resources aren't used much with GTK2
 beforelight: We have another screensaver
+bdftopcf: unused, because there are no bitmap fonts on this CD
 bitmap: editing XBM files doesn't fit in the purpose of the CD
 editres: X resources aren't used much with GTK2
 fonttosfnt: fake TTFs are evil
@@ -27,6 +28,7 @@ twm: Alexander E. Patrakov is too lazy to configure it
 viewres: X resources aren't used much with GTK2
 x11perf: useless benchmark
 xbiff: mail never arrives to /var/mail on this CD
+xcalc: didn't survive removal of bitmap fonts
 xclipboard: uses core X fonts that create problems with UTF-8
 xclock: XFCE already has one clock
 xcmsdb: libX11 has XCMS disabled on this CD

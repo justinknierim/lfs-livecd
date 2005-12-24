@@ -3,7 +3,7 @@
 NM= freefont-ttf
 VRS= 20050407
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/X11R6/lib/X11/fonts/TTF
+LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)

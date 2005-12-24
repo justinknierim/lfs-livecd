@@ -3,7 +3,7 @@
 NM= kochi-substitute
 VRS= 20030628
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/X11R6/lib/X11/fonts/TTF
+LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://osdn.dl.sourceforge.jp/efont/4845/$(FILE)

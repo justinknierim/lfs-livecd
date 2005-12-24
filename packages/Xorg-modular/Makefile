@@ -19,10 +19,13 @@ include $(ROOT)/scripts/functions
 download: SHA1SUMS $(FILE1) $(FILE2)
 	awk '/^[^#]/{print $$2}' SHA1SUMS | ( cd $(SRC) ; wget -c -nc -B $(URLBASE) -i /dev/stdin )
 	cat SHA1SUMS | ( cd $(SRC) ; sha1sum -c - ) >download.log
-	ln -sf `awk '/^[^#]/{print "/$(SRC)/"$$2 }' SHA1SUMS` .
+	ln -sf `awk '/^[^#]/{print "$(SRC)/"$$2 }' SHA1SUMS` .
 	@touch $@
 
-stage2: Makefile download symlinks utils proto lib apps drv
+stage2: Makefile download symlinks utils proto lib apps drv fonts
+	echo -e "#!/bin/sh\nexec /usr/bin/X -nolisten tcp" >/etc/X11/xinit/xserverrc
+	chmod 755 /etc/X11/xinit/xserverrc
+	install -m644 $(ROOT)/etc/X11/xorg.conf /etc/X11/xorg.conf			
 	@touch $@
 
 symlinks: Makefile
@@ -58,11 +61,11 @@ lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
 	@touch $@
 
 apps:	Y-xbitmaps \
-	N-appres Y-bdftopcf N-beforelight N-bitmap N-editres N-fonttosfnt \
+	N-appres N-bdftopcf N-beforelight N-bitmap N-editres N-fonttosfnt \
 	N-fslsfonts N-fstobdf Y-iceauth N-ico N-lbxproxy N-listres N-luit \
 	N-mkcfm Y-mkfontdir Y-mkfontscale N-oclock N-pclcomp N-proxymngr \
 	Y-rgb N-rstart Y-scripts Y-sessreg Y-setxkbmap N-showfont Y-smproxy \
-	N-twm N-viewres N-x11perf Y-xauth N-xbiff Y-xcalc N-xclipboard \
+	N-twm N-viewres N-x11perf Y-xauth N-xbiff N-xcalc N-xclipboard \
 	N-xclock N-xcmsdb N-xconsole Y-xcursorgen N-xdbedizzy N-xditview \
 	N-xdm Y-xdpyinfo Y-xdriinfo N-xedit N-xev N-xeyes N-xf86dga N-xfd \
 	N-xfindproxy N-xfontsel N-xfs N-xfsinfo N-xfwp Y-xgamma N-xgc \
@@ -101,6 +104,28 @@ drv:	Y-xorg-server N-xf86-input-aiptek Y-xf86-input-evdev N-xf86-input-ur98 \
 	Y-xf86-video-voodoo
 	@touch $@
 
+# Idea: provide only required "cursor" and "fixed" fonts to X core protocol
+#     take cursor.pfa from font-xfree86-type1
+#     and cour*.pfa from font-ibm-type1, alias that to "fixed"
+# Put them into /usr/lib/X11/fonts/Type1
+#     Make them invisible to fontconfig because they
+#     confuse its font substitution algorithm
+# None of the installed applications should use X core font protocol.
+#
+# Useful TrueType fonts should go to /usr/share/fonts
+# and be visible to fontconfig
+
+EXTRA_FLAGS-font-bh-ttf=--with-fontdir=/usr/share/fonts
+EXTRA_FLAGS-font-misc-ethiopic=--with-otf-fontdir=/usr/share/fonts --with-ttf-fontdir=no
+EXTRA_FLAGS-font-misc-meltho=--with-fontdir=/usr/share/fonts
+
+fonts:	Y-font-bh-ttf Y-font-misc-ethiopic Y-font-misc-meltho \
+	Y-font-xfree86-type1 Y-font-ibm-type1
+# Want huge cursors? replace 31 with 63
+	@echo 'cursor -xfree86-cursor-medium-r-normal--31-0-100-100-p-0-adobe-fontspecific' >/usr/lib/X11/fonts/Type1/fonts.alias
+	@echo 'fixed -ibm-courier-bold-r-normal--18-0-100-100-m-0-iso8859-1' >>/usr/lib/X11/fonts/Type1/fonts.alias
+	@touch $@
+
 N-%:
 	@$(call echo_message, NOT building)
 	@grep '^$*' EXCUSES
@@ -135,7 +160,7 @@ compile-y-%:
 	# May well be just an unnecessary precaution
 	autoreconf --force --install --verbose
 	./configure --help
-	./configure --prefix=/usr --localstatedir=/var
+	./configure --prefix=/usr --localstatedir=/var $(EXTRA_FLAGS-$*)
 	make $(PM)
 	make DESTDIR=$(ROOT)/debug/$* install
 	make install

@@ -27,6 +27,7 @@ compile-stage2:
 	# UGLY HACK BELOW. Remove when Greek is supported in DejaVu Sans Mono.
 	# Needed in order to avoid fallback to (ugly) FreeMono in Terminal.
 	sed -i -e '/prefer/,+2s,^\(.*Sans\) Mono\(.*$$\),&\n\1\2,' /etc/fonts/fonts.conf
+	cp $(ROOT)/etc/fonts/local.conf /etc/fonts/local.conf
 
 clean:
 	-rm -rf $(DIR)
