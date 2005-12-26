@@ -1,5 +1,5 @@
-# tin configuration file V1.3.6
-# This file was automatically saved by tin 1.6.2 20030910 ("Pabbay")
+# tin configuration file V1.3.7
+# This file was automatically saved by tin 1.8.0 20051224 ("Ronay")
 #
 # Do not edit while tin is running, since all your changes to this file
 # will be overwritten when you leave tin.
@@ -17,7 +17,10 @@ auto_save=OFF
 mark_saved_read=ON
 
 # Perform post processing (saving binary attachments) from saved articles.
-# 0=(no) 1=(yes) 2=(extract shell archives (shar) only)
+# Possible values are (the default is marked with *):
+# * 0 = no
+#   1 = extract shell archives (shar) only
+#   2 = yes
 post_process_type=0
 
 # If set, post processed files will be opened in a viewer
@@ -53,9 +56,11 @@ show_only_unread=ON
 # If ON show only subscribed to groups that contain unread articles.
 show_only_unread_groups=OFF
 
-# 0=(Only kill unread articles)
-# 1=(Kill all articles and show in threads marked with K)
-# 2=(Kill all articles and never show them).
+# Filter which articles
+# Possible values are (the default is marked with *):
+# * 0 = only kill unread articles
+#   1 = kill all articles and show in threads marked with K
+#   2 = kill all articles and never show them
 kill_level=0
 
 # If ON the TAB command will go to next unread article at article viewer level
@@ -70,9 +75,12 @@ space_goto_next_unread=OFF
 pgdn_goto_next=ON
 
 # Number of lines that cursor-up/down will scroll in article pager
-# eg, 1+ = line-by-line, 0 = page-by-page (traditional behavior),
-# -1 = the top/bottom line is carried over onto the next page,
-# -2 = half-page scrolling
+# Possible values are (the default is marked with *):
+#  -2 = half-page scrolling
+#  -1 = the top/bottom line is carried over onto the next page
+#   0 = page-by-page (traditional behavior)
+# * 1 = line-by-line
+#   2 or greater = scroll by 2 or more lines (only in the pager)
 scroll_lines=1
 
 # If ON ask user if read groups should all be marked read
@@ -82,15 +90,36 @@ catchup_read_groups=OFF
 group_catchup_on_exit=ON
 thread_catchup_on_exit=ON
 
-# Thread articles on 0=(nothing) 1=(Subject) 2=(References) 3=(Both)
-# 4=(Multipart Subject).
+# Thread articles by ...
+# Possible values are (the default is marked with *):
+#   0 = nothing
+#   1 = Subject
+#   2 = References
+# * 3 = Both (Subject and References)
+#   4 = Multipart Subject
+#   5 = Percentage Match
 thread_articles=3
+
+# Thread percentage match...
+# the percentage of characters in the subject of an article that must match
+# a base article for both those articles to be considered to belong to the
+# same thread. This option is an integer percentage, eg. 80, no decimals may
+# follow. If 80 is used here, then 80% of the characters must match exactly,
+# no insertion of a character, for the two articles to be put in the same
+# thread. eg. 'happy' and 'harpy' would match, but 'harpie', 'happie' and
+# 'harppy' would be threaded separately from 'happy'
+thread_perc=75
 
 # If ON show group description text after newsgroup name at
 # group selection level
 show_description=ON
 
-# Part of from field to display 0) none 1) address 2) full name 3) both
+# Part of from field to display
+# Possible values are (the default is marked with *):
+#   0 = none
+#   1 = address
+# * 2 = full name
+#   3 = both
 show_author=2
 
 # Which news headers you wish to see. If you want to see _all_ the headers,
@@ -112,12 +141,26 @@ news_headers_to_not_display=
 # If ON use print current subject or newsgroup description in the last line
 info_in_last_line=OFF
 
-# Sort articles by 0=(nothing) 1=(Subject descend) 2=(Subject ascend)
-# 3=(From descend) 4=(From ascend) 5=(Date descend) 6=(Date ascend)
-# 7=(Score descend) 8=(Score ascend) 9=(Lines descend) 10=(Lines ascend).
+# Sort articles by ...
+# Possible values are (the default is marked with *):
+#   0 = nothing
+#   1 = Subject descending
+#   2 = Subject ascending
+#   3 = From descending
+#   4 = From ascending
+#   5 = Date descending
+# * 6 = Date ascending
+#   7 = Score descending
+#   8 = Score ascending
+#   9 = Lines descending
+#  10 = Lines ascending
 sort_article_type=6
 
-# Sort thread by 0=(nothing) 1=(Score descend) 2=(Score ascend)
+# Sort thread by ...
+# Possible values are (the default is marked with *):
+#   0 = nothing
+# * 1 = Score descending
+#   2 = Score ascending
 sort_threads_type=1
 
 # (-m) directory where articles/threads are saved in mailbox format
@@ -125,12 +168,6 @@ default_maildir=/root/Mail
 
 # Format of the mailbox.
 mailbox_format=MBOXO
-
-# If ON print all of article header otherwise just the important lines
-print_header=OFF
-
-# Print program with parameters used to print articles/threads
-default_printer=/usr/bin/lpr
 
 # If ON articles/threads will be saved in batch mode when save -S
 # or mail (-M/-N) is specified on the command line
@@ -145,21 +182,31 @@ start_editor_offset=ON
 default_editor_format=%E +%N %F
 
 # Format of mailer line including parameters
-# %M Mailer  %S Subject  %T To  %F Filename  %U User (AmigaDOS)
+# %M Mailer  %S Subject  %T To  %F Filename
 # ie. to use elm as your mailer:    elm -s "%S" "%T" < %F
 # ie. elm interactive          :    elm -i %F -s "%S" "%T"
 default_mailer_format=%M -oi -t < %F
 
-# Interactive mailreader: if ON mailreader will be invoked earlier for
-# reply so you can use more of its features (eg. MIME, pgp, ...)
-# this option has to suit default_mailer_format
-use_mailreader_i=OFF
+# Interactive mailreader
+# Possible values are (the default is marked with *):
+# * 0 = no interactive mailreader
+#   1 = use interactive mailreader with headers in file
+#   2 = use interactive mailreader without headers in file
+interactive_mailer=0
 
 # What informations should be displayed in article/thread listing
-# 0 = nothing, 1 = lines, 2 = score, 3 = lines & score
+# Possible values are (the default is marked with *):
+#   0 = nothing
+# * 1 = lines
+#   2 = score
+#   3 = lines & score
 show_info=0
 
-# Thread score 0=(Max) 1=(Sum) 2=(Average)
+# Thread score
+# Possible values are (the default is marked with *):
+# * 0 = max
+#   1 = sum
+#   2 = average
 thread_score=0
 
 # If ON remove ~/.article after posting.
@@ -206,14 +253,15 @@ reread_active_file_secs=1200
 quote_chars=>_
 
 # How quoting should be handled when following up or replying.
-# 0 = Nothing special
-# 1 = Compress quotes
-# 2 = Quote signatures
-# 3 = Compress quotes, quote signatures
-# 4 = Quote empty lines
-# 5 = Compress quotes, quote empty lines
-# 6 = Quote signatures, quote empty lines
-# 7 = Compress quotes, quote signatures, quote empty lines
+# Possible values are (the default is marked with *):
+#   0 = Nothing special
+#   1 = Compress quotes
+#   2 = Quote signatures
+#   3 = Compress quotes, quote signatures
+#   4 = Quote empty lines
+# * 5 = Compress quotes, quote empty lines
+#   6 = Quote signatures, quote empty lines
+#   7 = Compress quotes, quote signatures, quote empty lines
 quote_style=0
 
 # A regular expression that tin will use to decide which lines are
@@ -257,7 +305,7 @@ strip_re_regex=(?:R[eE](?:\^\d+|\[\d\])?|A[wW]|Odp|Sv):\s
 
 # A regular expression that tin will use to find Subject suffixes
 # which will be removed when replying or posting followup.
-strip_was_regex=.\((?:[Ww]a[rs]|[Bb]y[l³]o):.*\)\s*$
+strip_was_regex=.\((?:[Ww]a[rs]|[Bb]y[l\x{0142}]o):.*\)\s*$
 
 # If OFF don't show signatures when displaying articles
 show_signatures=ON
@@ -267,11 +315,12 @@ show_signatures=ON
 tex2iso_conv=OFF
 
 # Handling of uuencoded data in the pager
-# 0 = display raw uuencoded data
-# 1 = uuencoded data will be condensed to a single tag line showing
-#     size and filename, similar to how MIME attachments are displayed
-# 2 = as for 1, but any line that looks like uuencoded data will be folded
-#     into a tag line.
+# Possible values are (the default is marked with *):
+# * 0 = no, display raw uuencoded data
+#   1 = yes, uuencoded data will be condensed to a single tag line showing
+#       size and filename, similar to how MIME attachments are displayed
+#   2 = hide all, as for 1, but any line that looks like uuencoded data will
+#       be folded into a tag line.
 hide_uue=0
 
 # Format of quote line when mailing/posting/following-up an article
@@ -357,7 +406,7 @@ cache_overview_files=OFF
 
 # Number of articles to get (0=no limit), if negative sets maximum number
 # of already read articles to be read before first unread one
-getart_limit=0
+getart_limit=100
 
 # Number of days in which article is considered recent, (0=OFF)
 recent_time=2
@@ -377,100 +426,164 @@ score_select=100
 # If ON using ANSI-color
 use_color=ON
 
-# For color-adjust use the following numbers
-#  0-black       1-red         2-green        3-brown
-#  4-blue        5-pink        6-cyan         7-white
+# Changing colors of several screen parts
+# Possible values are:
+#  -1 = default (white for foreground and black for background)
+#   0 = black
+#   1 = red
+#   2 = green
+#   3 = brown
+#   4 = blue
+#   5 = pink
+#   6 = cyan
+#   7 = white
 # These are *only* for foreground:
-#  8-gray        9-lightred   10-lightgreen  11-yellow
-# 12-lightblue  13-lightpink  14-lightcyan   15-lightwhite
-# A '-1' is interpreted as default (foreground normally is white, and
-# background black)
+#   8 = gray
+#   9 = light red
+#  10 = light green
+#  11 = yellow
+#  12 = light blue
+#  13 = light pink
+#  14 = light cyan
+#  15 = light white
 
 # Standard foreground color
+# Default: -1 (default color)
 col_normal=-1
 
-# Standard-Background-Color
+# Standard background color
+# Default: -1 (default color)
 col_back=-1
 
 # Color of background for inverse text
+# Default: 4 (blue)
 col_invers_bg=4
 
 # Color of foreground for inverse text
+# Default: 7 (white)
 col_invers_fg=7
 
-# Color of text-lines
+# Color of text lines
+# Default: -1 (default color)
 col_text=-1
 
 # Color of mini help menu
+# Default: 3 (brown)
 col_minihelp=3
 
 # Color of help pages
+# Default: -1 (default color)
 col_help=-1
 
 # Color of messages in last line
+# Default: 6 (cyan)
 col_message=6
 
 # Color of quote-lines
+# Default: 2 (green)
 col_quote=2
 
 # Color of twice quoted lines
+# Default: 3 (brown)
 col_quote2=3
 
 # Color of >=3 times quoted lines
+# Default: 4 (blue)
 col_quote3=4
 
 # Color of header-lines
+# Default: 2 (green)
 col_head=2
 
 # Color of actual news header fields
+# Default: 9 (light red)
 col_newsheaders=9
 
 # Color of article subject
+# Default: 6 (cyan)
 col_subject=6
 
 # Color of response counter
+# Default: 2 (green)
 col_response=2
 
 # Color of sender (From:)
+# Default: 2 (green)
 col_from=2
 
 # Color of Help/Mail-Sign
+# Default: 4 (blue)
 col_title=4
 
 # Color of signature
+# Default: 4 (blue)
 col_signature=4
+
+# Color of highlighted URLs
+# Default: -1 (default color)
+col_urls=-1
+
+# Enable URL highlighting?
+url_highlight=ON
 
 # Enable word highlighting?
 word_highlight=ON
 
-# Wrap article lines at column
-wrap_column=0
-
 # Should the leading and ending stars and dashes also be displayed,
 # even when they are highlighting marks?
-# 0 - no    1 - yes, display mark    2 - print a space instead
+# Possible values are (the default is marked with *):
+#   0 = no
+#   1 = yes, display mark
+# * 2 = print a space instead
 word_h_display_marks=2
 
-# Color of word highlighting. There are four possibilities
-# in articles: *stars*, /slashes/, _underdashes_ and -strokes-.
+# Color of word highlighting with *stars*
+# Default: 11 (yellow)
 col_markstar=11
+
+# Color of word highlighting with _dash_
+# Default: 13 (light pink)
 col_markdash=13
+
+# Color of word highlighting with /slash/
+# Default: 14 (light cyan)
 col_markslash=14
+
+# Color of word highlighting with -stroke-
+# Default: 12 (light blue)
 col_markstroke=12
 
-# Attribute of word highlighting on mono terminals.
-# There are four possibilities in articles:
-# *stars*, /slashes/, _underdashes_ and -strokes-.
-# The possible values are:
-# 0 - Normal, 1 - Underline, 2 - Best highlighting,
-# 3 - Reverse video, 4 - Blinking, 5 - Half bright, 6 - Bold
+# Attributes of word highlighting on mono terminals
+# Possible values are:
+#   0 = Normal
+#   1 = Underline
+#   2 = Best highlighting
+#   3 = Reverse video
+#   4 = Blinking
+#   5 = Half bright
+#   6 = Bold
+
+# Attribute of word highlighting with *stars*
+# Default: 6 (bold)
 mono_markstar=6
+
+# Attribute of word highlighting with _dash_
+# Default: 2 (best highlighting)
 mono_markdash=2
+
+# Attribute of word highlighting with /slash/
+# Default: 5 (half bright)
 mono_markslash=5
+
+# Attribute of word highlighting with -stroke-
+# Default: 3 (reverse video)
 mono_markstroke=3
 
 # User's mail address (and fullname), if not username@host (fullname)
 mail_address=
+
+# Wrap article lines at column
+wrap_column=0
 
 # Charset used for MIME (Content-Type) header in postings.
 mm_network_charset=US-ASCII
@@ -519,11 +632,29 @@ alternative_handling=ON
 strip_newsrc=OFF
 
 # What to do with bogus groups in newsrc file
-# 0=(Keep) 1=(Remove) 2=(Highlight with D on selection screen).
+# Possible values are (the default is marked with *):
+# * 0 = keep
+#   1 = remove
+#   2 = highlight with D on selection screen
 strip_bogus=2
 
-# Wildcard matching 0=(wildmat) 1=(regex)
+# Format string for date representation
+date_format=%a, %d %b %Y %H:%M:%S
+
+# Wildcard matching
+# Possible values are (the default is marked with *):
+# * 0 = wildmat
+#   1 = regex
 wildcard=0
+
+# Unicode normalization form
+# Possible values are (the default is marked with *):
+#   0 = None
+# * 1 = NFKC
+#   2 = NFKD
+#   3 = NFC
+#   4 = NFD
+normalization_form=1
 
 # Defaults for quick (1 key) kill & auto-selection filters
 # header=NUM  0,1=Subject: 2,3=From: 4=Message-ID: & full References: line

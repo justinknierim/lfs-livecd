@@ -1,12 +1,12 @@
 # tin Makefile
 
 NM= tin
-VRS= 1.6.2
+VRS= 1.8.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= ftp://ftp.tin.org/pub/news/clients/$(NM)/v1.6/$(FILE)
-SHA-$(FILE)= 9ab37d0b2712c074e60d99d0cf5bb3a774be75db
+URL-$(FILE)= ftp://ftp.tin.org/pub/news/clients/$(NM)/v1.8/$(FILE)
+SHA-$(FILE)= ce3bee69f98ce66587124e7159c47443d6c102df
 
 # Targets
 
@@ -25,8 +25,11 @@ compile-stage2:
 	 --enable-nntp-only --disable-pgp-gpg --disable-printing
 	make $(PM) build
 	make install
-	cp $(ROOT)/etc/tinrc /etc
-	echo -e 'lfs.support:\nblfs.support:\nlivecd:' >/root/.newsrc
+	mkdir -p /etc/tin
+	cp $(ROOT)/etc/tin/tinrc /etc/tin
+	echo 'gmane.linux.lfs.support' >/root/.newsrc
+	echo 'gmane.linux.lfs.beyond.support' >>/root/.newsrc
+
 
 clean:
 	-rm -rf $(DIR)
