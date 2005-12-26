@@ -27,8 +27,8 @@ compile-stage2:
 	make install
 	mkdir -p /etc/tin
 	cp $(ROOT)/etc/tin/tinrc /etc/tin
-	echo 'gmane.linux.lfs.support' >/root/.newsrc
-	echo 'gmane.linux.lfs.beyond.support' >>/root/.newsrc
+	echo 'gmane.linux.lfs.support:' >/root/.newsrc
+	echo 'gmane.linux.lfs.beyond.support:' >>/root/.newsrc
 
 
 clean:
