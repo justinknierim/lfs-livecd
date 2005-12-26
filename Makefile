@@ -277,7 +277,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-XML-Parser ch-Terminal ch-irssi \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo \
-	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 \
+	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
