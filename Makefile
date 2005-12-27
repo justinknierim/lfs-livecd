@@ -501,11 +501,8 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-ifneq ($(LFS-ARCH),x86_64)
-ifneq ($(LFS-ARCH),sparc64)
-	@install -m644 etc/X11/app-defaults/XTerm $(MP)/etc/X11/app-defaults/XTerm
-	@install -m644 etc/X11/twm/system.twmrc $(MP)/etc/X11/twm/system.twmrc
-else
+ifeq ($(LFS-ARCH),x86_64)
+ifeq ($(LFS-ARCH),sparc64)
 	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
 endif
 endif
