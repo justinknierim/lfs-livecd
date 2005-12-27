@@ -501,10 +501,8 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-ifeq ($(LFS-ARCH),x86_64)
 ifeq ($(LFS-ARCH),sparc64)
 	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
-endif
 endif
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/
 	@sed -e 's|_LINKER_|$(LINKER)|' -e 's|/lib/|/$(LIB_MAYBE64)/|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
