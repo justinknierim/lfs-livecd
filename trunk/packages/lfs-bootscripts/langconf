@@ -36,6 +36,7 @@ guess_selection() {
 			continue
 		fi
 		F_KEYMAP="${F_KEYMAP//\"/}"
+		F_KEYMAP="${F_KEYMAP//+/ }"
 		F_LEGACYCHARSET="${F_LEGACYCHARSET//\"/}"
 		F_XKEYMAP="${F_XKEYMAP//\"/}"
 		same_locale "$F_LANG" "$LANG" && SELECTED="$F_DESCRIPTION" && return 0
@@ -43,7 +44,7 @@ guess_selection() {
 	F_LANG="$LANG"
 	F_KEYMAP=defkeymap
 	F_LEGACYCHARSET=""
-	F_XKEYMAP="en_US"
+	F_XKEYMAP="us"
 	return 1
 }
 
