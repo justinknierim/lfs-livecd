@@ -105,11 +105,7 @@ drv:	Y-xorg-server N-xf86-input-aiptek Y-xf86-input-evdev N-xf86-input-ur98 \
 	@touch $@
 
 # Idea: provide only required "cursor" and "fixed" fonts to X core protocol
-#     take cursor.pfa from font-xfree86-type1
-#     and cour*.pfa from font-ibm-type1, alias that to "fixed"
-# Put them into /usr/lib/X11/fonts/Type1
-#     Make them invisible to fontconfig because they
-#     confuse its font substitution algorithm
+#     use bitmap fonts built into libXfont for that
 # None of the installed applications should use X core font protocol.
 #
 # Useful TrueType fonts should go to /usr/share/fonts
@@ -119,11 +115,7 @@ EXTRA_FLAGS-font-bh-ttf=--with-fontdir=/usr/share/fonts
 EXTRA_FLAGS-font-misc-ethiopic=--with-otf-fontdir=/usr/share/fonts --with-ttf-fontdir=no
 EXTRA_FLAGS-font-misc-meltho=--with-fontdir=/usr/share/fonts
 
-fonts:	Y-font-bh-ttf Y-font-misc-ethiopic Y-font-misc-meltho \
-	Y-font-xfree86-type1 Y-font-ibm-type1
-# Want huge cursors? replace 31 with 63
-	@echo 'cursor -xfree86-cursor-medium-r-normal--31-0-100-100-p-0-adobe-fontspecific' >/usr/lib/X11/fonts/Type1/fonts.alias
-	@echo 'fixed -ibm-courier-bold-r-normal--18-0-100-100-m-0-iso8859-1' >>/usr/lib/X11/fonts/Type1/fonts.alias
+fonts:	Y-font-bh-ttf Y-font-misc-ethiopic Y-font-misc-meltho
 	@touch $@
 
 N-%:
@@ -181,8 +173,10 @@ compile-y-xorg-server:
 	sed -i -e '1i#include <linux/types.h>' hw/xfree86/os-support/linux/lnx_agp.c
 	# 100 dpi is more appropriate for today's displays as a guess
 	sed -i -e '/DPI/s,75,100,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
+	# Allow the use of builtin fonts from libXfont.so
+	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
 	./configure --help
-	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2)
+	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
 	make $(PM)
 	make DESTDIR=$(ROOT)/debug/xorg-server install
 	make install
