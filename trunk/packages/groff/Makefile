@@ -32,8 +32,8 @@ stage2: Makefile $(FILE) $(PATCH)
 
 compile-stage2:
 	zcat ../$(PATCH) | patch -Np1
-	sed -i 's,2010,002D,' font/devutf8/R.proto
-	sed -i 's,2212,002D,' font/devutf8/R.proto
+	sed -i -e 's/2010/002D/' -e 's/2212/002D/' \
+	    -e 's/2018/0060/' -e 's/2019/0027/' font/devutf8/R.proto
 ifndef CROSS
 	PAGE=$(pagesize) ./configure --prefix=/usr --enable-multibyte
 else
