@@ -171,8 +171,9 @@ compile-y-xorg-server:
 	autoreconf --force --install --verbose
 	# Fix build failure
 	sed -i -e '1i#include <linux/types.h>' hw/xfree86/os-support/linux/lnx_agp.c
-	# 100 dpi is more appropriate for today's displays as a guess
-	sed -i -e '/DPI/s,75,100,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
+	# 96 dpi is more appropriate for today's displays as a guess
+	# and still allows Terminal to fit into 800x600
+	sed -i -e '/DPI/s,75,96,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	# Allow the use of builtin fonts from libXfont.so
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
 	./configure --help
