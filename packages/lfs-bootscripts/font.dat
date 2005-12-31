@@ -12,7 +12,7 @@ GB2312		default8x16			3
 GBK		default8x16			3
 GEORGIAN-PS	default8x16			4
 ISO-8859-1	lat1-16 -m 8859-1		0
-ISO-8859-2	lat2a-16 -m 8859-2		0
+ISO-8859-2	lat2-16 -m 8859-2		0
 ISO-8859-3	LatArCyrHeb-16 -m 8859-3	0
 ISO-8859-5	cyr-sun16 -m 8859-5		0
 ISO-8859-6	LatArCyrHeb-16 -m 8859-6	0
