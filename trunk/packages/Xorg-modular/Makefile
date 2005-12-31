@@ -176,10 +176,8 @@ compile-y-xorg-server:
 	sed -i -e '/DPI/s,75,96,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	# Allow the use of builtin fonts from libXfont.so
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
-	./configure --help
 	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
 	make $(PM)
-	make DESTDIR=$(ROOT)/debug/xorg-server install
 	make install
 
 clean:
