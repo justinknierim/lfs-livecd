@@ -267,8 +267,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
 	ch-fontconfig ch-Xorg-modular ch-freefont ch-inputattach ch-fonts-dejavu \
-	ch-fonts-kochi ch-fonts-arphic ch-fonts-baekmuk \
-	update-fontsdir ch-libjpeg ch-libtiff ch-libart_lgpl \
+	ch-fonts-kochi ch-fonts-arphic ch-fonts-baekmuk ch-libjpeg ch-libtiff ch-libart_lgpl \
 	ch-openssh ch-glib2 ch-libungif ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-cairo \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
@@ -285,7 +284,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile
+	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
@@ -473,8 +472,7 @@ final-environment:
 	@-cp $(ROOT)/etc/fstab /etc
 
 update-fontsdir:
-	cd /usr/X11R6/lib/X11/fonts/TTF ; /usr/X11R6/bin/mkfontscale ; \
-	/usr/X11R6/bin/mkfontdir ; /usr/bin/fc-cache -f
+	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
 
 chroot-gvim:
 	make -C $(PKG)/vim stage3
