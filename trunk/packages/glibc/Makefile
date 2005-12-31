@@ -74,7 +74,6 @@ stage1: $(FILE) $(FILE2)
 	cp $(SRC)/{$(FILE),$(FILE2)} $(LFSSRC)/
 
 compile-stage1:
-	cd ../$(DIR) ; unpack ../$(FILE2)
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
 	 --without-gd --with-headers=$(WD)/include --without-selinux
@@ -133,7 +132,7 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 ifndef CROSS
-stage2: $(FILE)
+stage2: $(FILE) $(FILE2)
 	$(sep_dir_build)
 	touch $@
 
@@ -149,7 +148,7 @@ compile-stage2:
 	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
-	PARALLELMFLAGS="$(PM)" make install
+	PARALLELMFLAGS="$(PM)" make install_root=/ install
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales
 	cp $(ROOT)/etc/nsswitch.conf /etc
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
@@ -183,7 +182,7 @@ endif
     	 --libexecdir=/usr/lib64/glibc --libdir=/usr/lib64
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
-	make install
+	make install_root=/ install
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales
 	cp $(ROOT)/etc/nsswitch.conf /etc
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime
@@ -204,7 +203,7 @@ endif
     	 --libexecdir=/usr/lib/glibc --host=$(LFS_TARGET32)
 	PARALLELMFLAGS="$(PM)" make
 	touch /etc/ld.so.conf
-	make install
+	make install_root=/ install
 
 clean:
 	-rm -rf $(DIR)
