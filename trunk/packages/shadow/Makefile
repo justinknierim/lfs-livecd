@@ -34,6 +34,7 @@ else
 endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
+	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
 	make $(PM)
 	make install
 	cp etc/{limits,login.access} /etc
