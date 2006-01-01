@@ -27,7 +27,9 @@ compile-stage2:
 	 --enable-debug=no --enable-panel --enable-startup-notification \
 	 --libexecdir=/usr/sbin ; \
 	make $(PM) ; \
-	make install ; cd .. ; done 
+	make install ; cd .. ; done
+	# FIXME: maybe copy to /etc/X11/xinit/xinitrc? The default there
+	# calls xterm and twm, and none of these programs exist on the CD
 	cp $(ROOT)/root/.xinitrc /root/
 	cp ../desktop-files/* /usr/share/applications
 	sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
@@ -35,6 +37,8 @@ compile-stage2:
 	rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
 	for f in /etc/xdg/xfce4/panel/contents.xml* ; do ../cleanup-panel.pl $$f ; done
 	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
+	mkdir -p /etc/xdg/xfce4/mcs_settings
+	cp ../settings/* /etc/xdg/xfce4/mcs_settings
 
 clean:
 	-rm -rf $(DIR)
