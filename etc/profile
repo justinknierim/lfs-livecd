@@ -16,13 +16,7 @@ TERMCMD=Terminal
 
 XMODIFIERS=@im=SCIM
 
-# Make sure that VTE uses antialiasing/hinting settings from fontconfig
-VTE_USE_XFT=0
-VTE_USE_FT2=0
-VTE_USE_PANGO=1
-
 export PATH INPUTRC G_FILENAME_ENCODING PKG_CONFIG_PATH XML_CATALOG_FILES
 export WWW_HOME NNTPSERVER TERMCMD XMODIFIERS
-export VTE_USE_XFT VTE_USE_FT2 VTE_USE_PANGO
 
 source /etc/bashrc
