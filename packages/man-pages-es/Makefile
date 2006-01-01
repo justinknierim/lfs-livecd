@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	find man? -type f | \
-	 grep -v 'man7/iso_8859-2.7' | grep -v 'man7/iso_8859-7.7' | \
+	 grep -v 'man7/iso_8859-7.7' | \
 	 while read F ; do \
 	  iconv -f UTF-8 -t ISO-8859-1 $$F >tmp ; mv tmp $$F ; \
 	 done
