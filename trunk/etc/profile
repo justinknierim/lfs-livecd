@@ -1,12 +1,10 @@
-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/X11R6/bin
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 INPUTRC=/etc/inputrc
 
 G_FILENAME_ENCODING=@locale
 
 XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog"
-
-PKG_CONFIG_PATH=/usr/X11R6/lib/pkgconfig
 
 WWW_HOME="/usr/share/LFS-BOOK-trunk-HTML/index.html"
 
