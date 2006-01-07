@@ -1,31 +1,24 @@
 # LFS-Bootscripts Makefile
 
 NM= lfs-bootscripts
-VRS= 3.2.1
+VRS= 20051223
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 6de412b717ae09fbaf701ec9485b60f496f173aa
-
-FILE1= console
-URL-$(FILE1)= http://www.linuxfromscratch.org/~alexander/patches/$(FILE1)
-SHA-$(FILE1)= 2c9c97b6576af6dddedca75cfadf431d5aa53fda
+URL-$(FILE)= http://www.linuxfromscratch.org/~dj/$(NM)/$(FILE)
+SHA-$(FILE)= 4d419d9bd4a28861214dd83d0ec9dc0a6325d30d
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-$(FILE1):
-	$(call download,$@,$(URL-$@),$(SHA-$@))
-
 chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
+stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(FILE1)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	sed -i s/sane/cooked/ lfs/init.d/functions

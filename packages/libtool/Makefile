@@ -1,12 +1,12 @@
 # Libtool Makefile
 
 NM= libtool
-VRS= 1.5.20
+VRS= 1.5.22
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7d94f8a4c67f435051905d6e629df861ecb45ed1
+SHA-$(FILE)= 1aeec8e1f9667fa971ba21608d398d278577dd03
 
 # Targets
 
