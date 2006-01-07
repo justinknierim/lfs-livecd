@@ -31,7 +31,6 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	sed -i '/^TARGETS/s@arpd@@g' misc/Makefile
 	chmod u+x configure
 	./configure
 ifndef CROSS
@@ -40,6 +39,7 @@ else
 	make $(PM) CC="gcc $(64FLAGS)" SBINDIR=/sbin
 endif
 	make SBINDIR=/sbin install
+	mv -v /sbin/arpd /usr/sbin
 
 clean:
 	-rm -rf $(DIR)

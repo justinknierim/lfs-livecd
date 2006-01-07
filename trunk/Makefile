@@ -237,7 +237,7 @@ pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-coreutils \
 	ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk \
 	ch-m4 ch-bison ch-gpm ch-ncurses ch-readline ch-vim ch-less \
-	ch-gdbm ch-groff ch-groff-1.19 \
+	ch-db ch-groff ch-groff-1.19 \
 	ch-sed ch-flex ch-gettext ch-inetutils ch-iproute2 ch-perl ch-texinfo \
 	ch-autoconf ch-automake ch-bash
 
