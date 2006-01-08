@@ -1,4 +1,4 @@
-export VERSION := x86-CRS051009-pre1
+export VERSION := x86-CRS051009-pre2
 export CROSS := yes
 export CROSS_WD := /cross-tools
 export 32FLAGS := -march=i486
