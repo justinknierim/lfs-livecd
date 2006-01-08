@@ -24,6 +24,7 @@ compile-stage2:
 	make $(PM)
 	make install
 	sed -i -e 's/Bitstream Vera/DejaVu/' /etc/fonts/fonts.conf
+	sed -i -e 's,^\(\t\t\t<family>Kochi.*\)$$,\1\n\t\t\t<family>AR PL New Sung</family>,' /etc/fonts/fonts.conf
 	# UGLY HACK BELOW. Remove when Greek is supported in DejaVu Sans Mono.
 	# Needed in order to avoid fallback to (ugly) FreeMono in Terminal.
 	sed -i -e '/prefer/,+2s,^\(.*Sans\) Mono\(.*$$\),&\n\1\2,' /etc/fonts/fonts.conf

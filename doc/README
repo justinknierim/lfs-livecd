@@ -182,17 +182,17 @@ and some Asian languages. No additional configuration is required in order to
 use these fonts.
 
 Use of this LiveCD with Chinese, Japanese or Korean language requires that
-your monitor has at least 96 pixels per inch in order for hieroglyphs to
+your monitor has at least 80 pixels per inch in order for hieroglyphs to
 be recognizable (i.e., at least 12 pixels high). This means the following
 minimum resolution:
 
-    15" => 1152x864
-    17" => 1280x1024
-    19" => 1400x1050
-    20" => 1600x1200
+    15" => 1024x768
+    17" => 1024x768
+    19" => 1280x1024
+    20" => 1280x1024
 
 If your monitor cannot handle such resolution, edit the
-/etc/X11/xinit/xserverrc file with vim, nano or joe, and add the -dpi 96
+/etc/X11/xinit/xserverrc file with vim, nano or joe, and add the -dpi 94
 parameter to the X server command line there.
 
 THANKS

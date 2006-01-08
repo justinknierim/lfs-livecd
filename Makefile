@@ -267,7 +267,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
 	ch-fontconfig ch-Xorg-modular ch-freefont ch-inputattach ch-fonts-dejavu \
-	ch-fonts-kochi ch-fonts-arphic ch-fonts-baekmuk ch-libjpeg ch-libtiff ch-libart_lgpl \
+	ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk ch-libjpeg ch-libtiff ch-libart_lgpl \
 	ch-openssh ch-glib2 ch-libungif ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-cairo \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-firefox \
