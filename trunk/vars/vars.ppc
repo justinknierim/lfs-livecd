@@ -1,4 +1,4 @@
-export VERSION := ppc-6.2-pre1
+export VERSION := ppc-6.2-pre2
 export CFLAGS := -Os -s
 export LIB_MAYBE64 := lib
 export KERNEL_ARCH := ppc
