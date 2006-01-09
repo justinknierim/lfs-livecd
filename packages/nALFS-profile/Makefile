@@ -6,7 +6,7 @@ DIR= $(VRS)
 
 FILE= $(NM)-$(DIR).tar.bz2
 URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/profiles/lfs/svn/$(FILE)
-SHA-$(FILE)= d0af040466421adfbcb2b49856d0a3322250d88d
+SHA-$(FILE)= 3c749861e18c077c5a9a312760fc217cab5cc315
 
 # Targets
 
