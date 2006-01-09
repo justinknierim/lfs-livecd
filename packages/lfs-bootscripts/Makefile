@@ -5,7 +5,7 @@ VRS= 20051223
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/~dj/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 4d419d9bd4a28861214dd83d0ec9dc0a6325d30d
 
 # Targets

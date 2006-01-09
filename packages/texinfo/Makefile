@@ -14,7 +14,7 @@ URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 2ead28cb8e2679cdb53e1e4908209f0a31397dfe
 
 PATCH50= $(DIR)-multibyte-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
 SHA-$(PATCH50)= cb7f2c85a6f0ed73e8c4d1772e20b886a8c0de96
 
 # Targets

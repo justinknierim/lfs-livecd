@@ -17,7 +17,7 @@ URL-$(THAI_FILE)= http://linux.thai.net/pub/thailinux/software/snapshots/thai-co
 SHA-$(THAI_FILE)= 2d5e8f4d6cf488987600d455078fe8f5d4199217
 
 PATCH1= $(DIR)-backspace-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH1)
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 39e332e42d5145dfc47786dba5eff63cda91d0ba
 
 PATCH30= $(DIR)-sparc_kbdrate-1.patch
