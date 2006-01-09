@@ -5,7 +5,7 @@ VRS= 0.2.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.os-works.com/files/projects/terminal/0.2/$(FILE)
+URL-$(FILE)= http://download.berlios.de/xfce-goodies/$(FILE)
 SHA-$(FILE)= 8787f574469ec47cba9786d64fa5803fd28dd3b3
 
 # Targets

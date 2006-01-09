@@ -5,7 +5,7 @@ VRS= 0.3.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.os-works.com/files/projects/libexo/0.3/$(FILE)
+URL-$(FILE)= http://download.berlios.de/xfce-goodies/$(FILE)
 SHA-$(FILE)= 724715b157b6b4a664516459f6c3be10ae82cc4b
 
 # Targets
