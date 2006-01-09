@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure --prefix=/usr --sysconfdir=/etc
 	make -C libncftp shared
 	make -C libncftp soinstall
 	make $(PM)

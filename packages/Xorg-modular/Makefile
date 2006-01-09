@@ -151,8 +151,7 @@ compile-y-%:
 	# Extra safety measure, due to "test: too many arguments" messages
 	# May well be just an unnecessary precaution
 	autoreconf --force --install --verbose
-	./configure --help
-	./configure --prefix=/usr --localstatedir=/var $(EXTRA_FLAGS-$*)
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var $(EXTRA_FLAGS-$*)
 	make $(PM)
 	make install
 
@@ -175,7 +174,7 @@ compile-y-xorg-server:
 	sed -i -e '/DPI/s,75,94,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	# Allow the use of builtin fonts from libXfont.so
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
-	./configure --prefix=/usr --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
 	make $(PM)
 	make install
 
