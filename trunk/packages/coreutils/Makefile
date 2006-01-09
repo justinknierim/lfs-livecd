@@ -17,7 +17,7 @@ URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= 6a0098315fa9b7cb80d17dd1b146ac91fa187606
 
 PATCH50= $(DIR)-i18n-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
 SHA-$(PATCH50)= 13e3a734aea39bfcb9bc24d295ee26bdf370b03c
 
 # Targets

@@ -14,7 +14,7 @@ URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.12/$(PATCH1)
 SHA-$(PATCH1)= a56513748661db102d75a576d053f6bd78fd2294
 
 PATCH50= $(NM)-2.6.12.5-utf8_input-2.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
 SHA-$(PATCH50)= 72b51b7cf6b5eeecf79a07d3778670c64011397c
 
 else
@@ -25,7 +25,7 @@ URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.14/$(PATCH1)
 SHA-$(PATCH1)= 1d44c6bd6cb14ae35cdea973510c8608bd557f39
 
 PATCH50= $(NM)-2.6.14-utf8_input-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
 SHA-$(PATCH50)= 691a781c8233bcba9457bddbe3b7362bf7f663f7
 endif
 
