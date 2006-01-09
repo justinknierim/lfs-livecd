@@ -25,7 +25,7 @@ compile-stage2:
 	cd $$i ; \
 	 ./configure --prefix=/usr --sysconfdir=/etc \
 	 --enable-debug=no --enable-panel --enable-startup-notification \
-	 --libexecdir=/usr/sbin ; \
+	 --libexecdir=/usr/sbin --enable-compositor ; \
 	make $(PM) ; \
 	make install ; cd .. ; done
 	# FIXME: maybe copy to /etc/X11/xinit/xinitrc? The default there
