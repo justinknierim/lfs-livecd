@@ -11,9 +11,9 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 2cd082775d30be463c0ac674a00595eb56fda22e
 
-PATCH50= $(DIR)-redhat_fixes-1.patch
+PATCH50= $(DIR)-redhat_fixes-2.patch
 URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= cd2f9c8efeed69efb98bebbb07a104b1c842cfb0
+SHA-$(PATCH50)= 6f7f1623d1909f07dc08a8a16a24cbce6be8dfc5
 
 # Targets
 
