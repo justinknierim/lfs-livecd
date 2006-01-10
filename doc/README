@@ -15,11 +15,10 @@ Web Tools
 * lynx (text web browser)
 * w3m (text web browser)
 * irssi (console irc client, unstable version)
-* firefox (graphical web browser)
+* mozilla (graphical web browser, mail and news reader and irc client)
 * xchat (x-based irc client)
 * msmtp (SMTP client for use with mutt and tin)
 * mutt (console mail and news reader)
-* thunderbird (graphical mail and news reader)
 * tin (console news reader)
 
 Text Editors
@@ -30,7 +29,7 @@ Text Editors
 Network Tools
 * SSH server & client
 * NFS server & client
-* Samba
+* Samba (client only)
 * Subversion
 * cvs
 * pppd
@@ -58,6 +57,7 @@ Other Programs
 * pciutils
 * mdadm
 * LVM2
+* dmraid
 * hdparm
 * xlockmore
 
@@ -161,15 +161,13 @@ following parameters:
   "setfont" program separated by the "+" sign), e.g:
   FONT=LatArCyrHeb-16+-m+8859-15
 
-  XKEYMAP: the keymap to use with X window system, e.g. XKEYMAP=us_intl
+  XKEYMAP: the keymap to use with X window system, e.g. XKEYMAP=us
 
 Alternatively, these items can be configured interactively using dialog-based
 interface if the locale is not specified on the boot prompt.
 
 For some locales (e.g. lv_LV.ISO-8859-13) there is no valid console keymap,
 but there is a keymap for X. In this case, the only solution is to use X.
-Languages that need special input method software (e.g. Chinese, Japanese
-and Korean) are not supported yet.
 
 While this CD configures the LANG environment variable, console font and
 keymap for you, it's your responsibility to configure other locale-dependent

@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Mozilla Firefox
+Name=Mozilla
 GenericName=Web Browser
 Comment=Browse the World Wide Web
-Exec=firefox
+Exec=mozilla
 Terminal=false
 MultipleArgs=false
 Type=Application
