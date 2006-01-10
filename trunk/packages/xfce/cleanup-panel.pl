@@ -11,10 +11,10 @@ close FH;
 $content =~ s,<Popup>.*?</Popup>,<Popup/>,sg;
 $content =~ s,popup="1",popup="0",g;
 
-# Use Firefox and Thunderbird for web and mail
-$content =~ s,Mozilla,Firefox,g;
-$content =~ s,mozilla -mail,thunderbird,g;
-$content =~ s,mozilla,firefox,g;
+## Use Firefox and Thunderbird for web and mail
+#$content =~ s,Mozilla,Firefox,g;
+#$content =~ s,mozilla -mail,thunderbird,g;
+#$content =~ s,mozilla,firefox,g;
 
 # Hide the non-functional "Lock Screen" button
 $content =~ s,button1=".",button1="1",g;

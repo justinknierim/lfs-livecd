@@ -1,12 +1,12 @@
 [Desktop Entry]
-Name=Thunderbird Mail Client
+Name=Mozilla Mail
 Comment=Read and write your email
-Exec=thunderbird
+Exec=mozilla -mail
 Terminal=false
 MultipleArgs=false
 Type=Application
 Categories=Application;Network
-Name[ca]=Client de correu Thunderbird
+Name[ca]=Client de correu Mozilla
 Comment[ca]=Llegiu i escriviu correu
 Comment[de]=Emails lesen und verfassen
 Comment[fr]=Lire et écrire votre mél

@@ -5,5 +5,5 @@ MiscCursorBlinks=TRUE
 ShortcutsNoMenukey=TRUE
 ShortcutsNoMnemonics=TRUE
 TitleInitial=LFS LiveCD
-HelperWebbrowser=firefox
-HelperMailreader=thunderbird
+HelperWebbrowser=mozilla-browser
+HelperMailreader=mozilla-mailer
