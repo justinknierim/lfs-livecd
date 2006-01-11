@@ -1,12 +1,10 @@
 # nALFS profile Makefile
 
-NM= profile
+NM= nALFS-profile
 VRS= LFS-SVN
-DIR= $(VRS)
+DIR= $(NM)-$(VRS)
 
-FILE= $(NM)-$(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/profiles/lfs/svn/$(FILE)
-SHA-$(FILE)= 3c749861e18c077c5a9a312760fc217cab5cc315
+URL=  svn://svn.linuxfromscratch.org/ALFS/profiles/LFS/trunk
 
 # Targets
 
@@ -16,14 +14,13 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile 
 	$(std_build)
-
-compile-stage2:
-	sed -i 's@/your/$(DIR)/packages@/sources@g' config/general.ent
-	# Temporary fix for LFS-6.1 profile
-	sed -i 's@/usr/local@/usr@g' runit.sh
-	cp -rav . /root/nALFS-profile-$(DIR)
+	@$(call echo_message, Building)
+	@svn co -q $(URL) $(DIR)
+	cd $(DIR) ; sed -i 's@/your/$(DIR)/packages@/sources@g' config/general.ent
+	cp -av $(DIR) /root/ >$(DIR)-$@.log 2>&1
+	@touch $@	
 
 clean:
 	-rm -rf $(DIR)
