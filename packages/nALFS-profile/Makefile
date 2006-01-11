@@ -4,7 +4,7 @@ NM= nALFS-profile
 VRS= LFS-SVN
 DIR= $(NM)-$(VRS)
 
-URL=  svn://svn.linuxfromscratch.org/ALFS/profiles/LFS/trunk
+URL= svn://svn.linuxfromscratch.org/ALFS/profiles/LFS/trunk
 
 # Targets
 
