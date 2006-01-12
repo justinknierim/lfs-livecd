@@ -6,16 +6,12 @@ DIR= $(NM)-$(VRS)-HTML
 
 # Ensure sources match LFS book for "trunk".  Update along with LFS packages.
 ifeq ($(VRS),trunk)
-REV= 7225
+REV= 7272
 REVPARM= -r $(REV)
 endif
 
 URL= svn://svn.linuxfromscratch.org/LFS/$(VRS)/BOOK
-FIREFOX_CONFIG= $(ROOT)/root/.mozilla/firefox/2qwpcv2u.default/prefs.js
-
-PATCH50= lfs_book-r7225-utf8-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
-SHA-$(PATCH50)= 40a0ca2f045f6e750b7cd0310a2225e78b542587
+FIREFOX_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
 # Targets
 
@@ -35,12 +31,10 @@ stage2: Makefile $(PATCH50)
 	 $(FIREFOX_CONFIG)
 	@sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(DIR)/index.html\"@' \
 	 $(ROOT)/etc/profile
-	@cd $(NM) ; patch -Np0 -i ../$(PATCH50) ; make BASEDIR=../$(DIR)-UTF8
-	cp -av $(DIR)-UTF8 /usr/share
 	@make clean >$(DIR)-$@.log 2>&1
 	@touch $@
 
 clean:
-	-rm -rf $(NM) $(DIR) $(DIR)-UTF8
+	-rm -rf $(NM) $(DIR)
 
 .PHONY: clean chroot compile-stage2
