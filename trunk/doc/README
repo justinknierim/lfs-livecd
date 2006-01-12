@@ -63,7 +63,7 @@ Other Programs
 
 nALFS & ALFS profile for LFS SVN
 (A tool for automating a Linux From Scratch installation)
-WARNING: the supplied profile is obsolete and doesn't match the book.
+WARNING: the supplied profile doesn't match the current LFS book.
 
 jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
