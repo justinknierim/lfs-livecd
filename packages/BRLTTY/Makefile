@@ -1,12 +1,12 @@
 # BRLTTY Makefile
 
-NM= BRLTTY
+NM= brltty
 VRS= 3.7.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.GZ
+FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.mielke.cc/brltty/releases/$(FILE)
-SHA-$(FILE)= 
+SHA-$(FILE)= 0aa8a51a03687acddadbd422f5dff688a5a89b97
 
 # Targets
 
