@@ -1,12 +1,12 @@
 # Anthy Makefile
 
 NM= anthy
-VRS= 6700b
+VRS= 7307
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/anthy/15414/$(FILE)
-SHA-$(FILE)= 19e53a9c41497ef2949e23851999ed72fd211e83
+URL-$(FILE)= http://osdn.dl.sourceforge.jp/anthy/18359/$(FILE)
+SHA-$(FILE)= bd6eb346c5dcca4f51825f997ccb51d7cd1b08d2
 
 # Targets
 
@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc
+	./configure --prefix=/usr --sysconfdir=/etc --disable-static
 	make $(PM)
 	make install
 
