@@ -5,7 +5,7 @@ VRS= 1.7.12
 DIR= mozilla
 
 FILE= $(NM)-$(VRS)-source.tar.bz2
-URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/$(VRS)/source/$(FILE)
+URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/mozilla/releases/mozilla$(VRS)/source/$(FILE)
 SHA-$(FILE)= d94251b86d36b8d5e3e45d31a67ebe334f1ba267
 
 PATCH1= $(NM)-1.7.11-gcc4-2.patch
