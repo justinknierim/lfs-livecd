@@ -12,6 +12,14 @@ PATCH1= $(DIR)-libc-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= e515154714acdbb1dbdbeb71727649895e26f50d
 
+PATCH2= $(DIR)-update_db_file-1.patch
+URL-$(PATCH2)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH2)
+SHA-$(PATCH2)= e5f94cf06a6fa9ed1339e6e6fbfb3e972a83f849
+
+PATCH3= $(DIR)-sprintf_vulnerability-1.patch
+URL-$(PATCH3)= http://www.linuxfromscratch.org/patches/downloads/perl/$(PATCH3)
+SHA-$(PATCH3)= dda2881adffd5407881778f8daa6a959ec2ad589
+
 PATCH40= $(DIR)-Configure_multilib-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= e2c53f1de5b116f75cfb6c92219012fff9494f78
@@ -22,7 +30,7 @@ SHA-$(PATCH41)= 111f00a3baadaa4551fdaee3599e95401f81aa53
 
 include $(CROSSVARS)
 
-STAGE2_DEPS = $(FILE)
+STAGE2_DEPS = $(FILE) $(PATCH2) $(PATCH3)
 
 # Targets
 
@@ -51,11 +59,14 @@ chroot:
 
 stage2: Makefile $(STAGE2_DEPS)
 	$(std_build)
+	cp $(SRC)/{$(PATCH2),$(PATCH3)} $(LFSSRC)
 ifdef CROSS
 	cp $(SRC)/{$(PATCH40),$(PATCH41)} $(LFSSRC)
 endif
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
 ifndef CROSS
 	./configure.gnu --prefix=/usr -Dpager="/usr/bin/less -isR"
 else
