@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)-HTML
 
 # Ensure sources match LFS book for "trunk".  Update along with LFS packages.
 ifeq ($(VRS),trunk)
-REV= 7272
+REV= 7287
 REVPARM= -r $(REV)
 endif
 
