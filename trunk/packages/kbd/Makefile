@@ -44,7 +44,7 @@ chroot:
 
 stage2: Makefile $(STAGE2-DEPS)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH3)} $(LFSSRC)
+	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH3)} $(LFSSRC)
 
 compile-stage2:
 	cd .. ; unpack $(BELARUSIAN_FILE) ; unpack $(THAI_FILE)
