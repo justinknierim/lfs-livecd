@@ -1,12 +1,12 @@
 # Psmisc Makefile
 
 NM= psmisc
-VRS= 21.9
+VRS= 22.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= de7b74d7fee5b46cefa0c3bca025ce075e2075ed
+SHA-$(FILE)= f654685c7c300d9681131465f8c5d5ae5a3f8ace
 
 # Targets
 

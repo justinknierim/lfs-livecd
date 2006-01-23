@@ -13,11 +13,11 @@ URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= e515154714acdbb1dbdbeb71727649895e26f50d
 
 PATCH2= $(DIR)-update_db_file-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH2)
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= e5f94cf06a6fa9ed1339e6e6fbfb3e972a83f849
 
 PATCH3= $(DIR)-sprintf_vulnerability-1.patch
-URL-$(PATCH3)= http://www.linuxfromscratch.org/patches/downloads/perl/$(PATCH3)
+URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
 SHA-$(PATCH3)= dda2881adffd5407881778f8daa6a959ec2ad589
 
 PATCH40= $(DIR)-Configure_multilib-1.patch
