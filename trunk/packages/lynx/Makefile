@@ -24,10 +24,10 @@ compile-stage2:
 	    --enable-nls --with-ssl --enable-charset-choice \
 	    --enable-locale-charset --with-screen=ncursesw
 	make $(PM)
-	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg
 	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
 	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
 	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/doc
+	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg
 
 clean:
 	-rm -rf $(DIR)
