@@ -24,7 +24,6 @@ compile-stage2:
 	    --enable-nls --with-ssl --enable-charset-choice \
 	    --enable-locale-charset --with-screen=ncursesw
 	make $(PM)
-	make install
 	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg
 	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
 	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
