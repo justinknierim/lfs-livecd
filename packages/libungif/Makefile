@@ -1,12 +1,12 @@
 # LibUngif Makefile
 
 NM= libungif
-VRS= 4.1.3
+VRS= 4.1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 04aab31b3e9e719a80320667bc23b3ee35505a34
+SHA-$(FILE)= af687ffbcfe6afd1d76e33ea8cf27ffb02ed61fc
 
 # Targets
 

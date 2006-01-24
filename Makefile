@@ -241,8 +241,8 @@ pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages \
 	ch-sed ch-flex ch-gettext ch-inetutils ch-iproute2 ch-perl ch-texinfo \
 	ch-autoconf ch-automake ch-bash
 
-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
-	ch-grep ch-grub ch-gzip ch-hotplug ch-man-db ch-make \
+post-bash: ch-file ch-grep ch-libtool ch-bzip2 ch-diffutils ch-kbd \
+	ch-e2fsprogs ch-grub ch-gzip ch-hotplug ch-man-db ch-make \
 	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
 	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
 
