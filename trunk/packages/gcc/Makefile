@@ -152,6 +152,7 @@ else
 	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
 	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
 endif
+	cd ../$(DIR) ; sed -i 's/@@have_mktemp_command@@/yes/' gcc/gccbug.in
 	make $(PM)
 	make install
 	ln -sf ../usr/bin/cpp /lib

@@ -26,6 +26,7 @@ ifndef CROSS
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
 endif
+	echo '#define YYENABLE_NLS 1' >> config.h
 	make $(PM)
 	make install
 
