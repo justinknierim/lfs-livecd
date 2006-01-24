@@ -76,11 +76,11 @@ process may fail if you have more than one video card, or if your video card
 doesn't support 24-bit color depth.
 
 You still have to edit /etc/X11/xorg.conf using vim, joe or nano in order to
-configure the available video modes (otherwise the highest resolution with
-60 Hz refresh rate will be used). Instructions for doing that are found in
-the BLFS book, under the section Configuring Xorg:
-
-http://www.linuxfromscratch.org/blfs/view/svn/x/installing.html#xorg
+configure the available video modes. Otherwise the mode with the highest
+resolution which fits into the detected synchronization frequency ranges of
+the monitor will be used. This may damage your eyes with a CRT monitor
+or be just unacceptable for a LCD monitor. In order to avoid this, uncomment
+and fill in the "Modes" line in the "Screen" section of /etc/X11/xorg.conf.
 
 When you are finished, run startx.
 
