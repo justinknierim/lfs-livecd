@@ -37,12 +37,12 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH3)
 	cp unix/Makefile .
 ifneq ($(LFS-ARCH),x86)
-	make prefix=/usr LOCAL_UNZIP=-DUSE_UNSHRINK linux_noasm
+	make prefix=/usr LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux_noasm
 else
-	make prefix=/usr LOCAL_UNZIP=-DUSE_UNSHRINK linux
-	make prefix=/usr LOCAL_UNZIP=-DUSE_UNSHRINK linux_shlibz
+	make prefix=/usr LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
+	make prefix=/usr LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux_shlibz
 endif
-	make prefix=/usr LOCAL_UNZIP=-DUSE_UNSHRINK install
+	make prefix=/usr install
 ifeq ($(LFS-ARCH),x86)
 	cp -d libunzip.so* /usr/lib
 endif

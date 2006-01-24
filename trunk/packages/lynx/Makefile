@@ -26,11 +26,9 @@ compile-stage2:
 	make $(PM)
 	make install
 	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg
-	make docdir=/usr/share/doc/$(NM)-$(VRS)/lynx_doc \
-	 helpdir=/usr/share/doc/$(NM)-$(VRS)/lynx_help install-doc
-	make docdir=/usr/share/doc/$(NM)-$(VRS)/lynx_doc \
-	 helpdir=/usr/share/doc/$(NM)-$(VRS)/lynx_help install-help
-	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/lynx_doc
+	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
+	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
+	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/doc
 
 clean:
 	-rm -rf $(DIR)
