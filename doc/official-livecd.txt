@@ -24,7 +24,7 @@ on a CD leads to the following consequences:
 
 1. The device which holds the system is not known in advance.
 
-Some people have their CD-ROM as /dev/hdc, others use /dev/hdd or even /dev/sda.
+Some people have their CD-ROM as /dev/hdc, others use /dev/hdd or even /dev/sr0.
 This means that one cannot pass a fixed "root=..." argument to the kernel
 in the boot loader configuration.
 
@@ -94,8 +94,90 @@ label linux
 The meaning of each configuration option is described in the syslinux.doc file
 in the syslinux source tarball.
 
-{plan: document: why the timeout, old insecure autosshd, how to load an
-initramfs, why initramfs_data_cpio.gz and not initramfs_data.cpio.gz}
+The initramfs performs detection of the CD-ROM device and mounts filesystems
+in such a way that a read-write filesystem is presented to the user. From
+the viewpoint of the boot loader, the initramfs image is just an initrd.
+The file name is passed as initramfs_data_cpio.gz, not initramfs_data.cpio.gz,
+because Syslinux understands only the bare ISO9660 filenames, not RockRidge
+extensions. To see bare ISO9660 filenames, issue the following command:
+
+mount -o norock,nojoliet /dev/cdrom /media/cdrom
+
+The timeout exists for unattended boot scenarios where the user is supposed to
+connect to his LiveCD system via ssh. This currently requires customizing the
+LiveCD, as described in the README file. Earlier, an attempt was made to start
+the ssh daemon automatically when the boot prompt times out, and change the
+root password to a well-known string. Such practice was insecure, and the
+old method of starting sshd has been dropped.
+
+III. Finding the root device.
+
+When the kernel boots, it realizes that the boot loader has passed something
+to it using the initrd protocol. The kernel looks at the contents of this image
+and checks whether it looks like a compressed cpio archive. For the official
+LFS LiveCD, this is the case, and the kernel unpacks this archive into the
+"ramfs" filesystem and uses it as a root filesystem. Then, the kernel checks
+whether the /init file exists and is executable. If it is not, the usual
+"root=..." argument parsing takes place. But the initramfs on the official
+LFS LiveCD contains /init, thus, the kernel executes it instead of parsing
+the non-existing "root=..." parameter. This /init file has to mount the
+real root file system and tell the kernel to use it.
+
+Currently, a statically-linked binary is used as the /init script, which makes
+it hard to explain what exactly is going on to people who don't know the C
+programming language. The source for this binary is kept in the
+lfs-livecd/initramfs directory. Earlier pre-releases of the LiveCD contained
+a number of small utilities statically linked against the "klibc" library
+(available from http://www.kernel.org/pub/linux/libs/klibc) instead of the
+usual glibc, and the /init file was a shell script. This practice has been
+dropped in favour of a statically linked glibc-based binary because klibc
+could not be built on some non-x86 architectures, like Sparc.
+
+Searching for the root device is the first thing done by /init. This is done
+by querying the ISO9660 volume label on each known device that could
+contain the LFS LiveCD. The static device nodes created when building the CD
+are used in initramfs. The shell-based /init used the following commands for
+searching the CD:
+
+LABEL="LFS_CD"
+DEVS=`echo /dev/hd* /dev/sr*`
+
+while [ -z "$CDROM" ] && [ "$TIMEOUT" != "..............." ] ; do
+        for DEV in $DEVS ; do
+                if [ "`isoinfo -V $DEV 2>/dev/null`" = "$LABEL" ] ; then
+                        CDROM=$DEV
+                fi
+        done
+        if [ -z "$CDROM" ] ; then
+                echo -n "."
+                TIMEOUT=".$TIMEOUT"
+                sleep 1
+        fi
+done
+
+The "isoinfo" program is available from
+ftp://metalab.unc.edu/pub/Linux/utils/disk-management/
+
+In order to compile cleanly against klibc, it needs a patch:
+isoinfo-0.03.02-fixes-1.patch
+
+It is also possible to search for the CD by attempting to mount all devices
+and looking if one of them contains some file known to be present on the CD.
+
+The logic for retrying the CD-ROM detection is needed in the case of SCSI
+and USB CD-ROM drives, because the kernel performs their detection in the
+background, and it takes some time, and therefore the first round of CD-ROM
+detection may miss such devices.
+
+In the current C-based init, the corresponding logic is contained in the
+mountlfscd() function.
+
+When the device containing the LFS CD is found, the tmpfs filesystem is mouned
+onto the /.tmpfs directory, and the CD-ROM device it is mounted onto
+/.tmpfs/.cdrom. Note: this does not become the root filesystem.
+
+Such setup is needed in order to be able to access the sources present on
+the LiveCD, and will be explained later.
 
 CHANGELOG:
 {place the SVN changelog here just before the official release}
