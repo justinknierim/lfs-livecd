@@ -22,10 +22,10 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 ifndef CROSS
-	./configure --libdir=/lib --enable-shared
+	./configure --libdir=/lib --enable-shared --without-selinux
 else
 	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \
-   	 --enable-shared
+   	 --enable-shared --without-selinux
 endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
