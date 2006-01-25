@@ -16,9 +16,9 @@ PATCH2= $(DIR)-suppress_uptime_kill_su-1.patch
 URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= 6a0098315fa9b7cb80d17dd1b146ac91fa187606
 
-PATCH50= $(DIR)-i18n-1.patch
+PATCH50= $(DIR)-i18n-2.patch
 URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= 13e3a734aea39bfcb9bc24d295ee26bdf370b03c
+SHA-$(PATCH50)= 3ff73ceeae8ef66345cfed38f770e51db4d02199
 
 # Targets
 
