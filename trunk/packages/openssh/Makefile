@@ -4,9 +4,9 @@ NM= openssh
 VRS= 4.2p1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://sunsite.ualberta.ca/pub/OpenBSD/OpenSSH/portable/$(FILE)
-SHA-$(FILE)= 5e7231cfa8ec673ea856ce291b78fac8b380eb78
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= fd50e6d851150e5218994d50e2aebb2878aaea42
 
 # Targets
 
