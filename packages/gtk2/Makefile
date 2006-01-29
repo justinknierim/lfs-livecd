@@ -1,12 +1,12 @@
 # Gtk+ Makefile
 
 NM= gtk+
-VRS= 2.8.9
+VRS= 2.8.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 8560c2ac2275bca7b9fd7d00c41555f95c638b82
+SHA-$(FILE)= 43ae4d54cd418dd12b34dbb52e345da50779e0d9
 
 # Targets
 
