@@ -1,12 +1,12 @@
 # man-pages-it Makefile
 
 NM= man-pages-it
-VRS= 0.3.4
+VRS= 2.21
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.pluto.it/pub/pluto/ildp/man/$(FILE)
-SHA-$(FILE)= e5014f209afddaf2e468f1b28446b9acf9facd55
+SHA-$(FILE)= 802cdac169ddc170a3a0ffb6e9e73545f5a80aa7
 
 # Targets
 
@@ -17,12 +17,11 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
-	@mkdir $(DIR)
-	@cd $(DIR) ; unpack ../$(FILE)
-	@make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-	@make clean
+	$(std_build)
 
 compile-stage2:
+	find . -type d -exec chmod 755 '{}' \;
+	find . -type f -exec chmod 644 '{}' \;
 	cp -r man? /usr/share/man/it
 
 clean:
