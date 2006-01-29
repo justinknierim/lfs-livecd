@@ -1,12 +1,12 @@
 # Glib Makefile
 
 NM= glib
-VRS= 2.8.4
+VRS= 2.8.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= d6168689dee919013de71481286dc090e2d855d1
+SHA-$(FILE)= 28731dc4799efc1824610971c88a571f18bd8471
 
 # Targets
 
