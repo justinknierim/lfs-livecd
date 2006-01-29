@@ -79,7 +79,7 @@ compile-stage1:
 	 --without-gd --with-headers=$(WD)/include --without-selinux
 	PARALLELMFLAGS="$(PM)" make
 	touch $(WD)/etc/ld.so.conf
-	make install
+	PARALLELMFLAGS="$(PM)" make install
 else
 
 stage1: $(STAGE1_DEPS)
