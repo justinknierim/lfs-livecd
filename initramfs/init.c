@@ -25,6 +25,7 @@ int mountlfscd(void);
 
 int main(int argc, char * argv[], char * envp[])
 {
+	char **cmd = malloc( sizeof(char *) * (argc+1) );
 	int i, fd, ffd;
 	struct loop_info loopinfo;
 	
@@ -147,9 +148,14 @@ int main(int argc, char * argv[], char * envp[])
 	/* We're done! Pass control to sysvinit. */
 
 	printf("Starting init...\n");
-	i = execve("/sbin/init", argv, envp);
-	if (i<0)
-		printf("Failed to start init: %s :(\n", strerror(errno));
+	cmd[0] = malloc( sizeof(char) * 11);
+	cmd[0] = strncpy(cmd[0], "/sbin/init", 11);
+
+        for (i=1; i <= argc; i++) {
+                cmd[i] = argv[i];
+        }
+        i = execve(cmd[0], cmd, envp);
+	printf("Failed to start init: %s :(\n", strerror(errno));
 
 	return(0);
 }
