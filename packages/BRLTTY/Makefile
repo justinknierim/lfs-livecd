@@ -20,7 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --disable-speech-support --disable-api --without-x
+	./configure --prefix=/usr --sysconfdir=/etc --disable-speech-support \
+	    --disable-api --without-x
 	make $(PM)
 	make install
 
