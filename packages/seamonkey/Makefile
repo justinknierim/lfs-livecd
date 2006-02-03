@@ -32,7 +32,7 @@ compile-stage2:
 	cp -ra $(ROOT)/root/.mozilla /root
 	# ln -sf /usr/lib/mozilla/plugins/libmozsvgdec.{so,a} \
 	# /usr/lib/$(NM)-$(VRS)/plugins
-	ln -sf seamonkey /usr/lib/mozilla
+	ln -sf seamonkey /usr/bin/mozilla
 
 clean:
 	-rm -rf $(DIR)
