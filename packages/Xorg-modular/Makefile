@@ -157,7 +157,11 @@ compile-y-%:
 
 compile-y-mesa:
 	# FIXME x86_64
+ifeq ($(LFS-ARCH),ppc)
+	make linux-dri-ppc OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/xorg/modules/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
+else
 	make linux-dri-x86 OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/xorg/modules/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
+endif
 	bin/installmesa /usr
 	mkdir -p /usr/lib/xorg/modules/dri
 	install -v lib/*dri* /usr/lib/xorg/modules/dri
