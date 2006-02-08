@@ -5,7 +5,7 @@ VRS= 3.0.21a
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://us2.samba.org/$(NM)/ftp/$(FILE)
+URL-$(FILE)= http://us2.samba.org/$(NM)/ftp/old-versions/$(FILE)
 SHA-$(FILE)= c8d339801f2f1c60a4bb652aee85da6a0eb5d224
 
 # Targets
