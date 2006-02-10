@@ -2,7 +2,7 @@ This is version [version] of the official Linux From Scratch LiveCD.
 
 PACKAGES
 ===========================
-Available packages on this cd for your use:
+Available packages on this CD for your use:
 
 Xorg (X Window System Environment)
 
@@ -71,7 +71,7 @@ Makefiles that can download, check and build each LFS package for you.)
 
 CONFIGURING X
 ===========================
-The Live CD attempts to configure X for your video card automatically. The
+The LiveCD attempts to configure X for your video card automatically. The
 process may fail if you have more than one video card, or if your video card
 doesn't support 24-bit color depth.
 
@@ -129,7 +129,7 @@ you have to customize the CD as described above. Add the following files:
 
 * /etc/ssh/ssh_host_dsa_key, /etc/ssh/ssh_host_rsa_key
     Create those files as described in the ssh-keygen(1) manual page. If you
-    don't fo that, random host keys will be generated for you automatically
+    don't do that, random host keys will be generated for you automatically
     during the boot process. This is less secure, because you can't verify
     them.
 
@@ -196,8 +196,5 @@ parameter to the X server command line there.
 
 THANKS
 ===========================
-Special thanks to Alexander Patrakov, Andrew Sanch, Archaic, Matthew Burgess,
-Kevin Fleming, Jim Gifford, Justin Knierim, Robert Connolly, Bruce Dubbs,
-Roel Neefs and the many others in the LFS community whose suggestions & support
-helped create this CD. Also thanks to Gerard Beekmans for the LFS project,
-without which there would be no CD.
+Many thanks to all whose suggestions, support and hard work have helped create
+this CD.
