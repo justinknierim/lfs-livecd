@@ -1,2 +1,1 @@
 STARTFILE_PREFIX_SPEC_HEADERS= gcc/config/linux.h gcc/config/linux64.h
-EXTRA_FLAGS_FOR_TOOLS= CFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc" CXXFLAGS_FOR_TARGET="-mcpu=ultrasparc -mtune=ultrasparc"

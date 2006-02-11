@@ -42,7 +42,7 @@ compile-cross-static:
 	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
 	 --target=$(LFS_TARGET) --with-local-prefix=$(WD) --disable-nls \
 	 --disable-shared --disable-threads --enable-languages=c 
-	make $(PM) $(EXTRA_FLAGS_FOR_TOOLS) all-gcc
+	make $(PM) all-gcc
 	make install-gcc
 
 cross: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
@@ -65,7 +65,7 @@ compile-cross:
 	 --enable-shared --enable-languages=c,c++ --enable-__cxa_atexit \
 	 --enable-c99 --enable-long-long --enable-threads=posix
 	make $(PM) AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(EXTRA_FLAGS_FOR_TOOLS)
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld"
 	make install
 
 stage1: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
