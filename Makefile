@@ -102,6 +102,8 @@ export WHITE= "[00m"
 all: test-host lfs-base extend-lfs iso
 	@echo "The LiveCD, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
 
+minimal: test-host lfs-base extend-minimal iso
+
 test-host:
 	@if [ `whoami` != "root" ] ; then \
 	 echo "You must be logged in as root." && exit 1 ; fi
@@ -176,6 +178,14 @@ ifeq ($(LFS-ARCH),x86_64)
 	 make x86_64-blfs $(chbash-post-bash)'
 endif
 endif
+	@make unmount
+	@touch $@
+
+extend-minimal: prep-chroot
+	@cp $(WD)/bin/which $(MP)/usr/bin
+	@cp $(ROOT)/scripts/unpack $(MP)/bin
+	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
+	 make blfs-minimal $(chbash-post-bash)'
 	@make unmount
 	@touch $@
 
@@ -287,6 +297,26 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
+
+blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
+	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 \
+	ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh ch-glib2 ch-cvs \
+	ch-popt ch-samba ch-irssi ch-wireless_tools ch-tcpwrappers ch-portmap \
+	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
+	ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dmraid \
+        ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
+        ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
+        ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
+        ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+        ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
+        ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
+        ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
+        ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile update-fontsdir
+ifeq ($(LFS-ARCH),ppc)
+        make ch-yaboot
+endif
+
 
 x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl \
 	ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
