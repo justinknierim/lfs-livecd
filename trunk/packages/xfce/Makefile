@@ -32,8 +32,6 @@ compile-stage2:
 	# calls xterm and twm, and none of these programs exist on the CD
 	cp $(ROOT)/root/.xinitrc /root/
 	cp ../desktop-files/* /usr/share/applications
-	sed -i -e 's/mozilla/firefox/' /etc/xdg/xfce4/desktop/menu.xml*
-	sed -i -e 's/Mozilla/Firefox/' /etc/xdg/xfce4/desktop/menu.xml*
 	rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
 	for f in /etc/xdg/xfce4/panel/contents.xml* ; do ../cleanup-panel.pl $$f ; done
 	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
