@@ -83,7 +83,7 @@ export CXXFLAGS := $(CFLAGS)
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
 export WHICH= $(WD)/bin/which
-export WGET= wget
+export WGET?= wget
 
 export BRW= "[0;1m"
 export RED= "[0;31m"
