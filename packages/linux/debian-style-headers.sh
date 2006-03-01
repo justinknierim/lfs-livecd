@@ -14,7 +14,7 @@ cp -rv "$SRCDIR/.config" "$SRCDIR/Makefile" "$SRCDIR/Module.symvers" "$DSTDIR"
 	    mkdir -p "$DSTDIR/$dir"
 	done )
 ( cd "$SRCDIR" ; find -type f -a '(' -name Kconfig\* \
-    -o -name Makefile -o -name \*.s ')' ) | (
+    -o -name Makefile\* -o -name \*.s ')' ) | (
 	cd "$SRCDIR"
 	while read file ; do
 	    cp -v "$file" "$DSTDIR/$file"

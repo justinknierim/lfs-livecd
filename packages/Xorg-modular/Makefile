@@ -2,6 +2,8 @@ NM= X.org
 VRS= X11R7.0
 URLBASE= http://xorg.freedesktop.org/releases/$(VRS)/src/everything/
 
+PATCH1= xorg_server-X11R7.0_1.0.1-dotclock-1.patch
+
 LIBDRM_VRS= 2.0
 FILE1= libdrm-$(LIBDRM_VRS).tar.gz
 DIR1= libdrm-$(LIBDRM_VRS)
@@ -56,7 +58,7 @@ lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
 	Y-libXevie Y-libXfont Y-libXfontcache Y-libXft Y-libXi Y-libXinerama \
 	Y-libxkbfile Y-libxkbui N-libXprintUtil N-libXprintAppUtil \
 	Y-libXrandr Y-libXres Y-libXScrnSaver Y-libXTrap Y-libXtst Y-libXv \
-	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm \
+	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm Y-encodings \
 	Y-libdrm Y-mesa
 	@touch $@
 
@@ -178,6 +180,8 @@ compile-y-xorg-server:
 	sed -i -e '/DPI/s,75,94,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	# Allow the use of builtin fonts from libXfont.so
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
+	# Don't attempt to exceed DDC probed maximum pixel clock
+	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
 	make $(PM)
 	make install
