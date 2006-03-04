@@ -92,9 +92,9 @@ compile-stage1:
 	 --with-local-prefix=$(WD) --enable-long-long --enable-c99 \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch
-	make AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" \
-	 $(EXTRA_FLAGS_FOR_TOOLS) $(PM)
+	make $(CFLAGS_FOR_TARGET) $(CXXFLAGS_FOR_TARGET) \
+	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
+	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
 	make install
 	ln -s gcc $(WD)/bin/cc
 
