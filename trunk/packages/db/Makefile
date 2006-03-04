@@ -4,9 +4,9 @@ NM= db
 VRS= 4.4.16
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://downloads.sleepycat.com/$(FILE)
-SHA-$(FILE)= 08ce785ad051ed6e9712201423ddb9045d0cd62c
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= dd03d6f2d3802c8e5f92e650d3be514f47810b39
 
 # Targets
 
