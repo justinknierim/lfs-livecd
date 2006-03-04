@@ -42,7 +42,7 @@ compile-cross-static:
 	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
 	 --target=$(LFS_TARGET) --with-local-prefix=$(WD) --disable-nls \
 	 --disable-shared --disable-threads --enable-languages=c 
-	make $(PM) all-gcc
+	make $(CFLAGS_FOR_TARGET) $(PM) all-gcc
 	make install-gcc
 
 cross: $(FILE) $(PATCH1) $(PATCH40) $(PATCH41)
