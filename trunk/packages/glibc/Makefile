@@ -13,7 +13,7 @@ ifndef CROSS
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 82d0487419f1bdbf2dee439c344e89d6af47e558
 else
-URL-$(FILE)= ftp://sources.redhat.com/pub/glibc/snapshots/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 9c7f190eb9d590a33384a24c3772bd3a13355575
 endif
 
@@ -23,10 +23,6 @@ FILE2= $(NM)-libidn-$(VRS).tar.bz2
 URL-$(FILE2)= http://ftp.gnu.org/gnu/glibc/$(FILE2)
 SHA-$(FILE2)= 95d3a98495d4bd7138149fd312db88da56e735db
 endif
-
-PATCH30= $(DIR)-sparc_tls-1.patch
-URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
-SHA-$(PATCH30)= 5100d3728f58bc40f7f61de10c0b7a202b876aa5
 
 PATCH40= $(DIR)-libgcc_eh-1.patch
 URL-$(PATCH40)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH40)
@@ -41,14 +37,11 @@ STAGE2_DEPS= $(FILE) $(PATCH41)
 
 PATCH50= $(DIR)-supported_locales-2.patch
 
+include $(CROSSVARS)
+
 # Targets
 
 include $(ROOT)/scripts/functions
-
-ifeq ($(LFS-ARCH),sparc64)
-STAGE1_DEPS+= $(PATCH30) $(PATCH41)
-STAGE2_DEPS+= $(PATCH30)
-endif
 
 headers: $(FILE)
 	$(sep_dir_build)
@@ -86,10 +79,7 @@ stage1: $(STAGE1_DEPS)
 	$(sep_dir_build)
 
 compile-stage1:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30) ; patch -Np1 -i ../$(PATCH41)
-endif
+	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
 	echo "libc_cv_forced_unwind=yes" > config.cache
 	echo "libc_cv_c_cleanup=yes" >> config.cache
 ifeq ($(LFS-ARCH),sparc64)
@@ -111,10 +101,7 @@ stage1-32: $(STAGE1_DEPS)
 	$(sep_dir_build)
 
 compile-stage1-32:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH40)
-ifeq ($(LFS-ARCH),sparc64)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH30) ; patch -Np1 -i ../$(PATCH41)
-endif
+	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
 	echo "libc_cv_forced_unwind=yes" > config.cache
 	echo "libc_cv_c_cleanup=yes" >> config.cache
 	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc $(32FLAGS)" \
