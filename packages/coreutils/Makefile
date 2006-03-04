@@ -35,7 +35,7 @@ else
 	echo "utils_cv_sys_open_max=1024" >> config.cache
 	CC="$${CC} $(64FLAGS)" \
 	 ./configure --prefix=$(WD) --cache-file=config.cache \
-	 --build=$(LFS_HOST) --target=$(LFS_TARGET)
+	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
 endif
 	make $(PM)
 	make install
