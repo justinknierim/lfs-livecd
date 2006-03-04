@@ -63,16 +63,16 @@ compile-pass1:
 	make install
 	make -C ld clean
 	make -C ld LIB_PATH=$(WD)/lib
-	cp -v ld/ld-new /tools/bin
+	cp -v ld/ld-new $(WD)/bin
 
 adjust-toolchain:
-	mv -v /tools/bin/{ld,ld-old}
-	mv -v /tools/$$(gcc -dumpmachine)/bin/{ld,ld-old}
-	mv -v /tools/bin/{ld-new,ld}
-	ln -sv /tools/bin/ld /tools/$$(gcc -dumpmachine)/bin/ld
+	mv -v $(WD)/bin/{ld,ld-old}
+	mv -v $(WD)/$$(gcc -dumpmachine)/bin/{ld,ld-old}
+	mv -v $(WD)/bin/{ld-new,ld}
+	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
 	SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	gcc -dumpspecs > $$SPECFILE && \
-	sed 's@^/lib/ld-linux.so.2@/tools&@g' $$SPECFILE > tempspecfile && \
+	sed 's@^/lib/ld-linux.so.2@$(WD)&@g' $$SPECFILE > tempspecfile && \
 	mv -vf tempspecfile $$SPECFILE && \
 	unset SPECFILE
 	GCC_INCLUDEDIR=`dirname $$(gcc -print-libgcc-file-name)`/include && \
@@ -91,19 +91,19 @@ compile-pass2:
 	make install
 	make -C ld clean
 	make -C ld LIB_PATH=/usr/lib:/lib
-	cp -v ld/ld-new /tools/bin
+	cp -v ld/ld-new $(WD)/bin
 
 chroot-re-adjust-toolchain:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-re-adjust-toolchain $(chbash-pre-bash)'
 
 re-adjust-toolchain:
-	mv -v /tools/bin/{ld,ld-old}
-	mv -v /tools/$$(gcc -dumpmachine)/bin/{ld,ld-old}
-	mv -v /tools/bin/{ld-new,ld}
-	ln -sv /tools/bin/ld /tools/$$(gcc -dumpmachine)/bin/ld
+	mv -v $(WD)/bin/{ld,ld-old}
+	mv -v $(WD)/$$(gcc -dumpmachine)/bin/{ld,ld-old}
+	mv -v $(WD)/bin/{ld-new,ld}
+	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
 	gcc -dumpspecs | \
-	perl -p -e 's@/tools/lib/ld-linux.so.2@/lib/ld-linux.so.2@g;' \
+	perl -p -e 's@$(WD)/lib/ld-linux.so.2@/lib/ld-linux.so.2@g;' \
 	    -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
 	    `dirname $$(gcc --print-libgcc-file-name)`/specs
 	touch $@
