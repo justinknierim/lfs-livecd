@@ -4,6 +4,7 @@ export CROSS := yes
 export CROSS_WD := /cross-tools
 export 32FLAGS := -m32 -mcpu=ultrasparc -mtune=ultrasparc
 export 64FLAGS := -m64 -mcpu=ultrasparc -mtune=ultrasparc
+export GCCTARGET := -mcpu=ultrasparc -mtune=ultrasparc
 export CFLAGS := -Os -s
 export LIB_MAYBE64 := lib64
 export LFS_HOST ?= sparc64-cross-linux-gnu
