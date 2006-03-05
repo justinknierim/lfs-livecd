@@ -33,8 +33,8 @@ export MP ?= /mnt/lfs
 export timezone ?= GMT
 export pagesize ?= letter
 export ROOT ?= /lfs-livecd
-export PM ?= -j3
-export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
+#export PM ?= -j3
+export HTTP ?= http://ftp.linuxfromscratch.org/pub/lfs/conglomeration
 export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
 
 # Directory variables
@@ -82,8 +82,8 @@ export CXXFLAGS := $(CFLAGS)
 
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
-export WHICH= $(WD)/bin/which
-export WGET?= wget
+export WHICH ?= $(WD)/bin/which
+export WGET ?= wget
 
 export BRW= "[0;1m"
 export RED= "[0;31m"
@@ -226,10 +226,10 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-wget-scpt lfs-strip
 	@cp /etc/resolv.conf $(WD)/etc
 else
-tools: lfs-binutils-scpt lfs-gcc-scpt lfs-zlib-scpt lfs-gawk-scpt lfs-coreutils-scpt \
+tools: lfs-binutils-scpt lfs-gcc-scpt lfs-gawk-scpt lfs-coreutils-scpt \
 	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
 	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt \
-	lfs-tar-scpt lfs-bash-scpt lfs-util-linux-scpt lfs-wget-scpt
+	lfs-tar-scpt lfs-bash-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt
 	@cp /etc/resolv.conf $(WD)/etc
 endif
 
