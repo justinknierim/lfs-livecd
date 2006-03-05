@@ -41,6 +41,8 @@ ifndef CROSS
 	make -C text-utils more
 else
 	patch -Np1 -i ../$(PATCH31)
+	cp -v configure configure.orig
+	sed -e 's@/usr/include@$(WD)/include@g' configure.orig > configure
 	CC="$${CC} $(64FLAGS)" ./configure
 	make ARCH="" CPU="" -C lib
 	make ARCH="" CPU="" -C mount mount umount
