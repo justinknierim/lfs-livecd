@@ -28,7 +28,7 @@ else
 	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
 	echo "ac_cv_func_setvbuf_reversed=no" >> config.cache
 	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-   	 ./configure --prefix=$(WD) --with-curses \
+   	 ./configure --prefix=$(WD) \
    	 --without-bash-malloc --host=$(LFS_TARGET) \
 	 --cache-file=config.cache
 endif
