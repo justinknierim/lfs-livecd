@@ -29,7 +29,7 @@ compile-stage1:
 ifndef CROSS
 	./configure --prefix=$(WD)
 else	
-	CC="gcc $(64FLAGS)" ./configure --prefix=$(WD)
+	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) --host=$(LFS_TARGET)
 endif
 	make $(PM)
 	make install
