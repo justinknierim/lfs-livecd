@@ -7,7 +7,8 @@ export 64FLAGS := -m64 -mcpu=ultrasparc -mtune=ultrasparc
 export GCCTARGET := -mcpu=ultrasparc -mtune=ultrasparc
 export CFLAGS := -Os -s
 export LIB_MAYBE64 := lib64
-export LFS_HOST ?= sparc64-cross-linux-gnu
-export LFS_TARGET := sparc64-sun-linux-gnu
-export LFS_TARGET32 := sparcv9-sun-linux-gnu
+export LFS_HOST ?= sparcv9-cross--linux-gnu
+export LFS_TARGET := sparc64-unknown-linux-gnu
+export LFS_TARGET32 := sparcv9-unknown-linux-gnu
 export KERNEL_ARCH := sparc64
+export WHICH := $(CROSS_WD)/bin/which
