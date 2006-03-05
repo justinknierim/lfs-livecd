@@ -93,8 +93,7 @@ compile-stage1:
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --disable-nls --enable-languages=c,c++ --disable-libstdcxx-pch
 	make $(CFLAGS_FOR_TARGET) $(CXXFLAGS_FOR_TARGET) \
-	 AS_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-as" \
-	 LD_FOR_TARGET="$(CROSS_WD)/bin/$(LFS_TARGET)-ld" $(PM)
+	 AS_FOR_TARGET="${AS}" LD_FOR_TARGET="${LD}" $(PM)
 	make install
 	ln -s gcc $(WD)/bin/cc
 
