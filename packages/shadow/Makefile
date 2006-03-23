@@ -30,6 +30,22 @@ endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
+	../convert-mans UTF-8 ISO-8859-2 man/cs/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/de/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/es/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/fi/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/fr/*.?
+	../convert-mans UTF-8 ISO-8859-2 man/hu/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/id/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/it/*.?
+	../convert-mans UTF-8 EUC-JP man/ja/*.?
+	# ../convert-mans UTF-8 EUC-KR man/ko/*.?
+	../convert-mans UTF-8 ISO-8859-2 man/pl/*.?
+	../convert-mans UTF-8 ISO-8859-1 man/pt_BR/*.?
+	../convert-mans UTF-8 KOI8-R man/ru/*.?
+	../convert-mans UTF-8 ISO-8859-9 man/tr/*.?
+	# ../convert-mans UTF-8 GB2312 man/zh_CN/*.?
+	# ../convert-mans UTF-8 BIG5 man/zh_TW/*.?
 	make $(PM)
 	make install
 	cp etc/{limits,login.access} /etc

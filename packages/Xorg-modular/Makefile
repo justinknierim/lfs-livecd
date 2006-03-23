@@ -58,14 +58,14 @@ lib:	Y-xtrans Y-libXau Y-libXdmcp Y-libX11 Y-libXext N-libAppleWM \
 	Y-libXevie Y-libXfont Y-libXfontcache Y-libXft Y-libXi Y-libXinerama \
 	Y-libxkbfile Y-libxkbui N-libXprintUtil N-libXprintAppUtil \
 	Y-libXrandr Y-libXres Y-libXScrnSaver Y-libXTrap Y-libXtst Y-libXv \
-	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm Y-encodings \
+	Y-libXvMC Y-libXxf86dga Y-libXxf86misc Y-libXxf86vm \
 	Y-libdrm Y-mesa
 	@touch $@
 
 apps:	Y-xbitmaps \
 	N-appres N-bdftopcf N-beforelight N-bitmap N-editres N-fonttosfnt \
 	N-fslsfonts N-fstobdf Y-iceauth N-ico N-lbxproxy N-listres N-luit \
-	N-mkcfm Y-mkfontdir Y-mkfontscale N-oclock N-pclcomp N-proxymngr \
+	N-mkcfm Y-mkfontdir Y-mkfontscale Y-encodings N-oclock N-pclcomp N-proxymngr \
 	Y-rgb N-rstart Y-scripts Y-sessreg Y-setxkbmap N-showfont Y-smproxy \
 	N-twm N-viewres N-x11perf Y-xauth N-xbiff N-xcalc N-xclipboard \
 	N-xclock N-xcmsdb N-xconsole Y-xcursorgen N-xdbedizzy N-xditview \
