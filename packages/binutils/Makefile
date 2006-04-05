@@ -86,7 +86,7 @@ pass2: $(FILE)
 
 compile-pass2:
 	../$(DIR)/configure --prefix=$(WD) --disable-nls \
-	 --enable-shared --with-lib-path=$(WD)/lib
+	 --with-lib-path=$(WD)/lib
 	make $(PM)
 	make install
 	make -C ld clean
