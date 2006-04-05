@@ -84,7 +84,7 @@ compile-stage1:
 ifeq ($(LFS-ARCH),sparc64)
 	echo "libc_cv_sparc64_tls=yes" >> config.cache
 endif
-		echo "slibdir=$(WD)/lib64" >> configparms
+	echo "slibdir=$(WD)/lib64" >> configparms
 	BUILD_CC="gcc" CC="$(LFS_TARGET)-gcc $(64FLAGS)" \
 	AR="$(LFS_TARGET)-ar" RANLIB="$(LFS_TARGET)-ranlib" \
 	../$(DIR)/configure --prefix=$(WD) --host=$(LFS_TARGET) \
