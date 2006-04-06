@@ -4,9 +4,9 @@ NM= pkg-config
 VRS= 0.20
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 1e1368a2e00e81012aafa22d06cf15a520db81cd
+SHA-$(FILE)= 285a486e2cf97e3c6bcb3eec9a7fed299031eb6e
 
 # Targets
 
