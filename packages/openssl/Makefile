@@ -4,9 +4,9 @@ NM= openssl
 VRS= 0.9.7i
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= e5237c09aa46359e811f82002c8cead49b44b2ed
+SHA-$(FILE)= 4c23925744d43272fa19615454da44e01465eb06
 
 PATCH1= $(DIR)-fix_manpages-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)

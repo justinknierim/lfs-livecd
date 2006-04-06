@@ -4,9 +4,9 @@ NM= libxml2
 VRS= 2.6.22
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 3f920523136d51b246569977df70e6893d925dd5
+SHA-$(FILE)= ef9f217d10548ea5bfb0a3f84cc9fc58a2218fb2
 
 include $(CROSSVARS)
 
