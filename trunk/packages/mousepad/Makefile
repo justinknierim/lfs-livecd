@@ -5,7 +5,7 @@ VRS= 0.2.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://erikharrison.net/software/$(FILE)
+URL-$(FILE)= http://tx-us.lunar-linux.org/lunar/cache/$(FILE)
 SHA-$(FILE)= 8fd12f5945dc4618f06f9e24c8986e6af521c4b2
 
 # Targets
