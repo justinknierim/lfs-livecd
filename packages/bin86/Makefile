@@ -4,9 +4,9 @@ NM= bin86
 VRS= 0.16.17
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= ea9a73068a3569a12ffa12ebffe798e51533faca
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://ftp.nux.at/pub/dev86/$(FILE)
+SHA-$(FILE)= 656f06b4b26d08412132e338baa25e42d713eeec
 
 # Targets
 
