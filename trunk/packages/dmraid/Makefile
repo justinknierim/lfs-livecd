@@ -1,12 +1,12 @@
 # dmraid Makefile
 
 NM= dmraid
-VRS= 1.0.0.rc9
+VRS= 1.0.0.rc10
 DIR= $(NM)
 
 FILE= $(NM)-$(VRS).tar.bz2
 URL-$(FILE)= http://people.redhat.com/~heinzm/sw/$(NM)/src/$(FILE)
-SHA-$(FILE)= b394202fe2217cf02fae8e444a262c22415ec61b
+SHA-$(FILE)= 34fae05d2697908f7bcdb6f063d0b127fe0a5c1c
 
 # Targets
 
@@ -20,7 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cd $(VRS) ; sed -i '/selinux/d' tools/Makefile.in
 	cd $(VRS) ; ./configure --prefix=/usr
 	# This package doesn't like parallel build
 	cd $(VRS) ; make
