@@ -1,12 +1,12 @@
-# LibUngif Makefile
+# giflib Makefile
 
-NM= libungif
+NM= giflib
 VRS= 4.1.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= af687ffbcfe6afd1d76e33ea8cf27ffb02ed61fc
+SHA-$(FILE)= 95068775508599e61bfda1de255281440e11d763
 
 # Targets
 
