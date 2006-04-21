@@ -10,7 +10,7 @@ SHA-$(FILE)= 35e8f7eadded3be38df2eb8ac8db094109339d5e
 
 PATCH1= $(DIR)-fixes-8.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 2699c7c6f0ee68f4b26d1e0ffbe2c4430388d6e2
+SHA-$(PATCH1)= 03d6781dd9ad6336eda906d5645c166e1641dd49
 
 FILE1 = $(NM)-doc-$(VRS).tar.bz2
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
