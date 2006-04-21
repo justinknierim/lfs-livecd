@@ -13,10 +13,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
 SHA-$(FILE)= 19c8c83e6ee29dd6041dae0daf1c1d0debd3d32a
 
-# Don't recompress with bzip2, this would break jhalfs
-PATCH= groff_1.18.1.1-10.diff.gz
+PATCH= $(DIR)-debian_fixes-1.patch
 URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
-SHA-$(PATCH)= 197464e2a56854ada9d5512ff1089fa94fdf36e5
+SHA-$(PATCH)= 39fb82b9673523cb2451a0491929693226ea97dd
 
 # Targets
 
@@ -31,18 +30,17 @@ stage2: Makefile $(FILE) $(PATCH)
 	cp $(SRC)/{$(FILE),$(PATCH)} $(LFSSRC)
 
 compile-stage2:
-	zcat ../$(PATCH) | patch -Np1
+	patch -Np1 -i ../$(PATCH)
 	sed -i -e 's/2010/002D/' -e 's/2212/002D/' \
 	    -e 's/2018/0060/' -e 's/2019/0027/' font/devutf8/R.proto
 ifndef CROSS
 	PAGE=$(pagesize) ./configure --prefix=/usr --enable-multibyte
 else
 	PAGE=$(pagesize) CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	 ./configure --prefix=/usr --libdir=/usr/lib64 --enable-multibyte
+	 ./configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64) --enable-multibyte
 endif
 	make
 	make install
-	ln -sf soelim /usr/bin/zsoelim
 	ln -sf eqn /usr/bin/geqn
 	ln -sf tbl /usr/bin/gtbl
 

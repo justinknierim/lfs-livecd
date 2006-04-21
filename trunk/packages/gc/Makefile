@@ -1,12 +1,12 @@
 # Boehm GC Makefile
 
 NM= gc
-VRS= 6.5
+VRS= 6.7
 DIR= $(NM)$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.hpl.hp.com/personal/Hans_Boehm/gc/gc_source/$(FILE)
-SHA-$(FILE)= 1227e4d5d156bdc56ade82043e1d03d2cf35bef5
+SHA-$(FILE)= 22d7f81bf141bd1df8fe7a692e80b03754717498
 
 # Targets
 

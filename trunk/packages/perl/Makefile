@@ -1,24 +1,20 @@
 # Perl Makefile
 
 NM= perl
-VRS= 5.8.7
+VRS= 5.8.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= c9477c6fe76b200033694bdc555a0276523d4228
+SHA-$(FILE)= 4aab490040727ca4419098720eca2ba4367df539
 
-PATCH1= $(DIR)-libc-1.patch
+PATCH1= $(DIR)-libc-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= e515154714acdbb1dbdbeb71727649895e26f50d
+SHA-$(PATCH1)= b72468149c5eee6faefde7f32bb05bda6e2a1c9d
 
-PATCH2= $(DIR)-update_db_file-1.patch
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= e5f94cf06a6fa9ed1339e6e6fbfb3e972a83f849
-
-PATCH3= $(DIR)-sprintf_vulnerability-1.patch
-URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
-SHA-$(PATCH3)= dda2881adffd5407881778f8daa6a959ec2ad589
+PATCH2= $(DIR)-makemaker-1.patch
+URL-$(PATCH2)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH2)
+SHA-$(PATCH2)= 892ba3c9304875d323e4818bfd0064311e11a5a0
 
 PATCH40= $(DIR)-Configure_multilib-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
@@ -30,7 +26,7 @@ SHA-$(PATCH41)= 111f00a3baadaa4551fdaee3599e95401f81aa53
 
 include $(CROSSVARS)
 
-STAGE2_DEPS = $(FILE) $(PATCH2) $(PATCH3)
+STAGE2_DEPS = $(FILE) $(PATCH2)
 
 # Targets
 
@@ -59,16 +55,18 @@ chroot:
 
 stage2: Makefile $(STAGE2_DEPS)
 	$(std_build)
-	cp $(SRC)/{$(PATCH2),$(PATCH3)} $(LFSSRC)
+	cp $(SRC)/$(PATCH2) $(LFSSRC)
 ifdef CROSS
 	cp $(SRC)/{$(PATCH40),$(PATCH41)} $(LFSSRC)
 endif
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH2)
-	patch -Np1 -i ../$(PATCH3)
 ifndef CROSS
-	./configure.gnu --prefix=/usr -Dpager="/usr/bin/less -isR"
+	./configure.gnu --prefix=/usr \
+	    -Dman1dir=/usr/share/man/man1 \
+	    -Dman1dir=/usr/share/man/man1 \
+	    -Dpager="/usr/bin/less -isR"
 else
 	patch -Np1 -i ../$(PATCH40)
 	patch -Np1 -i ../$(PATCH41)

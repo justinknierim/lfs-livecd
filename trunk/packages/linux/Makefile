@@ -1,36 +1,29 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= $(KVERS)
+VRS= 2.6.16.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-ifndef CROSS
-SHA-$(FILE)= fa23a2508a82d17c414adc00cca4557d331a3393
+URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
+SHA-$(FILE)= 9adfac760417bc11ecd86ed148e11abad6d1b672
 
-PATCH1= reiser4-for-2.6.12-3.patch.gz
-URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.12/$(PATCH1)
-SHA-$(PATCH1)= a56513748661db102d75a576d053f6bd78fd2294
+# URL_REISER4= http://www.kernel.org/pub/linux/kernel/people/akpm/patches/2.6/2.6.16/2.6.16-mm1/broken-out/
 
-PATCH50= $(NM)-2.6.12.5-utf8_input-2.patch
-URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= 72b51b7cf6b5eeecf79a07d3778670c64011397c
+PATCH1= reiser4-for-2.6.16-1.patch.gz
+URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.16/$(PATCH1)
+SHA-$(PATCH1)= 80d0e0530bf658489834dd27ae955e5d89257a98
 
-else
-SHA-$(FILE)= b3700f5b923446f9c8f1beda914e1b0f65d8349e
+PATCH2= linux-2.6.16-net_race-1.patch
+PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
-PATCH1= reiser4-for-2.6.14-1.patch.gz
-URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.14/$(PATCH1)
-SHA-$(PATCH1)= 1d44c6bd6cb14ae35cdea973510c8608bd557f39
+PATCH4= patch-2.6.16-ide1.gz
+URL-$(PATCH4)= http://zeniv.linux.org.uk/~alan/IDE/$(PATCH4)
+SHA-$(PATCH4)= 573490726a3de61bb2edee2798d83f1350632819
 
-PATCH50= $(NM)-2.6.14-utf8_input-1.patch
-URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= 691a781c8233bcba9457bddbe3b7362bf7f663f7
-endif
-
-PATCH2= squashfs2.2-patch
-
+PATCH50= $(NM)-2.6.16-utf8_input-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+SHA-$(PATCH50)= 1245a73e16a0d6d1b1adfa167bbee2c02ca92dd5
 
 # Targets
 
@@ -40,39 +33,56 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
+reiser4:
+	mkdir reiser4
+	-cd reiser4 ; $(WGET) -nc $(URL_REISER4)series
+	cd reiser4 ; grep 'reiser4' series | grep -v '#' >reiser4-patches
+	-cd reiser4 ; $(WGET) -nc -B $(URL_REISER4) -i reiser4-patches
+
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH3) $(PATCH4) $(PATCH50)
 	$(std_build)
 	cp $(SRC)/{$(FILE),$(PATCH50)} $(LFSSRC)/
 
 compile-stage2:
 ifeq ($(LFS-ARCH),x86)
-	if [ ! -d /boot/isolinux ] ; then mkdir /boot/isolinux ; fi
+	mkdir -p /boot/isolinux
 endif
 ifeq ($(LFS-ARCH),x86_64)
-	if [ ! -d /boot/isolinux ] ; then mkdir /boot/isolinux ; fi
+	mkdir -p /boot/isolinux
 endif
-	zcat ../$(PATCH1) > ../reiser4.patch
-	patch -Np1 -i ../reiser4.patch
+ifndef LIBATA_SUFFIX
+	zcat ../$(PATCH1) | patch -Np1
+#	for a in `cat ../reiser4/reiser4-patches` ; do patch -Np1 -i ../reiser4/$$a ; done
+#	echo 'EXPORT_SYMBOL(page_cache_readahead);' >>mm/readahead.c
 	patch -Np1 -i ../$(PATCH2)
-	cd $(ROOT) ; make -C $(PKG)/unionfs patch-kernel
-	patch -Np1 -i ../$(PATCH50)
+	patch -Np1 -i ../$(PATCH3)
+	zcat ../$(PATCH4) | patch -Np1
+	patch -Np1 -l -i ../$(PATCH50)
+endif
 	make mrproper
-	cp ../config.$(LFS-ARCH) .config
+	cp ../config.$(LFS-ARCH)$(LIBATA_SUFFIX) .config
+ifndef LIBATA_SUFFIX
 	make $(PM)
 	make modules_install
+else
+	make $(PM) bzImage
+endif
 ifeq ($(LFS-ARCH),x86)
-	cp -v arch/i386/boot/bzImage /boot/isolinux/linux
+	cp -v arch/i386/boot/bzImage /boot/isolinux/linux$(LIBATA_SUFFIX)
 endif
 ifeq ($(LFS-ARCH),x86_64)
-	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
+	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux$(LIBATA_SUFFIX)
 endif
 ifeq ($(LFS-ARCH),ppc)
-	cp -v vmlinux /boot/linux
+	cp -v vmlinux /boot/linux$(LIBATA_SUFFIX)
 endif
 ifeq ($(LFS-ARCH),sparc64)
-	cp -v arch/sparc64/boot/image /boot/linux
+	cp -v arch/sparc64/boot/image /boot/linux$(LIBATA_SUFFIX)
 endif
-	cd .. ; ./debian-style-headers.sh linux-$(KVERS)
+ifndef LIBATA_SUFFIX
+	cd .. ; ./debian-style-headers.sh linux-$(VRS)
+	make -f ../Makefile compile-stage2 LIBATA_SUFFIX=.ata
+endif
 
 clean:
 	-rm -rf $(DIR)

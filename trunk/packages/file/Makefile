@@ -1,12 +1,12 @@
 # File Makefile
 
 NM= file
-VRS= 4.16
+VRS= 4.17
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= aa99ab8e29d5833787e63d6380a4a03104df2554
+SHA-$(FILE)= 6d4d0f18c6a6749048df2d6cf36aac6f287f2154
 
 # Targets
 
@@ -25,7 +25,7 @@ ifndef CROSS
 	./configure --prefix=/usr
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-  	 --libdir=/usr/lib64
+	 --libdir=/usr/lib64
 endif
 	make $(PM)
 	make install

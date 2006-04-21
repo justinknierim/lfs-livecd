@@ -26,7 +26,7 @@ ifndef CROSS
 	make install
 else
 	make $(PM) CC="gcc $(64FLAGS)"
-	make install lib64=lib64
+	make install lib64=$(LIB_LAYBE64)
 endif
 
 clean:

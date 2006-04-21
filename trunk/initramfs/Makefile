@@ -21,7 +21,7 @@ stage2: Makefile
 	@touch $@
 
 compile-stage2: init
-	mkdir -p $(WDIR)/{dev,bin,.tmpfs,.union}
+	mkdir -p $(WDIR)/{dev/mapper,bin,.tmpfs,.lfs-cd}
 	$(CP) init $(WDIR)/
 	$(MK) -m 640 $(WDIR)/dev/console c 5 1
 	$(MK) -m 660 $(WDIR)/dev/hda b 3 0
@@ -41,7 +41,10 @@ compile-stage2: init
 	$(MK) -m 660 $(WDIR)/dev/sr5 b 11 5
 	$(MK) -m 660 $(WDIR)/dev/sr6 b 11 6
 	$(MK) -m 660 $(WDIR)/dev/sr7 b 11 7
+	$(MK) -m 660 $(WDIR)/dev/mapper/control c 10 63
+	$(MK) -m 660 $(WDIR)/dev/mapper/lfs-cd b 254 0
 	$(MK) -m 660 $(WDIR)/dev/loop0 b 7 0
+	$(MK) -m 660 $(WDIR)/dev/loop1 b 7 1
 	cd $(WDIR); find . | cpio -o -H newc | gzip -9 > ../initramfs_data.cpio.gz
 ifeq ($(LFS-ARCH),x86)
 	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
@@ -58,7 +61,7 @@ endif
 	rm -rf temp
 
 init:
-	gcc $@.c -o $@ -static -Os -s -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\"
+	gcc $@.c -o $@ -static -ldevmapper -Os -s -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\"
 
 clean:
 	-rm -rf temp

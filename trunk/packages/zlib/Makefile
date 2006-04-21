@@ -32,7 +32,6 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-
 	$(ARCH_CC) $(ARCH_CFLAGS) ./configure --prefix=/usr --shared --libdir=/$(LIB_MAYBE64)
 	make $(PM)
 	make install

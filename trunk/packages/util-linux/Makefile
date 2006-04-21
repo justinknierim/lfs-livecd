@@ -62,17 +62,14 @@ compile-stage2:
 	sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c
 	mkdir -p /var/lib/hwclock
 	patch -Np1 -i ../$(PATCH1)
-ifdef CROSS
-	patch -Np1 -i ../$(PATCH31)
-endif
 ifndef CROSS
 	./configure
 else
+	patch -Np1 -i ../$(PATCH31)
 	CC="gcc $(64FLAGS)" ./configure
 endif
 	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
 	make HAVE_KILL=yes HAVE_SLN=yes install
-	mv /usr/bin/logger /bin
 
 clean:
 	-rm -rf $(DIR)

@@ -1,5 +1,4 @@
 export VERSION := x86-6.2-pre4
 export CFLAGS := -Os -s -march=i486
 export LIB_MAYBE64 := lib
-export KERNEL_ARCH := i386
 export LINKER := ld-linux.so.2

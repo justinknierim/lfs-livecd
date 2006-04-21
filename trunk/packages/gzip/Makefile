@@ -50,12 +50,12 @@ endif
 	sed -i 's@"BINDIR"@/bin@g' gzexe.in
 	make $(PM)
 	make install
-	mv /usr/bin/gzip /bin
-	rm /usr/bin/{gunzip,zcat}
-	ln -sf gzip /bin/gunzip
-	ln -sf gzip /bin/zcat
-	ln -sf gzip /bin/compress
-	ln -sf gunzip /bin/uncompress
+	mv -v /usr/bin/gzip /bin
+	rm -v /usr/bin/{gunzip,zcat}
+	ln -sfv gzip /bin/gunzip
+	ln -sfv gzip /bin/zcat
+	ln -sfv gzip /bin/compress
+	ln -sfv gunzip /bin/uncompress
 
 clean:
 	-rm -rf $(DIR)

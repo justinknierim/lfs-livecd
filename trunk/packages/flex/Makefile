@@ -1,16 +1,12 @@
 # Flex Makefile
 
 NM= flex
-VRS= 2.5.31
+VRS= 2.5.33
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= c305d08a469625658418cb8f2d66c66fce1b76e5
-
-PATCH1= $(DIR)-debian_fixes-3.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= aafb7a09fa8ffe4d3db0737df6ac39d26f93e072
+SHA-$(FILE)= acdb8fff6455967ad1a5bfc71855dbcc1253ee56
 
 # Targets
 
@@ -20,13 +16,11 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	patch -Np1 -Z -i ../$(PATCH1)
-	touch doc/flex.1
 ifndef CROSS
 	./configure --prefix=/usr
 else
@@ -35,7 +29,7 @@ else
 endif
 	make $(PM)
 	make install
-	ln -s libfl.a /usr/$(LIB_MAYBE64)/libl.a
+	ln -sfv libfl.a /usr/$(LIB_MAYBE64)/libl.a
 	echo "#!/bin/sh" > /usr/bin/lex
 	echo "# Begin /usr/bin/lex" >> /usr/bin/lex
 	echo "" >> /usr/bin/lex

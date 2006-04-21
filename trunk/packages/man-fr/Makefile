@@ -1,12 +1,12 @@
 # man-fr Makefile
 
 NM= man-fr
-VRS= 1.58
+VRS= 1.58.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).0.tar.bz2
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ccb.club.fr/man/$(FILE)
-SHA-$(FILE)= e95ac5648dff7fb8855abc7a5c4e59aa1dd81125
+SHA-$(FILE)= 4f3347c6f0ce5d007f865d610a69fcf6b37757a8
 
 # Targets
 

@@ -1,12 +1,12 @@
 # Shadow Makefile
 
 NM= shadow
-VRS= 4.0.14
+VRS= 4.0.15
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7d8c504ae03421f9a75cfef3b97b9713782a6e91
+SHA-$(FILE)= 0f7cd3366a032091fdffd2f8edf65056bd576cae
 
 # Targets
 
@@ -25,7 +25,7 @@ ifndef CROSS
 	./configure --libdir=/lib --enable-shared --without-selinux
 else
 	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \
-   	 --enable-shared --without-selinux
+	 --enable-shared --without-selinux
 endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
@@ -53,11 +53,11 @@ endif
 	     -e 's@/var/spool/mail@/var/mail@' \
 	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' \
 	     etc/login.defs > /etc/login.defs
-	mv /usr/bin/passwd /bin
-	mv /$(LIB_MAYBE64)/libshadow.*a /usr/$(LIB_MAYBE64)
-	rm /$(LIB_MAYBE64)/libshadow.so
-	ln -sf ../../$(LIB_MAYBE64)/libshadow.so.0 /usr/$(LIB_MAYBE64)/libshadow.so
-	mkdir -p /etc/default
+	mv -v /usr/bin/passwd /bin
+	mv -v /$(LIB_MAYBE64)/libshadow.*a /usr/$(LIB_MAYBE64)
+	rm -v /$(LIB_MAYBE64)/libshadow.so
+	ln -sfv ../../$(LIB_MAYBE64)/libshadow.so.0 /usr/$(LIB_MAYBE64)/libshadow.so
+	mkdir -pv /etc/default
 	pwconv
 	grpconv
 

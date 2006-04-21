@@ -30,8 +30,7 @@ else
 	 --host=$(LFS_TARGET) --without-debug --without-ada \
 	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
 endif
-	make sources
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -44,6 +43,7 @@ stage2: Makefile $(FILE) $(PATCH50)
 
 compile-stage2:
 # The non-wide library is for commercial software only => not for the Live CD
+# And nothing on the CD uses the C++ binding
 	patch -Np1 -i ../$(PATCH50)
 ifndef CROSS
 	./configure --prefix=/usr --with-shared \
@@ -53,23 +53,20 @@ else
 	    ./configure --prefix=/usr --libdir=/usr/lib64 --with-shared \
 	    --without-debug --enable-widec --without-cxx-binding
 endif
-	# FIXME: still needed?
-	make sources
-	make $(PM)
+	make
 	make install
 	chmod 755 /usr/$(LIB_MAYBE64)/*.$(VRS)
 	mv /usr/$(LIB_MAYBE64)/libncursesw.so.5* /$(LIB_MAYBE64)
-	ln -sf ../../$(LIB_MAYBE64)/libncursesw.so.5 /usr/$(LIB_MAYBE64)/libncursesw.so
+	ln -sfv ../../$(LIB_MAYBE64)/libncursesw.so.5 /usr/$(LIB_MAYBE64)/libncursesw.so
 	for lib in curses ncurses form panel menu ; do \
-	  rm -f /usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
+	  rm -vf /usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
 	  echo "INPUT(-l$${lib}w)" >/usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
-	  ln -sf lib$${lib}w.a /usr/$(LIB_MAYBE64)/lib$${lib}.a ; \
+	  ln -svf lib$${lib}w.a /usr/$(LIB_MAYBE64)/lib$${lib}.a ; \
 	 done
-	rm -f /usr/$(LIB_MAYBE64)/libcursesw.so
 	echo "INPUT(-lncursesw)" >/usr/$(LIB_MAYBE64)/libcursesw.so
-	ln -sf libncurses.so /usr/$(LIB_MAYBE64)/libcurses.so
-	ln -sf libncursesw.a /usr/$(LIB_MAYBE64)/libcursesw.a
-	ln -sf libncurses.a /usr/$(LIB_MAYBE64)/libcurses.a
+	ln -svf libncurses.so /usr/$(LIB_MAYBE64)/libcurses.so
+	ln -svf libncursesw.a /usr/$(LIB_MAYBE64)/libcursesw.a
+	ln -svf libncurses.a /usr/$(LIB_MAYBE64)/libcurses.a
 
 clean:
 	-rm -rf $(DIR)

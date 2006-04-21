@@ -22,7 +22,7 @@ ifndef CROSS
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-   	 --host=$(LFS_TARGET) --cache-file=config.cache
+	 --host=$(LFS_TARGET) --cache-file=config.cache
 endif
 	make $(PM)
 	make install
@@ -40,7 +40,7 @@ ifndef CROSS
 	 --localstatedir=/var/lib/locate
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-    	--libexecdir=/usr/lib64/findutils --localstatedir=/var/lib/locate
+	 --libexecdir=/usr/lib64/findutils --localstatedir=/var/lib/locate
 endif
 	make $(PM)
 	make install

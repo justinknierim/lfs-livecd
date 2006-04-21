@@ -1,16 +1,12 @@
 # dhcpcd Makefile
 
 NM= dhcpcd
-VRS= 1.3.22-pl4
+VRS= 2.0.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= f4462063c7b392f1899bc9e6ada3309d42e92794
-
-PATCH1= $(DIR)-fhs-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 30056e2d658ceab74a65264c5ecfae4dcbfe8cfb
+URL-$(FILE)= http://download.berlios.de/dhcpcd/$(FILE)
+SHA-$(FILE)= dec7254ce08114f1ced5e3c37bf528f33bf1ea96
 
 # Targets
 
@@ -24,9 +20,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix="" --sysconfdir=/var/lib \
-	 --mandir=/usr/share/man
+	./configure --prefix="" --sysconfdir=/var/lib --mandir=/usr/share/man
 	make $(PM)
 	make install
 

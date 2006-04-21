@@ -1,12 +1,12 @@
 # ImLib2 Makefile
 
 NM= imlib2
-VRS= 1.2.1
+VRS= 1.2.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= f3ba13557f9ad3a3f84e1c21f19c1f8b99b92eba
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/enlightenment/$(FILE)
+SHA-$(FILE)= c358aed94f2faf0fb2afcae905c56e8a54c1d763
 
 # Targets
 

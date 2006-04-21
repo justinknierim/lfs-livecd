@@ -1,16 +1,12 @@
 # SCIM-Tables Makefile
 
 NM= scim-tables
-VRS= 0.5.3
+VRS= 0.5.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= aab123b59e4047caf7cf65589c2fef907899325f
-
-# Strictly speaking, not needed: Thai is already supported via XKB
-FILE1= Thai.png
-PATCH1= thai-table.patch
+SHA-$(FILE)= 25c3d800ae465cd9468a93c54398df59e0d3f743
 
 # Targets
 
@@ -24,9 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cp ../$(FILE1) icons
-	patch -Np1 -i ../$(PATCH1)
-	autoreconf -i
 	./configure --prefix=/usr --sysconfdir=/etc
 	make $(PM)
 	make install

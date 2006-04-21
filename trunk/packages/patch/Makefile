@@ -18,10 +18,11 @@ stage1: $(FILE)
 
 compile-stage1:
 ifndef CROSS
+	# CPPFLAGS=-D_GNU_SOURCE is for ppc
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
 else
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-    	 --host=$(LFS_TARGET)
+	 --host=$(LFS_TARGET)
 endif
 	make $(PM)
 	make install

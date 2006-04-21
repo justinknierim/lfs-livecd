@@ -29,12 +29,12 @@ endif
 compile-stage1:
 ifndef CROSS
 	./configure --prefix=$(WD)
-	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
-	echo "#define HAVE_LC_MESSAGES 1" >> config.h
 else
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-   	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
+	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
 endif
+	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
+	echo "#define HAVE_LC_MESSAGES 1" >> config.h
 	make $(PM)
 	make install
 
@@ -51,7 +51,7 @@ ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-   	 --libexecdir=/usr/lib64
+	 --libexecdir=/usr/lib64
 endif
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
