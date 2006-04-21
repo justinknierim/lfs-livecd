@@ -1,12 +1,12 @@
 # Psmisc Makefile
 
 NM= psmisc
-VRS= 22.1
+VRS= 22.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f654685c7c300d9681131465f8c5d5ae5a3f8ace
+SHA-$(FILE)= a9fbc679297fcf1e4d42a1beb29e28358174ee33
 
 # Targets
 
@@ -29,8 +29,7 @@ else
 endif
 	make $(PM)
 	make install
-	mv /bin/pstree* /usr/bin
-	ln -sf pstree /usr/bin/pstree.x11
+	mv -v /bin/pstree* /usr/bin
 
 clean:
 	-rm -rf $(DIR)

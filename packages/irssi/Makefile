@@ -4,9 +4,11 @@ NM= irssi
 VRS= 0.8.10
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR)a.tar.bz2
 URL-$(FILE)= http://irssi.org/files/$(FILE)
-SHA-$(FILE)= 055eef31ed7a52e30d9a63d803306570c7cd3393
+SHA-$(FILE)= c27c3aa19f7e54e4295c9e78f522194b296e9f7f
+
+PATCH1= $(DIR)-gslice-1.patch
 
 # Targets
 
@@ -23,6 +25,7 @@ stage2: Makefile $(FILE)
 # This breaks non-ASCII input.
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --sysconfdir=/etc
 	make $(PM)
 	make install

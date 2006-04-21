@@ -1,12 +1,12 @@
 # SCIM-Input-Pad Makefile
 
 NM= scim-input-pad
-VRS= 0.1.0
+VRS= 0.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= a274978b608ac51066e463a7d969e59b5a873cdb
+SHA-$(FILE)= c8722aaa261cc46bdc49a3586524ed53422b42dc
 
 # Targets
 

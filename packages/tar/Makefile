@@ -16,6 +16,9 @@ PATCH2= $(DIR)-sparse_fix-1.patch
 URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= 269dfcc556b6217d27d043ea623df75e19e3d8c9
 
+PATCH3= $(DIR)-security_fixes-1.patch
+URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
+SHA-$(PATCH3)= 93fd5a55bccf25d03bb7e18dffc0bce27c29d207
 
 # Targets
 
@@ -32,7 +35,7 @@ ifndef CROSS
 else
 	echo "am_cv_func_working_getline=yes" >> config.cache
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-   	 --host=$(LFS_TARGET) --cache-file=config.cache
+	 --host=$(LFS_TARGET) --cache-file=config.cache
 endif
 	make $(PM)
 	make install
@@ -41,18 +44,19 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
 	$(std_build)
-	cp $(SRC)/$(PATCH2) $(LFSSRC)
+	cp $(SRC)/{$(PATCH2),$(PATCH3)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
 ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-   	 --bindir=/bin --libexecdir=/usr/sbin
+	 --bindir=/bin --libexecdir=/usr/sbin
 endif
 	make $(PM)
 	make install

@@ -1,12 +1,12 @@
 # Sed Makefile
 
 NM= sed
-VRS= 4.1.4
+VRS= 4.1.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 3e2c884252920cced7b636826bf9a99d7d3e8437
+SHA-$(FILE)= edb9f49caff130eef7d80f357610611355767fbd
 
 # Targets
 
@@ -21,7 +21,7 @@ ifndef CROSS
 	./configure --prefix=$(WD)
 else
 	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-   	 --host=$(LFS_TARGET)
+	 --host=$(LFS_TARGET)
 endif
 	make $(PM)
 	make install
@@ -36,10 +36,10 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i 's@/doc@&/$(DIR)@' doc/Makefile.in
 ifndef CROSS
-	./configure --prefix=/usr --bindir=/bin
+	./configure --prefix=/usr --bindir=/bin --enable-html
 else
 	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --bindir=/bin
+	 --bindir=/bin --enable-html
 endif
 	make $(PM)
 	make install

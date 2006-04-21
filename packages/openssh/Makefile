@@ -1,12 +1,12 @@
 # OpenSSH Makefile
 
 NM= openssh
-VRS= 4.2p1
+VRS= 4.3p2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= fd50e6d851150e5218994d50e2aebb2878aaea42
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://openbsd.md5.com.ar/pub/OpenBSD/OpenSSH/portable/$(FILE)
+SHA-$(FILE)= 2b5b0751fd578283ba7b106025c0ba391fd72f1f
 
 # Targets
 

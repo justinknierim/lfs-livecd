@@ -61,17 +61,17 @@ endef
 	$(call download,$@,$(URL-$@),$(SHA-$@))
 
 wget-list-entry:
-	@echo $(URL-$(FILE)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(FILE1)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(FILE2)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(FILE3)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(FILE4)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(FILE5)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH1)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH2)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH3)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH4)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH5)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH6)) >>$(MKTREE)/wget-list
-	@echo $(URL-$(PATCH7)) >>$(MKTREE)/wget-list
+	@echo $(URL-$(FILE)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE1)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE2)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE3)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE4)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE5)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH1)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH2)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH3)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH4)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH5)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH6)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH7)) >>$(MPBASE)$(ROOT)/wget-list

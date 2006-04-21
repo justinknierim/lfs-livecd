@@ -1,5 +1,4 @@
 export VERSION := sparc64-CLFS20051009-pre1
-export KVERS := 2.6.13.3
 export CROSS := yes
 export CROSS_WD := /cross-tools
 export 32FLAGS := -m32 -mcpu=ultrasparc -mtune=ultrasparc
@@ -10,5 +9,4 @@ export LIB_MAYBE64 := lib64
 export LFS_HOST ?= sparcv9-cross--linux-gnu
 export LFS_TARGET := sparc64-unknown-linux-gnu
 export LFS_TARGET32 := sparcv9-unknown-linux-gnu
-export KERNEL_ARCH := sparc64
 export WHICH := $(CROSS_WD)/bin/which

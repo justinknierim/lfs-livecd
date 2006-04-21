@@ -30,7 +30,7 @@ ifndef CROSS
 else
 	cp Makefile{,.bak}
 	sed -e 's@^\(all:.*\) test@\1@g' \
-    	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile.bak > Makefile
+	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile.bak > Makefile
 	make CC="$${CC} $(64FLAGS)" AR="${AR}" RANLIB="${RANLIB}"
 endif
 	make PREFIX=$(WD) install
@@ -46,6 +46,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+	sed -i 's@tempfile -d /tmp -p bz@mktemp -p /tmp@' bzdiff
 ifndef CROSS
 	make $(PM) -f Makefile-libbz2_so
 	make clean
@@ -59,12 +60,12 @@ else
 	make CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)"
 endif
 	make install
-	cp bzip2-shared /bin/bzip2
-	cp -a libbz2.so* /$(LIB_MAYBE64)
-	ln -s ../../$(LIB_MAYBE64)/libbz2.so.1.0 /usr/$(LIB_MAYBE64)/libbz2.so
-	rm /usr/bin/{bunzip2,bzcat,bzip2}
-	ln -s bzip2 /bin/bunzip2
-	ln -s bzip2 /bin/bzcat
+	cp -v bzip2-shared /bin/bzip2
+	cp -av libbz2.so* /$(LIB_MAYBE64)
+	ln -sv ../../$(LIB_MAYBE64)/libbz2.so.1.0 /usr/$(LIB_MAYBE64)/libbz2.so
+	rm -v /usr/bin/{bunzip2,bzcat,bzip2}
+	ln -sv bzip2 /bin/bunzip2
+	ln -sv bzip2 /bin/bzcat
 
 clean:
 	-rm -rf $(DIR)

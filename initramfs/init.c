@@ -23,30 +23,68 @@ const char *lfscd;
 
 int mountlfscd(void);
 
+int losetup(char * loop, char * file, int flags)
+{
+	struct loop_info loopinfo;
+	int fd, ffd;
+	
+	memset(&loopinfo, 0, sizeof(loopinfo));
+
+	ffd = open(file, flags);
+	if (ffd<0) {
+		printf("Failed to open the %s file: %s\n", file, strerror(errno));
+		return(0);
+	}
+	
+	fd = open(loop, flags);
+	if (fd<0) {
+		printf("Failed to open the loop device: %s\n", strerror(errno));
+		return(0);
+	}
+
+	snprintf(loopinfo.lo_name, LO_NAME_SIZE, "%s", file);
+
+	loopinfo.lo_offset = 0;
+	loopinfo.lo_encrypt_key_size = 0;
+	loopinfo.lo_encrypt_type = LO_CRYPT_NONE;
+
+	if(ioctl(fd, LOOP_SET_FD, ffd) < 0) {
+		printf("Failed to set up device: %s\n", strerror(errno));
+		return(0);
+	}
+	close(ffd);
+
+        if(ioctl(fd, LOOP_SET_STATUS, &loopinfo) < 0) {
+                printf("Failed to set up device: %s\n", strerror(errno));
+		(void) ioctl(fd, LOOP_CLR_FD, 0);
+		close(fd);
+                return(0);
+        }
+        close(fd);
+	return(1);
+}
+
 int main(int argc, char * argv[], char * envp[])
 {
 	char **cmd = malloc( sizeof(char *) * (argc+1) );
-	int i, fd, ffd;
-	struct loop_info loopinfo;
-	
-	umask(0);
+	int i, overhead;
+	int fd;
+	struct dm_task * dmt;
+	struct stat stat_buf;
+	char buf[65536];
 	
 	printf("Initramfs activated\n");
 
-	printf("Mounting tmpfs...\n");
-	i = mount("tmpfs", TMPFS, "tmpfs", 0, "size=90%"); /* Mount a tmpfs */
-	if (i<0) {
+	mkdir("/proc", 0755);
+	mount("proc", "/proc", "proc", 0, 0);
+	
+	mkdir(TMPFS, 0755);
+	if (mount("tmpfs", TMPFS, "tmpfs", 0, "size=90%") < 0) {
 		printf("Failed to mount tmpfs: %s\n", strerror(errno));
 		return (0);
 	}
-	mkdir(OVERLAY, 0755);			     /* Create a .overlay directory */
-	mkdir(DEV, 0755);			     /* Create a /dev directory */
-	mkdir(SHM, 0755);			     /* Create a /dev/shm directory */
-	mkdir(PROC, 0755);			     /* Create a /proc directory */
-	mkdir(TMP, 01777);			     /* Create a /tmp directory */
-	mkdir(CDROM_MOUNT, 0755);		     /* Create a .cdrom directory */
-	mkdir(SQFS, 0755);			     /* Create a .sqfs directory */
-	mkdir("/.tmpfs/.tmp",01777);		     /* Create a .tmp directory */
+	
+	mkdir(CDROM_MOUNT, 0755);
 
 	printf("Searching for the CD named %s...\n", VOLUME_ID);
 
@@ -70,91 +108,74 @@ int main(int argc, char * argv[], char * envp[])
 
 	/* If we're here, we have the LiveCD mounted and verifieid */
 	
-	/* Now, attempt to attach the squashfs root file to /dev/loop0 */
+	/* Now, attempt to attach the root file to /dev/loop0 */
 
-	printf("Setting up the loopback device...\n");
-
-	ffd = open(SQFS_FILE, O_RDONLY);
-	if (ffd<0) {
-		printf("Failed to open the squashfs file: %s\n", strerror(errno));
-		return(0);
-	}
+	printf("Setting up the loopback devices...\n");
 	
-	fd = open(LOOP, O_RDONLY);
-	if (fd<0) {
-		printf("Failed to open the loop device: %s\n", strerror(errno));
-		return(0);
-	}
-
-	memset(&loopinfo, 0, sizeof(loopinfo));
-	snprintf(loopinfo.lo_name, LO_NAME_SIZE, "%s", SQFS_FILE);
-
-	loopinfo.lo_offset = 0;
-	loopinfo.lo_encrypt_key_size = 0;
-	loopinfo.lo_encrypt_type = LO_CRYPT_NONE;
-
-	if(ioctl(fd, LOOP_SET_FD, ffd) < 0) {
-		printf("Failed to set up device: %s\n", strerror(errno));
-		return(0);
-	}
-	close(ffd);
-
-        if(ioctl(fd, LOOP_SET_STATUS, &loopinfo) < 0) {
-                printf("Failed to set up device: %s\n", strerror(errno));
-		(void) ioctl(fd, LOOP_CLR_FD, 0);
-		close(fd);
-                return(0);
-        }
-        close(fd);
-
-	/* Mount the squashfs root file system */
-
-	printf("Mounting squashfs file...\n");
-	i = mount(LOOP, SQFS, "squashfs", MS_RDONLY, NULL);
+	losetup("/dev/loop0", ROOT_FILE, O_RDONLY);
+	
+	/* Create a sparse file for the second loop */
+	
+	stat(ROOT_FILE, &stat_buf);
+	overhead = 0x1000 + stat_buf.st_size / 0x100;
+	
+	fd = open(OVERLAY, O_CREAT | O_WRONLY, 0600);
+	ftruncate(fd, stat_buf.st_size + overhead);
+	close(fd);
+	
+	losetup("/dev/loop1", OVERLAY, O_RDWR);
+	
+	/* Set up device-mapper */
+        dmt = dm_task_create(DM_DEVICE_CREATE);
+        dm_task_set_name(dmt, "lfs-cd");
+        dm_task_set_major(dmt, 254);
+        dm_task_set_minor(dmt, 0);
+        dm_task_add_target(dmt, 0, stat_buf.st_size / 0x200,
+	    "snapshot", "/dev/loop0 /dev/loop1 p 8");
+        dm_task_run(dmt);
+        dm_task_destroy(dmt);
+							
+	printf("Mounting root filesystem...\n");
+	mkdir(ROOT, 0755);
+	i = mount("/dev/mapper/lfs-cd", ROOT, "ext2", 0, 0);
 	if (i<0) {
-		printf("Failed to mount squashfs: %s\n", strerror(errno));
+		printf("Failed to mount root fs: %s\n", strerror(errno));
 		return(0);
 	}
 
-	/* Activate unionfs */
+	/* Move the tmpfs to /dev/shm in the root fs */
 
-	printf("Mounting unionfs...\n");
-	i = mount("unionfs", "/.union", "unionfs", 0, "dirs=/.tmpfs/.overlay=rw:/.tmpfs/.cdrom=ro:/.tmpfs/.sqfs=ro");
-	if (i<0) {
-		printf("Failed to mount unionfs: %s\n", strerror(errno));
-		return(0);
-	}
-
-	/* Move the tmpfs to /dev/shm in the unionfs */
-
-	mount(TMPFS, "/.union/dev/shm", NULL, MS_MOVE, NULL);
+	mount("/.tmpfs", ROOT "/dev/shm", NULL, MS_MOVE, NULL);
 
 	/* Create a symlink for the CD drive to /dev/lfs-cd */
 
-	symlink(lfscd, "/.union/dev/lfs-cd");
+	symlink(lfscd, ROOT "/dev/lfs-cd");
 
-	mount("/.union/dev/shm/.tmp", "/.union/tmp", NULL, MS_BIND, NULL);
 
-	/* Chroot into the unionfs */
+	/* Remove the "/init" binary to free some RAM */
+	unlink ("/init");
+	umount2("/proc", 0);
+	
+	/* Chroot into the root fs */
 
-	chdir("/.union");
-
+	chdir(ROOT);
 	mount(".", "/", NULL, MS_MOVE, NULL);
 
 	if ( chroot(".") || chdir("/") )
 		return(0);
 	
-	
 	/* We're done! Pass control to sysvinit. */
 
 	printf("Starting init...\n");
+	
+	/* FIXME: file descriptors still point to initramfs */
 	cmd[0] = malloc( sizeof(char) * 11);
 	cmd[0] = strncpy(cmd[0], "/sbin/init", 11);
 
-        for (i=1; i <= argc; i++) {
-                cmd[i] = argv[i];
-        }
-        i = execve(cmd[0], cmd, envp);
+	for (i=1; i <= argc; i++) {
+		cmd[i] = argv[i];
+	}
+	i = execve(cmd[0], cmd, envp);
 	printf("Failed to start init: %s :(\n", strerror(errno));
 
 	return(0);

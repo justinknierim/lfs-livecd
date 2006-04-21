@@ -1,12 +1,12 @@
 # Subversion Makefile
 
 NM= subversion
-VRS= 1.2.3
+VRS= 1.3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 513a217ba4a8045ea3daba5c3b0816f80ce0041b
+SHA-$(FILE)= f8d670a0ae931fca17192d02862aa93a229e5dda
 
 # Targets
 
@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	$(ARCH_CC) ./configure --prefix=/usr $(EXTRA_CONF)
+	$(ARCH_CC) ./configure --prefix=/usr --with-ssl --without-berkeley-db $(EXTRA_CONF)
 	make $(PM)
 	make install
 	install -v -d -m755 /usr/share/doc/$(DIR)

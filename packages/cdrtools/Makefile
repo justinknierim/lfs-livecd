@@ -40,8 +40,8 @@ compile-stage2:
 	    LC_ALL=de_DE iconv -f ISO-8859-1 -t US-ASCII//TRANSLIT $$F >tmp ; \
 	    mv tmp $$F ; done
 	patch -Np1 -i ../$(PATCH1)
-	make $(PM) INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root
-	make INS_BASE=/usr DEFINSUSR=root DEFINSGRP=root install
+	make $(PM) INS_BASE=/tools DEFINSUSR=root DEFINSGRP=root
+	make INS_BASE=/tools DEFINSUSR=root DEFINSGRP=root install
 
 clean:
 	-rm -rf $(DIR)

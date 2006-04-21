@@ -1,3 +1,4 @@
+
 #
 # Makefiles for automating the LFS LiveCD build
 #
@@ -11,6 +12,9 @@
 #
 # Unless otherwise noted, please try to keep all line lengths below 80 chars. 
 #
+
+# Machine architecure, LiveCD version, and specific arch variables.
+#==============================================================================
 
 # Place your personal customizations in Makefile.personal
 # instead of editing this Makefile.
@@ -29,7 +33,8 @@
 # HTTPBLFS: Default http server for the BLFS packages
 
 export LFS-ARCH ?= x86
-export MP ?= /mnt/lfs
+export MPBASE ?= /mnt/lfs
+export MP ?= $(MPBASE)/image
 export timezone ?= GMT
 export pagesize ?= letter
 export ROOT ?= /lfs-livecd
@@ -46,11 +51,11 @@ export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
 
+ROOTFS_MEGS := 1536
+
 export CROSSVARS := vars/vars.$(LFS-ARCH)
 
 include $(CROSSVARS)
-
-export KVERS ?= 2.6.12.5
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
@@ -108,15 +113,85 @@ test-host:
 	@if [ `whoami` != "root" ] ; then \
 	 echo "You must be logged in as root." && exit 1 ; fi
 
+# This image should be kept as clean as possible, i.e.:
+# avoid creating files on it that you will later delete,
+# preserve as many zeroed sectors as possible.
+root.ext2:
+	dd if=/dev/null of=root.ext2 bs=1M seek=$(ROOTFS_MEGS)
+	echo y | mke2fs root.ext2
+	tune2fs -c 0 -i 0 root.ext2
+
+# This target populates the root.ext2 image and sets up some mounts
+# Basically, replaces the prep-chroot and createdirs targets
+$(MP)$(ROOT): root.ext2
+	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
+	mount -o loop root.ext2 $(MP)
+	-rm $(MP)/boot
+	mkdir -p $(MP)$(ROOT) $(MP)$(SRC) $(MP)$(WD) $(MP)/boot
+	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
+	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
+	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
+	mount --bind $(MPBASE)/iso/boot $(MP)/boot
+	mkdir -p $(MP)$(WD)/bin
+	mkdir -p $(MP)$(LFSSRC)
+	-ln -nsf $(MPBASE)$(WD) /
+	-ln -nsf $(MPBASE)$(SRC) /
+	-ln -nsf $(MPBASE)$(ROOT) /
+	-ln -nsf $(MP)$(LFSSRC) /
+ifdef CROSS
+	mkdir -p $(MPBASE)$(CROSS_WD)/bin $(MP)$(CROSS_WD)
+	mount --bind $(MPBASE)$(CROSS_WD) $(MP)$(CROSS_WD)
+	-ln -nsf $(MP)$(CROSS_WD) /
+endif
+	-mkdir -p $(MP)/{proc,sys,dev/shm,dev/pts}
+	-mount -t proc proc $(MP)/proc
+	-mount -t sysfs sysfs $(MP)/sys
+	-mount -t tmpfs tmpfs $(MP)/dev/shm
+	-mount -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
+	-install -d $(MP)/{bin,etc/opt,home,lib,mnt}
+	-install -d $(MP)/{sbin,srv,usr/local,var,opt}
+	-install -d $(MP)/root -m 0750
+	-install -d $(MP)/tmp $(MP)/var/tmp -m 1777
+	-install -d $(MP)/media/{floppy,cdrom}
+	-install -d $(MP)/usr/{bin,include,lib,sbin,share,src}
+	-ln -s share/{man,doc,info} $(MP)/usr
+	-install -d $(MP)/usr/share/{doc,info,locale,man}
+	-install -d $(MP)/usr/share/{misc,terminfo,zoneinfo}
+	-install -d $(MP)/usr/share/man/man{1,2,3,4,5,6,7,8}
+	-install -d $(MP)/usr/local/{bin,etc,include,lib,sbin,share,src}
+	-ln -s share/{man,doc,info} $(MP)/usr/local
+	-install -d $(MP)/usr/local/share/{doc,info,locale,man}
+	-install -d $(MP)/usr/local/share/{misc,terminfo,zoneinfo}
+	-install -d $(MP)/usr/local/share/man/man{1,2,3,4,5,6,7,8}
+	-install -d $(MP)/var/{lock,log,mail,run,spool}
+	-install -d $(MP)/var/{opt,cache,lib/{misc,locate},local}
+	-install -d $(MP)/opt/{bin,doc,include,info}
+	-install -d $(MP)/opt/{lib,man/man{1,2,3,4,5,6,7,8}}
+ifdef CROSS
+	-install -d $(MP)/{,usr/{,local},opt}/$(LIB_MAYBE64)
+	-install -d /usr/lib/locale
+	-ln -s ../lib/locale /usr/$(LIB_MAYBE64)
+endif
+	# The "662" permissions in LFS are a security hole due to "loadkeys":
+	# A remote attacker can remap any key to "<CTRL+C>rm -rf /<ENTER>"
+	# and wait for root to press that key.
+	-mknod -m 600 $(MP)/dev/console c 5 1
+	-mknod -m 666 $(MP)/dev/null c 1 3
+	-mknod -m 666 $(MP)/dev/zero c 1 5
+	-mknod -m 666 $(MP)/dev/ptmx c 5 2
+	-mknod -m 666 $(MP)/dev/tty c 5 0
+	-mknod -m 444 $(MP)/dev/random c 1 8
+	-mknod -m 444 $(MP)/dev/urandom c 1 9
+	# No chown because this will not affect the permissions in any way.
+	-ln -s /proc/self/fd $(MP)/dev/fd
+	-ln -s /proc/self/fd/0 $(MP)/dev/stdin
+	-ln -s /proc/self/fd/1 $(MP)/dev/stdout
+	-ln -s /proc/self/fd/2 $(MP)/dev/stderr
+	-ln -s /proc/kcore $(MP)/dev/core
+
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
-lfs-base: lfsuser ln-root
-	@if [ ! -d $(MP)$(WD)/bin ] ; then mkdir -p $(MP)$(WD)/bin ; fi
-	@if [ ! -d $(MP)$(SRC) ] ; then mkdir $(MP)$(SRC) ; fi
-	@if [ ! -d $(MP)$(LFSSRC) ] ; then mkdir $(MP)$(LFSSRC) ; fi
-	@-ln -nsf $(MP)$(WD) /
-	@-ln -nsf $(MP)$(SRC) /
-	@-ln -nsf $(MP)$(LFSSRC) /
+lfs-base: $(MP)$(ROOT) lfsuser
 ifndef CROSS
 	@-make unamemod
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
@@ -124,12 +199,8 @@ ifndef CROSS
 	@cp $(ROOT)/scripts/unpack $(WD)/bin
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
 	@touch $(PKG)/wget/.pass2
-	@make prep-chroot
-	@-mkdir $(MP)/etc
 	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
-	@-mkdir $(MP)/bin
-	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
-	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
+	@-ln -s $(WD)/bin/bash $(MP)/bin/bash
 	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
 	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
 	 cd $(ROOT) && make pre-bash $(chbash-pre-bash)'
@@ -137,20 +208,14 @@ ifndef CROSS
 	 make post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 else
-	@if [ ! -d $(MP)$(CROSS_WD)/bin ] ; then mkdir -p $(MP)$(CROSS_WD)/bin ; fi
-	@-ln -nsf $(MP)$(CROSS_WD) /
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(CROSS_WD) $(MP)$(CROSS_WD) $(CROSS_WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
 	@cp $(ROOT)/scripts/unpack $(WD)/bin
 	@cp $(ROOT)/scripts/unpack $(CROSS_WD)/bin
 	@su - lfs -c "$(crossenv) '$(lfsbash) && $(MAKE) cross-tools'"
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
-	@make prep-chroot
-	@-mkdir $(MP)/etc
 	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
-	@-mkdir $(MP)/bin
-	@if [ ! -f $(MP)/bin/bash ] ; then if [ ! -d $(MP) ] ; then \
-	 mkdir $(MP)/bin ; fi ; ln -s ${WD}/bin/bash ${MP}/bin/bash ; fi
+	@-ln -s $(WD)/bin/bash $(MP)/bin/bash
 	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
 	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
 	 cd $(ROOT) && make cross-pre-bash $(chbash-pre-bash)'
@@ -159,10 +224,10 @@ else
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 endif
 
-ln-root:
-	@-ln -nsf $(MP)$(ROOT) /
+stop-here:
+	exit 1
 
-extend-lfs: prep-chroot
+extend-lfs: $(MP)$(ROOT)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 ifndef CROSS
@@ -178,8 +243,6 @@ ifeq ($(LFS-ARCH),x86_64)
 	 make x86_64-blfs $(chbash-post-bash)'
 endif
 endif
-	@make unmount
-	@touch $@
 
 extend-minimal: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
@@ -205,10 +268,9 @@ ifdef CROSS
 	@-ln -s $(WD)/bin/wget $(CROSS_WD)/bin
 endif
 	@touch $@
-	
+
 unamemod:
-	@if [ ! -d ${WD}/bin ] ; then mkdir ${WD}/bin ; fi
-	@install -m 755 uname/uname ${WD}/bin/
+	@install -m 755 uname/uname $(WD)/bin/
 	@touch $@
 
 cross-tools: pre-which pre-wget lfs-linux-libc-headers-scpt lfs-binutils-cross \
@@ -218,12 +280,12 @@ ifndef CROSS
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
-	lfs-binutils-pass2 lfs-gawk-scpt lfs-coreutils-scpt \
-	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt \
-	lfs-make-scpt lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt \
-	lfs-ncurses-scpt lfs-patch-scpt lfs-tar-scpt lfs-texinfo-scpt \
-	lfs-bash-scpt lfs-m4-scpt lfs-util-linux-scpt lfs-perl-scpt \
-	lfs-wget-scpt lfs-strip
+	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
+	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
+	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
+	lfs-m4-scpt lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
+	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
+	lfs-strip
 	@cp /etc/resolv.conf $(WD)/etc
 else
 tools: lfs-binutils-scpt lfs-gcc-scpt lfs-gawk-scpt lfs-coreutils-scpt \
@@ -233,30 +295,19 @@ tools: lfs-binutils-scpt lfs-gcc-scpt lfs-gawk-scpt lfs-coreutils-scpt \
 	@cp /etc/resolv.conf $(WD)/etc
 endif
 
-
-prep-chroot:
-	@-mkdir -p $(MP)/{proc,sys}
-	@-mount -t proc proc $(MP)/proc
-	@-mount -t sysfs sysfs $(MP)/sys
-	@-mount -f -t tmpfs none $(MP)/dev
-	@-mount -f -t tmpfs tmpfs $(MP)/dev/shm
-	@-mount -f -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
-	@touch $@
-
-pre-bash: createdirs createfiles popdev ch-linux-libc-headers ch-man-pages \
+pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-coreutils \
-	ch-zlib ch-mktemp ch-iana-etc ch-findutils ch-gawk \
-	ch-m4 ch-bison ch-gpm ch-ncurses ch-readline ch-vim ch-less \
-	ch-db ch-groff \
-	ch-sed ch-flex ch-gettext ch-inetutils ch-iproute2 ch-perl ch-texinfo \
-	ch-autoconf ch-automake ch-bash
+	ch-iana-etc ch-m4 ch-bison ch-ncurses ch-procps ch-sed ch-libtool \
+	ch-perl ch-readline ch-zlib ch-autoconf ch-automake ch-bash
 
-post-bash: ch-file ch-grep ch-libtool ch-bzip2 ch-diffutils ch-kbd \
-	ch-e2fsprogs ch-grub ch-gzip ch-hotplug ch-man-db ch-make \
-	ch-module-init-tools ch-patch ch-procps ch-psmisc ch-shadow \
-	ch-sysklogd ch-sysvinit ch-tar ch-udev ch-util-linux final-environment
+post-bash: ch-bzip2 ch-diffutils ch-e2fsprogs ch-file ch-findutils ch-flex \
+	ch-grub ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
+	ch-iproute2 ch-kbd ch-less ch-make ch-man-db ch-mktemp \
+	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
+	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
+	final-environment
 
-cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
+cross-pre-bash: createfiles lfs-tcl-scpt lfs-expect-scpt \
 	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
 	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
 	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline \
@@ -267,14 +318,23 @@ cross-pre-bash: createdirs createfiles popdev lfs-tcl-scpt lfs-expect-scpt \
 cross-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
 	ch-grep ch-gzip ch-man-db ch-make ch-module-init-tools ch-patch ch-procps \
 	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
-	ch-hotplug final-environment
+	final-environment
 ifeq ($(LFS-ARCH),x86_64)
 	make ch-grub
 endif
 
+minimal-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs \
+	ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
+	ch-livecd-bootscripts \
+	ch-curl ch-zip ch-unzip ch-docbook-xml ch-libxslt ch-docbook-xsl \
+	ch-html_tidy ch-LFS-BOOK ch-openssh \
+	ch-dhcpcd ch-cpio ch-eject ch-nALFS ch-dialog ch-device-mapper \
+	ch-linux ch-cdrtools ch-zisofs-tools ch-initramfs \
+	ch-syslinux ch-nALFS-profile ch-blfs-bootscripts
+
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
 	ch-fontconfig ch-Xorg-modular ch-freefont ch-inputattach ch-fonts-dejavu \
 	ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk ch-libjpeg ch-libtiff ch-libart_lgpl \
@@ -287,9 +347,10 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo \
 	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-	ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
+	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
-	ch-ctags ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils \
+	ch-ctags ch-initramfs ch-zisofs-tools ch-cdrtools ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
@@ -300,7 +361,7 @@ endif
 
 blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 \
-	ch-expat ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-expat ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh ch-glib2 ch-cvs \
 	ch-popt ch-samba ch-irssi ch-wireless_tools ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
@@ -314,30 +375,31 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
         ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
         ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
-        make ch-yaboot
+	make ch-yaboot
 endif
-
 
 x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl \
 	ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
-	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-squashfs ch-cpio \
+	ch-livecd-bootscripts \
+	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy cd-LFS-BOOK ch-cpio \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-linux ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-syslinux
+	ch-linux ch-ctags ch-device-mapper ch-initramfs ch-cdrtools ch-zisofs-tools \
+	ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-docbook-xml ch-libxslt \
+	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh \
 	ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
 	ch-portmap ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils \
 	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
-	ch-libaal ch-reiser4progs ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin \
+	ch-libaal ch-reiser4progs ch-cpio ch-mutt ch-msmtp ch-tin \
 	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+	ch-ctags ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-elftoaout ch-silo
 
-wget-list: ln-root
+wget-list:
 	@>wget-list ; \
 	 for DIR in packages/* ; do \
 	    make -C $${DIR} wget-list-entry || echo Never mind. ; \
@@ -361,11 +423,11 @@ lfs-%-only-pass2: unamemod lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass2'"
 
 # The following takes the form 'make [package name]-only-ch'	
-%-only-ch: prep-chroot
+%-only-ch: $(MP)$(ROOT)
 	make -C $(PKG)/$* chroot
 	make unmount
 
-gvim: prep-chroot
+gvim: $(MP)$(ROOT)
 	make -C $(PKG)/vim chroot3
 	make unmount
 
@@ -379,38 +441,14 @@ gvim: prep-chroot
 # scripts internally.
 #==============================================================================
 
-createdirs:
-	@-$(WD)/bin/install -d /{bin,boot,dev,etc/opt,home,lib,mnt}
-	@-$(WD)/bin/install -d /{sbin,srv,usr/local,var,opt}
-	@-$(WD)/bin/install -d /root -m 0750
-	@-$(WD)/bin/install -d /tmp /var/tmp -m 1777
-	@-$(WD)/bin/install -d /media/{floppy,cdrom}
-	@-$(WD)/bin/install -d /usr/{bin,include,lib,sbin,share,src}
-	@-$(WD)/bin/ln -s share/{man,doc,info} /usr
-	@-$(WD)/bin/install -d /usr/share/{doc,info,locale,man}
-	@-$(WD)/bin/install -d /usr/share/{misc,terminfo,zoneinfo}
-	@-$(WD)/bin/install -d /usr/share/man/man{1,2,3,4,5,6,7,8}
-	@-$(WD)/bin/install -d /usr/local/{bin,etc,include,lib,sbin,share,src}
-	@-$(WD)/bin/ln -s share/{man,doc,info} /usr/local
-	@-$(WD)/bin/install -d /usr/local/share/{doc,info,locale,man}
-	@-$(WD)/bin/install -d /usr/local/share/{misc,terminfo,zoneinfo}
-	@-$(WD)/bin/install -d /usr/local/share/man/man{1,2,3,4,5,6,7,8}
-	@-$(WD)/bin/install -d /var/{lock,log,mail,run,spool}
-	@-$(WD)/bin/install -d /var/{opt,cache,lib/{misc,locate},local}
-	@-$(WD)/bin/install -d /opt/{bin,doc,include,info}
-	@-$(WD)/bin/install -d /opt/{lib,man/man{1,2,3,4,5,6,7,8}}
+createfiles:
 	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
 ifdef CROSS
-	@-$(WD)/bin/install -d /{,usr/{,local},opt}/lib64
-	@-$(WD)/bin/install -d /usr/lib/locale
-	@-$(WD)/bin/ln -s ../lib/locale /usr/lib64
 	@-$(WD)/bin/ln -s $(WD)/lib64/libgcc_s.so{,.1} /usr/lib64
 endif
-
-createfiles:
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
@@ -418,27 +456,6 @@ ifdef CROSS
 	@chmod 600 /var/log/btmp
 endif
 	@mv $(WD)/etc/resolv.conf /etc
-
-popdev:
-	@if [ ! -c /dev/console ] ; then mknod -m 600 /dev/console c 5 1 && \
-	 mknod -m 666 /dev/null c 1 3 ; fi
-	@if ! tail -n 3 /proc/mounts | grep -q "dev tmpfs" ; then \
-	 mount -n -t tmpfs tmpfs /dev && \
-	 mknod -m 662 /dev/console c 5 1 ; \
-	 mknod -m 666 /dev/null c 1 3 ; \
-	 mknod -m 666 /dev/zero c 1 5 ; \
-	 mknod -m 666 /dev/ptmx c 5 2 ; \
-	 mknod -m 666 /dev/tty c 5 0 ; \
-	 mknod -m 444 /dev/random c 1 8 ; \
-	 mknod -m 444 /dev/urandom c 1 9 ; \
- 	 chown root:tty /dev/{console,ptmx,tty} ; \
-	 ln -s /proc/self/fd /dev/fd ; \
-	 ln -s /proc/self/fd/0 /dev/stdin ; \
-	 ln -s /proc/self/fd/1 /dev/stdout ; \
-	 ln -s /proc/self/fd/2 /dev/stderr ; \
-	 ln -s /proc/kcore /dev/core ; \
-	 mkdir /dev/pts && mount -t devpts -o gid=4,mode=620 none /dev/pts ; \
-	 mkdir /dev/shm && mount -t tmpfs none /dev/shm ; fi
 
 # Do not call the targets below manually! They are used internally and must be
 # called by other targets.
@@ -474,10 +491,10 @@ lfs-strip:
 	@-rm -rf $(WD)/{doc,info,man}
 	@touch $@
 
-ch-%: popdev
+ch-%:
 	make -C $(PKG)/$* stage2
 
-ch-glibc-32: popdev
+ch-glibc-32:
 	make -C $(PKG)/glibc stage2-32
 
 re-adjust-toolchain:
@@ -509,7 +526,7 @@ chroot-gvim:
 # Targets to create the iso
 #==============================================================================
 
-prepiso: unmount
+prepiso: $(MP)$(ROOT)
 	@-rm $(MP)/root/.bash_history
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
@@ -537,31 +554,25 @@ endif
 ifndef CROSS
 	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
 endif
-	@-mkdir $(MP)/iso
-	@cp -rav $(MP)/lfs-sources $(MP)/iso
-	@cp -rav $(MP)/boot $(MP)/iso
-	@touch $@
 
-$(MP)/iso/.root.sqfs:
-	@$(WD)/bin/mksquashfs $(MP) .root.sqfs -info -e \
-	 boot cross-tools sources lfs-sources tools iso lfs-livecd lost+found tmp proc >sqfs.log 2>&1 && \
-	 mv .root.sqfs $@
-
-iso: prepiso $(MP)/iso/.root.sqfs
+iso: prepiso
+	@make unmount
+	@sync
+	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 ifeq ($(LFS-ARCH),x86)
-	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
-	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
+	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
 endif
 ifeq ($(LFS-ARCH),x86_64)
-	@cd $(MP)/iso ; $(MP)/usr/bin/mkisofs -R -l --allow-leading-dots -D -o \
-	$(MKTREE)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
+	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
 endif
 ifeq ($(LFS-ARCH),ppc)
-	@cd $(MP) ; ./usr/bin/mkisofs -hfs -part --allow-leading-dots \
+	@cd $(MP) ; ./usr/bin/mkisofs -z -hfs -part --allow-leading-dots \
 	-map $(MKTREE)/$(PKG)/yaboot/map.hfs -no-desktop \
 	-hfs-volid "lfslivecd-$(VERSION)" -V "lfslivecd-$(VERSION)" \
 	-hfs-bless iso/boot -r -v -o $(MKTREE)/lfslivecd-$(VERSION).iso iso \
@@ -570,7 +581,7 @@ ifeq ($(LFS-ARCH),ppc)
 	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
 endif
 ifeq ($(LFS-ARCH),sparc64)
-	@cd $(MP) ; ./usr/bin/mkisofs -v -R -l -D --allow-leading-dots \
+	@cd $(MP) ; ./usr/bin/mkisofs -z -v -R -l -D --allow-leading-dots \
 	 -G iso/boot/isofs.b -B ... -r -V "lfslivecd-$(VERSION)" \
 	 -o $(MKTREE)/lfslivecd-$(VERSION).iso iso >$(MKTREE)/iso.log 2>&1
 endif
@@ -586,29 +597,25 @@ endif
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,unamemod,prep-chroot,lfs-base,extend-lfs,lfs-strip,}
+	@-rm {prepiso,lfsuser,unamemod,lfs-base,extend-lfs,lfs-strip,}
 	@-rm {sqfs.log,lfs-strip,pre-wget}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
-	@-rm $(PKG)/initramfs/stage2
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
-	@find $(PKG)/*/ -type l -exec rm -fr \{} \;
 ifdef CROSS
 	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
 	@rm -f $(PKG)/glibc/headers
 	@rm -f adjusting-toolchain
 endif
 	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
-	@rm -f $(PKG)/wget/{prebuild,.pass2}
-	@rm -f $(PKG)/binutils/{a.out,dummy.c,.specstest}
-	@rm -f initramfs/stage2
+	@rm -f $(PKG)/wget/prebuild
+	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
 	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
 
 scrub: clean
-	@-for i in bin boot dev etc home iso lib media mnt opt proc root sbin srv sys tmp \
-	 usr var ; do rm -rf $(MP)/$$i ; done
+	@-rm root.ext2
 	@-rm lfslivecd-$(VERSION).iso
 
 clean_sources:
@@ -618,13 +625,24 @@ clean_sources:
 unmount:
 	@-umount $(MP)/dev/shm
 	@-umount $(MP)/dev/pts
-	@-umount $(MP)/dev
 	@-umount $(MP)/proc
 	@-umount $(MP)/sys
-	@rm -f $(ROOT)/prep-chroot
+	@-umount $(MP)/boot
+	@-umount $(MP)$(SRC)
+	@-umount $(MP)$(WD)
+	@-umount $(MP)$(ROOT)
+	@-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
+	@-rmdir $(MP)/boot
+	@-ln -s /dev/shm/.cdrom/boot $(MP)
+	@-umount $(MP)
+
+zeroes: $(MP)$(ROOT)
+	-dd if=/dev/zero of=$(MP)/zeroes
+	-rm $(MP)/zeroes
+	-make unmount
 
 .PHONY: unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
 	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
-	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 popdev createfiles createdirs \
+	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 createfiles \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
-	lfs-rm-wget blfs post-bash pre-bash tools pre-which
+	lfs-rm-wget blfs post-bash pre-bash tools pre-which zeroes

@@ -39,10 +39,11 @@ else
 endif
 	make $(PM)
 	make install
-	ln -sf ../../../doc/vim-$(VRS) /usr/share/vim/$(DIR)/doc
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
-	ln -sf vim /usr/bin/vi
+	ln -sfv vim /usr/bin/vi
+	ln -sfv vim.1 /usr/share/man/man1/vi.1
+	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
 stage3: Makefile $(FILE) $(FILE2)
@@ -55,10 +56,11 @@ compile-stage3:
 	./configure --prefix=/usr --with-features=huge
 	make $(PM)
 	make install
-	ln -sf ../../../doc/vim-$(VRS) /usr/share/vim/$(DIR)/doc
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
-	ln -sf vim /usr/bin/vi
+	ln -sfv vim /usr/bin/vi
+	ln -sfv vim.1 /usr/share/man/man1/vi.1
+	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
 clean:

@@ -97,7 +97,8 @@ instructions below.
     mkdir second-session && cd second-session
     vim path/to/new-file
     vim path/to/file-to-be-changed
-    touch path/to/.wh.file-to-be-deleted
+    echo path/to/file1-to-be-deleted >.delete
+    echo path/to/file2-to-be-deleted >>.delete
     cd ..
 
 * Make an image contatining those files:

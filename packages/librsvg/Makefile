@@ -1,12 +1,12 @@
 # librsvg Makefile
 
 NM= librsvg
-VRS= 2.12.7
+VRS= 2.14.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 2dbb387bca326d44c24348bd48b39b12bd3ab365
+URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/librsvg/2.14/$(FILE)
+SHA-$(FILE)= d3d76c74363ed72a3435caffe8b0da5449c93018
 
 # Targets
 

@@ -1,12 +1,12 @@
 # rsync Makefile
 
 NM= rsync
-VRS= 2.6.6
+VRS= 2.6.7
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 3596f480289513ec802335f1f7936022d876f912
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://rsync.samba.org/ftp/rsync/$(FILE)
+SHA-$(FILE)= 0081125bfb7cc67fb4dd4d63fcb62739d701f67e
 
 # Targets
 
@@ -20,8 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	mkdir /home/rsync
-	chown rsyncd:rsyncd /home/rsync
 	./configure --prefix=/usr
 	make $(PM)
 	make install

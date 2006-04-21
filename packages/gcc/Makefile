@@ -1,12 +1,12 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.0.2
+VRS= 4.0.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f1b714c6398393d8f7f4ad5be933b462a95b075d
+SHA-$(FILE)= 5a94943d9ab823cf8d080cc7f9e8a4a91797afea
 
 PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
@@ -141,17 +141,18 @@ ifndef CROSS
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
 	 gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+	cd ../$(DIR) ; sed -i 's/@have_mktemp_command@/yes/' gcc/gccbug.in
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++
 else
+	cd ../$(DIR) ; sed -i 's/@have_mktemp_command@/yes/' gcc/gccbug.in
 	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
 	../$(DIR)/configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64) \
 	 --libexecdir=/usr/$(LIB_MAYBE64) --enable-shared --enable-threads=posix \
 	 --enable-__cxa_atexit --enable-c99 --enable-long-long \
 	 --enable-clocale=gnu --enable-languages=c,c++ --disable-libstdcxx-pch
 endif
-	cd ../$(DIR) ; sed -i 's/@@have_mktemp_command@@/yes/' gcc/gccbug.in
 	make $(PM)
 	make install
 	ln -sf ../usr/bin/cpp /lib

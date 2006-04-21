@@ -2,8 +2,8 @@
 Default/Other				C		""		""		"us"
 English,_USA_(ISO-8859-1)		en_US		""		""		"us"
 English,_USA_(UTF-8)			en_US.UTF-8	""		"iso-8859-1"	"us"
-English,_GB_(ISO-8859-1)		en_GB		"uk"		""		"gb"
-English,_GB_(UTF-8)			en_GB.UTF-8	"uk"		"iso-8859-1"	"gb"
+English,_GB_(ISO-8859-1)		en_GB		"gb"		""		"uk"
+English,_GB_(UTF-8)			en_GB.UTF-8	"gb"		"iso-8859-1"	"uk"
 English,_Australia_(ISO-8859-1)		en_AU		""		""		"us"
 English,_Australia_(UTF-8)		en_AU.UTF-8	""		"iso-8859-1"	"us"
 

@@ -1,12 +1,12 @@
 # DB Makefile
 
 NM= db
-VRS= 4.4.16
+VRS= 4.4.20
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= dd03d6f2d3802c8e5f92e650d3be514f47810b39
+SHA-$(FILE)= 63ff1d980648e4eb8a3d68cfe7592a3d677c7b5b
 
 # Targets
 
@@ -30,8 +30,8 @@ else
 endif
 	cd build_unix ; make
 	cd build_unix ; make docdir=/usr/share/doc/$(DIR) install
-	chown root:root /usr/bin/db_* /usr/lib/libdb* /usr/include/db*
-	chown -R root:root /usr/share/doc/$(DIR)
+	chown -v root:root /usr/bin/db_* /usr/lib/libdb* /usr/include/db*
+	chown -Rv root:root /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

@@ -22,7 +22,7 @@ ifndef CROSS
 else
 	cd $(NM)-tools ; echo "am_cv_func_working_getline=yes" >> config.cache
 	cd $(NM)-tools ; CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-   	 ./configure --prefix=$(WD) --host=$(LFS_TARGET) --disable-shared \
+	 ./configure --prefix=$(WD) --host=$(LFS_TARGET) --disable-shared \
 	 --cache-file=config.cache
 endif
 	cd $(NM)-tools ; make -C lib

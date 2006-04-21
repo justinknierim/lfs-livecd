@@ -4,13 +4,10 @@ NM= LFS-BOOK
 VRS= trunk
 DIR= $(NM)-$(VRS)-HTML
 
-# Ensure sources match LFS book for "trunk".  Update along with LFS packages.
-ifeq ($(VRS),trunk)
-REV= 7298
+REV= 7553
 REVPARM= -r $(REV)
-endif
 
-URL= svn://svn.linuxfromscratch.org/LFS/$(VRS)/BOOK
+URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
 FIREFOX_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
 # Targets

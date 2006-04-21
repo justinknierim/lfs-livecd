@@ -1,12 +1,12 @@
 # Pango Makefile
 
 NM= pango
-VRS= 1.10.2
+VRS= 1.12.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= dc67f60ed5840e0f9476b65e091a0a1dfc56811f
+URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/pango/1.12/$(FILE)
+SHA-$(FILE)= 26f3268eabeea8aa45b1286dc7af3149c8d544a1
 
 # Targets
 

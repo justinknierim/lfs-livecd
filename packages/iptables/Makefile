@@ -1,12 +1,12 @@
 # iptables Makefile
 
 NM= iptables
-VRS= 1.3.3
+VRS= 1.3.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 03cd8b6b1b81ed066b2b7ab387374be87cb4270c
+URL-$(FILE)= http://ftp.netfilter.org/pub/iptables/$(FILE)
+SHA-$(FILE)= 6dbeeee13517fa02852960b6f6e51115c7548a09
 
 # Targets
 

@@ -1,12 +1,12 @@
 # Expat Makefile
 
 NM= expat
-VRS= 1.95.8
+VRS= 2.0.0
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= a05bef2d12056162becb6ac631c31e45acd76ce2
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://ufpr.dl.sourceforge.net/sourceforge/expat/$(FILE)
+SHA-$(FILE)= 9ff011a75a1f5b60145c4afdec520442cb398d93
 
 include $(CROSSVARS)
 

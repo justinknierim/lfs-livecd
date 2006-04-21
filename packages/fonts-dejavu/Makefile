@@ -1,13 +1,13 @@
 # DejaVu fonts Makefile
 
 NM= dejavu-ttf
-VRS= 2.2
+VRS= 2.4.1
 DIR= $(NM)-$(VRS)
 LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/dejavu/$(FILE)
-SHA-$(FILE)= fe40a63e3c2d0a69545662dd44e7980a3c810306
+SHA-$(FILE)= 29a4a7248bdfe5c298ef0efc2d7ebfc38827b66d
 
 # Targets
 
@@ -17,7 +17,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
