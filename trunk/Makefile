@@ -296,7 +296,7 @@ tools: lfs-binutils-scpt lfs-gcc-scpt lfs-gawk-scpt lfs-coreutils-scpt \
 endif
 
 pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
-	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-coreutils \
+	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-coreutils \
 	ch-iana-etc ch-m4 ch-bison ch-ncurses ch-procps ch-sed ch-libtool \
 	ch-perl ch-readline ch-zlib ch-autoconf ch-automake ch-bash
 
