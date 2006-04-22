@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/$(FILE)
-SHA-$(FILE)= 08c38de94964c137fa541c5f6556170e2c4d8a62
+SHA-$(FILE)= e0e58856532c49bd16447922ec802c7ac99d497d
 
 include $(CROSSVARS)
 
