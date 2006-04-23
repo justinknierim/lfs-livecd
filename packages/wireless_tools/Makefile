@@ -1,12 +1,12 @@
 # wireless_tools Makefile
 
 NM= wireless_tools
-VRS= 27
+VRS= 28
 DIR= $(NM).$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 0b94fa04df84419e3ef34e272e7be215f6533c4d
+SHA-$(FILE)= ad97b9748ad6e5d1b50a4e68035997877b6ee984
 
 # Targets
 
