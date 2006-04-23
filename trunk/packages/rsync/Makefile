@@ -1,12 +1,12 @@
 # rsync Makefile
 
 NM= rsync
-VRS= 2.6.7
+VRS= 2.6.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://rsync.samba.org/ftp/rsync/$(FILE)
-SHA-$(FILE)= 0081125bfb7cc67fb4dd4d63fcb62739d701f67e
+SHA-$(FILE)= 2ac54feed46054ced334eb0a234ada18aee53d9c
 
 # Targets
 
