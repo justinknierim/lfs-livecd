@@ -1,12 +1,12 @@
 # dhcpcd Makefile
 
 NM= dhcpcd
-VRS= 2.0.3
+VRS= 2.0.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://download.berlios.de/dhcpcd/$(FILE)
-SHA-$(FILE)= dec7254ce08114f1ced5e3c37bf528f33bf1ea96
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= f2480d142dfce4128b13d434497ad933f4c337d1
 
 # Targets
 
