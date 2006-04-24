@@ -5,7 +5,7 @@ VRS= 1.3.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.netfilter.org/pub/iptables/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 6dbeeee13517fa02852960b6f6e51115c7548a09
 
 # Targets

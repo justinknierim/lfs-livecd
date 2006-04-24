@@ -5,7 +5,7 @@ VRS= 2.34
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.cpan.org/authors/id/M/MS/MSERGEANT/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 253cb641057d929616622408de5a572ab37a8df9
 
 # Targets
