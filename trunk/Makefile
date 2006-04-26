@@ -323,15 +323,6 @@ ifeq ($(LFS-ARCH),x86_64)
 	make ch-grub
 endif
 
-minimal-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs \
-	ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
-	ch-livecd-bootscripts \
-	ch-curl ch-zip ch-unzip ch-docbook-xml ch-libxslt ch-docbook-xsl \
-	ch-html_tidy ch-LFS-BOOK ch-openssh \
-	ch-dhcpcd ch-cpio ch-eject ch-nALFS ch-dialog ch-device-mapper \
-	ch-linux ch-cdrtools ch-zisofs-tools ch-initramfs \
-	ch-syslinux ch-nALFS-profile ch-blfs-bootscripts
-
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
@@ -345,7 +336,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-XML-Parser ch-Terminal ch-mousepad ch-irssi \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo \
-	ch-dialog ch-ncftp ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dmraid \
+	ch-dialog ch-ncftp ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
@@ -354,7 +345,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile update-fontsdir
+	ch-bin86 ch-lilo ch-syslinux update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
@@ -365,7 +356,7 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh ch-glib2 ch-cvs \
 	ch-popt ch-samba ch-irssi ch-wireless_tools ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
-	ch-pciutils ch-nALFS ch-device-mapper ch-LVM2 ch-dmraid \
+	ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
         ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
         ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
         ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
@@ -373,7 +364,7 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
         ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
         ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
         ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-        ch-bin86 ch-lilo ch-syslinux ch-nALFS-profile update-fontsdir
+        ch-bin86 ch-lilo ch-syslinux update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
