@@ -278,7 +278,7 @@ net_service_menu(){
 			set_pppoe_cfg;
 			modprobe ppp_generic ; modprobe pppoe ; sleep 1
 			ip link set $DEV up
-			pppd plugin rp-pppoe.so $DEV user $PPPOEUSER noauth updetach
+			pppd call pppoe updetach
 			;;
 		*)
 			exit 0
