@@ -4,9 +4,9 @@ NM= less
 VRS= 394
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= e8d5cdbd1fbf6fe9bc32e54e2ce957c2ebf68eb5
+SHA-$(FILE)= fa0d9aa30ec461866786c4080bb594fc3337bb02
 
 # Targets
 

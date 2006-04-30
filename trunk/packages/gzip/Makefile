@@ -4,9 +4,9 @@ NM= gzip
 VRS= 1.3.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= c860a851959d77e45ff153183b43723dd5a5c542
+SHA-$(FILE)= 843272609b9bff1bdf2770a28d498d6519901e73
 
 PATCH1= $(DIR)-security_fixes-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

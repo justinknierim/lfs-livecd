@@ -10,7 +10,7 @@ VRS= 1.18.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 19c8c83e6ee29dd6041dae0daf1c1d0debd3d32a
 
 PATCH= $(DIR)-debian_fixes-1.patch

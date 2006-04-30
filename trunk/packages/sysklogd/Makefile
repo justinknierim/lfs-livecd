@@ -4,9 +4,9 @@ NM= sysklogd
 VRS= 1.4.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 2439b0ce3c3e0c98e5a03cee13a112cff9a801d2
+SHA-$(FILE)= 093775da0e429d0768cf195ceb20fdd6d96aeeea
 
 PATCH1= $(DIR)-fixes-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

@@ -4,9 +4,9 @@ NM= sysvinit
 VRS= 2.86
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= e4b8c4ab3b080dd8cc3f29f0c38a32fc7307d8ef
+SHA-$(FILE)= 3e78df609a2ff0fea6304cb662a7f10298d03667
 
 PATCH1= $(DIR)-reexec06-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

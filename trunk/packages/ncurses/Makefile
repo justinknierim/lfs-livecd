@@ -4,9 +4,9 @@ NM= ncurses
 VRS= 5.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 3283b776e69134aa49147b66619e01d29bc50714
+SHA-$(FILE)= 46414a72e91a62f63a8c9af00f0d65497f5ecc5a
 
 PATCH50= $(DIR)-fixes-1.patch
 URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)

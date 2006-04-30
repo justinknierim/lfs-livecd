@@ -4,9 +4,9 @@ NM= tcl
 VRS= 8.4.12
 DIR= $(NM)$(VRS)
 
-FILE= $(DIR)-src.tar.bz2
+FILE= $(DIR)-src.tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f906b8af7eebc9b8b55ff515666eff275e18756d
+SHA-$(FILE)= 8f9808da2df0aeb2319ab10a4fc49295789fc43d
 
 # Targets
 

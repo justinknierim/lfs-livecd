@@ -6,7 +6,7 @@ DATE= 060323
 DIR= $(NM)-$(VRS)-$(DATE)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://developer.osdl.org/dev/iproute2/download/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 76d866bb3b46a7b2e73d79a4faf6fa8971527633
 
 # Targets

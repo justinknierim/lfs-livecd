@@ -4,9 +4,9 @@ NM= procps
 VRS= 3.2.6
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 74fe5e5fdb84d6dad6688d007a276c5c1e18a0be
+SHA-$(FILE)= 91f44180eb50a94eb945c2598c0e849879e65893
 
 # Targets
 

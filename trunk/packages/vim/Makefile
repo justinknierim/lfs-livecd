@@ -8,9 +8,9 @@ FILE= $(NM)-$(VRS).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 4ecc16d704b303db25c52c6bc33ab65e661ace93
 
-FILE2= $(NM)-$(VRS)-lang.tar.bz2
+FILE2= $(NM)-$(VRS)-lang.tar.gz
 URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
-SHA-$(FILE2)= 91ac269d6dbeff880b38d6b955a112bb591b62d7
+SHA-$(FILE2)= 4b80d0f2a0643ab942a9297b88a5447f654e998e
 
 # Targets
 

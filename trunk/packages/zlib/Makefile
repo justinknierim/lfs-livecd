@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
+SHA-$(FILE)= 60faeaaf250642db5c0ea36cd6dcc9f99c8f3902
 
 include $(CROSSVARS)
 
