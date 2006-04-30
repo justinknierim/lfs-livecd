@@ -4,9 +4,9 @@ NM= dejagnu
 VRS= 1.4.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= c50655b800ad27be60aed5546495e3154ffce9b2
+SHA-$(FILE)= fd82ffd396eba5b595f76d2f4a068cb7fcc6cffb
 
 # Targets
 

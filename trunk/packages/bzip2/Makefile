@@ -4,9 +4,9 @@ NM= bzip2
 VRS= 1.0.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 8726fce88aeeb11923f2a83225beac37b9a42dab
+SHA-$(FILE)= 7e749510f65c86fbfff37b97144a02f1b8b8617f
 
 PATCH1= $(DIR)-install_docs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

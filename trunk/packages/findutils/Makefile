@@ -4,9 +4,9 @@ NM= findutils
 VRS= 4.2.27
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 9a1785654b3a23a67f92fc7189d038fc2ed08bd2
+SHA-$(FILE)= 0655e10b20dc66b1ccddfa45e5d6c57a3cd312a2
 
 # Targets
 
