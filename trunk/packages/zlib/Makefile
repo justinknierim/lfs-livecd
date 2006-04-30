@@ -4,7 +4,7 @@ NM= zlib
 VRS= 1.2.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 60faeaaf250642db5c0ea36cd6dcc9f99c8f3902
 
