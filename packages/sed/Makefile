@@ -4,9 +4,9 @@ NM= sed
 VRS= 4.1.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= edb9f49caff130eef7d80f357610611355767fbd
+SHA-$(FILE)= 8e575e8a44568392d5b6e089eab5da5cdbd45885
 
 # Targets
 

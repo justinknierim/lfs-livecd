@@ -4,9 +4,9 @@ NM= libtool
 VRS= 1.5.22
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 1aeec8e1f9667fa971ba21608d398d278577dd03
+SHA-$(FILE)= 17353e66aeaac80ae188ea0a3a90609550ce3254
 
 # Targets
 

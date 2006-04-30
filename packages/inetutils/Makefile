@@ -4,9 +4,9 @@ NM= inetutils
 VRS= 1.4.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 53841f98bd32a899461b67c319ec2bb18060d9c5
+SHA-$(FILE)= 6b60d2c78702512e95afae36415f6fe3523dba77
 
 PATCH1= $(DIR)-no_server_man_pages-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

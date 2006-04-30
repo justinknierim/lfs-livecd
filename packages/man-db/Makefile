@@ -5,7 +5,7 @@ VRS= 2.4.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://savannah.nongnu.org/download/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= a9f6ac22ccd97186005920cedb5f6611df13d4fa
 
 # Targets

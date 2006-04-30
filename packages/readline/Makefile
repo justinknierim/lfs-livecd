@@ -4,9 +4,9 @@ NM= readline
 VRS= 5.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 06fb3e314e43140f8d7d1b5ce1d8cc3f6af151f3
+SHA-$(FILE)= 4b2ee2bc9c6dd1d238c84a58f7e6db173600b850
 
 # Targets
 

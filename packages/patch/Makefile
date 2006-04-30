@@ -4,9 +4,9 @@ NM= patch
 VRS= 2.5.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 0282d048ff6ebd06cb92adc06b49932ec71c382f
+SHA-$(FILE)= a12d520eba0dc35d1c4d50ec75b7684451a40de9
 
 # Targets
 

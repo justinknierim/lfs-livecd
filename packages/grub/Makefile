@@ -4,9 +4,9 @@ NM= grub
 VRS= 0.97
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 51d60ce71a40e6ecf6870b3a96067b7866a2c477
+SHA-$(FILE)= 2580626c4579bd99336d3af4482c346c95dac4fb
 
 # Targets
 

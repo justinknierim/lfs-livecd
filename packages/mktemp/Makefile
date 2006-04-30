@@ -4,9 +4,9 @@ NM= mktemp
 VRS= 1.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 57f1fa25c1ac7d564e530d8ccd7594d835cf96ad
+SHA-$(FILE)= aa001fd61d13bbf128dc58ca4dc6d83311435bae
 
 PATCH1= $(DIR)-add_tempfile-3.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
