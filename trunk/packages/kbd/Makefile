@@ -13,7 +13,7 @@ URL-$(BELARUSIAN_FILE)= http://www.mova.org/bellinux/$(BELARUSIAN_FILE)
 SHA-$(BELARUSIAN_FILE)= c0026a915fff58cdc3b68bb57de4eec35a220c43
 
 THAI_FILE= thai-console-data_cvs20051001.tar.bz2
-URL-$(THAI_FILE)= http://linux.thai.net/pub/thailinux/software/snapshots/thai-console-data/$(THAI_FILE)
+URL-$(THAI_FILE)= $(HTTP)/thai-console-data/$(THAI_FILE)
 SHA-$(THAI_FILE)= 2d5e8f4d6cf488987600d455078fe8f5d4199217
 
 PATCH1= $(DIR)-backspace-1.patch
