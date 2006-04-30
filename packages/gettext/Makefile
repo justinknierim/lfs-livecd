@@ -4,9 +4,9 @@ NM= gettext
 VRS= 0.14.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= eaea6cb53693cca785831b98c6d7359423d33e6e
+SHA-$(FILE)= 68737eee1a6427044eef901dc88e4144d371fb6b
 
 # Targets
 

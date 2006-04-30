@@ -4,9 +4,9 @@ NM= expect
 VRS= 5.43.0
 DIR= $(NM)-5.43
 
-FILE= $(NM)-$(VRS).tar.bz2
+FILE= $(NM)-$(VRS).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a73530772f9d735e98175c7807efa8e785c5fa60
+SHA-$(FILE)= 854440d937c1d05103bf2d02f911005b739fa1e9
 
 PATCH1= $(NM)-$(VRS)-spawn-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)

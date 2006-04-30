@@ -4,17 +4,17 @@ NM= bash
 VRS= 3.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 35e8f7eadded3be38df2eb8ac8db094109339d5e
+SHA-$(FILE)= 766e3fd9384616d8a103f812f662fd8ec791c129
 
 PATCH1= $(DIR)-fixes-8.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 03d6781dd9ad6336eda906d5645c166e1641dd49
 
-FILE1 = $(NM)-doc-$(VRS).tar.bz2
+FILE1 = $(NM)-doc-$(VRS).tar.gz
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 21084bf998eb11b9c30cd6dac72471ee980cc893
+SHA-$(FILE1)= 9cacbbdf3b1be03819b1ea82cdaec0f5e61570c1
 
 # Targets
 

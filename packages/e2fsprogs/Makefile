@@ -4,9 +4,9 @@ NM= e2fsprogs
 VRS= 1.38
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 6252152e90c52a8cf158559cd16c0d0ec236c980
+SHA-$(FILE)= aa8915fe43bc7cf5fba633df7041009ce9981551
 
 # Targets
 

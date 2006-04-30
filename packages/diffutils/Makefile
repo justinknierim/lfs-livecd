@@ -4,9 +4,9 @@ NM= diffutils
 VRS= 2.8.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b01fd84ae885fef426e6ccf157ae7184fb9a79a4
+SHA-$(FILE)= a4c467c3a6a08cde9f3d94d02067ec26436e7dc5
 
 PATCH50= $(DIR)-i18n-1.patch
 URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
