@@ -12,10 +12,6 @@ PATCH1= $(DIR)-libc-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= b72468149c5eee6faefde7f32bb05bda6e2a1c9d
 
-PATCH2= $(DIR)-makemaker-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH2)
-SHA-$(PATCH2)= 892ba3c9304875d323e4818bfd0064311e11a5a0
-
 PATCH40= $(DIR)-Configure_multilib-1.patch
 URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
 SHA-$(PATCH40)= e2c53f1de5b116f75cfb6c92219012fff9494f78
@@ -26,7 +22,7 @@ SHA-$(PATCH41)= 111f00a3baadaa4551fdaee3599e95401f81aa53
 
 include $(CROSSVARS)
 
-STAGE2_DEPS = $(FILE) $(PATCH2)
+STAGE2_DEPS = $(FILE)
 
 # Targets
 
@@ -61,7 +57,6 @@ ifdef CROSS
 endif
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH2)
 ifndef CROSS
 	./configure.gnu --prefix=/usr \
 	    -Dman1dir=/usr/share/man/man1 \
