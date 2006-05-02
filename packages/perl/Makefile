@@ -51,7 +51,6 @@ chroot:
 
 stage2: Makefile $(STAGE2_DEPS)
 	$(std_build)
-	cp $(SRC)/$(PATCH2) $(LFSSRC)
 ifdef CROSS
 	cp $(SRC)/{$(PATCH40),$(PATCH41)} $(LFSSRC)
 endif
