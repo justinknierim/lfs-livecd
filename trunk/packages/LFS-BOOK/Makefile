@@ -4,7 +4,7 @@ NM= LFS-BOOK
 VRS= trunk
 DIR= $(NM)-$(VRS)-HTML
 
-REV= 7553
+REV= 7583
 REVPARM= -r $(REV)
 
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK

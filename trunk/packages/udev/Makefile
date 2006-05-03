@@ -1,16 +1,18 @@
 # Udev Makefile
 
 NM= udev
-VRS= 088
+VRS= 091
+CONFVRS= 20060502-try2
 DIR= $(NM)-$(VRS)
+CONFDIR=$(NM)-config-$(CONFVRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/hotplug/$(FILE)
-SHA-$(FILE)= 3a0fcf32aee14c36aa74172ec7d69c0d1b76b9dc
+SHA-$(FILE)= d6c9ad0fd86df80f5e6228ce529de1a2c1427a85
 
-CONFIG1= $(NM)-config-6.rules
+CONFIG1= $(CONFDIR).tar.bz2
 URL-$(CONFIG1)= http://downloads.linuxfromscratch.org/$(CONFIG1)
-SHA-$(CONFIG1)= 4cc5382a0d7cca26f7ad342cbc7ed9d179c94ea5
+SHA-$(CONFIG1)= 55690045db2d3cf70f5e46e11846494b6ccd33dc
 
 # Targets
 
@@ -25,6 +27,15 @@ stage2: Makefile $(FILE) $(CONFIG1)
 	cp $(SRC)/{$(FILE),$(CONFIG1)} $(LFSSRC)
 
 compile-stage2:
+	tar xf ../$(CONFIG1)
+	install -dv /lib/{firmware,udev/devices/{pts,shm}}
+	mknod -m0666 /lib/udev/devices/null c 1 3
+	ln -sfv /proc/self/fd /lib/udev/devices/fd
+	ln -sfv /proc/self/fd/0 /lib/udev/devices/stdin
+	ln -sfv /proc/self/fd/1 /lib/udev/devices/stdout
+	ln -sfv /proc/self/fd/2 /lib/udev/devices/stderr
+	ln -sfv /proc/kcore /lib/udev/devices/core
+	rm -rf extras/dasd_id
 ifndef CROSS
 	make EXTRAS="`echo extras/*/`"
 else
@@ -32,25 +43,17 @@ else
 	 EXTRAS="`echo extras/*/`"
 endif
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
-	mkdir -p /lib/firmware
-	grep -v cdrom $(SRC)/$(CONFIG1) >/etc/udev/rules.d/25-lfs.rules
-	cp etc/udev/05-udev-early.rules /etc/udev/rules.d/
+	cp $(CONFDIR)/[0-9]* /etc/udev/rules.d/
+	install -v -m 744 $(CONFDIR)/write_cd_aliases /lib/udev/
 	echo 'ACTION=="add", BUS=="pci", SYSFS{class}=="0x030000", RUN+="detect-video"' >/etc/udev/rules.d/30-video.rules
-	cp ../50-network.rules /etc/udev/rules.d/
+	install -m755 ../detect-video /lib/udev
+	install -m644 ../50-network.rules /etc/udev/rules.d/
+	install -m644 -D docs/writing_udev_rules/index.html \
+	 /usr/share/doc/$(DIR)/index.html
 	# Debug, remove before release
 	gcc -o bug ../bug.c
 	install -m755 bug /lib/udev
-	echo 'ACTION=="add", RUN+="bug"' >/etc/udev/rules.d/90-debug.rules
 	# End of debug
-	mkdir -p /lib/udev/devices/pts
-	ln -nsf /proc/self/fd /lib/udev/devices/fd
-	ln -nsf /proc/self/fd/0 /lib/udev/devices/stdin
-	ln -nsf /proc/self/fd/1 /lib/udev/devices/stdout
-	ln -nsf /proc/self/fd/2 /lib/udev/devices/stderr
-	ln -nsf /proc/kcore /lib/udev/devices/core
-	install ../detect-video /lib/udev
-	install -m644 -D docs/writing_udev_rules/index.html \
-	 /usr/share/doc/$(DIR)/index.html
 
 clean:
 	-rm -rf $(DIR)

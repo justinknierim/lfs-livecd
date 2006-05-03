@@ -57,7 +57,7 @@ diff -urN lfs-bootscripts-20060415.orig/lfs/init.d/udev lfs-bootscripts-20060415
  		echo > /proc/sys/kernel/hotplug
  
 -		# Copy static device nodes to /dev
--		cp -ar /lib/udev/devices/* /dev
+-		cp -a /lib/udev/devices/* /dev
 +		# LiveCD specific
 +		/usr/sbin/dmsetup mknodes
  
