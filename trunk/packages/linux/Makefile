@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.16.5
+VRS= 2.6.16.13
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= 9adfac760417bc11ecd86ed148e11abad6d1b672
+SHA-$(FILE)= c236af60e46edefb1743974bc229f5ce054e5106
 
 # URL_REISER4= http://www.kernel.org/pub/linux/kernel/people/akpm/patches/2.6/2.6.16/2.6.16-mm1/broken-out/
 
@@ -14,7 +14,6 @@ PATCH1= reiser4-for-2.6.16-1.patch.gz
 URL-$(PATCH1)= http://ftp.namesys.com/pub/reiser4-for-2.6/2.6.16/$(PATCH1)
 SHA-$(PATCH1)= 80d0e0530bf658489834dd27ae955e5d89257a98
 
-PATCH2= linux-2.6.16-net_race-1.patch
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
 PATCH4= patch-2.6.16-ide1.gz
@@ -54,7 +53,6 @@ ifndef LIBATA_SUFFIX
 	zcat ../$(PATCH1) | patch -Np1
 #	for a in `cat ../reiser4/reiser4-patches` ; do patch -Np1 -i ../reiser4/$$a ; done
 #	echo 'EXPORT_SYMBOL(page_cache_readahead);' >>mm/readahead.c
-	patch -Np1 -i ../$(PATCH2)
 	patch -Np1 -i ../$(PATCH3)
 	zcat ../$(PATCH4) | patch -Np1
 	patch -Np1 -l -i ../$(PATCH50)
