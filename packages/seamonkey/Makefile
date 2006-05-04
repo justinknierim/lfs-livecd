@@ -1,12 +1,12 @@
 # Firefox Makefile
 
 NM= seamonkey
-VRS= 1.0
+VRS= 1.0.1
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= f535ff1d2620ac5a76a2d8179c07f82cd53f938f
+SHA-$(FILE)= e8673838903d50247d96ed42daf99c2adbd9f577
 
 # Targets
 
