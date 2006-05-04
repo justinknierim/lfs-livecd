@@ -4,21 +4,29 @@ URLBASE= http://xorg.freedesktop.org/releases/$(VRS)/src/everything/
 
 PATCH1= xorg_server-X11R7.0_1.0.1-dotclock-1.patch
 
+PATCH2= xorg-server-1.0.1-geteuid.diff
+URL-$(PATCH2)= http://xorg.freedesktop.org/releases/$(VRS)/patches/$(PATCH2)
+SHA-$(PATCH2)= 44b44fa3efc63697eefadc7c2a1bfa50a35eec91
+
+PATCH3= xorg-server-1.0.x-mitri.diff
+URL-$(PATCH3)= http://xorg.freedesktop.org/releases/$(VRS)/patches/$(PATCH3)
+SHA-$(PATCH3)= d6eba2bddac69f12f21785ea94397b206727ba93
+
 LIBDRM_VRS= 2.0
 FILE1= libdrm-$(LIBDRM_VRS).tar.gz
 DIR1= libdrm-$(LIBDRM_VRS)
 SHA-$(FILE1)= 679d4b74b93a429bfd28ab4a01b0c80ffdc9ab1c
 URL-$(FILE1)= http://dri.freedesktop.org/libdrm/$(FILE1)
 
-MESA_VRS= 6.4.1
+MESA_VRS= 6.4.2
 FILE2= MesaLib-$(MESA_VRS).tar.bz2
 DIR2= Mesa-$(MESA_VRS)
-SHA-$(FILE2)= efb70276ccd9cd13dbd7d5e581213a5ca3e4ef25
+SHA-$(FILE2)= 4f042bdf38c9eb62e04660bd18566e7ca50d8640
 URL-$(FILE2)= http://easynews.dl.sourceforge.net/sourceforge/mesa3d/$(FILE2)
 
 include $(ROOT)/scripts/functions
 
-download: SHA1SUMS $(FILE1) $(FILE2)
+download: SHA1SUMS $(FILE1) $(FILE2) $(PATCH2) $(PATCH3)
 	awk '/^[^#]/{print $$2}' SHA1SUMS | ( cd $(SRC) ; wget -c -nc -B $(URLBASE) -i /dev/stdin )
 	cat SHA1SUMS | ( cd $(SRC) ; sha1sum -c - ) >download.log
 	ln -sf `awk '/^[^#]/{print "$(SRC)/"$$2 }' SHA1SUMS` .
@@ -73,7 +81,7 @@ apps:	Y-xbitmaps \
 	N-xfindproxy N-xfontsel N-xfs N-xfsinfo N-xfwp Y-xgamma N-xgc \
 	Y-xhost Y-xinit Y-xkbcomp N-xkbevd N-xkbprint Y-xkbutils Y-xkill \
 	N-xload N-xlogo N-xlsatoms Y-xlsclients Y-xlsfonts Y-xmag N-xman \
-	N-xmessage N-xmh Y-xmodmap N-xmore N-xphelloworld N-xplsprinters \
+	Y-xmessage N-xmh Y-xmodmap N-xmore N-xphelloworld N-xplsprinters \
 	N-xpr N-xprehashprinterlist N-xprop Y-xrandr Y-xrdb Y-xrefresh \
 	N-xrx Y-xset Y-xsetmode Y-xsetpointer Y-xsetroot N-xsm N-xstdcmap \
 	N-xtrap Y-xvidtune N-xvinfo Y-xwd N-xwininfo Y-xwud \
@@ -182,6 +190,9 @@ compile-y-xorg-server:
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
 	# Don't attempt to exceed DDC probed maximum pixel clock
 	patch -Np1 -i ../$(PATCH1)
+	# Upstream fixes
+	patch -Np0 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var --with-mesa-source=`pwd`/$(DIR2) --with-default-font-path=built-ins
 	make $(PM)
 	make install

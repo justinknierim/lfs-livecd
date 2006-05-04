@@ -53,7 +53,7 @@ xload: Will be re-added on request
 xlogo: useless demo
 xlsatoms: X atoms are too low-level and are better left alone
 xman: uses core X fonts that create problems with UTF-8
-xmessage: uses core X fonts that create problems with UTF-8
+xmessage: uses core X fonts that create problems with UTF-8. Still installed for answering the 640x480 FAQ.
 xmh: we don't have mh on this CD
 xmore: uses core X fonts that create problems with UTF-8
 xphelloworld: LFS LiveCD doesn't support printing
