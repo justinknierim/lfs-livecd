@@ -105,7 +105,7 @@ export WHITE= "[00m"
 # lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
 
 all: test-host lfs-base extend-lfs iso
-	@echo "The LiveCD, $(MKTREE)/lfslivecd-$(VERSION).iso, is ready!"
+	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
 
 minimal: test-host lfs-base extend-minimal iso
 
