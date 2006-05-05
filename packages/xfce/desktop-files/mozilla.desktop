@@ -1,8 +1,8 @@
 [Desktop Entry]
-Name=Mozilla
+Name=SeaMonkey
 GenericName=Web Browser
 Comment=Browse the World Wide Web
-Exec=mozilla
+Exec=/bin/sh -c 'mozilla -remote "xfeDoCommand(openBrowser)" 2>/dev/null || mozilla'
 Terminal=false
 MultipleArgs=false
 Type=Application
