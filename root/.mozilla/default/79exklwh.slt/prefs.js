@@ -10,9 +10,9 @@
  */
 
 user_pref("browser.preferences.lastpanel", 0);
-user_pref("browser.search.defaultengine", "engine:///usr/lib/seamonkey-1.0/searchplugins/google.src");
+user_pref("browser.search.defaultengine", "engine:///usr/lib/seamonkey-1.0.1/searchplugins/google.src");
 user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-trunk-HTML/index.html");
-user_pref("browser.startup.homepage_override.mstone", "rv:1.8.0.1");
+user_pref("browser.startup.homepage_override.mstone", "rv:1.8.0.2");
 user_pref("dom.disable_open_during_load", true);
 user_pref("extensions.disabledObsolete", true);
 user_pref("extensions.irc.bugURL", "http://bugs.linuxfromscratch.org/show_bug.cgi?id=%s");
@@ -25,7 +25,7 @@ user_pref("extensions.irc.nickCompleteStr", ":");
 user_pref("extensions.irc.nickname", "lfs-livecd");
 user_pref("extensions.irc.username", "guest");
 user_pref("extensions.lastAppVersion", "1.0");
-user_pref("intl.charsetmenu.browser.cache", "ISO-8859-1");
+user_pref("intl.charsetmenu.browser.cache", "UTF-8, ISO-8859-1");
 user_pref("mailnews.send_default_charset", "UTF-8");
 user_pref("network.cookie.prefsMigrated", true);
 user_pref("prefs.converted-to-utf8", true);
