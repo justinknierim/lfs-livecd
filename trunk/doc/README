@@ -61,10 +61,6 @@ Other Programs
 * hdparm
 * xlockmore
 
-nALFS & ALFS profile for LFS SVN
-(A tool for automating a Linux From Scratch installation)
-WARNING: the supplied profile doesn't match the current LFS book.
-
 jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
 Makefiles that can download, check and build each LFS package for you.)
@@ -72,17 +68,52 @@ Makefiles that can download, check and build each LFS package for you.)
 CONFIGURING X
 ===========================
 The LiveCD attempts to configure X for your video card automatically. The
-process may fail if you have more than one video card, or if your video card
-doesn't support 24-bit color depth.
+process may fail if you have more than one video card, if your video card
+doesn't support 24-bit color depth, or if your monitor is not Plug-n-Play
+compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
+In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
+vim, joe or nano.
 
-You still have to edit /etc/X11/xorg.conf using vim, joe or nano in order to
-configure the available video modes. Otherwise the mode with the highest
-resolution which fits into the detected synchronization frequency ranges of
-the monitor will be used. This may damage your eyes with a CRT monitor
-or be just unacceptable for a LCD monitor. In order to avoid this, uncomment
-and fill in the "Modes" line in the "Screen" section of /etc/X11/xorg.conf.
+1) In Section "Device", specify the driver for your video card, e.g.:
 
-When you are finished, run startx.
+Section "Device"
+        Identifier      "Generic Video Card"
+        Driver          "ati"
+EndSection
+		
+2) In Section "Monitor", specify the allowed frequency ranges for your
+monitor. If unsure, consult the manual that came with your monitor. If
+such information is not there, but you know a working resolution and refresh
+rate, run the "gtf" command. E.g., if your monitor can handle 1280x1024@85Hz:
+
+$ gtf 1280 1024 85
+
+Note: you must specify the refresh rate of 60 Hz for LCD monitors.
+
+Then look at the output:
+
+# 1280x1024 @ 85.00 Hz (GTF) hsync: 91.38 kHz; pclk: 159.36 MHz
+Modeline "1280x1024_85.00"  159.36  1280 1376 1512 1744  1024 1025 1028 1075 -HSync +Vsync
+
+Put the synchronization ranges that contain the printed values. For the above
+example, this means that the following information should be added in the
+"Monitor" section:
+
+Section "Monitor"
+	Identifier	"Generic Monitor"
+	Option		"DPMS"
+	HorizSync	30-92   # because gtf said "hsync: 91.38 kHz"
+	VertRefresh	56-86   # because a 85 Hz mode has been requested
+	# the Modeline may also be pasted here
+EndSection
+
+3) In the Section "Screen", change the DefaultDepth and add the "Modes"
+line to SubSection "Display" with the proper color depth. If you added custom
+Modelines, you have to specify them exactly as defined, i.e. "1280x1024_85.00"
+in the example above. The built-in Modelines have names similar to "1024x768",
+without explicit specification of the refresh rate.
+
+When you are finished editing /etc/X11/xorg.conf, run startx.
 
 CUSTOMIZING THE CD CONTENTS
 ===========================
