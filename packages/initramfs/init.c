@@ -66,12 +66,10 @@ int losetup(char * loop, char * file, int flags)
 
 int main(int argc, char * argv[], char * envp[])
 {
-	char **cmd = malloc( sizeof(char *) * (argc+1) );
 	int i, overhead;
 	int fd;
 	struct dm_task * dmt;
 	struct stat stat_buf;
-	char buf[65536];
 	
 	printf("Initramfs activated\n");
 
@@ -169,13 +167,7 @@ int main(int argc, char * argv[], char * envp[])
 	printf("Starting init...\n");
 	
 	/* FIXME: file descriptors still point to initramfs */
-	cmd[0] = malloc( sizeof(char) * 11);
-	cmd[0] = strncpy(cmd[0], "/sbin/init", 11);
-
-	for (i=1; i <= argc; i++) {
-		cmd[i] = argv[i];
-	}
-	i = execve(cmd[0], cmd, envp);
+	execve("/sbin/init", argv, envp);
 	printf("Failed to start init: %s :(\n", strerror(errno));
 
 	return(0);
