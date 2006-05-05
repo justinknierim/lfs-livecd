@@ -4,7 +4,7 @@
 unset LC_ALL
 if xrandr | grep -q '\*0.*640 x 480.*\*60'
 then
-xmessage \
+xmessage -center \
 "The X server could not obtain the allowed synchronization
 frequencies from the monitor because your monitor is not
 Plug-n-Play compatible.  Thus, a default resolution of
@@ -12,7 +12,10 @@ Plug-n-Play compatible.  Thus, a default resolution of
 
 To fix the problem, press Ctrl + Alt + Backspace, and then
 specify the allowed frequency ranges in /etc/X11/xorg.conf
-manually.  See /root/README for details."
+manually.  See /root/README for details.
+
+If 640 x 480 @ 60 Hz is indeed what you want, press the 'okay'
+button to proceed."
 fi
 scim -d
 exec startxfce4
