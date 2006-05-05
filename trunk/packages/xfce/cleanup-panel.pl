@@ -11,10 +11,9 @@ close FH;
 $content =~ s,<Popup>.*?</Popup>,<Popup/>,sg;
 $content =~ s,popup="1",popup="0",g;
 
-## Use Firefox and Thunderbird for web and mail
-#$content =~ s,Mozilla,Firefox,g;
-#$content =~ s,mozilla -mail,thunderbird,g;
-#$content =~ s,mozilla,firefox,g;
+# Use SeaMonkey for web and mail
+$content =~ s,Mozilla,SeaMonkey,g;
+$content =~ s,mozilla,/bin/sh -c 'mozilla -remote "xfeDoCommand(openBrowser)" 2&gt;/dev/null || mozilla',g;
 
 # Hide the non-functional "Lock Screen" button
 $content =~ s,button1=".",button1="1",g;
@@ -28,6 +27,10 @@ $content =~ s,showtwo=".",showtwo="0",g;
 
 $content =~ s,<Group>[^G]*?xfprint4.*?</Group>\s*,,sg;
 $content =~ s,<Group>[^G]*?xmms.*?</Group>\s*,,sg;
+
+# Hide the mail icon because of the profile locking problem,
+# and because its text isn't looked up for translations
+$content =~ s,<Group>[^G]*?libmailcheck.*?</Group>\s*,,sg;
 
 # End of hack
 
