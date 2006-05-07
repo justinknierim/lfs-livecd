@@ -16,23 +16,12 @@ SHA-$(PATCH1)= 8dde8415d03b1897f50d5b12b6c876feda15e0be
 
 include $(ROOT)/scripts/functions
 
-ifndef CROSS
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
-else
-stage1: $(FILE)
-	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
-endif
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD)
-else
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
-endif
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
 	make $(PM)
@@ -47,12 +36,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --libexecdir=/usr/lib64
-endif
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
 	make $(PM)

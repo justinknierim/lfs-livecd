@@ -28,7 +28,6 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
 
 compile-stage2:
-ifneq ($(LFS-ARCH),sparc64)
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	./configure --prefix=/usr --sysconfdir=/etc --without-curses
@@ -36,7 +35,6 @@ ifneq ($(LFS-ARCH),sparc64)
 	make install
 	cp conf/gpm-root.conf /etc
 	/sbin/ldconfig
-endif
 
 clean:
 	-rm -rf $(DIR)

@@ -25,14 +25,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	make $(PM)
-else
-	cp Makefile{,.bak}
-	sed -e 's@^\(all:.*\) test@\1@g' \
-	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile.bak > Makefile
-	make CC="$${CC} $(64FLAGS)" AR="${AR}" RANLIB="${RANLIB}"
-endif
 	make PREFIX=$(WD) install
 
 chroot:
@@ -47,18 +40,9 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	sed -i 's@tempfile -d /tmp -p bz@mktemp -p /tmp@' bzdiff
-ifndef CROSS
 	make $(PM) -f Makefile-libbz2_so
 	make clean
 	make $(PM)
-else
-	sed -i -e 's@^\(all:.*\) test@\1@g' \
-    	 -e 's@/lib\(/\| \|$$\)@/lib64\1@g' Makefile
-	make $(PM) -f Makefile-libbz2_so CC="gcc $(64FLAGS)" \
-	 CXX="g++ $(64FLAGS)"
-	make clean
-	make CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)"
-endif
 	make install
 	cp -v bzip2-shared /bin/bzip2
 	cp -av libbz2.so* /$(LIB_MAYBE64)

@@ -21,15 +21,8 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD) --with-shared --without-debug \
 	 --without-ada --enable-overwrite
-else
-	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-	 ./configure --prefix=$(WD) --with-shared \
-	 --host=$(LFS_TARGET) --without-debug --without-ada \
-	 --enable-overwrite --with-build-cc=gcc --libdir=$(WD)/lib64
-endif
 	make
 	make install
 
@@ -41,32 +34,26 @@ stage2: Makefile $(FILE) $(PATCH50)
 	$(std_build)
 	cp $(SRC)/$(PATCH50) $(LFSSRC)
 
-compile-stage2:
 # The non-wide library is for commercial software only => not for the Live CD
 # And nothing on the CD uses the C++ binding
+compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
-ifndef CROSS
 	./configure --prefix=/usr --with-shared \
 	    --without-debug --enable-widec --without-cxx-binding
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	    ./configure --prefix=/usr --libdir=/usr/lib64 --with-shared \
-	    --without-debug --enable-widec --without-cxx-binding
-endif
 	make
 	make install
-	chmod 755 /usr/$(LIB_MAYBE64)/*.$(VRS)
-	mv /usr/$(LIB_MAYBE64)/libncursesw.so.5* /$(LIB_MAYBE64)
-	ln -sfv ../../$(LIB_MAYBE64)/libncursesw.so.5 /usr/$(LIB_MAYBE64)/libncursesw.so
+	chmod 755 /usr/lib/*.$(VRS)
+	mv /usr/lib/libncursesw.so.5* /lib
+	ln -sfv ../../lib/libncursesw.so.5 /usr/lib/libncursesw.so
 	for lib in curses ncurses form panel menu ; do \
-	  rm -vf /usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
-	  echo "INPUT(-l$${lib}w)" >/usr/$(LIB_MAYBE64)/lib$${lib}.so ; \
-	  ln -svf lib$${lib}w.a /usr/$(LIB_MAYBE64)/lib$${lib}.a ; \
+	  rm -vf /usr/lib/lib$${lib}.so ; \
+	  echo "INPUT(-l$${lib}w)" >/usr/lib/lib$${lib}.so ; \
+	  ln -svf lib$${lib}w.a /usr/lib/lib$${lib}.a ; \
 	 done
-	echo "INPUT(-lncursesw)" >/usr/$(LIB_MAYBE64)/libcursesw.so
-	ln -svf libncurses.so /usr/$(LIB_MAYBE64)/libcurses.so
-	ln -svf libncursesw.a /usr/$(LIB_MAYBE64)/libcursesw.a
-	ln -svf libncurses.a /usr/$(LIB_MAYBE64)/libcurses.a
+	echo "INPUT(-lncursesw)" >/usr/lib/libcursesw.so
+	ln -svf libncurses.so /usr/lib/libcurses.so
+	ln -svf libncursesw.a /usr/lib/libcursesw.a
+	ln -svf libncurses.a /usr/lib/libcurses.a
 
 clean:
 	-rm -rf $(DIR)

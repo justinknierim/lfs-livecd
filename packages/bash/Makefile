@@ -25,17 +25,7 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD) --without-bash-malloc
-else
-	cp Makefile.in Makefile.in.orig
-	sed "s@size \$$(Program)@$(LFS_TARGET)-&@g"  Makefile.in.orig > Makefile.in
-	echo "ac_cv_func_setvbuf_reversed=no" >> config.cache
-	CC="$${CC} $(64FLAGS)" CXX="$${CXX} $(64FLAGS)" \
-	 ./configure --prefix=$(WD) \
-	 --without-bash-malloc --host=$(LFS_TARGET) \
-	 --cache-file=config.cache
-endif
 	make
 	make install
 	ln -sv bash $(WD)/bin/sh
@@ -53,14 +43,8 @@ compile-stage2:
 	sed -i "s|htmldir = @htmldir@|htmldir = /usr/share/doc/$(DIR)|" \
 	 Makefile.in
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
 	 --with-installed-readline
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	 ./configure --prefix=/usr --bindir=/bin \
-	 --without-bash-malloc --with-installed-readline
-endif
 	make $(PM)
 	make install
 

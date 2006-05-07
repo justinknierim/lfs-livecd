@@ -29,20 +29,11 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD)
-else
-	echo "utils_cv_sys_open_max=1024" >> config.cache
-	CC="$${CC} $(64FLAGS)" \
-	 ./configure --prefix=$(WD) --cache-file=config.cache \
-	 --build=$(LFS_HOST) --host=$(LFS_TARGET)
-endif
 	make $(PM)
 	make install
-ifndef CROSS
 	mv $(WD)/bin/uname $(WD)/bin/uname.real 
 	install -m 755 $(MP)$(ROOT)/uname/uname $(WD)/bin/
-endif
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
@@ -56,18 +47,11 @@ compile-stage2:
 ifeq ($(LFS-ARCH),x86)
 	patch -Np1 -i ../$(PATCH1)
 endif
-ifeq ($(LFS-ARCH),x86_64)
-	patch -Np1 -i ../$(PATCH1)
-endif
 	patch -Np1 -i ../$(PATCH2)
 	patch -Np1 -i ../$(PATCH50)
 	chmod +x tests/sort/sort-mb-tests
 	sed -i 's/_LEN 6/_LEN 20/' src/who.c
-ifndef CROSS
 	./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
-endif
 	make $(PM)
 	make install
 	$(WD)/bin/mv /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
@@ -75,10 +59,8 @@ endif
 	mv /usr/bin/{rmdir,stty,sync,true,uname} /bin
 	mv /usr/bin/chroot /usr/sbin
 	mv /usr/bin/{head,sleep} /bin
-ifndef CROSS
 	mv /bin/uname /bin/uname.real
 	install -m 755 ${ROOT}/uname/uname /bin/
-endif
 
 clean:
 	-rm -rf $(DIR)

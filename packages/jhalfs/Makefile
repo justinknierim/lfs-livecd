@@ -1,8 +1,8 @@
 # jhalfs Makefile
 
 NM= jhalfs
-VRS= 0.2
-DIR= $(NM)-$(VRS)
+VRS= trunk
+DIR= $(NM)
 
 # Targets
 
@@ -14,13 +14,9 @@ chroot:
 
 stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/tags/$(VRS) $(DIR)
-	@make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-	@make clean >>$(DIR)-$@.log 2>&1
+	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/trunk/ /root/$(DIR) \
+	 >>$(DIR)-$@.log 2>&1
 	@touch $@
-
-compile-stage2:
-	make install
 
 clean:
 	-rm -rf $(DIR)

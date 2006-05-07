@@ -24,12 +24,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD) --disable-perl-regexp
-else
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --host=$(LFS_TARGET) --disable-perl-regexp
-endif
 	make $(PM)
 	make install
 
@@ -43,12 +38,7 @@ stage2: Makefile $(FILE) $(PATCH50)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
-ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --bindir=/bin
-endif
 	make $(PM)
 	make install
 

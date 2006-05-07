@@ -22,14 +22,8 @@ stage1: $(FILE) $(PATCH1)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
 	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
 	--with-tclinclude=$(WD)/include --with-x=no
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=$(WD) --with-tcl=$(WD)/lib64 \
-	--with-tclinclude=$(WD)/include --libdir=$(WD)/lib64 \
-	--with-x=no
-endif
 	make $(PM)
 	make SCRIPTS="" install
 

@@ -29,7 +29,7 @@ URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
 SHA-$(PATCH3)= 93ec9885a79ff79088f1533ec52f1a87dae69500
 
 STAGE2-DEPS = $(FILE) $(BELARUSIAN_FILE) $(THAI_FILE) $(PATCH1) $(PATCH3)
-ifeq ($(LFS-ARCH),sparc64)
+ifeq ($(LFS-ARCH),sparc)
 STAGE2-DEPS += $(PATCH30)
 endif
 
@@ -52,16 +52,11 @@ compile-stage2:
 	sed -i -e 's/\(50 = 0x.\)A/\1C/' data/keymaps/i386/qwerty/by2_win.map
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH3)
-ifeq ($(LFS-ARCH),sparc64)
+ifeq ($(LFS-ARCH),sparc)
 	patch -Np1 -i ../$(PATCH30)
 endif
-ifndef CROSS
 	./configure
 	make $(PM)
-else
-	CC="gcc $(64FLAGS)" ./configure
-	make $(PM) CC="gcc $(64FLAGS)"
-endif
 	make install
 	# Turkish fixup
 	cp /usr/share/kbd/consoletrans/cp857_to_uni.trans /usr/share/kbd/unimaps/cp857.uni

@@ -21,11 +21,7 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/ --enable-zlib
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/ --enable-zlib
-endif
 	make $(PM)
 	make install
 	echo 'blacklist 8139cp' >/etc/modprobe.conf

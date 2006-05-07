@@ -21,12 +21,7 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	./configure --libdir=/lib --enable-shared --without-selinux
-else
-	CC="gcc $(64FLAGS)" ./configure --libdir=/lib64 \
-	 --enable-shared --without-selinux
-endif
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
@@ -54,9 +49,9 @@ endif
 	     -e 's@MAIL_CHECK_ENAB..yes@MAIL_CHECK_ENAB no@' \
 	     etc/login.defs > /etc/login.defs
 	mv -v /usr/bin/passwd /bin
-	mv -v /$(LIB_MAYBE64)/libshadow.*a /usr/$(LIB_MAYBE64)
-	rm -v /$(LIB_MAYBE64)/libshadow.so
-	ln -sfv ../../$(LIB_MAYBE64)/libshadow.so.0 /usr/$(LIB_MAYBE64)/libshadow.so
+	mv -v /lib/libshadow.*a /usr/lib
+	rm -v /lib/libshadow.so
+	ln -sfv ../../lib/libshadow.so.0 /usr/lib/libshadow.so
 	mkdir -pv /etc/default
 	pwconv
 	grpconv

@@ -21,11 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	patch -Np1 -i ../$(DIR)-fix_compile-1.patch
-ifeq ($(LFS-ARCH),sparc64)
-	OPTIMIZER="-Os" CC="gcc -m64 $(64FLAGS)" make
-else
 	OPTIMIZER="-Os" make
-endif
 	make install
 
 clean:

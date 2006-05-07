@@ -46,9 +46,6 @@ compile-stage2:
 ifeq ($(LFS-ARCH),x86)
 	mkdir -p /boot/isolinux
 endif
-ifeq ($(LFS-ARCH),x86_64)
-	mkdir -p /boot/isolinux
-endif
 ifndef LIBATA_SUFFIX
 	zcat ../$(PATCH1) | patch -Np1
 #	for a in `cat ../reiser4/reiser4-patches` ; do patch -Np1 -i ../reiser4/$$a ; done
@@ -68,14 +65,8 @@ endif
 ifeq ($(LFS-ARCH),x86)
 	cp -v arch/i386/boot/bzImage /boot/isolinux/linux$(LIBATA_SUFFIX)
 endif
-ifeq ($(LFS-ARCH),x86_64)
-	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux$(LIBATA_SUFFIX)
-endif
 ifeq ($(LFS-ARCH),ppc)
 	cp -v vmlinux /boot/linux$(LIBATA_SUFFIX)
-endif
-ifeq ($(LFS-ARCH),sparc64)
-	cp -v arch/sparc64/boot/image /boot/linux$(LIBATA_SUFFIX)
 endif
 ifndef LIBATA_SUFFIX
 	cd .. ; ./debian-style-headers.sh linux-$(VRS)

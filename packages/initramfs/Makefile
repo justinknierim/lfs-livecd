@@ -49,13 +49,7 @@ compile-stage2: init
 ifeq ($(LFS-ARCH),x86)
 	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
 endif
-ifeq ($(LFS-ARCH),x86_64)
-	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
-endif
 ifeq ($(LFS-ARCH),ppc)
-	$(CP) initramfs_data.cpio.gz /boot/
-endif
-ifeq ($(LFS-ARCH),sparc64)
 	$(CP) initramfs_data.cpio.gz /boot/
 endif
 	rm -rf temp

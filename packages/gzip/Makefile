@@ -21,14 +21,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC) 
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD)
-else
-	cp configure{,.bak}
-	sed "s@nm conftest@$(LFS_TARGET)-&@" configure.bak > configure
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --host=$(LFS_TARGET)
-endif
 	make $(PM)
 	make install
 
@@ -42,11 +35,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
 	./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
-endif
 	sed -i 's@"BINDIR"@/bin@g' gzexe.in
 	make $(PM)
 	make install

@@ -31,11 +31,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH50)
-ifndef CROSS
 	make $(PM)
-else
-	make $(PM) CC="gcc $(64FLAGS)"
-endif
 	make install
 	cp -ra $(ROOT)/etc/syslog.conf /etc
 

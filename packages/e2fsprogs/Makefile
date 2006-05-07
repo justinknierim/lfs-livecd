@@ -22,16 +22,9 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	mkdir build
-ifndef CROSS
 	cd build ; ../configure --prefix=/usr --with-root-prefix="" \
 	 --enable-elf-shlibs --disable-evms
 	cd build ; make
-else
-	sed -i '/libdir=.*\/lib/s@/lib@/lib64@g' configure
-	cd build ; CC="gcc $(64FLAGS)" ../configure --prefix=/usr \
-	 --with-root-prefix="" --enable-elf-shlibs --disable-evms
-	cd build ; make CC="gcc $(64FLAGS)"
-endif
 	cd build ; make install
 	cd build ; make install-libs
 

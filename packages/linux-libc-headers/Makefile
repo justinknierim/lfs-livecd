@@ -8,7 +8,7 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= e72c9b260995b269c9fb9248ed468c18fb01f3fd
 
-include $(CROSSVARS)
+include $(ARCHVARS)
 
 DEPS= $(FILE) $(PATCHES)
 
@@ -39,10 +39,6 @@ compile-stage2:
 	cp -Rv include/$(LLH_ASM) /usr/include/asm
 	for ASM in $(LLH_ASMS) ; do cp -Rv include/$$ASM /usr/include/ ; done
 	cp -Rv include/linux /usr/include
-ifdef CROSS
-	cp -Rv include/mtd /usr/include
-	cp -Rv include/scsi /usr/include
-endif
 	chown -R root:root /usr/include
 	find /usr/include -type d -exec chmod 755 {} \;
 	find /usr/include -type f -exec chmod 644 {} \;

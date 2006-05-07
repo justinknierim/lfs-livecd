@@ -21,13 +21,8 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	make $(PM)
 	make install
-else
-	make $(PM) CC="gcc $(64FLAGS)"
-	make install lib64=$(LIB_LAYBE64)
-endif
 
 clean:
 	-rm -rf $(DIR)

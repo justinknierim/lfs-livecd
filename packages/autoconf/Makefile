@@ -21,11 +21,7 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
-endif
 	make $(PM)
 	make install
 

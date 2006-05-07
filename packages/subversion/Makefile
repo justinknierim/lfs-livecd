@@ -20,8 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	$(ARCH_CC) ./configure --prefix=/usr --with-ssl \
-	 --with-editor=/usr/bin/vim --without-berkeley-db $(EXTRA_CONF)
+	./configure --prefix=/usr --with-ssl \
+	 --with-editor=/usr/bin/vim --without-berkeley-db
 	make $(PM)
 	make install
 	install -v -d -m755 /usr/share/doc/$(DIR)

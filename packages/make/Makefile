@@ -17,12 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD)
-else
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-   	 --host=$(LFS_TARGET)
-endif
 	make $(PM)
 	make install
 
@@ -34,11 +29,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
-endif
 	make $(PM)
 	make install
 

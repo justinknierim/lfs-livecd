@@ -19,11 +19,6 @@ SHA-$(PATCH31)= 638972c2f2b09cf20aac60ede91e803a96cea4d9
 STAGE1_DEPS = $(FILE)
 STAGE2_DEPS = $(FILE) $(PATCH1)
 
-ifdef CROSS
-STAGE1_DEPS+= $(PATCH31)
-STAGE2_DEPS+= $(PATCH31)
-endif
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -34,20 +29,10 @@ stage1: $(STAGE1_DEPS)
 
 compile-stage1:
 	sed -i 's@/usr/include@$(WD)/include@g' configure
-ifndef CROSS
 	./configure
 	make -C lib
 	make -C mount mount umount
 	make -C text-utils more
-else
-	patch -Np1 -i ../$(PATCH31)
-	cp -v configure configure.orig
-	sed -e 's@/usr/include@$(WD)/include@g' configure.orig > configure
-	CC="$${CC} $(64FLAGS)" ./configure
-	make ARCH="" CPU="" -C lib
-	make ARCH="" CPU="" -C mount mount umount
-	make ARCH="" CPU="" -C text-utils more
-endif
 	cp mount/{,u}mount text-utils/more $(WD)/bin
 
 chroot:
@@ -62,12 +47,6 @@ compile-stage2:
 	sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c
 	mkdir -p /var/lib/hwclock
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
-	./configure
-else
-	patch -Np1 -i ../$(PATCH31)
-	CC="gcc $(64FLAGS)" ./configure
-endif
 	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
 	make HAVE_KILL=yes HAVE_SLN=yes install
 

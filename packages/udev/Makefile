@@ -36,12 +36,7 @@ compile-stage2:
 	ln -sfv /proc/self/fd/2 /lib/udev/devices/stderr
 	ln -sfv /proc/kcore /lib/udev/devices/core
 	rm -rf extras/dasd_id
-ifndef CROSS
 	make EXTRAS="`echo extras/*/`"
-else
-	make CC="gcc $(64FLAGS)" LD="gcc $(64FLAGS)" \
-	 EXTRAS="`echo extras/*/`"
-endif
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
 	cp $(CONFDIR)/[0-9]* /etc/udev/rules.d/
 	install -v -m 744 $(CONFDIR)/write_cd_aliases /lib/udev/
