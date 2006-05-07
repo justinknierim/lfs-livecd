@@ -24,11 +24,11 @@ compile-stage2:
 	./configure --prefix=/usr --libdir=/lib
 	make $(PM) SHLIB_LIBS=-lncurses
 	make install
-	chmod 755 /$(LIB_MAYBE64)/lib{readline,history}.so*
-	mv /$(LIB_MAYBE64)/lib{readline,history}.a /usr/$(LIB_MAYBE64)
-	rm /$(LIB_MAYBE64)/lib{readline,history}.so
-	ln -sf ../../$(LIB_MAYBE64)/libreadline.so.5 /usr/$(LIB_MAYBE64)/libreadline.so
-	ln -sf ../../$(LIB_MAYBE64)/libhistory.so.5 /usr/$(LIB_MAYBE64)/libhistory.so
+	chmod 755 /lib/lib{readline,history}.so*
+	mv /lib/lib{readline,history}.a /usr/lib
+	rm /lib/lib{readline,history}.so
+	ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so
+	ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so
 
 clean:
 	-rm -rf $(DIR)
