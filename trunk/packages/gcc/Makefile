@@ -12,8 +12,6 @@ PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
 
-include $(ARCHVARS)
-
 # Targets
 
 include $(ROOT)/scripts/functions
