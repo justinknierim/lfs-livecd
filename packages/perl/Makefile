@@ -12,8 +12,6 @@ PATCH1= $(DIR)-libc-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= b72468149c5eee6faefde7f32bb05bda6e2a1c9d
 
-include $(ARCHVARS)
-
 STAGE2_DEPS = $(FILE)
 
 # Targets
