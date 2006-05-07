@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64)
+	./configure --prefix=/usr --libdir=/usr/lib
 	make $(PM)
 	make install
 

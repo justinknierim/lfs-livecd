@@ -24,7 +24,7 @@ compile-stage2:
 	./configure --prefix=/usr
 	make $(PM)
 	make install
-	ln -sfv libfl.a /usr/$(LIB_MAYBE64)/libl.a
+	ln -sfv libfl.a /usr/lib/libl.a
 	echo "#!/bin/sh" > /usr/bin/lex
 	echo "# Begin /usr/bin/lex" >> /usr/bin/lex
 	echo "" >> /usr/bin/lex
