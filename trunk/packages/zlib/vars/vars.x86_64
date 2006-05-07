@@ -1,3 +1,0 @@
-ARCH_CC=CC="gcc $(64FLAGS)"
-ARCH_CFLAGS=CFLAGS="${CFLAGS} -fPIC"
-EXTRA_CONF="--libdir=/usr/lib64"

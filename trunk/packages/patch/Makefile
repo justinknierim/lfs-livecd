@@ -17,13 +17,8 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	# CPPFLAGS=-D_GNU_SOURCE is for ppc
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
-else
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --host=$(LFS_TARGET)
-endif
 	make $(PM)
 	make install
 
@@ -35,11 +30,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifndef CROSS
+	# CPPFLAGS=-D_GNU_SOURCE is for ppc
 	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=/usr
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr
-endif
 	make $(PM)
 	make install
 

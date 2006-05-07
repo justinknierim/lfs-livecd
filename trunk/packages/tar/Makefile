@@ -29,14 +29,8 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)/
 
 compile-stage1:
-ifndef CROSS
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD)
-else
-	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --host=$(LFS_TARGET) --cache-file=config.cache
-endif
 	make $(PM)
 	make install
 
@@ -52,12 +46,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	patch -Np1 -i ../$(PATCH3)
-ifndef CROSS
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --bindir=/bin --libexecdir=/usr/sbin
-endif
 	make $(PM)
 	make install
 

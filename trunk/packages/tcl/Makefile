@@ -18,12 +18,7 @@ stage1: $(FILE)
 
 compile-stage1:
 	cd unix ; cp configure configure.orig ; sed "s/relid'/relid/" configure.orig >configure
-ifndef CROSS
 	cd unix ; ./configure --prefix=$(WD)
-else
-	cd unix ; sed -i 's@\$$(prefix)/lib@\$$(prefix)/lib64@g' Makefile.in
-	cd unix ; CC="gcc $(64FLAGS)" ./configure --prefix=/tools --libdir=$(WD)/lib64
-endif
 	cd unix ; make $(PM)
 	cd unix ; make install
 	cd unix ; make install-private-headers

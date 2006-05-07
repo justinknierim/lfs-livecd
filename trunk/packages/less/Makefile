@@ -21,17 +21,9 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/usr --sysconfdir=/etc
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --sysconfdir=/etc
-endif
 	make $(PM)
 	make install
-ifdef CROSS
-	mv /usr/bin/less /bin
-endif
 
 clean:
 	-rm -rf $(DIR)

@@ -27,12 +27,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	sed -i 's@Sending processes@& started by init@g' src/init.c
-ifndef CROSS
 	ROOT="" make $(PM) -C src
-else
-	ROOT="" make -C src clobber
-	ROOT="" make $(PM) -C src CC="gcc $(64FLAGS)"
-endif
 	ROOT="" make -C src install
 	cp $(ROOT)/etc/inittab /etc
 

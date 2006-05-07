@@ -16,7 +16,7 @@ PATCH40= $(NM)-0.9.7h-allow_lib64-1.patch
 URL-$(PATCH40)= http://linuxfromscratch.org/~thomasp/x86_64-livecd/$(PATCH40)
 SHA-$(PATCH40)= 26ce4198986c9c46b8ae2c85918f831f550cee88
 
-include $(CROSSVARS)
+include $(ARCHVARS)
 
 CONFIG ?= ./config
 DEPS= $(FILE) $(PATCHES)

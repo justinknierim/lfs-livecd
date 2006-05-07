@@ -12,8 +12,6 @@ FILE1= $(NM)_docs_051020.tgz
 URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
 SHA-$(FILE1)= 04988d51267566db6899e8061d9f2e5b58fbeec4
 
-include $(CROSSVARS) 
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -28,7 +26,7 @@ stage2: Makefile $(FILE) $(FILE1)
 
 compile-stage2:
 	sh build/gnuauto/setup.sh
-	$(ARCH_CC) ./configure --prefix=/usr $(EXTRA_CONF)
+	./configure --prefix=/usr
 	make $(PM)
 	make install
 	install -d -m755 /usr/share/doc/tidy

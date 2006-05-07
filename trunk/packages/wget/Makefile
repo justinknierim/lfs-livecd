@@ -28,13 +28,8 @@ stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared --disable-nls
-else
-	./configure --prefix=$(WD) --host=$(LFS_TARGET) \
-	 --without-ssl
-endif
 	make $(PM)
 	make install
 

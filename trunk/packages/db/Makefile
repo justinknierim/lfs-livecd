@@ -21,13 +21,8 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	cd build_unix ; ../dist/configure --prefix=/usr \
 	    --enable-compat185 --enable-cxx
-else
-	cd build_unix ; CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	    --libdir=/usr/$(LIB_MAYBE64) --enable-compat185 --enable-cxx
-endif
 	cd build_unix ; make
 	cd build_unix ; make docdir=/usr/share/doc/$(DIR) install
 	chown -v root:root /usr/bin/db_* /usr/lib/libdb* /usr/include/db*

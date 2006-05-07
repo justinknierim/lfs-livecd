@@ -31,17 +31,10 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH2)
 	patch -Np1 -i ../$(PATCH1)
-ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/sbin \
 	--sysconfdir=/etc --localstatedir=/var \
 	--disable-logger --disable-syslogd \
 	--disable-whois --disable-servers
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	--libexecdir=/usr/sbin --sysconfdir=/etc --localstatedir=/var \
-	--disable-logger --disable-syslogd --disable-whois \
-	--disable-servers
-endif
 	make $(PM)
 	make install
 	mv /usr/bin/ping /bin

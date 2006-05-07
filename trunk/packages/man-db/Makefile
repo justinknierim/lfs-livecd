@@ -31,11 +31,7 @@ compile-stage2:
 	echo '#define COL "/usr/bin/col"' >>include/manconfig.h.in
 	echo '#define VGRIND "/usr/bin/vgrind"' >>include/manconfig.h.in
 	echo '#define GRAP "/usr/bin/grap"' >>include/manconfig.h.in
-ifndef CROSS
 	./configure --prefix=/usr --enable-mb-groff --disable-setuid
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr --enable-mb-groff --disable-setuid
-endif
 	make
 	make install
 

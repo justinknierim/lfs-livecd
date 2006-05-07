@@ -1,2 +1,0 @@
-ENABLE-64-BIT-BFD=--enable-64-bit-bfd
-PATCHES=$(PATCH40) $(PATCH41)

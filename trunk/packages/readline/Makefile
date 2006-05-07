@@ -21,12 +21,7 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/usr --libdir=/lib
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-   	 ./configure --prefix=/usr --libdir=/lib64
-endif
 	make $(PM) SHLIB_LIBS=-lncurses
 	make install
 	chmod 755 /$(LIB_MAYBE64)/lib{readline,history}.so*

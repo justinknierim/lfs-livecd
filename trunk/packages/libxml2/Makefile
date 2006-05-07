@@ -8,8 +8,6 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/$(FILE)
 SHA-$(FILE)= e0e58856532c49bd16447922ec802c7ac99d497d
 
-include $(CROSSVARS)
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -22,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	$(ARCH_CC) ./configure --prefix=/usr --with-history $(EXTRA_CONF)
+	./configure --prefix=/usr --with-history
 	make $(PM)
 	make install
 

@@ -33,12 +33,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH)
 	sed -i -e 's/2010/002D/' -e 's/2212/002D/' \
 	    -e 's/2018/0060/' -e 's/2019/0027/' font/devutf8/R.proto
-ifndef CROSS
 	PAGE=$(pagesize) ./configure --prefix=/usr --enable-multibyte
-else
-	PAGE=$(pagesize) CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	 ./configure --prefix=/usr --libdir=/usr/$(LIB_MAYBE64) --enable-multibyte
-endif
 	make
 	make install
 	ln -sf eqn /usr/bin/geqn

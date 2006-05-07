@@ -7,15 +7,7 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
-PATCH40= $(DIR)-posix-1.patch
-URL-$(PATCH40)= $(HTTP)/$(NM)/$(PATCH40)
-SHA-$(PATCH40)= 7bd70eb6359d9ed5c1691208dfa321d68c5e1d9c
-
-PATCH41= $(DIR)-genscripts_multilib-1.patch
-URL-$(PATCH41)= $(HTTP)/$(NM)/$(PATCH41)
-SHA-$(PATCH41)= 1d7cb62e537ddfea800d7790149e3ce74d415928
-
-include $(CROSSVARS)
+include $(ARCHVARS)
 
 DEPS= $(FILE) $(PATCHES)
 
@@ -25,34 +17,6 @@ include $(ROOT)/scripts/functions
 
 LINKER ?= ld-linux.so.2
 
-cross: $(DEPS)
-	$(sep_dir_build)
-	for i in $(DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
-
-compile-cross:
-	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	../$(DIR)/configure --prefix=$(CROSS_WD) --host=$(LFS_HOST) \
-	--target=$(LFS_TARGET) --with-lib-path=$(WD)/lib \
-	--disable-nls --enable-shared $(ENABLE-64-BIT-BFD)
-	make configure-host
-	make $(PM)
-	make install
-	cp -v ../$(DIR)/include/libiberty.h $(WD)/include
-
-stage1: $(DEPS)
-	$(sep_dir_build)
-
-compile-stage1:
-	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	CC="$${CC} $(64FLAGS)" ../$(DIR)/configure --prefix=$(WD) --libdir=$(WD)/$(LIB_MAYBE64) \
-	 --with-lib-path=$(WD)/lib --build=$(LFS_HOST) --host=$(LFS_TARGET) \
-	 --target=$(LFS_TARGET) --disable-nls --enable-shared \
-	 $(ENABLE-64-BIT-BFD)
-	make configure-host
-	make $(PM)
-	make install
-
-# fIXME: copy this file for cross-case also
 pass1: $(FILE)
 	$(sep_dir_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
@@ -117,13 +81,7 @@ stage2: $(DEPS)
 
 compile-stage2:
 	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-ifndef CROSS
 	../$(DIR)/configure --prefix=/usr --enable-shared
-else
-	CC="gcc $(64FLAGS)" ../$(DIR)/configure --prefix=/usr \
-	 --enable-shared $(ENABLE-64-BIT-BFD) --libdir=/usr/$(LIB_MAYBE64)
-	make configure-host
-endif
 	make $(PM) tooldir=/usr
 	make tooldir=/usr install
 	cp ../$(DIR)/include/libiberty.h /usr/include
@@ -132,4 +90,4 @@ clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-cross compile-stage1 compile-pass1 clean chroot compile-pass2 compile-stage2
+.PHONY: compile-pass1 clean chroot compile-pass2 compile-stage2

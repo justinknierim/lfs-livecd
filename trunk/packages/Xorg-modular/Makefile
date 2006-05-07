@@ -140,20 +140,20 @@ Y-%: SHA1SUMS
 
 y-%:
 	unpack $(FILE)
-	make CROSSVARS=../$(CROSSVARS) -C `basename $(FILE) .tar.bz2` -f ../Makefile compile-$@
+	make ARCHVARS=../$(ARCHVARS) -C `basename $(FILE) .tar.bz2` -f ../Makefile compile-$@
 	rm -rf `basename $(FILE) .tar.bz2`
 
 Y-libdrm:
 	@$(call echo_message, Building)
 	@unpack $(FILE1) >$@.log 2>&1
-	@make CROSSVARS=../$(CROSSVARS) -C $(DIR1) -f ../Makefile compile-y-libdrm >$@.log 2>&1
+	@make ARCHVARS=../$(ARCHVARS) -C $(DIR1) -f ../Makefile compile-y-libdrm >$@.log 2>&1
 	@rm -rf $(DIR1)
 	@touch $@
 
 Y-mesa:
 	@$(call echo_message, Building)
 	@unpack $(FILE2) >$@.log 2>&1
-	@make CROSSVARS=../$(CROSSVARS) -C $(DIR2) -f ../Makefile compile-y-mesa >$@.log 2>&1
+	@make ARCHVARS=../$(ARCHVARS) -C $(DIR2) -f ../Makefile compile-y-mesa >$@.log 2>&1
 	@rm -rf $(DIR2)
 	@touch $@
 

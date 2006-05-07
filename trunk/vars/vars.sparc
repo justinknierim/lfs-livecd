@@ -1,0 +1,2 @@
+export VERSION := sparc-6.2-pre1
+export CFLAGS := -Os -s

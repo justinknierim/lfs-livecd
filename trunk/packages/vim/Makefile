@@ -31,12 +31,7 @@ stage2: Makefile $(FILE) $(FILE2)
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
-ifndef CROSS
 	./configure --prefix=/usr --enable-multibyte
-else
-	CC="gcc $(64FLAGS)" CXX="g++ $(64FLAGS)" \
-	 ./configure --prefix=/usr --enable-multibyte
-endif
 	make $(PM)
 	make install
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}

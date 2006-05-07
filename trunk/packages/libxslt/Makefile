@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	$(ARCH_CC) ./configure --prefix=/usr $(EXTRA_CONF)
+	./configure --prefix=/usr
 	make $(PM)
 	make install
 

@@ -17,13 +17,7 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-ifndef CROSS
 	./configure --prefix=$(WD)
-else
-	echo "am_cv_func_working_getline=yes" >> config.cache
-	CC="$${CC} $(64FLAGS)" ./configure --prefix=$(WD) \
-	 --host=$(LFS_TARGET) --cache-file=config.cache
-endif
 	make $(PM)
 	make install
 
@@ -35,13 +29,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifndef CROSS
 	./configure --prefix=/usr --libexecdir=/usr/lib/findutils \
 	 --localstatedir=/var/lib/locate
-else
-	CC="gcc $(64FLAGS)" ./configure --prefix=/usr \
-	 --libexecdir=/usr/lib64/findutils --localstatedir=/var/lib/locate
-endif
 	make $(PM)
 	make install
 

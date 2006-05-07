@@ -1,2 +1,0 @@
-ARCH_CC=CC="gcc $(64FLAGS)"
-EXTRA_CONF="--libdir=/usr/lib64"
