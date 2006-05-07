@@ -7,8 +7,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
-include $(ARCHVARS)
-
 DEPS= $(FILE) $(PATCHES)
 
 # Targets
