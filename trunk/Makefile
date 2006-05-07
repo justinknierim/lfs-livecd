@@ -1,4 +1,3 @@
-
 #
 # Makefiles for automating the LFS LiveCD build
 #
@@ -53,29 +52,18 @@ export MKTREE := $(MP)$(ROOT)
 
 ROOTFS_MEGS := 1536
 
-export CROSSVARS := vars/vars.$(LFS-ARCH)
+export ARCHVARS := vars/vars.$(LFS-ARCH)
 
-include $(CROSSVARS)
+include $(ARCHVARS)
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
-ifndef CROSS
 export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 
 export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 
 export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-
-else
-export crossenv := exec env -i HOME=$$HOME CFLAGS='' CXXFLAGS='' LFS=$(MP) LC_ALL=POSIX BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
-
-export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX CC='$(LFS_TARGET)-gcc' CXX='$(LFS_TARGET)-g++' AR='$(LFS_TARGET)-ar' AS='$(LFS_TARGET)-as' RANLIB='$(LFS_TARGET)-ranlib' LD='$(LFS_TARGET)-ld' STRIP='$(LFS_TARGET)-strip' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=$(CROSS_WD)/bin:/bin:/usr/bin /bin/bash -c
-
-export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
-
-export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' BUILD32='$(32FLAGS)' BUILD64='$(64FLAGS)' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-endif
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 
@@ -108,6 +96,7 @@ all: test-host lfs-base extend-lfs iso
 	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
 
 minimal: test-host lfs-base extend-minimal iso
+	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
 
 test-host:
 	@if [ `whoami` != "root" ] ; then \
@@ -137,11 +126,6 @@ $(MP)$(ROOT): root.ext2
 	-ln -nsf $(MPBASE)$(SRC) /
 	-ln -nsf $(MPBASE)$(ROOT) /
 	-ln -nsf $(MP)$(LFSSRC) /
-ifdef CROSS
-	mkdir -p $(MPBASE)$(CROSS_WD)/bin $(MP)$(CROSS_WD)
-	mount --bind $(MPBASE)$(CROSS_WD) $(MP)$(CROSS_WD)
-	-ln -nsf $(MP)$(CROSS_WD) /
-endif
 	-mkdir -p $(MP)/{proc,sys,dev/shm,dev/pts}
 	-mount -t proc proc $(MP)/proc
 	-mount -t sysfs sysfs $(MP)/sys
@@ -166,11 +150,6 @@ endif
 	-install -d $(MP)/var/{opt,cache,lib/{misc,locate},local}
 	-install -d $(MP)/opt/{bin,doc,include,info}
 	-install -d $(MP)/opt/{lib,man/man{1,2,3,4,5,6,7,8}}
-ifdef CROSS
-	-install -d $(MP)/{,usr/{,local},opt}/$(LIB_MAYBE64)
-	-install -d /usr/lib/locale
-	-ln -s ../lib/locale /usr/$(LIB_MAYBE64)
-endif
 	-mknod -m 600 $(MP)/dev/console c 5 1
 	-mknod -m 666 $(MP)/dev/null c 1 3
 	-mknod -m 666 $(MP)/dev/zero c 1 5
@@ -188,7 +167,6 @@ endif
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
 lfs-base: $(MP)$(ROOT) lfsuser
-ifndef CROSS
 	@-make unamemod
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
@@ -203,22 +181,6 @@ ifndef CROSS
 	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
 	 make post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
-else
-	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin $(CROSS_WD) $(MP)$(CROSS_WD) $(CROSS_WD)/bin \
-	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
-	@cp $(ROOT)/scripts/unpack $(WD)/bin
-	@cp $(ROOT)/scripts/unpack $(CROSS_WD)/bin
-	@su - lfs -c "$(crossenv) '$(lfsbash) && $(MAKE) cross-tools'"
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
-	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
-	@-ln -s $(WD)/bin/bash $(MP)/bin/bash
-	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
-	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
-	 cd $(ROOT) && make cross-pre-bash $(chbash-pre-bash)'
-	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
-	 make cross-post-bash $(chbash-post-bash)'
-	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
-endif
 
 stop-here:
 	exit 1
@@ -226,19 +188,8 @@ stop-here:
 extend-lfs: $(MP)$(ROOT)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
-ifndef CROSS
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
-else
-ifeq ($(LFS-ARCH),sparc64)
-	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make sparc64-blfs $(chbash-post-bash)'
-endif
-ifeq ($(LFS-ARCH),x86_64)
-	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make x86_64-blfs $(chbash-post-bash)'
-endif
-endif
 
 extend-minimal: prep-chroot
 	@cp $(WD)/bin/which $(MP)/usr/bin
@@ -260,19 +211,12 @@ pre-which:
 
 pre-wget:
 	@make -C $(PKG)/wget prebuild
-ifdef CROSS
-	@-ln -s $(WD)/bin/wget $(CROSS_WD)/bin
-endif
 	@touch $@
 
 unamemod:
 	@install -m 755 uname/uname $(WD)/bin/
 	@touch $@
 
-cross-tools: pre-which pre-wget lfs-linux-libc-headers-scpt lfs-binutils-cross \
-	lfs-gcc-cross-static lfs-glibc-scpt-32 lfs-glibc-scpt lfs-gcc-cross
-
-ifndef CROSS
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
@@ -283,13 +227,6 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
 	lfs-strip
 	@cp /etc/resolv.conf $(WD)/etc
-else
-tools: lfs-binutils-scpt lfs-gcc-scpt lfs-gawk-scpt lfs-coreutils-scpt \
-	lfs-bzip2-scpt lfs-gzip-scpt lfs-diffutils-scpt lfs-findutils-scpt lfs-make-scpt \
-	lfs-grep-scpt lfs-sed-scpt lfs-gettext-scpt lfs-ncurses-scpt lfs-patch-scpt \
-	lfs-tar-scpt lfs-bash-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt
-	@cp /etc/resolv.conf $(WD)/etc
-endif
 
 pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-coreutils \
@@ -302,22 +239,6 @@ post-bash: ch-bzip2 ch-diffutils ch-e2fsprogs ch-file ch-findutils ch-flex \
 	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
 	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
 	final-environment
-
-cross-pre-bash: createfiles lfs-tcl-scpt lfs-expect-scpt \
-	lfs-dejagnu-scpt lfs-perl-scpt lfs-texinfo-scpt ch-linux-libc-headers \
-	ch-man-pages ch-glibc-32 ch-glibc adjusting-toolchain ch-binutils ch-gcc \
-	ch-coreutils ch-zlib ch-iana-etc ch-findutils ch-gawk ch-ncurses ch-readline \
-	ch-vim ch-m4 ch-bison ch-less ch-db ch-groff ch-sed \
-	ch-flex ch-gettext ch-inetutils \
-	ch-perl ch-iproute2 ch-texinfo ch-autoconf ch-automake ch-bash
-
-cross-post-bash: ch-file ch-libtool ch-bzip2 ch-diffutils ch-kbd ch-e2fsprogs \
-	ch-grep ch-gzip ch-man-db ch-make ch-module-init-tools ch-patch ch-procps \
-	ch-psmisc ch-shadow ch-sysklogd ch-sysvinit ch-tar ch-util-linux ch-udev \
-	final-environment
-ifeq ($(LFS-ARCH),x86_64)
-	make ch-grub
-endif
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
@@ -362,27 +283,6 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
-
-x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl \
-	ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat ch-subversion ch-lfs-bootscripts \
-	ch-livecd-bootscripts \
-	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy cd-LFS-BOOK ch-cpio \
-	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-linux ch-device-mapper ch-initramfs ch-cdrtools ch-zisofs-tools \
-	ch-syslinux
-
-sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
-	ch-joe ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh \
-	ch-glib2 ch-cvs ch-popt ch-samba ch-tcpwrappers \
-	ch-portmap ch-nfs-utils ch-traceroute ch-dialog ch-ncftp ch-pciutils \
-	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
-	ch-libaal ch-reiser4progs ch-cpio ch-mutt ch-msmtp ch-tin \
-	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
-	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-elftoaout ch-silo
 
 wget-list:
 	@>wget-list ; \
@@ -431,15 +331,9 @@ createfiles:
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
-ifdef CROSS
-	@-$(WD)/bin/ln -s $(WD)/lib64/libgcc_s.so{,.1} /usr/lib64
-endif
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
-ifdef CROSS
-	@chmod 600 /var/log/btmp
-endif
 	@mv $(WD)/etc/resolv.conf /etc
 
 # Do not call the targets below manually! They are used internally and must be
@@ -448,18 +342,6 @@ endif
 
 lfs-%-scpt:
 	$(MAKE) -C $(PKG)/$* stage1
-
-lfs-%-scpt-32:
-	$(MAKE) -C $(PKG)/$* stage1-32
-
-lfs-%-cross:
-	$(MAKE) -C $(PKG)/$* cross
-
-lfs-glibc-headers:
-	$(MAKE) -C $(PKG)/glibc headers
-
-lfs-gcc-cross-static:
-	$(MAKE) -C $(PKG)/gcc cross-static
 
 lfs-%-pass1:
 	$(MAKE) -C $(PKG)/$* pass1
@@ -479,19 +361,8 @@ lfs-strip:
 ch-%:
 	make -C $(PKG)/$* stage2
 
-ch-glibc-32:
-	make -C $(PKG)/glibc stage2-32
-
 re-adjust-toolchain:
 	make -C $(PKG)/binutils re-adjust-toolchain
-
-adjusting-toolchain:
-	gcc -dumpspecs | \
-	perl -pi -e 's@/tools/lib/ld@/lib/ld@g;' \
-     	 -e 's@/tools/lib64/ld@/lib64/ld@g;' \
-     	 -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
-     	 `dirname $$(gcc --print-libgcc-file-name)`/specs
-	@touch $@ 
 
 final-environment:
 	@cp -ra $(ROOT)/etc/sysconfig /etc
@@ -521,36 +392,19 @@ ifeq ($(LFS-ARCH),x86)
 	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
-ifeq ($(LFS-ARCH),x86_64)
-	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
-endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-ifeq ($(LFS-ARCH),sparc64)
-	@sed -i "s/Version:.*/Version: $(VERSION)/" $(MP)/boot/boot.msg
-endif
-	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/
 	@sed -e 's|_LINKER_|$(LINKER)|' -e 's|/lib/|/$(LIB_MAYBE64)/|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
 	@chmod 755 $(MP)/usr/bin/shutdown-helper
 	@cp -ra root $(MP)/etc/skel
-ifndef CROSS
-	@-mv $(MP)/bin/uname.real $(MP)/bin/uname
-endif
 
 iso: prepiso
 	@make unmount
 	@sync
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 ifeq ($(LFS-ARCH),x86)
-	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
-	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
-	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
-	-V "lfslivecd-$(VERSION)" ./
-endif
-ifeq ($(LFS-ARCH),x86_64)
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
 	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
@@ -565,20 +419,12 @@ ifeq ($(LFS-ARCH),ppc)
 	@if ! grep -q "Blessing" $(MKTREE)/iso.log ; then \
 	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
 endif
-ifeq ($(LFS-ARCH),sparc64)
-	@cd $(MP) ; ./usr/bin/mkisofs -z -v -R -l -D --allow-leading-dots \
-	 -G iso/boot/isofs.b -B ... -r -V "lfslivecd-$(VERSION)" \
-	 -o $(MKTREE)/lfslivecd-$(VERSION).iso iso >$(MKTREE)/iso.log 2>&1
-endif
 
 # Targets to clean your tree. 
 #==============================================================================
 
 clean: unmount
 	@-rm -rf $(WD) $(MP)$(WD) $(MPBASE)$(WD)
-ifdef CROSS
-	@-rm -rf $(CROSS_WD) $(MP)$(CROSS_WD)
-endif
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
@@ -589,11 +435,6 @@ endif
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
-ifdef CROSS
-	@find $(PKG) -name "cross*" -exec rm -rf \{} \;
-	@rm -f $(PKG)/glibc/headers
-	@rm -f adjusting-toolchain
-endif
 	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
