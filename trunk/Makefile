@@ -132,7 +132,6 @@ $(MP)$(ROOT): root.ext2
 	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
 	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
 	mount --bind $(MPBASE)/iso/boot $(MP)/boot
-	mkdir -p $(MP)$(WD)/bin
 	mkdir -p $(MP)$(LFSSRC)
 	-ln -nsf $(MPBASE)$(WD) /
 	-ln -nsf $(MPBASE)$(SRC) /
@@ -172,9 +171,6 @@ ifdef CROSS
 	-install -d /usr/lib/locale
 	-ln -s ../lib/locale /usr/$(LIB_MAYBE64)
 endif
-	# The "662" permissions in LFS are a security hole due to "loadkeys":
-	# A remote attacker can remap any key to "<CTRL+C>rm -rf /<ENTER>"
-	# and wait for root to press that key.
 	-mknod -m 600 $(MP)/dev/console c 5 1
 	-mknod -m 666 $(MP)/dev/null c 1 3
 	-mknod -m 666 $(MP)/dev/zero c 1 5
@@ -341,7 +337,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils \
-	ch-ctags ch-initramfs ch-zisofs-tools ch-cdrtools ch-blfs-bootscripts \
+	ch-initramfs ch-zisofs-tools ch-cdrtools ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
@@ -358,13 +354,11 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
 	ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
         ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-        ch-squashfs ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
+        ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
         ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-        ch-ctags ch-unionfs ch-initramfs ch-cdrtools ch-blfs-bootscripts \
+        ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
         ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-        ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
-        ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-        ch-bin86 ch-lilo ch-syslinux update-fontsdir
+        ch-bin86 ch-lilo ch-syslinux
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
@@ -374,7 +368,7 @@ x86_64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-nano ch-joe ch-screen ch-pkg
 	ch-livecd-bootscripts \
 	ch-docbook-xml ch-libxslt ch-docbook-xsl ch-html_tidy cd-LFS-BOOK ch-cpio \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-linux ch-ctags ch-device-mapper ch-initramfs ch-cdrtools ch-zisofs-tools \
+	ch-linux ch-device-mapper ch-initramfs ch-cdrtools ch-zisofs-tools \
 	ch-syslinux
 
 sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
@@ -386,7 +380,7 @@ sparc64-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano \
 	ch-device-mapper ch-LVM2 ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
 	ch-libaal ch-reiser4progs ch-cpio ch-mutt ch-msmtp ch-tin \
 	ch-mdadm ch-which ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-ctags ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
+	ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-elftoaout ch-silo
 
@@ -581,7 +575,7 @@ endif
 #==============================================================================
 
 clean: unmount
-	@-rm -rf $(WD) $(MP)$(WD)
+	@-rm -rf $(WD) $(MP)$(WD) $(MPBASE)$(WD)
 ifdef CROSS
 	@-rm -rf $(CROSS_WD) $(MP)$(CROSS_WD)
 endif
