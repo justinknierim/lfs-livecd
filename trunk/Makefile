@@ -396,7 +396,7 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-	@sed -e 's|_LINKER_|$(LINKER)|' -e 's|/lib/|/$(LIB_MAYBE64)/|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
+	@sed 's|_LINKER_|$(LINKER)|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
 	@chmod 755 $(MP)/usr/bin/shutdown-helper
 	@cp -ra root $(MP)/etc/skel
 
