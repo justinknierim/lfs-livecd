@@ -191,7 +191,7 @@ extend-lfs: $(MP)$(ROOT)
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
 
-extend-minimal: prep-chroot
+extend-minimal: $(MP)$(ROOT)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
