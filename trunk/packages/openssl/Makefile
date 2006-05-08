@@ -27,14 +27,15 @@ stage2: Makefile $(DEPS)
 	$(std_build)
 
 compile-stage2:
-	for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
-	$(CONFIG) --openssldir=/etc/ssl --prefix=/usr $(SSL_TARGET) shared
+	patch -Np1 -i ../$(PATCH1)
+	# FIXME ppc
+	$(CONFIG) --openssldir=/etc/ssl --prefix=/usr shared
 ifeq ($(LFS-ARCH),x86)
-	sed -i 's/mcpu=pentium/mtune=i486/' Configure
-	sed -i 's/mcpu=pentium/mtune=i486/' Makefile
+	sed -i 's/mcpu=pentium/march=i486/' Configure
+	sed -i 's/mcpu=pentium/march=i486/' Makefile
 endif
-	make $(PM) $(LIBDIR_OVERRIDE) MANDIR=/usr/share/man
-	make $(LIBDIR_OVERRIDE) MANDIR=/usr/share/man install
+	make $(PM) MANDIR=/usr/share/man
+	make MANDIR=/usr/share/man install
 	cp -r certs /etc/ssl
 
 clean:
