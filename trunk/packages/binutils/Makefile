@@ -34,7 +34,7 @@ adjust-toolchain:
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
 	SPECFILE=`dirname $$(gcc -print-libgcc-file-name)`/specs && \
 	gcc -dumpspecs > $$SPECFILE && \
-	sed 's@^/lib/ld-linux.so.2@$(WD)&@g' $$SPECFILE > tempspecfile && \
+	sed 's@^/lib/$(LINKER)@$(WD)&@g' $$SPECFILE > tempspecfile && \
 	mv -vf tempspecfile $$SPECFILE && \
 	unset SPECFILE
 	GCC_INCLUDEDIR=`dirname $$(gcc -print-libgcc-file-name)`/include && \
@@ -65,7 +65,7 @@ re-adjust-toolchain:
 	mv -v $(WD)/bin/{ld-new,ld}
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
 	gcc -dumpspecs | \
-	perl -p -e 's@$(WD)/lib/ld-linux.so.2@/lib/ld-linux.so.2@g;' \
+	perl -p -e 's@$(WD)/lib/$(LINKER)@/lib/$(LINKER)@g;' \
 	    -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
 	    `dirname $$(gcc --print-libgcc-file-name)`/specs
 	touch $@
