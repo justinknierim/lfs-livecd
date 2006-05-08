@@ -7,8 +7,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 
-DEPS= $(FILE) $(PATCHES)
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -74,11 +72,10 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(DEPS)
+stage2: $(FILE)
 	$(sep_dir_build)
 
 compile-stage2:
-	cd ../$(DIR) ; for PATCH in $(PATCHES) ; do patch -Np1 -i ../$$PATCH ; done
 	../$(DIR)/configure --prefix=/usr --enable-shared
 	make $(PM) tooldir=/usr
 	make tooldir=/usr install

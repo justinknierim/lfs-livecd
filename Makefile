@@ -424,7 +424,7 @@ endif
 #==============================================================================
 
 clean: unmount
-	@-rm -rf $(WD) $(MP)$(WD) $(MPBASE)$(WD)
+	@-rm -rf $(WD) $(MPBASE)$(WD)
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
