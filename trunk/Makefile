@@ -274,12 +274,12 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-popt ch-samba ch-irssi ch-wireless_tools ch-tcpwrappers ch-portmap \
 	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
 	ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
-        ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-        ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
-        ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-        ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
-        ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-        ch-bin86 ch-lilo ch-syslinux
+	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
+	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
+	ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
+	ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
+	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
+	ch-bin86 ch-lilo ch-syslinux
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 endif
