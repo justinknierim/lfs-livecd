@@ -257,7 +257,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
-	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils \
+	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
 	ch-initramfs ch-zisofs-tools ch-cdrtools ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
