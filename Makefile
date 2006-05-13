@@ -196,8 +196,6 @@ extend-minimal: $(MP)$(ROOT)
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs-minimal $(chbash-post-bash)'
-	@make unmount
-	@touch $@
 
 lfsuser:
 	@-groupadd lfs
