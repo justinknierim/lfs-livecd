@@ -133,7 +133,7 @@ instructions below.
     cd ..
 
 * Make an image contatining those files:
-    mkisofs -M lfslivecd-[version].iso \
+    mkisofs -l -M lfslivecd-[version].iso \
         -C `cdrecord -msinfo dev=/dev/cdrom` \
 	-R -o second-session.iso second-session
 
@@ -173,7 +173,7 @@ you have to customize the CD as described above. Add the following files:
     Create an empty file in order to prevent udev from running dhcpcd.
 
 INTERNATIONALIZATION
-================
+============================
 It is possible to specify the locale using the bootloader prompt, like this:
 
   linux LANG=es_ES@euro
