@@ -14,7 +14,7 @@ chroot:
 
 stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co svn://linuxfromscratch.org/ALFS/jhalfs/trunk/ /root/$(DIR) \
+	@svn export svn://linuxfromscratch.org/ALFS/jhalfs/trunk/ /root/$(DIR) \
 	 >>$(DIR)-$@.log 2>&1
 	@touch $@
 
