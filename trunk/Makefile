@@ -308,11 +308,9 @@ lfs-%-only-pass2: unamemod lfsuser
 # The following takes the form 'make [package name]-only-ch'	
 %-only-ch: $(MP)$(ROOT)
 	make -C $(PKG)/$* chroot
-	make unmount
 
 gvim: $(MP)$(ROOT)
 	make -C $(PKG)/vim chroot3
-	make unmount
 
 # The following takes the form 'make [package name]-clean'
 # Cleans the build directory of a single package.
@@ -394,6 +392,7 @@ endif
 	@install -m644 doc/README $(MP)/root/README
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
+	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/ 
 	@sed 's|_LINKER_|$(LINKER)|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
 	@chmod 755 $(MP)/usr/bin/shutdown-helper
 	@cp -ra root $(MP)/etc/skel
