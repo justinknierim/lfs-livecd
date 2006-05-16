@@ -2,10 +2,25 @@
 use strict;
 use warnings;
 
+my $lang = $ARGV[0];
+$lang =~ s/.*xml.?// ;
+
 local $/;
 open(FH, "<$ARGV[0]");
 my $content = <FH>;
 close FH;
+
+# Translate "Xfce Menu" to the given language, present the result as UTF-8
+my $xfcemenu = `LC_ALL=en_US.UTF-8 LANGUAGE=$lang TEXTDOMAIN=xfdesktop gettext \"Xfce Menu\"`;
+
+# Test whether the translated menu file exists
+my $menufile = "/etc/xdg/xfce4/desktop/menu.xml.$lang";
+$menufile = "/etc/xdg/xfce4/desktop/menu.xml" unless -e $menufile;
+
+my $menuentry = "    <Group>\n      <Control id=\"-1\" filename=\"libdesktopmenu.so\" use_default_menu=\"1\" menu_file=\"$menufile\" icon_file=\"/usr/share/pixmaps/xfce4_xicon1.png\" show_menu_icons=\"1\" button_title=\"$xfcemenu\"/>\n    </Group>";
+
+# Add this entry as the first panel icon
+$content =~ s,<Groups>,<Groups>\n$menuentry,g;
 
 # Remove popup menus related to Konqueror etc.
 $content =~ s,<Popup>.*?</Popup>,<Popup/>,sg;
