@@ -4,9 +4,9 @@ NM= psmisc
 VRS= 22.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a9fbc679297fcf1e4d42a1beb29e28358174ee33
+SHA-$(FILE)= 1ae222803c5b5967a1b93e69f08330e0cdc1a554
 
 # Targets
 
