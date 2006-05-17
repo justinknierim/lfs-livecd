@@ -5,7 +5,7 @@ VRS= 20060308
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/ddccontrol/$(FILE)
 SHA-$(FILE)= da7358e8bdcd7d5a8ce26194cae0d4e7010a5b5e
 
 # Targets
