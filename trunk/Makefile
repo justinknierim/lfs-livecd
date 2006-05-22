@@ -190,12 +190,16 @@ extend-lfs: $(MP)$(ROOT)
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
+	@install -m644 etc/issue $(MP)/etc/issue
 
 extend-minimal: $(MP)$(ROOT)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs-minimal $(chbash-post-bash)'
+	@rm -rf $(LFSSRC) $(MP)$(LFSSRC)
+	@sed '/sources/d' etc/issue >$(MP)/etc/issue
+	@chmod 644 $(MP)/etc/issue
 
 lfsuser:
 	@-groupadd lfs
@@ -383,7 +387,6 @@ prepiso: $(MP)$(ROOT)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-	@install -m644 etc/issue $(MP)/etc/issue
 ifeq ($(LFS-ARCH),x86)
 	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
