@@ -11,12 +11,11 @@ ____________________________________________________________
 [00m
 Please read the [1;32m/root/README[00m file before using this CD.
 
-All the source packages you will need to build an LFS system
-are located in [1;32m/lfs-sources[00m.  You can find the
-LFS book in [1;32m/usr/share/LFS-BOOK-trunk-HTML[00m.
+All the source packages you will need to build an LFS system are located in [1;32m/lfs-sources[00m.
 
-Support questions concerning this CD should be directed to
-[1;32mlivecd@linuxfromscratch.org[00m
+You can find the LFS book in [1;32m/usr/share/LFS-BOOK-trunk-HTML[00m.
 
-Type "[0;31mgreeting[00m" at any time to view this message again.
+Support questions concerning this CD should be directed to [1;32mlivecd@linuxfromscratch.org[00m
+
+Type [0;31mgreeting[00m at any time to view this message again.
 
