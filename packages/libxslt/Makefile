@@ -1,12 +1,12 @@
 # libxslt Makefile
 
 NM= libxslt
-VRS= 1.1.15
+VRS= 1.1.16
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= f0c8ef4809104bf59ebf5b23a637e7dff61a2aa4
+SHA-$(FILE)= 1ccd3a465b4b4db2d7c38176846a71cdadcbdb29
 
 # Targets
 
