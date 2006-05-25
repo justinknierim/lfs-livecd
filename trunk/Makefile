@@ -417,12 +417,12 @@ ifeq ($(LFS-ARCH),x86)
 	-V "lfslivecd-$(VERSION)" ./
 endif
 ifeq ($(LFS-ARCH),ppc)
-	@cd $(MP) ; ./usr/bin/mkisofs -z -hfs -part --allow-leading-dots \
-	-map $(MKTREE)/$(PKG)/yaboot/map.hfs -no-desktop \
+	@cd $(MPBASE) ; $(WD)/bin/mkisofs -z -hfs -part -l --allow-leading-dots \
+	-map $(MPBASE)/$(ROOT)/$(PKG)/yaboot/map.hfs -no-desktop \
 	-hfs-volid "lfslivecd-$(VERSION)" -V "lfslivecd-$(VERSION)" \
-	-hfs-bless iso/boot -r -v -o $(MKTREE)/lfslivecd-$(VERSION).iso iso \
-	 >$(MKTREE)/iso.log 2>&1
-	@if ! grep -q "Blessing" $(MKTREE)/iso.log ; then \
+	-hfs-bless iso/boot -r -v -o $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso iso \
+	 >$(MPBASE)$(ROOT)/iso.log 2>&1
+	@if ! grep -q "Blessing" $(MPBASE)$(ROOT)/iso.log ; then \
 	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
 endif
 
