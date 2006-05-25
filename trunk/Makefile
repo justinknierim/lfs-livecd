@@ -267,6 +267,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-bin86 ch-lilo ch-syslinux update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
+	make ch-hfsutils
+	make ch-parted
+	make ch-mac-fdisk
 endif
 
 blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
@@ -284,6 +287,9 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-bin86 ch-lilo ch-syslinux
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
+	make ch-hfsutils
+	make ch-parted
+	make ch-mac-fdisk
 endif
 
 wget-list:
