@@ -13,6 +13,25 @@
 DIR=/etc/sysconfig/network-devices
 IFUP=$DIR/ifup
 IFDOWN=$DIR/ifdown
+OUI_DIR=/usr/share/oui-data
+
+# Find manufacturer by MAC address
+find_oui() {
+	MACADDR=`echo $1 | LC_ALL=C tr a-f A-F`
+	IFS=":"
+	set $MACADDR
+	if [ "$1-$2-$3" = "00-50-C2" ] ; then
+		# Search IAB
+		TAIL=$4$5$6
+		TAIL=${TAIL%???}000
+		LINE=`LC_ALL=C grep ^$TAIL- $OUI_DIR/iab.txt || echo "DUMMY	DUMMY	UNKNOWN MANUFACTURER"`
+		echo "$LINE" | cut -f 3-
+	else
+		# Search OUI
+		LINE=`LC_ALL=C grep ^$1-$2-$3 $OUI_DIR/oui.txt || echo "DUMMY	DUMMY	UNKNOWN MANUFACTURER"`
+		echo "$LINE" | cut -f 3-
+	fi
+}
 
 # Form to enter nameservers for /etc/resolv.conf
 set_dns(){
@@ -332,7 +351,16 @@ if [ `whoami` != "root" ] ; then
 	exit 1;
 fi
 
-for EDEV in /sys/class/net/eth* /sys/class/net/wlan* ; do
+for EDEV in /sys/class/net/* ; do
+	if [ ! -f $EDEV/addr_len ] || [ ! -f $EDEV/address ] ; then
+		continue
+	fi
+	read ADDRLEN <$EDEV/addr_len
+	read MACADDR <$EDEV/address
+	if [ "$ADDRLEN" != "6" ] || [ "$MACADDR" = "00:00:00:00:00:00" ] ; then
+		continue
+	fi
+	
 	EDEV=`basename $EDEV`
 	if echo $EDEV | grep -q "*" ; then continue ; fi
 	if echo `/sbin/ip link show $EDEV 2> /dev/null` | grep -q UP ; then
@@ -340,6 +368,7 @@ for EDEV in /sys/class/net/eth* /sys/class/net/wlan* ; do
 	else
 		EDEVSTATUS="DOWN"
 	fi
+	EDEVSTATUS="$EDEVSTATUS (`find_oui $MACADDR` $MACADDR)"
 	DEVLIST="$DEVLIST `basename $EDEV` \"$EDEVSTATUS\""
 done
 DEVLIST="$DEVLIST dialup \"Configure a dial-up modem.\" gprs \"Configure a GPRS modem.\""
