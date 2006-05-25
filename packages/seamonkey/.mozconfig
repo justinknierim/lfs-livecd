@@ -1,4 +1,4 @@
-mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/obj-i486-pc-linux-gnu
+mk_add_options MOZ_OBJDIR=@TOPSRCDIR@/mozilla-build
 mk_add_options MOZ_MAKE_FLAGS=-j3
 mk_add_options MOZ_CO_PROJECT=suite
 
