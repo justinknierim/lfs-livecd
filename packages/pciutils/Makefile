@@ -1,12 +1,12 @@
 # PCI Utilities Makefile
 
 NM= pciutils
-VRS= 2.2.1
+VRS= 2.2.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 94cd7e5db0e45d21e3892d3e6af6fe325af52dcb
+SHA-$(FILE)= 4a58d578cd0e0d81b85f8ee592c0c5e1d6ce6cda
 
 # Targets
 
