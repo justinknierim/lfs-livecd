@@ -368,7 +368,11 @@ for EDEV in /sys/class/net/* ; do
 	else
 		EDEVSTATUS="DOWN"
 	fi
-	EDEVSTATUS="$EDEVSTATUS (`find_oui $MACADDR` $MACADDR)"
+	MANUF="`find_oui $MACADDR`"
+	if [ ${#MANUF} -gt 40 ] ; then
+		MANUF=${MANUF:0:37}...
+	fi
+	EDEVSTATUS="$EDEVSTATUS ($MANUF $MACADDR)"
 	DEVLIST="$DEVLIST `basename $EDEV` \"$EDEVSTATUS\""
 done
 DEVLIST="$DEVLIST dialup \"Configure a dial-up modem.\" gprs \"Configure a GPRS modem.\""
