@@ -57,7 +57,7 @@ define download
 	@ln -sf $(SRC)/$(1) .
 endef
 
-%.gz %.tgz %.bz2 %.zip %.patch %.diff %.rules %.ttf:
+%.gz %.tgz %.bz2 %.zip %.patch %.diff %.rules %.ttf %.jpg:
 	$(call download,$@,$(URL-$@),$(SHA-$@))
 
 wget-list-entry:
