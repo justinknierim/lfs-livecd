@@ -226,6 +226,27 @@ If your monitor cannot handle such resolution, edit the
 /etc/X11/xinit/xserverrc file with vim, nano or joe, and add the -dpi 94
 parameter to the X server command line there.
 
+BRAILLE DISPLAY SUPPORT
+===========================
+The LiveCD includes the "brltty" program that allows a blind person to read
+the contents of Linux text console on a Braille display. In order to
+activate it:
+
+* Insert the CD into the drive, reboot the computer. The BIOS will produce
+  a beep, indicating successful power-on self-testing. Then it will load
+  the boot loader from the CD, and the boot loader will produce a second beep.
+* After the second beep, type:
+
+linux brltty=eu,ttyS0
+
+  This example assumes that the EuroBraille device is connected to the
+  first serial port. For other device types, the brltty parameter will
+  be different.
+
+Note: on this CD, the "brltty" program has not been configured to support
+any locale other than C and en_US. This is a bug, but the steps required
+to fix it are not known.
+
 THANKS
 ===========================
 Many thanks to all whose suggestions, support and hard work have helped create

@@ -11,10 +11,17 @@ export LC_ALL
 
 case "${1}" in
 	start)
-		if [ ! -z "$BRLTTY" ] ; then
+		if [ ! -z "$brltty" ] ; then
 		  boot_mesg "Activating brltty..."
-		  /usr/bin/brltty $BRLTTY
+		  /usr/bin/brltty
 		  echo_ok
+		  # Some applications need to be configured specially
+		  # in order to show cursor on selected items in menus
+		  echo 'visit_items=ON' >>/etc/dialogrc
+		  echo 'set braille_friendly=yes' >>/root/.muttrc
+		  sed -i 's/^#SHOW_CURSOR:FALSE/SHOW_CURSOR:TRUE/' /etc/lynx.cfg
+		  sed -i 's/^draw_arrow=OFF/draw_arrow=ON/' /etc/tin/tinrc
+		  # FIXME: others
 		fi
 		;;
 	*)
