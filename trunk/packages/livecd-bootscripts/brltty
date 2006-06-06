@@ -2,8 +2,10 @@
 
 # this script runs before "console",
 # thus translated error messages are not allowed
+# but a UTF-8 based locale is required for testing
+# the remote-X braille emulator (not on this CD)
 
-LC_ALL=C
+LC_ALL=en_US.UTF-8
 export LC_ALL
 
 . /etc/sysconfig/rc
