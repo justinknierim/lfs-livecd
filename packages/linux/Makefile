@@ -59,11 +59,10 @@ endif
 ifndef LIBATA_SUFFIX
 	make $(PM)
 	make modules_install
-else
+endif
 ifeq ($(LFS-ARCH),x86)
 	make $(PM) bzImage
 	cp -v arch/i386/boot/bzImage /boot/isolinux/linux$(LIBATA_SUFFIX)
-endif
 endif
 ifeq ($(LFS-ARCH),ppc)
 	make $(PM) vmlinux
