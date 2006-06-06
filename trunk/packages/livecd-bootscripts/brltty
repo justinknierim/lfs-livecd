@@ -15,8 +15,8 @@ case "${1}" in
 	start)
 		if [ ! -z "$brltty" ] ; then
 		  boot_mesg "Activating brltty..."
-		  /usr/bin/brltty
-		  echo_ok
+		  loadproc /usr/bin/brltty -l 0
+		  evaluate_retval
 		  # Some applications need to be configured specially
 		  # in order to show cursor on selected items in menus
 		  echo 'visit_items=ON' >>/etc/dialogrc
