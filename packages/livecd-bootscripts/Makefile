@@ -3,7 +3,7 @@ VRS= SVN
 
 # Targets
 
-SCRIPTS= customize clkconf langconf brltty
+SCRIPTS= customize clkconf langconf brltty brltty-restart
 DATA= font.dat font-errors.dat lang.dat
 
 include $(ROOT)/scripts/functions
@@ -25,6 +25,8 @@ compile-stage2:
 	ln -sf ../init.d/brltty /etc/rc.d/rcsysinit.d/S11brltty
 	ln -sf ../init.d/clkconf /etc/rc.d/rcsysinit.d/S59clkconf
 	ln -sf ../init.d/langconf /etc/rc.d/rcsysinit.d/S69langconf
+	# brltty has to be restarted in order to see the font change
+	ln -sf ../init.d/brltty-restart /etc/rc.d/rcsysinit.d/S71brltty-restart
 
 clean:
 
