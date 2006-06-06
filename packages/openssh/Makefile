@@ -22,7 +22,6 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	install -v -d -m700 /var/lib/sshd
 	chown root:sys /var/lib/sshd
-	sed -i "s:-lcrypto:/usr/lib/libcrypto.a:g" configure
 	./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin \
 	 --with-md5-passwords --with-privsep-path=/var/lib/sshd
 	make $(PM)
