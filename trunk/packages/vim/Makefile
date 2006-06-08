@@ -47,7 +47,8 @@ compile-stage2:
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sfv vim /usr/bin/vi
-	ln -sfv vim.1 /usr/share/man/man1/vi.1
+	for L in "" fr it pl ru ; do \
+	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
 	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
@@ -66,7 +67,8 @@ compile-stage3:
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{gr,pl,ru,sk}
 	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sfv vim /usr/bin/vi
-	ln -sfv vim.1 /usr/share/man/man1/vi.1
+	for L in "" fr it pl ru ; do \
+	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
 	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
