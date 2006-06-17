@@ -1,12 +1,12 @@
 # Coreutils Makefile
 
 NM= coreutils
-VRS= 5.94
+VRS= 5.96
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= c39add02995304e1cf3dfc8543702f22155fba50
+SHA-$(FILE)= 782379daf200427058ca94a408566d600f779823
 
 PATCH1= $(DIR)-uname-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
@@ -32,8 +32,6 @@ compile-stage1:
 	./configure --prefix=$(WD)
 	make $(PM)
 	make install
-	mv $(WD)/bin/uname $(WD)/bin/uname.real 
-	install -m 755 $(MP)$(ROOT)/uname/uname $(WD)/bin/
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
@@ -59,8 +57,6 @@ endif
 	mv /usr/bin/{rmdir,stty,sync,true,uname} /bin
 	mv /usr/bin/chroot /usr/sbin
 	mv /usr/bin/{head,sleep} /bin
-	mv /bin/uname /bin/uname.real
-	install -m 755 ${ROOT}/uname/uname /bin/
 
 clean:
 	-rm -rf $(DIR)

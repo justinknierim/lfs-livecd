@@ -21,8 +21,8 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-	./configure --prefix=$(WD) --with-shared --without-debug \
-	 --without-ada --enable-overwrite
+	./configure --prefix=$(WD) --with-shared --without-normal \
+	 --without-debug --without-ada --enable-overwrite --without-cxx-binding
 	make
 	make install
 
@@ -38,7 +38,7 @@ stage2: Makefile $(FILE) $(PATCH50)
 # And nothing on the CD uses the C++ binding
 compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
-	./configure --prefix=/usr --with-shared \
+	./configure --prefix=/usr --with-shared --without-normal \
 	    --without-debug --enable-widec --without-cxx-binding
 	make
 	make install
@@ -46,14 +46,10 @@ compile-stage2:
 	mv /usr/lib/libncursesw.so.5* /lib
 	ln -sfv ../../lib/libncursesw.so.5 /usr/lib/libncursesw.so
 	for lib in curses ncurses form panel menu ; do \
-	  rm -vf /usr/lib/lib$${lib}.so ; \
 	  echo "INPUT(-l$${lib}w)" >/usr/lib/lib$${lib}.so ; \
-	  ln -svf lib$${lib}w.a /usr/lib/lib$${lib}.a ; \
 	 done
 	echo "INPUT(-lncursesw)" >/usr/lib/libcursesw.so
 	ln -svf libncurses.so /usr/lib/libcurses.so
-	ln -svf libncursesw.a /usr/lib/libcursesw.a
-	ln -svf libncurses.a /usr/lib/libcurses.a
 
 clean:
 	-rm -rf $(DIR)

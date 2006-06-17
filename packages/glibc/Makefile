@@ -28,9 +28,10 @@ stage1: $(FILE) $(FILE2)
 	cp $(SRC)/{$(FILE),$(FILE2)} $(LFSSRC)/
 
 compile-stage1:
+# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
-	 --without-gd --with-headers=$(WD)/include --without-selinux
+	 --without-gd --with-headers=$(WD)/include --without-selinux --enable-static
 	PARALLELMFLAGS="$(PM)" make
 	# LFS says:
 	# mkdir -v /tools/etc
@@ -59,9 +60,11 @@ compile-stage2:
 	        ../$(DIR)/scripts/test-installation.pl
 # LiveCD specific locale additions
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH50)
+# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=/usr --disable-profile \
-	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc
+	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc --enable-static
 	PARALLELMFLAGS="$(PM)" make
+	-make -k check
 	touch /etc/ld.so.conf
 	PARALLELMFLAGS="$(PM)" make install
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales

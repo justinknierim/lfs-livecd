@@ -1,12 +1,12 @@
 # Tcl Makefile
 
 NM= tcl
-VRS= 8.4.12
+VRS= 8.4.13
 DIR= $(NM)$(VRS)
 
 FILE= $(DIR)-src.tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 8f9808da2df0aeb2319ab10a4fc49295789fc43d
+SHA-$(FILE)= 4af6bec9a941d7d798df4287eebece7ded67489c
 
 # Targets
 
@@ -17,7 +17,6 @@ stage1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
-	cd unix ; cp configure configure.orig ; sed "s/relid'/relid/" configure.orig >configure
 	cd unix ; ./configure --prefix=$(WD)
 	cd unix ; make $(PM)
 	cd unix ; make install

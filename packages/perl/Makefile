@@ -24,7 +24,9 @@ stage1: $(FILE) $(PATCH1)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
-	./configure.gnu --prefix=$(WD) -Dstatic_ext='Data/Dumper Fcntl IO POSIX' \
+	./configure.gnu --prefix=$(WD) \
+	 -Dstatic_ext='Data/Dumper Fcntl IO POSIX' \
+	 -Darchname=$${LFS_TARGET%%-*}-linux \
 	 $(EXTRA_CONF)
 	make perl utilities
 	cp perl pod/pod2man $(WD)/bin
@@ -42,7 +44,9 @@ compile-stage2:
 	./configure.gnu --prefix=/usr \
 	    -Dman1dir=/usr/share/man/man1 \
 	    -Dman1dir=/usr/share/man/man1 \
-	    -Dpager="/usr/bin/less -isR"
+	    -Dpager="/usr/bin/less -isR" \
+	    -Duseshrplib=true \
+	    -Darchname=$${LFS_TARGET%%-*}-linux
 	make
 	make install
 

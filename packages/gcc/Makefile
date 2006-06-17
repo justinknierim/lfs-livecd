@@ -16,14 +16,17 @@ SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
 
 include $(ROOT)/scripts/functions
 
+export LFS_USE_TARGET := yes
+
 pass1: $(FILE)
 	$(sep_dir_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-pass1:
+# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
-	 --enable-languages=c
+	 --enable-languages=c --enable-static
 	make $(PM) bootstrap
 	make install
 	ln -s gcc $(WD)/bin/cc
@@ -39,10 +42,11 @@ compile-pass2:
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
 	 > gcc/Makefile.in
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
 	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
-	 --disable-libstdcxx-pch
+	 --disable-libstdcxx-pch --enable-static
 	make $(PM)
 	make install
 
@@ -60,10 +64,12 @@ compile-stage2:
 	 gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's/@have_mktemp_command@/yes/' gcc/gccbug.in
+# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-clocale=gnu --enable-languages=c,c++
+	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static
 	make $(PM)
+	-make -k check
 	make install
 	ln -sf ../usr/bin/cpp /lib
 	ln -sf gcc /usr/bin/cc
