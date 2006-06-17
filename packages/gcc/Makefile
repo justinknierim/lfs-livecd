@@ -24,11 +24,11 @@ pass1: $(FILE)
 
 compile-pass1:
 # --enable-static overrides the unsuitable default in config.site
-	../$(DIR)/configure --prefix=$(WD) \
+	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
 	 --enable-languages=c --enable-static
-	make $(PM) bootstrap
-	make install
+	unset CFLAGS ; make $(PM) bootstrap
+	unset CFLAGS ; make install
 	ln -s gcc $(WD)/bin/cc
 
 pass2: $(FILE) $(PATCH1)

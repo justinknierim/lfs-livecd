@@ -20,11 +20,11 @@ pass1: $(FILE)
 
 compile-pass1:
 # --disable-shared overrides unsuitable default from config.site
-	../$(DIR)/configure --prefix=$(WD) --disable-nls --disable-shared
-	make $(PM)
-	make install
-	make -C ld clean
-	make -C ld LIB_PATH=$(WD)/lib
+	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) --disable-nls --disable-shared
+	unset CFLAGS ; make $(PM)
+	unset CFLAGS ; make install
+	unset CFLAGS ; make -C ld clean
+	unset CFLAGS ; make -C ld LIB_PATH=$(WD)/lib
 	cp -v ld/ld-new $(WD)/bin
 
 adjust-toolchain:

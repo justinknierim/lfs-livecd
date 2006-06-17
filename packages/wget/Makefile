@@ -19,10 +19,10 @@ prebuild: ftpget $(FILE)
 	$(std_build)
 
 compile-prebuild:
-	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
+	unset CFLAGS ; ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared --disable-nls
-	make $(PM)
-	make install
+	unset CFLAGS ; make $(PM)
+	unset CFLAGS ; make install
 
 stage1: $(FILE)
 	$(std_build)
