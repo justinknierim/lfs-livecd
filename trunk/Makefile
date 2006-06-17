@@ -24,8 +24,7 @@
 # LFS-ARCH: architecture for which the CD should be built.
 # MP:       mount point
 # timezone: default timezone
-# pagesize: paper size for groff.
-#           In utf8-newmake branch, create /etc/papersize instead
+# pagesize: default paper size for groff.
 # ROOT:     name of this directory, as seen from chroot
 # PM:       Parallel Build Level
 # HTTP:     Default http server for the lfs-base packages
@@ -49,6 +48,7 @@ export SRC := /sources
 export LFSSRC := /lfs-sources
 export PKG := packages
 export MKTREE := $(MP)$(ROOT)
+export CONFIG_SITE := $(ROOT)/scripts/config.site
 
 ROOTFS_MEGS := 1536
 
@@ -112,11 +112,11 @@ root.ext2:
 
 # This target populates the root.ext2 image and sets up some mounts
 # Basically, replaces the prep-chroot and createdirs targets
-$(MP)$(ROOT): root.ext2
+$(MKTREE): root.ext2
 	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
 	mount -o loop root.ext2 $(MP)
 	-rm $(MP)/boot
-	mkdir -p $(MP)$(ROOT) $(MP)$(SRC) $(MP)$(WD) $(MP)/boot
+	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD) $(MP)/boot
 	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
 	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
 	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
@@ -157,7 +157,6 @@ $(MP)$(ROOT): root.ext2
 	-mknod -m 666 $(MP)/dev/tty c 5 0
 	-mknod -m 444 $(MP)/dev/random c 1 8
 	-mknod -m 444 $(MP)/dev/urandom c 1 9
-	# No chown because this will not affect the permissions in any way.
 	-ln -s /proc/self/fd $(MP)/dev/fd
 	-ln -s /proc/self/fd/0 $(MP)/dev/stdin
 	-ln -s /proc/self/fd/1 $(MP)/dev/stdout
@@ -166,8 +165,7 @@ $(MP)$(ROOT): root.ext2
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
-lfs-base: $(MP)$(ROOT) lfsuser
-	@-make unamemod
+lfs-base: $(MKTREE) lfsuser
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
 	@cp $(ROOT)/scripts/unpack $(WD)/bin
@@ -185,14 +183,14 @@ lfs-base: $(MP)$(ROOT) lfsuser
 stop-here:
 	exit 1
 
-extend-lfs: $(MP)$(ROOT)
+extend-lfs: $(MKTREE)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
 	@install -m644 etc/issue $(MP)/etc/issue
 
-extend-minimal: $(MP)$(ROOT)
+extend-minimal: $(MKTREE)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
@@ -215,10 +213,6 @@ pre-wget:
 	@make -C $(PKG)/wget prebuild
 	@touch $@
 
-unamemod:
-	@install -m 755 uname/uname $(WD)/bin/
-	@touch $@
-
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
@@ -226,8 +220,7 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
 	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
 	lfs-m4-scpt lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
-	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
-	lfs-strip
+	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt
 	@cp /etc/resolv.conf $(WD)/etc
 
 pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
@@ -305,21 +298,21 @@ wget-list:
 #==============================================================================
 
 # The following takes the form 'make lfs-[package name]-only'	
-lfs-%-only: unamemod lfsuser
+lfs-%-only: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-scpt'"
 
 # The following two take the form 'make lfs-[package name]-only-pass#'	
-lfs-%-only-pass1: unamemod lfsuser
+lfs-%-only-pass1: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass1'"
 
-lfs-%-only-pass2: unamemod lfsuser
+lfs-%-only-pass2: lfsuser
 	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass2'"
 
 # The following takes the form 'make [package name]-only-ch'	
-%-only-ch: $(MP)$(ROOT)
+%-only-ch: $(MKTREE)
 	make -C $(PKG)/$* chroot
 
-gvim: $(MP)$(ROOT)
+gvim: $(MKTREE)
 	make -C $(PKG)/vim chroot3
 
 # The following takes the form 'make [package name]-clean'
@@ -358,12 +351,6 @@ lfs-%-pass2:
 lfs-adjust-toolchain:
 	$(MAKE) -C $(PKG)/binutils adjust-toolchain
 
-lfs-strip:
-	@-strip --strip-debug $(WD)/lib/*
-	@-strip --strip-unneeded $(WD)/{,s}bin/*
-	@-rm -rf $(WD)/{doc,info,man}
-	@touch $@
-
 ch-%:
 	make -C $(PKG)/$* stage2
 
@@ -388,7 +375,7 @@ chroot-gvim:
 # Targets to create the iso
 #==============================================================================
 
-prepiso: $(MP)$(ROOT)
+prepiso: $(MKTREE)
 	@-rm $(MP)/root/.bash_history
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
@@ -434,8 +421,7 @@ clean: unmount
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,unamemod,lfs-base,extend-lfs,lfs-strip,}
-	@-rm {sqfs.log,lfs-strip,pre-wget}
+	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
@@ -455,20 +441,20 @@ clean_sources:
 	@find packages/* -xtype l -exec rm -f \{} \;
 
 unmount:
-	@-umount $(MP)/dev/shm
-	@-umount $(MP)/dev/pts
-	@-umount $(MP)/proc
-	@-umount $(MP)/sys
-	@-umount $(MP)/boot
-	@-umount $(MP)$(SRC)
-	@-umount $(MP)$(WD)
-	@-umount $(MP)$(ROOT)
-	@-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
-	@-rmdir $(MP)/boot
-	@-ln -s /dev/shm/.cdrom/boot $(MP)
-	@-umount $(MP)
+	-umount $(MP)/dev/shm
+	-umount $(MP)/dev/pts
+	-umount $(MP)/proc
+	-umount $(MP)/sys
+	-umount $(MP)/boot
+	-umount $(MP)$(SRC)
+	-umount $(MP)$(WD)
+	-umount $(MP)$(ROOT)
+	-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
+	-rmdir $(MP)/boot
+	-ln -s /dev/shm/.cdrom/boot $(MP)
+	-umount $(MP)
 
-zeroes: $(MP)$(ROOT)
+zeroes: $(MKTREE)
 	-dd if=/dev/zero of=$(MP)/zeroes
 	-rm $(MP)/zeroes
 	-make unmount

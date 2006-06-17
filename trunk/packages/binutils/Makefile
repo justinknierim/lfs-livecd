@@ -12,13 +12,15 @@ SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
 include $(ROOT)/scripts/functions
 
 LINKER ?= ld-linux.so.2
+export LFS_USE_TARGET := yes
 
 pass1: $(FILE)
 	$(sep_dir_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-pass1:
-	../$(DIR)/configure --prefix=$(WD) --disable-nls
+# --disable-shared overrides unsuitable default from config.site
+	../$(DIR)/configure --prefix=$(WD) --disable-nls --disable-shared
 	make $(PM)
 	make install
 	make -C ld clean
@@ -45,8 +47,9 @@ pass2: $(FILE)
 	$(sep_dir_build)
 
 compile-pass2:
+# --disable-shared overrides unsuitable default from config.site
 	../$(DIR)/configure --prefix=$(WD) --disable-nls \
-	 --with-lib-path=$(WD)/lib
+	 --with-lib-path=$(WD)/lib --disable-shared
 	make $(PM)
 	make install
 	make -C ld clean
@@ -78,6 +81,7 @@ stage2: $(FILE)
 compile-stage2:
 	../$(DIR)/configure --prefix=/usr --enable-shared
 	make $(PM) tooldir=/usr
+	-make -k check
 	make tooldir=/usr install
 	cp ../$(DIR)/include/libiberty.h /usr/include
 

@@ -1,29 +1,17 @@
 #!/bin/sh
 
-# This file is not used for now and kept only for history
-
-test "$prefix" = NONE && prefix=/usr
-
-if [ ${CROSS} = "yes" ]
-then
-	case "$prefix" in
-	/cross-tools)
-		host=${LFS_HOST}
-		target=${LFS_TARGET}
-		;;
-	/tools)
-		# On IRC, Jim confirmed that always adding --build is harmless
-		build=${LFS_HOST}
-		host=${LFS_TARGET}
-		;;
-	esac
-fi
-
 test "$mandir" = '${prefix}/man' && mandir='${prefix}/share/man'
 test "$infodir" = '${prefix}/info' && infodir='${prefix}/share/info'
-test "$libdir" = NONE && libdir='${prefix}'/${LIB_MAYBE64}
-test -z "$CFLAGS" && CFLAGS="-Os -s -pipe"
-test -z "$CXXFLAGS" && CXXFLAGS=${CFLAGS}
 
-test "$prefix" != /cross-tools && test -z "$CC" && CC="gcc ${BUILD64}"
-test "$prefix" != /cross-tools && test -z "$CXX" && CXX="g++ ${BUILD64}"
+build=${LFS_TARGET}
+host=${LFS_TARGET}
+build_alias=${LFS_TARGET}
+host_alias=${LFS_TARGET}
+
+if [ "$LFS_USE_TARGET" = "yes" ] ; then
+    target=${LFS_TARGET}
+    target_alias=${LFS_TARGET}
+fi
+
+enable_static=${enable_static:-no}
+enable_shared=${enable_shared:-yes}

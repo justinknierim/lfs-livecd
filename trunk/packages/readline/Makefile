@@ -25,7 +25,6 @@ compile-stage2:
 	make $(PM) SHLIB_LIBS=-lncurses
 	make install
 	chmod 755 /lib/lib{readline,history}.so*
-	mv /lib/lib{readline,history}.a /usr/lib
 	rm /lib/lib{readline,history}.so
 	ln -sf ../../lib/libreadline.so.5 /usr/lib/libreadline.so
 	ln -sf ../../lib/libhistory.so.5 /usr/lib/libhistory.so

@@ -1,12 +1,12 @@
 # Bison Makefile
 
 NM= bison
-VRS= 2.1
+VRS= 2.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b236923e7d4909c6fd8873ac87431833fa45069b
+SHA-$(FILE)= b01691c83cc0d08d3c03e32c494f6b03381ecd21
 
 # Targets
 

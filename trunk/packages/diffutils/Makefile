@@ -35,6 +35,7 @@ stage2: Makefile $(FILE) $(PATCH50)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
+	touch man/diff.1
 	./configure --prefix=/usr
 	make $(PM)
 	make install
