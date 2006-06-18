@@ -12,7 +12,7 @@ PATCH1= $(DIR)-uname-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 42cc795e56b96994a4dc9e8f2a8dd72b6a25665f
 
-PATCH2= $(DIR)-suppress_uptime_kill_su-2.patch
+PATCH2= $(DIR)-suppress_uptime_kill_su-1.patch
 URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= a7dedf947b7651f882c8ede00eb6e56689bbb154
 
