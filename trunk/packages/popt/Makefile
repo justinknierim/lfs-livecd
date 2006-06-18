@@ -1,16 +1,12 @@
 # popt Makefile
 
 NM= popt
-VRS= 1.7
+VRS= 1.10.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(NM)_$(VRS).orig.tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 631a08bfc4db6a071944bde70144ac3609439915
-
-PATCH1= $(NM)_$(VRS)-5.diff.bz2
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 774d7b2ea41128ca8b46bc834f3de1052c4fb9dc
+FILE= $(NM)-$(VRS).tar.gz
+URL-$(FILE)= http://rpm.net.in/mirror/rpm-4.4.x/$(FILE)
+SHA-$(FILE)= 10e6649c4c37ecfb6fb4296aeca609b5fdd5e34d
 
 # Targets
 
@@ -20,20 +16,17 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	bzcat ../$(PATCH1) > ../$(DIR)-5.diff
-	patch -Np1 -i ../$(DIR)-5.diff
+	sed -i -e "/*origOptString ==/c 0)" popt.c
+	autoreconf -f -i -v
 	./configure --prefix=/usr
-	cp configure.in configure.ac
-	touch configure.in configure.ac
 	make $(PM)
 	make install
 
 clean:
 	-rm -rf $(DIR)
-	-rm -f $(DIR)-5.diff
 
 .PHONY: clean chroot compile-stage2
