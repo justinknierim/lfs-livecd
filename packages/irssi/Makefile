@@ -26,7 +26,8 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/usr --sysconfdir=/etc
+# --enable-static overrides unsuitable default from config.site
+	./configure --prefix=/usr --sysconfdir=/etc --enable-static
 	make $(PM)
 	make install
 	cp -ra $(ROOT)/root/.irssi /root
