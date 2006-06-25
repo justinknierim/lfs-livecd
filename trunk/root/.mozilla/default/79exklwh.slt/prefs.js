@@ -10,9 +10,9 @@
  */
 
 user_pref("browser.preferences.lastpanel", 0);
-user_pref("browser.search.defaultengine", "engine:///usr/lib/seamonkey-1.0.1/searchplugins/google.src");
+user_pref("browser.search.defaultengine", "engine:///usr/lib/seamonkey-1.0.2/searchplugins/google.src");
 user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-trunk-HTML/index.html");
-user_pref("browser.startup.homepage_override.mstone", "rv:1.8.0.2");
+user_pref("browser.startup.homepage_override.mstone", "rv:1.8.0.4");
 user_pref("dom.disable_open_during_load", true);
 user_pref("extensions.disabledObsolete", true);
 user_pref("extensions.irc.bugURL", "http://bugs.linuxfromscratch.org/show_bug.cgi?id=%s");
