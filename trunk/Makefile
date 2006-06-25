@@ -440,6 +440,8 @@ clean_sources:
 	@-rm $(SRC) ; rm -rf $(LFSSRC) $(MP)$(LFSSRC)
 	@find packages/* -xtype l -exec rm -f \{} \;
 
+mount: $(MKTREE)
+
 unmount:
 	-umount $(MP)/dev/shm
 	-umount $(MP)/dev/pts
@@ -459,7 +461,7 @@ zeroes: $(MKTREE)
 	-rm $(MP)/zeroes
 	-make unmount
 
-.PHONY: unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
+.PHONY: mount unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
 	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
 	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 createfiles \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
