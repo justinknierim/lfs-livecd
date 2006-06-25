@@ -1,12 +1,14 @@
 # Firefox Makefile
 
 NM= seamonkey
-VRS= 1.0.1
+VRS= 1.0.2
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= e8673838903d50247d96ed42daf99c2adbd9f577
+SHA-$(FILE)= 966e9a57269cd54f40312e5fdaa42e9f2c3fbcea
+
+PATCH1= $(NM)-$(VRS)-pangocairo-1.patch
 
 # Targets
 
@@ -25,11 +27,10 @@ compile-stage2:
 ifeq ($(LFS-ARCH),ppc)
 	echo "ac_cv_visibility_pragma=no" >> .mozconfig
 endif
+	patch -Np1 -i ../$(PATCH1)
 	make -f client.mk build
 	make -f client.mk install
 	cp -ra $(ROOT)/root/.mozilla /root
-	# ln -sf /usr/lib/mozilla/plugins/libmozsvgdec.{so,a} \
-	# /usr/lib/$(NM)-$(VRS)/plugins
 	ln -sf seamonkey /usr/bin/mozilla
 
 clean:
