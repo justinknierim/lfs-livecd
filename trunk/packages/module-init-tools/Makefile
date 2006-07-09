@@ -26,9 +26,7 @@ compile-stage2:
 	make install
 	echo 'blacklist 8139cp' >/etc/modprobe.conf
 	echo 'blacklist eth1394' >>/etc/modprobe.conf
-	echo 'blacklist skge' >>/etc/modprobe.conf
-	echo 'blacklist sky2' >>/etc/modprobe.conf
-	# After 2.6.16, blacklist sk98lin instead of skge and sky2
+	echo 'blacklist sk98lin' >>/etc/modprobe.conf
 
 clean:
 	-rm -rf $(DIR)
