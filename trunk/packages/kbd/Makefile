@@ -55,21 +55,22 @@ compile-stage2:
 ifeq ($(LFS-ARCH),sparc)
 	patch -Np1 -i ../$(PATCH30)
 endif
-	./configure
+	./configure --datadir=/lib/kbd
 	make $(PM)
 	make install
+	mv /usr/bin/{setfont,kbd_mode,openvt} /bin
 	# Turkish fixup
-	cp /usr/share/kbd/consoletrans/cp857_to_uni.trans /usr/share/kbd/unimaps/cp857.uni
+	cp /lib/kbd/consoletrans/cp857_to_uni.trans /lib/kbd/unimaps/cp857.uni
 	# Thai fonts and keymaps
 	gzip ../thai-console-data/consolefonts/*.psf
-	install -m644 ../thai-console-data/consolefonts/*.psf.gz /usr/share/kbd/consolefonts
-	install -m644 ../thai-console-data/consoletrans/tis620.acm /usr/share/kbd/consoletrans/tis620_to_uni.trans
+	install -m644 ../thai-console-data/consolefonts/*.psf.gz /lib/kbd/consolefonts
+	install -m644 ../thai-console-data/consoletrans/tis620.acm /lib/kbd/consoletrans/tis620_to_uni.trans
 	for a in ../thai-console-data/keymaps/*.kmap \
 	 ../thai-console-data/keymaps/experimental/*.kmap ; do \
 	    mv $${a} $${a%kmap}map ; done
 	sed -i 's,\+U,U,g' ../thai-console-data/keymaps/experimental/*.map
 	gzip ../thai-console-data/keymaps/*.map ../thai-console-data/keymaps/experimental/*.map
-	install -m644 ../thai-console-data/keymaps/*.map.gz ../thai-console-data/keymaps/experimental/*uni*.map.gz /usr/share/kbd/keymaps/i386/qwerty
+	install -m644 ../thai-console-data/keymaps/*.map.gz ../thai-console-data/keymaps/experimental/*uni*.map.gz /lib/kbd/keymaps/i386/qwerty
 
 clean:
 	-rm -rf $(DIR)
