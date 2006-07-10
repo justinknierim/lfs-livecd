@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Linux kernel version: 2.6.16.14
-# Wed May 24 18:53:04 2006
+# Linux kernel version: 2.6.16.20
+# Sun Jul  9 18:12:38 2006
 #
 # CONFIG_PPC64 is not set
 CONFIG_PPC32=y
@@ -160,7 +160,8 @@ CONFIG_PROC_DEVICETREE=y
 CONFIG_PM=y
 # CONFIG_PM_LEGACY is not set
 # CONFIG_PM_DEBUG is not set
-# CONFIG_SOFTWARE_SUSPEND is not set
+CONFIG_SOFTWARE_SUSPEND=y
+CONFIG_PM_STD_PARTITION=""
 CONFIG_SECCOMP=y
 CONFIG_ISA_DMA_API=y
 
