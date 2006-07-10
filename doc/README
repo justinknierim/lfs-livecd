@@ -247,6 +247,74 @@ Note: on this CD, the "brltty" program has not been configured to support
 any locale other than C and en_US. This is a bug, but the steps required
 to fix it are not known.
 
+RESUMING THE BUILD
+===========================
+There is a hint "How to resume your work after a break at different
+LFS stages" available at:
+
+http://www.linuxfromscratch.org/hints/downloads/files/stages-stop-and-resume.txt
+
+Instructions from there should work on this CD, however, there is a simpler
+(but highly experimental) method described below.
+
+1) Make sure you have (or are planning to create) a swap partition not used
+   by other Linux systems installed on your hard drive. The text below assumes
+   that /dev/hda2 is your (existing or planned) swap partition.
+
+2) Pass "resume=/dev/hda2" as one of the kernel arguments when booting this CD.
+   I.e., the complete boot line may look as:
+   linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg resume=/dev/hda2
+
+3) In chapter 2, the book tells you to create (if you didn't do it already)
+   and format that partition with mkswap. Follow the instructions in the book.
+   After running "mkswap /dev/hda2", also run the "swapon /dev/hda2" command.
+
+4) If you use X window system, edit the /etc/hibernate/common.conf file:
+   * Users of ATI video cards have to do nothing: the default file works.
+   * Users of old S3 video cards should uncomment the "EnableVbetool" line.
+   * Instructions for NVIDIA video cards are not currently known. Probably,
+     their users should uncomment the "UseDummyXServer" line (FIXME: this may
+     apply to the proprietary driver only).
+
+5) Follow the book as your time permits.
+
+6) When your time runs out, execute the "hibernate" command as root. It is not
+   necessary to stop the compilation, but running this command during a
+   testsuite may lead to failures that would not occur otherwise.
+
+NOTE: you must unmount all USB flash drives and all partitions used by other
+operating systems installed on your computer before hibernating! Don't
+attempt to mount partitions used by a hibernated system from other systems
+(even read-only, because there is no true read-only mount on journaled
+filesystems)!
+
+7) The computer will save its state to your swap partition and power down.
+   This CD will remain in the drive.
+
+8) When you are ready to resume the build, boot this CD again and pass exactly
+   the same "vga=..." and "resume=..." arguments that you used earlier.
+
+9) The computer will load its state from the swap partition and behave as if
+   you didn't power it off at all (except breaking all network connections).
+   The build will automatically continue.
+
+The procedure is a bit more complicated if your swap is on a LVM volume
+or on software RAID. In this case, instead of passing the resume=... argument,
+you should boot the CD as usual and make actions needed for the kernel to see
+the swap device (for LVM, that's "vgchange -ay"). After doing that, note
+the major and minor device number for that device (assigning persistent numbers
+is highly recommended), and echo them to /sys/power/resume. E.g., for LVM:
+
+# ls -lL /dev/myvg/swap
+brw------- 1 root root 254, 3 2006-07-10 17:51 /dev/myvg/swap
+# echo 254:3 >/sys/power/resume
+
+In the case of the first boot, this will print an error, but store the device
+numbers to be used for hibernation. Ignore the error and hibernate when needed.
+
+On the second boot (i.e., after hibernating), this "echo" command will restore
+the computer state from the swap device.
+
 THANKS
 ===========================
 Many thanks to all whose suggestions, support and hard work have helped create
