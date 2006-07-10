@@ -8,6 +8,8 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.suspend2.net/downloads/all/$(FILE)
 SHA-$(FILE)= b81808f499068937a9696e977ef1cfd499d21eee
 
+PATCH1=$(DIR)-lfs-1.patch
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -20,7 +22,9 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	PREFIX=/usr ./install.sh
+	patch -Np1 -i ../$(PATCH1)
+	rm -rf /etc/hibernate
+	yes | PREFIX=/usr ./install.sh
 
 clean:
 	-rm -rf $(DIR)
