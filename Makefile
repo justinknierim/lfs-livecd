@@ -257,7 +257,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-bin86 ch-lilo ch-syslinux update-fontsdir
+	ch-bin86 ch-lilo ch-syslinux ch-vbetool ch-hibernate-script \
+	update-fontsdir
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 	make ch-hfsutils
