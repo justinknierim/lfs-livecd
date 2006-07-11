@@ -243,9 +243,22 @@ linux brltty=eu,ttyS0
   first serial port. For other device types, the brltty parameter will
   be different.
 
-Note: on this CD, the "brltty" program has not been configured to support
-any locale other than C and en_US. This is a bug, but the steps required
-to fix it are not known.
+Note: in some locales, brltty displays incorrect Braille patterns. This is
+related to the fact that Braille tables in brltty are indexed with
+encoding-dependent byte representing the character. Such representation
+becomes invalid when another encoding for the same language is used.
+E.g., that's why the "ru" table (designed for KOI8-R encoding) produces
+wrong result in the ru_RU.CP1251 locale.
+
+Known non-working cases:
+    All CP1251-based locales (no CP1251 Braille table in brltty)
+    zh_TW (configuration instructions available in Chinese only)
+    All other Chinese, Japanese and Korean locales (no support in brltty)
+
+If brltty displays incorrect Braille patterns displays incorrect Braille
+patterns in your locale, please revert to the en_US locale, thus avoiding
+the use of non-ASCII characters. If you know how to fix this problem
+for your locale, mail this information to livecd@linuxfromscratch.org.
 
 RESUMING THE BUILD
 ===========================
