@@ -259,6 +259,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-bin86 ch-lilo ch-syslinux ch-vbetool ch-hibernate-script \
 	update-fontsdir
+ifeq ($(LFS-ARCH),x86)
+	make ch-gcc33
+endif
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 	make ch-hfsutils
