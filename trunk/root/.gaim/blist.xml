@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<gaim version='1.0'>
+	<blist>
+		<group name="LFS">
+			<setting name="collapsed" type="bool">0</setting>
+			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
+				<component name="channel">#livecd</component>
+				<component name="password"></component>
+			</chat>
+			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
+				<component name="channel">#lfs</component>
+				<component name="password"></component>
+			</chat>
+			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
+				<component name="channel">#lfs-support</component>
+				<component name="password"></component>
+			</chat>
+		</group>
+	</blist>
+	<privacy>
+		<account proto="prpl-irc" name="lfs-livecd@irc.linuxfromscratch.org" mode="1">
+		</account>
+	</privacy>
+</gaim>
