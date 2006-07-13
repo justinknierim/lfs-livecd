@@ -40,7 +40,7 @@ stage2: Makefile download symlinks utils proto lib apps drv fonts
 
 symlinks: Makefile
 	mkdir -p /usr/lib/X11 /etc/X11
-	for dir in app-defaults rstart xinit xkb xserver xsm ; do \
+	for dir in app-defaults xinit ; do \
 		mkdir -p /etc/X11/$$dir ; ln -sf /etc/X11/$$dir /usr/lib/X11 ; \
 	done
 	@touch $@
@@ -168,13 +168,13 @@ compile-y-%:
 compile-y-mesa:
 	# FIXME x86_64
 ifeq ($(LFS-ARCH),ppc)
-	make linux-dri-ppc OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/xorg/modules/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
+	make linux-dri-ppc OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
 else
-	make linux-dri-x86 OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/xorg/modules/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
+	make linux-dri-x86 OPT_FLAGS="$(CFLAGS) -DDEFAULT_DRIVER_DIR=\\\"/usr/lib/dri\\\"" MKDEP="gcc -M" MKDEP_OPTIONS="-MF depend"
 endif
 	bin/installmesa /usr
-	mkdir -p /usr/lib/xorg/modules/dri
-	install -v lib/*dri* /usr/lib/xorg/modules/dri
+	mkdir -p /usr/lib/dri
+	install -v lib/*dri* /usr/lib/dri
 
 compile-y-xorg-server:
 	unpack ../$(FILE2)
