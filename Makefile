@@ -245,7 +245,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-gc ch-w3m ch-cairo ch-hicolor-icon-theme \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-librsvg ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
-	ch-XML-Parser ch-Terminal ch-mousepad ch-irssi \
+	ch-XML-Parser ch-Terminal ch-mousepad ch-irssi ch-libgpg-error \
+	ch-libgcrypt ch-gnutls ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc \
 	ch-dialog ch-ncftp ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
@@ -261,6 +262,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	update-fontsdir
 ifeq ($(LFS-ARCH),x86)
 	make ch-gcc33
+	make ch-proprietary-drivers
 endif
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
