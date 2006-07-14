@@ -12,7 +12,7 @@ SHA-$(FILE)= 8d15b89fdf93ba84e2d33ff6061e140aed0a4dce
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= http://downloads.linuxfromscratch.org/$(FILE1)
-SHA-$(FILE1)= c6e82f279a8fb971201115d95b9b9027aefeae29
+SHA-$(FILE1)= 077121266d07d85056e30046ddefa64b1b366f95
 
 # Targets
 
