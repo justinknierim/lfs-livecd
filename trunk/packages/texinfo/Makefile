@@ -44,7 +44,6 @@ compile-stage2:
 	./configure --prefix=/usr
 	make $(PM)
 	make install
-	make TEXMF=/usr/share/texmf install-tex
 
 clean:
 	-rm -rf $(DIR)
