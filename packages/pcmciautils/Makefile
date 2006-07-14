@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's/MODALIAS/ENV{MODALIAS}/g' udev/rules-base
 	>udev/rules-modprobe
 	make
 	make SYMLINK="ln -sf" install
