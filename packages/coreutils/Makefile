@@ -56,7 +56,7 @@ endif
 	$(WD)/bin/mv /usr/bin/{false,hostname,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
 	mv /usr/bin/{rmdir,stty,sync,true,uname} /bin
 	mv /usr/bin/chroot /usr/sbin
-	mv /usr/bin/{head,sleep} /bin
+	mv /usr/bin/{head,sleep,nice} /bin
 
 clean:
 	-rm -rf $(DIR)
