@@ -1,12 +1,12 @@
 # E2fsprogs Makefile
 
 NM= e2fsprogs
-VRS= 1.38
+VRS= 1.39
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= aa8915fe43bc7cf5fba633df7041009ce9981551
+SHA-$(FILE)= c2dad0c9bd76701eafe3804e2a7d072aa198f046
 
 # Targets
 
