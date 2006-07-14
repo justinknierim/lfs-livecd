@@ -10,9 +10,9 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 8d15b89fdf93ba84e2d33ff6061e140aed0a4dce
 
-CONFIG1= $(CONFDIR).tar.bz2
-URL-$(CONFIG1)= http://downloads.linuxfromscratch.org/$(CONFIG1)
-SHA-$(CONFIG1)= c6e82f279a8fb971201115d95b9b9027aefeae29
+FILE1= $(CONFDIR).tar.bz2
+URL-$(FILE1)= http://downloads.linuxfromscratch.org/$(FILE1)
+SHA-$(FILE1)= c6e82f279a8fb971201115d95b9b9027aefeae29
 
 # Targets
 
@@ -27,7 +27,7 @@ stage2: Makefile $(FILE) $(CONFIG1)
 	cp $(SRC)/{$(FILE),$(CONFIG1)} $(LFSSRC)
 
 compile-stage2:
-	tar xf ../$(CONFIG1)
+	tar xf ../$(FILE1)
 	install -dv /lib/{firmware,udev/devices/{pts,shm}}
 	mknod -m0666 /lib/udev/devices/null c 1 3
 	ln -sfv /proc/self/fd /lib/udev/devices/fd
