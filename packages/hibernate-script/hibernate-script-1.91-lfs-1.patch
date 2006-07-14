@@ -6,7 +6,7 @@ diff -ur hibernate-script-1.91/common.conf hibernate-script-1.91.lfs/common.conf
  
  ### diskcache
 -# DisableWriteCacheOn /dev/hda
-+DisableWriteCacheOn /dev/hd? /dev/sd?
++# DisableWriteCacheOn /dev/hd? /dev/sd?
  
  ### fbsplash (enable SwitchToTextMode if you use this)
  # FBSplash on
@@ -16,8 +16,8 @@ diff -ur hibernate-script-1.91/common.conf hibernate-script-1.91.lfs/common.conf
  
 +# Rerun dhcpcd in the background for all known network interfaces
 +OnResume 59 for netdev in /sys/class/net/*/uevent ; do echo add >netdev ; done
-+# Restore console font
-+OnResume 20 openvt -f -c 1 -w /etc/rc.d/init.d/console start
++# Restore console font if not in X
++OnResume 10 case `fgconsole 2>/dev/null` in [1-6]) openvt -f -c 1 -w /etc/rc.d/init.d/console start ;; esac
 +
  ### modules
  # UnloadModules snd_via82cxxx usb-ohci
