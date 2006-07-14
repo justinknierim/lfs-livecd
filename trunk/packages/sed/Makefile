@@ -29,7 +29,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's@/doc@&/$(DIR)@' doc/Makefile.in
 	./configure --prefix=/usr --bindir=/bin --enable-html
 	make $(PM)
 	make install
