@@ -33,6 +33,7 @@ compile-stage2:
 	 --localstatedir=/var/lib/locate
 	make $(PM)
 	make install
+	mv -v /usr/bin/find /bin
 
 clean:
 	-rm -rf $(DIR)
