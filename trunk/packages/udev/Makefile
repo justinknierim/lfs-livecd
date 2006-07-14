@@ -24,7 +24,7 @@ chroot:
 
 stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(CONFIG1)} $(LFSSRC)
+	cp $(SRC)/{$(FILE),$(FILE1)} $(LFSSRC)
 
 compile-stage2:
 	tar xf ../$(FILE1)
