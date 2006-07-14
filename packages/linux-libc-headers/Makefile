@@ -31,11 +31,12 @@ stage2: $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cp -Rv include/$(LLH_ASM) /usr/include/asm
+	install -dv /usr/include/asm
+	cp -Rv include/$(LLH_ASM)/* /usr/include/asm
 	cp -Rv include/linux /usr/include
-	chown -R root:root /usr/include
-	find /usr/include -type d -exec chmod 755 {} \;
-	find /usr/include -type f -exec chmod 644 {} \;
+	chown -Rv root:root /usr/include/{asm,linux}
+	find /usr/include/{asm,linux} -type d -exec chmod -v 755 {} \;
+	find /usr/include/{asm,linux} -type f -exec chmod -v 644 {} \;
 
 clean:
 	-rm -rf $(DIR)
