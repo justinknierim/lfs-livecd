@@ -43,7 +43,7 @@ stage2: Makefile $(STAGE2_DEPS)
 compile-stage2:
 	./configure.gnu --prefix=/usr \
 	    -Dman1dir=/usr/share/man/man1 \
-	    -Dman1dir=/usr/share/man/man1 \
+	    -Dman3dir=/usr/share/man/man3 \
 	    -Dpager="/usr/bin/less -isR" \
 	    -Duseshrplib=true \
 	    -Darchname=$${LFS_TARGET%%-*}-linux
