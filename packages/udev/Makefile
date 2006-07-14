@@ -22,7 +22,7 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(CONFIG1)
+stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
 	cp $(SRC)/{$(FILE),$(CONFIG1)} $(LFSSRC)
 
