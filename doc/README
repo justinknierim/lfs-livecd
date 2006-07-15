@@ -71,18 +71,15 @@ The LiveCD attempts to configure X for your video card automatically. The
 process may fail if you have more than one video card, if your video card
 doesn't support 24-bit color depth, or if your monitor is not Plug-n-Play
 compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
-In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
-vim, joe or nano.
-
 Also, in the following cases, the autodetection process is known to suggest
 a non-working driver even for 2D graphics:
 
-    * ATI Radeon X1000 or higher
-    * Any NVIDIA card with the monitor connected to the DVI output.
+    * ATI Radeon X1000 or higher (needs "vesa" or proprietary "fglrx" driver)
+    * Any NVIDIA card with the monitor connected to the DVI output (needs
+      "vesa" or proprietary "nvidia" driver).
 
-Then, you should either install the proprietary driver (available as a *.run
-file in /lfs-sources) or use the "vesa" driver. In both cases, you should edit
-the /etc/X11/xorg.conf file manually.
+In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
+vim, joe or nano.
 
 1) In Section "Device", specify the driver for your video card, e.g.:
 
@@ -90,7 +87,11 @@ Section "Device"
         Identifier      "Generic Video Card"
         Driver          "ati"
 EndSection
-		
+
+Installers of proprietary video drivers are available in /lfs-sources as *.run
+files. IMPORTANT: in order to avoid wasting RAM by the device mapper,
+change the current directory to /dev/shm before installing these drivers.
+
 2) In Section "Monitor", specify the allowed frequency ranges for your
 monitor. If unsure, consult the manual that came with your monitor. If
 such information is not there, but you know a working resolution and refresh
