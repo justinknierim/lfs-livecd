@@ -21,7 +21,8 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --with-ssl \
-	 --with-editor=/usr/bin/vim --without-berkeley-db
+	 --with-editor=/usr/bin/vim --without-berkeley-db \
+	 --with-installbuilddir=/usr/share/apr/build
 	make $(PM)
 	make install
 	install -v -d -m755 /usr/share/doc/$(DIR)
