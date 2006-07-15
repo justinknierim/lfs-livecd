@@ -27,7 +27,7 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE1) $(FILE2) $(FILE3)
-	@install -m755 $(FILE1) $(FILE2) $(FILE3) /usr/src
+	@install -m755 $(FILE1) $(FILE2) $(FILE3) $(LFSSRC)
 	@touch $@
 
 clean:
