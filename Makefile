@@ -339,7 +339,7 @@ createfiles:
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
-	@mv $(WD)/etc/resolv.conf /etc
+	@cp $(WD)/etc/resolv.conf /etc
 
 # Do not call the targets below manually! They are used internally and must be
 # called by other targets.
@@ -383,6 +383,7 @@ chroot-gvim:
 
 prepiso: $(MKTREE)
 	@-rm $(MP)/root/.bash_history
+	@-rm $(MP)/etc/resolv.conf
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
