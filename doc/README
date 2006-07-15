@@ -74,6 +74,16 @@ compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
 In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
 vim, joe or nano.
 
+Also, in the following cases, the autodetection process is known to suggest
+a non-working driver even for 2D graphics:
+
+    * ATI Radeon X1000 or higher
+    * Any NVIDIA card with the monitor connected to the DVI output.
+
+Then, you should either install the proprietary driver (available as a *.run
+file in /lfs-sources) or use the "vesa" driver. In both cases, you should edit
+the /etc/X11/xorg.conf file manually.
+
 1) In Section "Device", specify the driver for your video card, e.g.:
 
 Section "Device"
