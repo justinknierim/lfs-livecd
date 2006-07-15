@@ -34,6 +34,7 @@ compile-stage2:
 	make $(PM)
 	make install
 	mv -v /usr/bin/find /bin
+	sed -i -e 's@BINDIR=/usr/bin@BINDIR=/bin@' /usr/bin/updatedb
 
 clean:
 	-rm -rf $(DIR)
