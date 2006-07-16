@@ -13,7 +13,7 @@ URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/blfs/svn/$(PATCH1)
 SHA-$(PATCH1)= 0ff124e669753a80050fe8b8746067d3eb8503b1
 
 PATCH2= $(DIR)-linkonce-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/blfs/svn/$(PATCH1)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/blfs/svn/$(PATCH2)
 SHA-$(PATCH2)= dd73dfe163ec16b59d3f258e7d60099a8c8de424
 
 # Targets
