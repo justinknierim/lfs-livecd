@@ -5,7 +5,7 @@ VRS= 0.8.10
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)a.tar.bz2
-URL-$(FILE)= http://www.irssi.org/files/$(FILE)
+URL-$(FILE)= http://mirror.irssi.org/$(FILE)
 SHA-$(FILE)= c27c3aa19f7e54e4295c9e78f522194b296e9f7f
 
 PATCH1= $(DIR)-gslice-1.patch
