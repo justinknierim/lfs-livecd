@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.16.25
+VRS= 2.6.16.26
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= edfe884401c74814d2b450aa0020ad5d24ad8cbb
+SHA-$(FILE)= 9bcbee82ccf335bdfc68cf57bc81d1f4ec22f151
 
 # URL_REISER4= http://www.kernel.org/pub/linux/kernel/people/akpm/patches/2.6/2.6.16/2.6.16-mm1/broken-out/
 
