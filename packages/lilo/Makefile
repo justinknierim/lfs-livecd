@@ -1,12 +1,12 @@
 # lilo Makefile
 
 NM= lilo
-VRS= 22.7.1
+VRS= 22.7.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).src.tar.gz
 URL-$(FILE)= http://home.san.rr.com/johninsd/pub/linux/lilo/$(FILE)
-SHA-$(FILE)= b431bb0756e1f42c38fc4645063acaea7f2ddcc7
+SHA-$(FILE)= 63b758d86d2242b802bce01da318f8c225eb0589
 
 PATCH1= $(NM)-22.6.1-devmapper.patch
 URL-$(PATCH1)= http://www.saout.de/misc/$(PATCH1)
