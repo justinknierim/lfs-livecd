@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= d114ed2943a4027f1277b04f57867a2e09a1f432
+SHA-$(FILE)= http://ftp.gnu.org/non-gnu/cvs/source/stable/$(VRS)/$(FILE)
 
 PATCH1= $(DIR)-zlib-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
