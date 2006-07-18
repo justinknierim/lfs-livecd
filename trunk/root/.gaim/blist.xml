@@ -6,15 +6,15 @@
 			<setting name="collapsed" type="bool">0</setting>
 			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
 				<component name="channel">#livecd</component>
-				<component name="password"></component>
+				<setting name="gtk-autojoin" type="bool">1</setting>
 			</chat>
 			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
 				<component name="channel">#lfs</component>
-				<component name="password"></component>
+				<setting name="gtk-autojoin" type="bool">1</setting>
 			</chat>
 			<chat proto="prpl-irc" account="lfs-livecd@irc.linuxfromscratch.org">
 				<component name="channel">#lfs-support</component>
-				<component name="password"></component>
+				<setting name="gtk-autojoin" type="bool">1</setting>
 			</chat>
 		</group>
 	</blist>
