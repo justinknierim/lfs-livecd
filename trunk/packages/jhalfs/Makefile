@@ -1,8 +1,12 @@
 # jhalfs Makefile
 
 NM= jhalfs
-VRS= trunk
-DIR= $(NM)
+VRS= 1.0
+DIR= $(NM)-$(VRS)
+
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/jhalfs/stable/$(FILE)
+SHA-$(FILE)= e153315fe642b76095356cccd22ea828b688a799
 
 # Targets
 
@@ -12,11 +16,11 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile
-	@$(call echo_message, Building)
-	@svn export svn://linuxfromscratch.org/ALFS/jhalfs/trunk/ /root/$(DIR) \
-	 >>$(DIR)-$@.log 2>&1
-	@touch $@
+stage2: Makefile $(FILE)
+	$(std_build)
+
+compile-stage2:
+	cp -av . /root/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
