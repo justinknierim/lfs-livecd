@@ -69,7 +69,7 @@ int main(int argc, char * argv[], char * envp[])
 	int i, overhead;
 	int fd;
 	struct dm_task * dmt;
-	struct stat stat_buf;
+	int devsize;
 	
 	printf("Initramfs activated\n");
 
@@ -114,11 +114,14 @@ int main(int argc, char * argv[], char * envp[])
 	
 	/* Create a sparse file for the second loop */
 	
-	stat(ROOT_FILE, &stat_buf);
-	overhead = 0x1000 + stat_buf.st_size / 0x100;
+	fd = open("/dev/loop0", O_RDONLY);
+	ioctl(fd, BLKGETSIZE, &devsize);
+	close(fd);
+	
+	overhead = 0x1000 + devsize * 2;
 	
 	fd = open(OVERLAY, O_CREAT | O_WRONLY, 0600);
-	ftruncate(fd, stat_buf.st_size + overhead);
+	ftruncate(fd, devsize * 0x200ULL + overhead);
 	close(fd);
 	
 	losetup("/dev/loop1", OVERLAY, O_RDWR);
@@ -128,7 +131,7 @@ int main(int argc, char * argv[], char * envp[])
         dm_task_set_name(dmt, "lfs-cd");
         dm_task_set_major(dmt, 254);
         dm_task_set_minor(dmt, 0);
-        dm_task_add_target(dmt, 0, stat_buf.st_size / 0x200,
+        dm_task_add_target(dmt, 0, devsize,
 	    "snapshot", "/dev/loop0 /dev/loop1 p 8");
         dm_task_run(dmt);
         dm_task_destroy(dmt);

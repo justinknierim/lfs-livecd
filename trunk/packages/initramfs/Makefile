@@ -55,7 +55,7 @@ endif
 	rm -rf temp
 
 init:
-	gcc $@.c -o $@ -static -ldevmapper -Os -s -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\"
+	gcc $@.c -o $@ -static -ldevmapper -Os -s -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\" -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 clean:
 	-rm -rf temp
