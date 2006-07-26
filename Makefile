@@ -258,8 +258,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-bin86 ch-lilo ch-syslinux ch-vbetool ch-hibernate-script \
-	update-fontsdir
+	ch-bin86 ch-lilo ch-syslinux ch-vbetool ch-hibernate-script
 ifeq ($(LFS-ARCH),x86)
 	make ch-gcc33
 	make ch-proprietary-drivers
@@ -270,6 +269,7 @@ ifeq ($(LFS-ARCH),ppc)
 	make ch-parted
 	make ch-mac-fdisk
 endif
+	make update-caches
 
 blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 \
@@ -372,8 +372,12 @@ final-environment:
 	@-cp $(ROOT)/etc/hosts /etc
 	@-cp $(ROOT)/etc/fstab /etc
 
-update-fontsdir:
+update-caches:
 	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
+	mandb -c 2>/dev/null
+	echo 'dummy / ext2 defaults 0 0' >/etc/mtab
+	updatedb --prunepaths='/sources /tools /lfs-livecd /proc /sys /dev /tmp /var/tmp'
+	echo >/etc/mtab
 
 chroot-gvim:
 	make -C $(PKG)/vim stage3
@@ -468,7 +472,7 @@ zeroes: $(MKTREE)
 	-rm $(MP)/zeroes
 	-make unmount
 
-.PHONY: mount unmount clean_sources scrub clean iso chroot-gvim update-fontsdir \
+.PHONY: mount unmount clean_sources scrub clean iso chroot-gvim update-caches \
 	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
 	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 createfiles \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
