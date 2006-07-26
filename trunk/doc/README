@@ -17,6 +17,7 @@ Web Tools
 * irssi (console irc client, unstable version)
 * mozilla (graphical web browser, mail and news reader and irc client)
 * xchat (x-based irc client)
+* GAIM (multiprotocol x-based chat client)
 * msmtp (SMTP client for use with mutt and tin)
 * mutt (console mail and news reader)
 * tin (console news reader)
@@ -64,6 +65,14 @@ Other Programs
 jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
 Makefiles that can download, check and build each LFS package for you.)
+
+CONFIGURING NET CONNECTION
+===========================
+The LiveCD attempts to detect the network cards present in the system.
+On each detected network card, dhcpcd is automatically started in the
+background. If it is not correct to acquire the network settings via DHCP
+in your location, or if you want to use dialup or GPRS connection, run the
+"net-setup" command.
 
 CONFIGURING X
 ===========================
