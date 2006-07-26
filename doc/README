@@ -293,12 +293,10 @@ Instructions from there should work on this CD, however, there is a simpler
    and format that partition with mkswap. Follow the instructions in the book.
    After running "mkswap /dev/hda2", also run the "swapon /dev/hda2" command.
 
-4) If you use X window system, edit the /etc/hibernate/common.conf file:
-   * Users of ATI video cards have to do nothing: the default file works.
-   * Users of old S3 video cards should uncomment the "EnableVbetool" line.
-   * Instructions for NVIDIA video cards are not currently known. Probably,
-     their users should uncomment the "UseDummyXServer" line (FIXME: this may
-     apply to the proprietary driver only).
+4) If you use X window system, take the following into account:
+   * Users of old S3 video cards should uncomment the "EnableVbetool" line
+     in the /etc/hibernate/common.conf file.
+   * Hibernation is incompatible with the proprietary "nvidia" driver.
 
 5) Follow the book as your time permits.
 
