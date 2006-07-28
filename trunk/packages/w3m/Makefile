@@ -27,7 +27,7 @@ compile-stage2:
 	autoconf
 	./configure --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc \
 	     --enable-image --with-mailer=/usr/bin/mutt \
-	     --with-browser=/usr/bin/firefox
+	     --with-browser=/usr/bin/mozilla
 	make
 	make install
 	install -v -D -m 644 doc/keymap.default /etc/w3m/keymap
