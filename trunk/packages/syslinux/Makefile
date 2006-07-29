@@ -20,11 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),x86)
 	cp -v isolinux.bin /boot/isolinux
 	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
-endif
-
 
 clean:
 	-rm -rf $(DIR)

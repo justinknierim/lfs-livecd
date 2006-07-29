@@ -258,15 +258,17 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-bin86 ch-lilo ch-syslinux ch-vbetool ch-hibernate-script
+	ch-vbetool ch-hibernate-script ch-parted
 ifeq ($(LFS-ARCH),x86)
+	make ch-bin86
+	make ch-lilo
+	make ch-syslinux
 	make ch-gcc33
 	make ch-proprietary-drivers
 endif
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
 	make ch-hfsutils
-	make ch-parted
 	make ch-mac-fdisk
 endif
 	make update-caches
