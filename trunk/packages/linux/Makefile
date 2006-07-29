@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.16.26
+VRS= 2.6.16.27
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= 9bcbee82ccf335bdfc68cf57bc81d1f4ec22f151
+SHA-$(FILE)= ef8635746668d49ba76e799ca681c1b46837e176
 
 # URL_REISER4= http://www.kernel.org/pub/linux/kernel/people/akpm/patches/2.6/2.6.16/2.6.16-mm1/broken-out/
 
@@ -20,8 +20,8 @@ PATCH4= patch-2.6.16-ide1.gz
 URL-$(PATCH4)= http://zeniv.linux.org.uk/~alan/IDE/$(PATCH4)
 SHA-$(PATCH4)= 573490726a3de61bb2edee2798d83f1350632819
 
-PATCH50= $(NM)-2.6.16-utf8_input-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/~alexander/patches/$(PATCH50)
+PATCH50= $(NM)-2.6.16.27-utf8_input-1.patch
+URL-$(PATCH50)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH50)
 SHA-$(PATCH50)= 1245a73e16a0d6d1b1adfa167bbee2c02ca92dd5
 
 # Targets
