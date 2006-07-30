@@ -258,8 +258,9 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-vbetool ch-hibernate-script ch-parted
+	ch-hibernate-script ch-parted
 ifeq ($(LFS-ARCH),x86)
+	make ch-vbetool
 	make ch-bin86
 	make ch-lilo
 	make ch-syslinux
