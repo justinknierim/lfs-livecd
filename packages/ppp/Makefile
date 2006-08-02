@@ -23,8 +23,9 @@ compile-stage2:
 	./configure --prefix=/usr
 	make $(PM)
 	make install
-	cp -a $(ROOT)/etc/ppp /etc
+	svn export --force $(ROOT)/etc/ppp /etc/ppp
 	chown -R 0:0 /etc/ppp
+	chmod 600 /etc/ppp/pap-secrets
 
 clean:
 	-rm -rf $(DIR)

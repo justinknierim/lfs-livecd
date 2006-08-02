@@ -1,13 +1,20 @@
 # LFS Book Makefile
 
 NM= LFS-BOOK
-VRS= trunk
-DIR= $(NM)-$(VRS)
+VRS= 6.2
+DIRBASE= $(NM)-$(VRS)
+DIR= $(DIRBASE)-XML
+HTMLDIR= $(DIRBASE)-HTML
 
-REV= 7646
-REVPARM= -r $(REV)
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
+SHA-$(FILE)= 8bb0076dc9979184f8d03972112cf6baffc98b4c
 
-URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+#REV= 7646
+#REVPARM= -r $(REV)
+#
+#URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
 # Targets
@@ -18,20 +25,21 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(PATCH50)
+stage2: Makefile
 	@$(call echo_message, Building)
-	@svn co -q $(REVPARM) $(URL) $(DIR)-XML
-	@cd $(DIR)-XML ; make BASEDIR=../$(DIR)-HTML
-	cp -av $(DIR)-{XML,HTML} /usr/share
+	#@svn co -q $(REVPARM) $(URL) $(DIR)-XML
+	tar xf $(FILE)
+	@cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
+	cp -av $(DIR) $(HTMLDIR) /usr/share
 	@sed -i \
-	 's@file:///.*index.html@file:///usr/share/$(DIR)-HTML/index.html@' \
+	 's@file:///.*index.html@file:///usr/share/$(HTMLDIR)/index.html@' \
 	 $(SEAMONKEY_CONFIG)
-	@sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(DIR)-HTML/index.html\"@' \
+	@sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(HTMLDIR)/index.html\"@' \
 	 $(ROOT)/etc/profile
 	@make clean >$(DIR)-$@.log 2>&1
 	@touch $@
 
 clean:
-	-rm -rf $(NM) $(DIR)-{XML,HTML}
+	-rm -rf $(NM) $(DIR) $(HTMLDIR)
 
 .PHONY: clean chroot compile-stage2

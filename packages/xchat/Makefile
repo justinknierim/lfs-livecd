@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr
 	make $(PM)
 	make install
-	cp -ra $(ROOT)/root/.xchat2 /root
+	svn export --force $(ROOT)/root/.xchat2 /root/.xchat2
 
 clean:
 	-rm -rf $(DIR)

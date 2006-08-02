@@ -30,7 +30,7 @@ endif
 	patch -Np1 -i ../$(PATCH1)
 	make -f client.mk build
 	make -f client.mk install
-	cp -ra $(ROOT)/root/.mozilla /root
+	svn export --force $(ROOT)/root/.mozilla /root/.mozilla
 	ln -sf seamonkey /usr/bin/mozilla
 
 clean:
