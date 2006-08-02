@@ -33,7 +33,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
 	make $(PM)
 	make install
-	cp -ra $(ROOT)/etc/syslog.conf /etc
+	install -m644 $(ROOT)/etc/syslog.conf /etc
 
 clean:
 	-rm -rf $(DIR)

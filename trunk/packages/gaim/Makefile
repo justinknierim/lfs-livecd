@@ -25,7 +25,7 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
-	cp -rv $(ROOT)/root/.gaim /root
+	svn export --force $(ROOT)/root/.gaim /root/.gaim
 
 clean:
 	-rm -rf $(DIR)

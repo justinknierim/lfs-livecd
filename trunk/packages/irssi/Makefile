@@ -30,7 +30,7 @@ compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --enable-static
 	make $(PM)
 	make install
-	cp -ra $(ROOT)/root/.irssi /root
+	svn export --force $(ROOT)/root/.irssi /root/.irssi
 
 clean:
 	-rm -rf $(DIR)
