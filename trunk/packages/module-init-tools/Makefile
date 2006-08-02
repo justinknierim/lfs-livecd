@@ -9,7 +9,7 @@ URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= b51e8ac170be23a1f2e301a1dddd47a47ec2186a
 
 PATCH1= $(DIR)-modprobe-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.2/$(PATCH1)
 SHA-$(PATCH1)= 0caecb2078cc47c97e496e2e4717b8b82a52eb01
 
 # Targets
