@@ -21,7 +21,7 @@ URL-$(PATCH4)= http://zeniv.linux.org.uk/~alan/IDE/$(PATCH4)
 SHA-$(PATCH4)= 573490726a3de61bb2edee2798d83f1350632819
 
 PATCH50= $(NM)-2.6.16.27-utf8_input-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH50)
+URL-$(PATCH50)= http://www.linuxfromscratch.org/patches/lfs/6.2/$(PATCH50)
 SHA-$(PATCH50)= 1245a73e16a0d6d1b1adfa167bbee2c02ca92dd5
 
 # Targets
