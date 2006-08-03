@@ -25,7 +25,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile
+stage2: Makefile $(FILE)
 	@$(call echo_message, Building)
 	#@svn co -q $(REVPARM) $(URL) $(DIR)-XML
 	tar xf $(FILE)
