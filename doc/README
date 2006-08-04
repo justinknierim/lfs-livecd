@@ -298,9 +298,9 @@ Instructions from there should work on this CD, however, there is a simpler
    I.e., the complete boot line may look as:
    linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg resume=/dev/hda2
 
-3) In chapter 2, the book tells you to create (if you didn't do it already)
-   and format that partition with mkswap. Follow the instructions in the book.
-   After running "mkswap /dev/hda2", also run the "swapon /dev/hda2" command.
+3) In chapter 2, the book tells you to create (if you didn't do it already),
+   format that partition with mkswap, and activate it with swapon. Follow the
+   instructions in the book.
 
 4) If you use X window system, take the following into account:
    * Users of old S3 video cards should uncomment the "EnableVbetool" line

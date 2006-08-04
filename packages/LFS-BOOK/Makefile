@@ -8,7 +8,7 @@ HTMLDIR= $(DIRBASE)-HTML
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
-SHA-$(FILE)= 8bb0076dc9979184f8d03972112cf6baffc98b4c
+SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
 #REV= 7646
 #REVPARM= -r $(REV)

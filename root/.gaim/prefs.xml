@@ -1,0 +1,13 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+
+<pref version='1.0' name='/'>
+	<pref name='gaim'>
+		<pref name='gtk'>
+			<pref name='browsers'>
+				<pref name='place' type='int' value='3' />
+				<pref name='command' type='string' value='' />
+				<pref name='browser' type='string' value='mozilla' />
+			</pref>
+		</pref>
+	</pref>
+</pref>
