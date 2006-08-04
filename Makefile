@@ -368,6 +368,7 @@ re-adjust-toolchain:
 
 final-environment:
 	@cp -ra $(ROOT)/etc/sysconfig /etc
+	@rm -rf /etc/sysconfig/.svn
 	@-cp $(ROOT)/etc/inputrc /etc
 	@-cp $(ROOT)/etc/bashrc /etc
 	@-cp $(ROOT)/etc/profile /etc
