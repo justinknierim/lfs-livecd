@@ -5,7 +5,7 @@ VRS= 22.7.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).src.tar.gz
-URL-$(FILE)= http://www.ibiblio.org/pub/Linux/system/boot/lilo/$(FILE)
+URL-$(FILE)= http://www.linuxfromscratch.org/~alexander/$(FILE)
 SHA-$(FILE)= b431bb0756e1f42c38fc4645063acaea7f2ddcc7
 
 PATCH1= $(NM)-22.6.1-devmapper.patch
