@@ -180,6 +180,7 @@ aliases = {
   SBAR = "STATUSBAR";
   INVITELIST = "mode $C +I";
   Q = "QUERY";
+  CHARSET = "recode add";
 };
 
 statusbar = {
