@@ -29,12 +29,12 @@ stage2: Makefile $(FILE) $(FILE1)
 compile-stage2:
 	tar xf ../$(FILE1)
 	install -dv /lib/{firmware,udev/devices/{pts,shm}}
-	mknod -m0666 /lib/udev/devices/null c 1 3
-	ln -sfv /proc/self/fd /lib/udev/devices/fd
-	ln -sfv /proc/self/fd/0 /lib/udev/devices/stdin
-	ln -sfv /proc/self/fd/1 /lib/udev/devices/stdout
-	ln -sfv /proc/self/fd/2 /lib/udev/devices/stderr
-	ln -sfv /proc/kcore /lib/udev/devices/core
+	mknod -m0666 /lib/udev/devices/null c 1 3 || true
+	ln -nsfv /proc/self/fd /lib/udev/devices/fd
+	ln -nsfv /proc/self/fd/0 /lib/udev/devices/stdin
+	ln -nsfv /proc/self/fd/1 /lib/udev/devices/stdout
+	ln -nsfv /proc/self/fd/2 /lib/udev/devices/stderr
+	ln -nsfv /proc/kcore /lib/udev/devices/core
 	rm -rf extras/dasd_id
 	make EXTRAS="`echo extras/*/`"
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install

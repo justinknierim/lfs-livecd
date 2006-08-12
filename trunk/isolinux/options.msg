@@ -11,7 +11,8 @@ Examples:
 
 There is also an alternative kernel image available that supports
 booting from SATA CD-ROMs. To use it, type "linux.ata". Note:
-it will rename your IDE disks from /dev/hdX to /dev/sdY
+it will rename your IDE disks from /dev/hdX to /dev/sdY. 64-bit
+kernels for use with CLFS are available as "linux64" and "linux64.ata"
 
 To set your timezone, add TZ=your_timezone anywhere
 after "linux" or "linux.ata". For example, TZ=EDT+4 means that the
