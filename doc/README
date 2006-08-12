@@ -60,6 +60,7 @@ Other Programs
 * LVM2
 * dmraid
 * hdparm
+* parted
 * xlockmore
 
 jhalfs
@@ -98,7 +99,8 @@ Section "Device"
 EndSection
 
 Installers of proprietary video drivers are available in /lfs-sources as *.run
-files. IMPORTANT: in order to avoid wasting RAM by the device mapper,
+files for the x86 architecture and 32-bit kernels only.
+IMPORTANT: in order to avoid wasting RAM by the device mapper,
 change the current directory to /dev/shm before installing these drivers.
 
 2) In Section "Monitor", specify the allowed frequency ranges for your
@@ -160,7 +162,6 @@ instructions below.
 * Append the image you just created to the official Linux From Scratch
   LiveCD:
     cdrecord dev=/dev/cdrom -v -multi -tao second-session.iso
-
 
 AUTOSSHD
 ============================

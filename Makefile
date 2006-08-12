@@ -260,12 +260,8 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-parted
 ifeq ($(LFS-ARCH),x86)
-	make ch-vbetool
-	make ch-bin86
-	make ch-lilo
-	make ch-syslinux
-	make ch-gcc33
-	make ch-proprietary-drivers
+	make ch-vbetool ch-bin86 ch-lilo ch-syslinux ch-gcc33 ch-proprietary-drivers
+	make ch-binutils64 ch-gcc64 ch-linux64
 endif
 ifeq ($(LFS-ARCH),ppc)
 	make ch-yaboot
