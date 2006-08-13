@@ -56,6 +56,7 @@ endif
 ifndef LIBATA_SUFFIX
 	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	PATH=$$PATH:$(WD)/bin make modules_install ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
+	rm /lib/modules/$(VRS)-64bit/{source,build}
 endif
 	PATH=$$PATH:$(WD)/bin make bzImage ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64$(LIBATA_SUFFIX)
