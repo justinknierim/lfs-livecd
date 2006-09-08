@@ -396,7 +396,7 @@ ifeq ($(LFS-ARCH),x86)
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
-	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root/README
+	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/ 
