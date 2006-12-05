@@ -1,0 +1,54 @@
+diff -urN util-linux-2.12q.orig/lib/getpass.c util-linux-2.12q/lib/getpass.c
+--- util-linux-2.12q.orig/lib/getpass.c	1970-01-01 05:00:00.000000000 +0500
++++ util-linux-2.12q/lib/getpass.c	2005-04-22 13:57:34.000000000 +0600
+@@ -0,0 +1,7 @@
++#include <stdio.h>
++
++const char *getpass(const char *prompt)
++{
++	fprintf(stderr, "This version of losetup doesn't support passwords.\n");
++	return "";	
++}
+diff -urN util-linux-2.12q.orig/mount/lomount.c util-linux-2.12q/mount/lomount.c
+--- util-linux-2.12q.orig/mount/lomount.c	2004-12-21 03:11:04.000000000 +0500
++++ util-linux-2.12q/mount/lomount.c	2005-04-22 13:39:50.000000000 +0600
+@@ -395,7 +395,6 @@
+ 
+ #ifdef LOOP_SET_FD
+ 
+-#include <getopt.h>
+ #include <stdarg.h>
+ 
+ int verbose = 0;
+@@ -448,10 +447,6 @@
+ 	int pfd = -1;
+ 	unsigned long long off;
+ 
+-	setlocale(LC_ALL, "");
+-	bindtextdomain(PACKAGE, LOCALEDIR);
+-	textdomain(PACKAGE);
+-
+ 	delete = find = 0;
+ 	off = 0;
+ 	offset = encryption = passfd = NULL;
+diff -urN util-linux-2.12q.orig/mount/Makefile util-linux-2.12q/mount/Makefile
+--- util-linux-2.12q.orig/mount/Makefile	2004-12-22 14:32:08.000000000 +0500
++++ util-linux-2.12q/mount/Makefile	2005-04-22 13:51:59.000000000 +0600
+@@ -29,7 +29,7 @@
+ 
+ MAYBE = pivot_root swapoff
+ 
+-LO_OBJS = lomount.o $(LIB)/xstrncpy.o
++LO_OBJS = lomount.o $(LIB)/xstrncpy.o $(LIB)/getpass.o
+ NFS_OBJS = nfsmount.o nfsmount_xdr.o nfsmount_clnt.o
+ GEN_FILES = nfsmount.h nfsmount_xdr.c nfsmount_clnt.c
+ 
+@@ -64,7 +64,7 @@
+ main_losetup.o: lomount.c
+ 	$(COMPILE) -DMAIN lomount.c -o $@
+ 
+-losetup: main_losetup.o $(LIB)/xstrncpy.o
++losetup: main_losetup.o $(LIB)/xstrncpy.o $(LIB)/getpass.o
+ 	$(LINK) $^ -o $@
+ 
+ mount.o umount.o nfsmount.o losetup.o fstab.o realpath.o sundries.o: sundries.h

@@ -1,0 +1,26 @@
+Origin: http://archives.linuxfromscratch.org/mail-archives/lfs-dev/2006-October/058454.html
+
+--- lfs-bootscripts-6.2/lfs/init.d/functions.orig	2006-03-22 02:02:32.000000000 +0100
++++ lfs-bootscripts-6.2/lfs/init.d/functions	2006-10-31 14:58:51.000000000 +0100
+@@ -363,7 +363,7 @@
+ 		for pid in ${lpids}
+ 		do
+ 			if [ "${pid}" -ne "$$" -a "${pid}" -ne "${PPID}" ]; then
+-				kill -0 "${pid}" > /dev/null &&
++				kill -0 "${pid}" > /dev/null 2>&1 &&
+ 				pidlist="${pidlist} ${pid}"
+ 			fi
+ 			
+@@ -588,7 +588,11 @@
+ 	done
+ 
+ 	if [ -z "${killsig}" ];	then
+-		pidofproc -s "${1}"
++		if [ -z "${pidfile}" ];	then
++			pidofproc -s "${1}"
++		else
++			pidofproc -s -p "${pidfile}" "${1}"
++		fi
+ 
+ 		# Program was terminated
+ 		if [ "$?" != "0" ]; then

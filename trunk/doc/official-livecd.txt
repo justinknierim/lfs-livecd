@@ -1,0 +1,183 @@
+AUTHOR: Alexander E. Patrakov <patrakov at ums dot usu dot ru>
+
+DATE: 2005-12-15
+
+LICENSE: GNU General Public License, version 2 or later
+
+SYNOPSIS: Design and history of the official LFS LiveCD
+
+DESCRIPTION:
+This hint documents design choices made while developing
+the official LFS LiveCD. This is not a step-by-step guide.
+
+PREREQUISITES:
+Ability to build LFS and BLFS and script the build process
+Working knowledge of C, ability to read and understand documentation
+
+HINT:
+
+I. DIFFERENCES BETWEEN A LIVE CD AND A REGULAR SYSTEM
+
+Any Linux live CD contains a Linux system and a special boot loader designed
+for running it from a CD-ROM. The fact that the root file system is stored
+on a CD leads to the following consequences:
+
+1. The device which holds the system is not known in advance.
+
+Some people have their CD-ROM as /dev/hdc, others use /dev/hdd or even /dev/sr0.
+This means that one cannot pass a fixed "root=..." argument to the kernel
+in the boot loader configuration.
+
+2. The hardware on the target system is not known in advance.
+
+In order to be useful for building the LFS system, the official LiveCD must
+be able to boot from a CD drive connected to any IDE or SCSI controller and
+also recognize all hard disks in the target system.
+
+3. The CD is read-only.
+
+The iso9660 filesystem used on CD-ROMs is read-only. However, some programs
+require a writeable location to store their settings. Some mechanism must
+exist that provides such scratch space.
+
+4. The CD size is limited to 700 MB.
+
+A bare-bones LFS system takes approximately 300 megabytes, even after stripping.
+The official LFS LiveCD must also contain LFS sources, this takes 150 MB more.
+Thus, without compression, at most 250 megabytes are left for additional BLFS
+software that makes the CD more comfortable.
+
+5. The CD must be configurable in order to fit different user needs.
+
+When a user builds his [B]LFS system, he/she edits the configuration files
+according to personal requirements. Other user may be uncomfortable with
+the first user's settings. Thus, a live CD should contain some default
+settings that work for most people. Sometimes (e.g. when keyboard layouts
+are concerned) it is not possible. In such cases, an easy configuration
+mechanism should exist.
+
+The points outlined above are discussed in more detail in the next parts
+of the hint.
+
+II. The boot loader
+
+One of the boot loaders capable of booting a Linux kernel from a CD-ROM is
+isolinux, part of the Syslinux package. Syslinux is available at:
+
+http://syslinux.zytor.com/
+
+The official LFS LiveCD uses a precompiled isolinux.bin file because some
+time ago the syslinux maintainer advised against recompiling syslinux from
+source. In order to build isolinux from source, nasm is needed. Issue the
+following commands to rebuild the isolinux.bin file:
+
+make spotless        # removes all precompiled files
+make isolinux.bin    # or just "make" if you want other programs in the package
+
+This "isolinux.bin" file should end up in the /boot/isolinux directory on the
+LiveCD, together with the isolinux.cfg configuration file, the kernel image
+("linux") and the initramfs image ("initramfs_data.cpio.gz", discussed in the
+next section). The isolinux.cfg file on the official LFS LiveCD contains the
+following:
+
+serial 0
+default linux
+prompt 1
+timeout 600
+display boot.msg
+F1 options.msg
+
+label linux
+  kernel linux
+  append initrd=initramfs_data_cpio.gz
+
+The meaning of each configuration option is described in the syslinux.doc file
+in the syslinux source tarball.
+
+The initramfs performs detection of the CD-ROM device and mounts filesystems
+in such a way that a read-write filesystem is presented to the user. From
+the viewpoint of the boot loader, the initramfs image is just an initrd.
+The file name is passed as initramfs_data_cpio.gz, not initramfs_data.cpio.gz,
+because Syslinux understands only the bare ISO9660 filenames, not RockRidge
+extensions. To see bare ISO9660 filenames, issue the following command:
+
+mount -o norock,nojoliet /dev/cdrom /media/cdrom
+
+The timeout exists for unattended boot scenarios where the user is supposed to
+connect to his LiveCD system via ssh. This currently requires customizing the
+LiveCD, as described in the README file. Earlier, an attempt was made to start
+the ssh daemon automatically when the boot prompt times out, and change the
+root password to a well-known string. Such practice was insecure, and the
+old method of starting sshd has been dropped.
+
+III. Finding the root device.
+
+When the kernel boots, it realizes that the boot loader has passed something
+to it using the initrd protocol. The kernel looks at the contents of this image
+and checks whether it looks like a compressed cpio archive. For the official
+LFS LiveCD, this is the case, and the kernel unpacks this archive into the
+"ramfs" filesystem and uses it as a root filesystem. Then, the kernel checks
+whether the /init file exists and is executable. If it is not, the usual
+"root=..." argument parsing takes place. But the initramfs on the official
+LFS LiveCD contains /init, thus, the kernel executes it instead of parsing
+the non-existing "root=..." parameter. This /init file has to mount the
+real root file system and tell the kernel to use it.
+
+Currently, a statically-linked binary is used as the /init script, which makes
+it hard to explain what exactly is going on to people who don't know the C
+programming language. The source for this binary is kept in the
+lfs-livecd/initramfs directory. Earlier pre-releases of the LiveCD contained
+a number of small utilities statically linked against the "klibc" library
+(available from http://www.kernel.org/pub/linux/libs/klibc) instead of the
+usual glibc, and the /init file was a shell script. This practice has been
+dropped in favour of a statically linked glibc-based binary because klibc
+could not be built on some non-x86 architectures, like Sparc.
+
+Searching for the root device is the first thing done by /init. This is done
+by querying the ISO9660 volume label on each known device that could
+contain the LFS LiveCD. The static device nodes created when building the CD
+are used in initramfs. The shell-based /init used the following commands for
+searching the CD:
+
+LABEL="LFS_CD"
+DEVS=`echo /dev/hd* /dev/sr*`
+
+while [ -z "$CDROM" ] && [ "$TIMEOUT" != "..............." ] ; do
+        for DEV in $DEVS ; do
+                if [ "`isoinfo -V $DEV 2>/dev/null`" = "$LABEL" ] ; then
+                        CDROM=$DEV
+                fi
+        done
+        if [ -z "$CDROM" ] ; then
+                echo -n "."
+                TIMEOUT=".$TIMEOUT"
+                sleep 1
+        fi
+done
+
+The "isoinfo" program is available from
+ftp://metalab.unc.edu/pub/Linux/utils/disk-management/
+
+In order to compile cleanly against klibc, it needs a patch:
+isoinfo-0.03.02-fixes-1.patch
+
+It is also possible to search for the CD by attempting to mount all devices
+and looking if one of them contains some file known to be present on the CD.
+
+The logic for retrying the CD-ROM detection is needed in the case of SCSI
+and USB CD-ROM drives, because the kernel performs their detection in the
+background, and it takes some time, and therefore the first round of CD-ROM
+detection may miss such devices.
+
+In the current C-based init, the corresponding logic is contained in the
+mountlfscd() function.
+
+When the device containing the LFS CD is found, the tmpfs filesystem is mouned
+onto the /.tmpfs directory, and the CD-ROM device it is mounted onto
+/.tmpfs/.cdrom. Note: this does not become the root filesystem.
+
+Such setup is needed in order to be able to access the sources present on
+the LiveCD, and will be explained later.
+
+CHANGELOG:
+{place the SVN changelog here just before the official release}

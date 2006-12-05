@@ -1,0 +1,21 @@
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+
+INPUTRC=/etc/inputrc
+
+G_FILENAME_ENCODING=@locale
+
+XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog"
+
+WWW_HOME="/usr/share/LFS-BOOK-6.2-HTML/index.html"
+
+NNTPSERVER=news.gmane.org
+
+TERMCMD=Terminal
+
+XMODIFIERS=@im=SCIM
+GTK_IM_MODULE=scim
+
+export PATH INPUTRC G_FILENAME_ENCODING PKG_CONFIG_PATH XML_CATALOG_FILES
+export WWW_HOME NNTPSERVER TERMCMD XMODIFIERS GTK_IM_MODULE
+
+source /etc/bashrc
