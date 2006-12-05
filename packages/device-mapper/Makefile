@@ -1,12 +1,12 @@
 # device-mapper Makefile
 
 NM= device-mapper
-VRS= 1.01.05
+VRS= 1.02.12
 DIR= $(NM).$(VRS)
 
 FILE= $(DIR).tgz
 URL-$(FILE)= ftp://sources.redhat.com/pub/dm/$(FILE)
-SHA-$(FILE)= 8b28c277ceb11f8a78f5e91b95036f5a563c7fa9
+SHA-$(FILE)= e1188ea7ddc4976e3614000a492e30fb019de2d6
 
 # Targets
 

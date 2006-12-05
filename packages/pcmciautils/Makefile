@@ -1,12 +1,12 @@
 # Sysfsutils Makefile
 
 NM= pcmciautils
-VRS= 013
+VRS= 014
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/pcmcia/$(FILE)
-SHA-$(FILE)= 6e0a903232788c8e0405416c7e5c7b34e9d118d4
+SHA-$(FILE)= 24122b196ab9199e259ba35ffe243d9b2820446a
 
 # Targets
 

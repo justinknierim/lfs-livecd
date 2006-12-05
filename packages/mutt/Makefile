@@ -1,20 +1,20 @@
 # mutt Makefile
 
 NM= mutt
-VRS= 1.5.11
+VRS= 1.5.13
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/mutt/$(FILE)
-SHA-$(FILE)= cc5823016fe7de6ee3a131b19a3f78796f9f53d5
+URL-$(FILE)= http://mirrors.dotsrc.org/mutt/devel/$(FILE)
+SHA-$(FILE)= 6d5b88d33e1727bf0342c31f06d55d7a3d2d4e0a
 
 PATCH1= patch-$(VRS).vvv.nntp.gz
 URL-$(PATCH1)= http://mutt.org.ua/download/mutt-$(VRS)/$(PATCH1)
-SHA-$(PATCH1)= 17070778844a6d1b8b668cadf29f4729aea7df69
+SHA-$(PATCH1)= ce67dcc2f59a709553b626ed93c12cf68f7e8551
 
 PATCH50= patch-$(VRS).mutt-j.multi-charset.1.gz
 URL-$(PATCH50)= http://www.emaillab.org/mutt/$(VRS)/$(PATCH50)
-SHA-$(PATCH50)= f9b44e1168ac669b7c14622056230f648df1686b
+SHA-$(PATCH50)= e36884d3cb9c88870feb6d7dc598534db59704dd
 
 PATCH51= mutt-$(VRS)-reject-1.patch
 # Targets
@@ -35,7 +35,6 @@ compile-stage2:
 	( zcat ../$(PATCH1) | patch -Np1 ) || patch -Np1 -i ../$(PATCH51)
 	aclocal -I m4
 	autoheader
-	cd m4 ;	make -f Makefile.am.in
 	automake --foreign
 	autoconf
 	./configure --prefix=/usr --sysconfdir=/etc --enable-imap \

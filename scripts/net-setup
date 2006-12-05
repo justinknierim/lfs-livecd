@@ -25,16 +25,16 @@ find_oui() {
 		TAIL=$4$5$6
 		TAIL=${TAIL%???}000
 		LINE=`LC_ALL=C grep ^$TAIL- $OUI_DIR/iab.txt || echo "DUMMY	DUMMY	UNKNOWN MANUFACTURER"`
-		echo "$LINE" | cut -f 3-
+		echo "$LINE" | cut -f 3- | iconv -f ISO-8859-1 -t //TRANSLIT
 	else
 		# Search OUI
 		LINE=`LC_ALL=C grep ^$1-$2-$3 $OUI_DIR/oui.txt || echo "DUMMY	DUMMY	UNKNOWN MANUFACTURER"`
-		echo "$LINE" | cut -f 3-
+		echo "$LINE" | cut -f 3- | iconv -f ISO-8859-1 -t //TRANSLIT
 	fi
 }
 
 # Form to enter nameservers for /etc/resolv.conf
-set_dns(){
+set_dns() {
 	DLG_COMMAND="dialog --title \"DNS Servers - /etc/resolv.conf\" --no-cancel \
         --form \"Please enter the DNS IP addresses below:\" 0 0 3 \
 	\"Server 1:\" 1 1 \"$F_DNS1\" 1 25 15 0 \
@@ -235,12 +235,10 @@ set_pppoe_cfg(){
 	PPPOEUSER=$F_USERNAME
         setup_papsecrets;
 
-	# Make a backup and restore before changes, so the sed's work correctly.
-	[ -f /etc/ppp/peers/pppoe.orig ] || cp /etc/ppp/peers/pppoe{,.orig}
-	cp /etc/ppp/peers/pppoe{.orig,}
-
-	# Alter /etc/ppp/peers/pppoe file.
-	sed -i -e "s@eth0@$DEV@g" -e "s@jdoe@$F_USERNAME@g" /etc/ppp/peers/pppoe
+	# '# MC is stupid
+	
+	echo "SERVICE=pppoe" >$ETHXCFG
+	echo "PPP_OPTS=\"user $F_USERNAME\"" >>$ETHXCFG
 
         unset F_USERNAME F_PASSWORD DLG_COMMAND SELECTION
 }
@@ -295,9 +293,7 @@ net_service_menu(){
 	
 		pppoe)
 			set_pppoe_cfg;
-			modprobe ppp_generic ; modprobe pppoe ; sleep 1
-			ip link set $DEV up
-			pppd call pppoe updetach
+			$IFUP $DEV
 			;;
 		*)
 			exit 0

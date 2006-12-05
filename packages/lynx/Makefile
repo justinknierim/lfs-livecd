@@ -1,12 +1,12 @@
 # Lynx Makefile
 
 NM= lynx
-VRS= 2.8.5
-DIR= $(NM)2-8-5
+VRS= 2.8.6
+DIR= $(NM)2-8-6
 
 FILE= $(NM)$(VRS).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= c70866f67c1365b55e0c9c0c569190f5919d28d4
+URL-$(FILE)= http://lynx.isc.org/lynx2.8.6/lynx2.8.6.tar.bz2
+SHA-$(FILE)= ca1242464d25f0b0560ef516a5200da89532b24b
 
 # Targets
 
@@ -20,8 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --libdir=/etc --with-zlib --with-bzlib \
-	    --enable-nls --with-ssl --enable-charset-choice \
+	./configure --prefix=/usr --sysconfdir=/etc --with-zlib --with-bzlib \
+	    --with-ssl --enable-charset-choice --enable-nls \
 	    --enable-locale-charset --with-screen=ncursesw
 	make $(PM)
 	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \

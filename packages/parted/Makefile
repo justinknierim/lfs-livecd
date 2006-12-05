@@ -1,12 +1,12 @@
 # parted Makefile
 
 NM= parted
-VRS= 1.6.25.1
+VRS= 1.7.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
-SHA-$(FILE)= b7c0d103afde096a4adf5f6783cd0688de471fc9
+SHA-$(FILE)= a504bb2c136e1c928b74e37ae5aa4066f8300e45
 
 # Targets
 

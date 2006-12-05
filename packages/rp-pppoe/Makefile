@@ -5,7 +5,7 @@ VRS= 3.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.roaringpenguin.com/penguin/pppoe/$(FILE)
+URL-$(FILE)= http://www.roaringpenguin.com/files/download/$(FILE)
 SHA-$(FILE)= d9a4346701e580b4a6049a940557b38533f9e8f7
 
 PATCH1= $(NM)-3.6-iproute2-1.patch

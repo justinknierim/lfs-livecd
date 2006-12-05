@@ -1,12 +1,12 @@
 # iptables Makefile
 
 NM= iptables
-VRS= 1.3.5
+VRS= 1.3.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 6dbeeee13517fa02852960b6f6e51115c7548a09
+URL-$(FILE)= http://www.netfilter.org/projects/iptables/files/$(FILE)
+SHA-$(FILE)= d0c873b4ce1a928424f38fa8419c96be22fef5d0
 
 # Targets
 

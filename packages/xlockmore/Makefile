@@ -1,12 +1,12 @@
 # xlockmore Makefile
 
 NM= xlockmore
-VRS= 5.19
+VRS= 5.22
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.tux.org/pub/X-Windows/xlockmore/$(FILE)
-SHA-$(FILE)= bd925bac3c8bfbe73eb7023bed1c7d8864ff73aa
+SHA-$(FILE)= 5f1789d6a9a20aef972bb37e414719610074bfb5
 
 # Targets
 

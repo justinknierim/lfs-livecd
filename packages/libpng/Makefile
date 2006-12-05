@@ -1,16 +1,12 @@
 # libpng Makefile
 
 NM= libpng
-VRS= 1.2.8
+VRS= 1.2.12
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= b6d73493eea4095166118b298efecb54a8e3d2f5
-
-PATCH1= $(DIR)-link_to_proper_libs-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 376016153e0a6f8650aea8dc754baf2679afee2a
+URL-$(FILE)= http://easynews.dl.sourceforge.net/libpng/$(FILE)
+SHA-$(FILE)= 44bd6821607ba09ac500279363871ad5974a01b5
 
 # Targets
 
@@ -20,15 +16,17 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	make prefix=/usr ZLIBINC=/usr/include ZLIBLIB=/usr/lib \
-	 -f scripts/makefile.linux
-	make prefix=/usr install -f scripts/makefile.linux
-	/sbin/ldconfig
+	./configure --prefix=/usr
+	make
+	make install
+	# Stray symlink because we disable static libraries
+	rm -f /usr/lib/libpng.a
+	install -v -m755 -d /usr/share/doc/$(DIR)
+	install -v -m644 README libpng.txt /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

@@ -1,12 +1,12 @@
 # Curl Makefile
 
 NM= curl
-VRS= 7.15.3
+VRS= 7.15.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 7e764126ce564429fe2f142428a27cbfc8fb69ee
+URL-$(FILE)= http://curl.haxx.se/download/$(FILE)
+SHA-$(FILE)= b79ee06d1da58c12c23a1b8aeccdb2b74a692cc7
 
 # Targets
 
@@ -20,8 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	 ./configure --prefix=/usr --libdir=/usr/lib
-	make $(PM)
+	./configure --prefix=/usr
+	make
 	make install
 	find docs -name "Makefile*" -o -name "*.1" -o -name "*.3" | xargs rm
 	install -v -d -m755 /usr/share/doc/$(DIR)

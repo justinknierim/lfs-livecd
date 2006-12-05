@@ -37,6 +37,7 @@ compile-stage2:
 	rm -f `grep -L 'include type="system"' /etc/xdg/xfce4/desktop/menu.xml*`
 	for f in /etc/xdg/xfce4/panel/contents.xml* ; do ../cleanup-panel.pl $$f ; done
 	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
+	sed -i 's/mice/simple/' /etc/xdg/xfce4-session/xfce4-session.rc
 	mkdir -p /etc/xdg/xfce4/mcs_settings
 	cp ../settings/* /etc/xdg/xfce4/mcs_settings
 	cp ../$(BG) /usr/share/xfce4/backdrops/

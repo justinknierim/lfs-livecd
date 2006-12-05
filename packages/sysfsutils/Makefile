@@ -1,12 +1,12 @@
 # Sysfsutils Makefile
 
 NM= sysfsutils
-VRS= 2.0.0
+VRS= 2.1.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/linux-diag/$(FILE)
-SHA-$(FILE)= 98a3883acee893f0c8e88929200bc8e202a14bf8
+SHA-$(FILE)= b3cb316c652b09ec66f93f4ea98a93a7a1001678
 
 # Targets
 

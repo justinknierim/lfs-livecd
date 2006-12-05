@@ -1,14 +1,12 @@
 # Firefox Makefile
 
 NM= seamonkey
-VRS= 1.0.2
+VRS= 1.0.5
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= 966e9a57269cd54f40312e5fdaa42e9f2c3fbcea
-
-PATCH1= $(NM)-$(VRS)-pangocairo-1.patch
+SHA-$(FILE)= 60be0112e369a06958c0295ad2de995ab476cef1
 
 # Targets
 
@@ -27,7 +25,6 @@ compile-stage2:
 ifeq ($(LFS-ARCH),ppc)
 	echo "ac_cv_visibility_pragma=no" >> .mozconfig
 endif
-	patch -Np1 -i ../$(PATCH1)
 	make -f client.mk build
 	make -f client.mk install
 	svn export --force $(ROOT)/root/.mozilla /root/.mozilla

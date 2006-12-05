@@ -1,12 +1,12 @@
 # scim-chewing Makefile
 
 NM= scim-chewing
-VRS= 0.2.1
+VRS= 0.3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://chewing.csie.net/download/scim/$(FILE)
-SHA-$(FILE)= a6e208c4dbf594256ea6fd7b3137eb37adc5d9df
+SHA-$(FILE)= 8114f297322fe94755c0349d287ee550ee6a96a2
 
 # Targets
 

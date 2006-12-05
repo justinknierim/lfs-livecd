@@ -1,0 +1,51 @@
+--- xorg-server-1.1.1/GL/symlink-mesa.sh	2006-07-05 18:38:46.000000000 +0000
++++ xorg-server-1.1.1.new/GL/symlink-mesa.sh	2006-10-17 14:58:43.000000000 +0000
+@@ -88,8 +88,11 @@
+     action api_noop.h
+     action api_validate.c
+     action api_validate.h
++    action arrayobj.c
++    action arrayobj.h
+     action attrib.c
+     action attrib.h
++    action bitset.h
+     action blend.c
+     action blend.h
+     action bufferobj.c
+@@ -168,6 +171,8 @@
+     action polygon.h
+     action rastpos.c
+     action rastpos.h
++    action rbadaptors.c
++    action rbadaptors.h
+     action renderbuffer.c
+     action renderbuffer.h
+     action simple_list.h
+@@ -462,8 +467,8 @@
+     action slang_common_builtin_gc.h
+     action slang_core_gc.h
+     action slang_fragment_builtin_gc.h
++    action slang_pp_version_syn.h
+     action slang_shader_syn.h
+-    action slang_version_syn.h
+     action slang_vertex_builtin_gc.h
+ }        
+ 
+--- xorg-server-1.1.1/GL/mesa/main/Makefile.am	2006-07-05 18:38:46.000000000 +0000
++++ xorg-server-1.1.1.new/GL/mesa/main/Makefile.am	2006-10-17 14:33:06.000000000 +0000
+@@ -29,6 +29,7 @@
+                     api_loopback.c \
+                     api_noop.c \
+                     api_validate.c \
++                    arrayobj.c \
+                     attrib.c \
+                     blend.c \
+                     bufferobj.c \
+@@ -67,6 +68,7 @@
+                     points.c \
+                     polygon.c \
+                     rastpos.c \
++                    rbadaptors.c \
+                     renderbuffer.c \
+                     state.c \
+                     stencil.c \

@@ -1,12 +1,12 @@
 # Glib Makefile
 
 NM= glib
-VRS= 2.10.2
+VRS= 2.10.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/glib/2.10/$(FILE)
-SHA-$(FILE)= 14d055725a4fa347bc4c11d6f52ec5268da2454f
+SHA-$(FILE)= bba1dea73c4426f6a130c82e0b7a07b78dfc73ce
 
 # Targets
 

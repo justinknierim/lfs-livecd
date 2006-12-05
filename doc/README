@@ -45,6 +45,8 @@ Filesystem Programs
 * reiserfsprogs
 * reiser4progs
 * xfsprogs
+* dosfstools
+* ntfsprogs
 
 Debugging Programs
 * strace
@@ -67,6 +69,25 @@ jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
 Makefiles that can download, check and build each LFS package for you.)
 
+IMPORTANT NOTE ABOUT THE KERNEL
+===========================
+The LFS book recommends using "the latest available 2.6.16.x kernel version".
+At the time of the release of this CD, such version is 2.6.16.28. However,
+because of the way jhalfs works, the source for the 2.6.16.27 kernel
+must be present on the CD in order for jhalfs to be able to build a kernel.
+However, using jhalfs for building the kernel is acceptable only if
+you don't care about security.
+
+In order to get the 2.6.16.28 kernel from this CD, unpack the
+linux-2.6.16.27.tar.bz2 source tarball, and apply the upstream update patch:
+
+bzcat ../patch-2.6.16.27-28.bz2 | patch -Np1
+
+The patch-2.6.16.27-28.bz2 file is in the /lfs-sources directory.
+
+Further kernel updates may be available from
+http://www.kernel.org/pub/linux/kernel/v2.6/incr/
+
 CONFIGURING NET CONNECTION
 ===========================
 The LiveCD attempts to detect the network cards present in the system.
@@ -84,9 +105,7 @@ compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
 Also, in the following cases, the autodetection process is known to suggest
 a non-working driver even for 2D graphics:
 
-    * ATI Radeon X1000 or higher (needs "vesa" or proprietary "fglrx" driver)
-    * Any NVIDIA card with the monitor connected to the DVI output (needs
-      "vesa" or proprietary "nvidia" driver).
+    * ATI Radeon X1000 or higher (needs the "vesa" driver)
 
 In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
 vim, joe or nano.
@@ -95,13 +114,8 @@ vim, joe or nano.
 
 Section "Device"
         Identifier      "Generic Video Card"
-        Driver          "ati"
+        Driver          "vesa"
 EndSection
-
-Installers of proprietary video drivers are available in /lfs-sources as *.run
-files for the x86 architecture and 32-bit kernels only.
-IMPORTANT: in order to avoid wasting RAM by the device mapper,
-change the current directory to /dev/shm before installing these drivers.
 
 2) In Section "Monitor", specify the allowed frequency ranges for your
 monitor. If unsure, consult the manual that came with your monitor. If
@@ -141,32 +155,12 @@ CUSTOMIZING THE CD CONTENTS
 ===========================
 It is possible to burn a customized version of the official Linux From
 Scratch LiveCD, with your own files added. To do that, follow the
-instructions below.
-
-* Burn the official CD in multi session mode:
-    cdrecord dev=/dev/cdrom -v -multi -tao lfslivecd-[version].iso
-
-* Prepare a directory with the files you want to add, delete or change:
-    mkdir second-session && cd second-session
-    vim path/to/new-file
-    vim path/to/file-to-be-changed
-    echo path/to/file1-to-be-deleted >.delete
-    echo path/to/file2-to-be-deleted >>.delete
-    cd ..
-
-* Make an image contatining those files:
-    mkisofs -l -M lfslivecd-[version].iso \
-        -C `cdrecord -msinfo dev=/dev/cdrom` \
-	-R -o second-session.iso second-session
-
-* Append the image you just created to the official Linux From Scratch
-  LiveCD:
-    cdrecord dev=/dev/cdrom -v -multi -tao second-session.iso
+instructions in the /root/lfscd-remastering-howto.txt file.
 
 AUTOSSHD
 ============================
 It is possible to start the sshd daemon automatically upon boot. To do that,
-you have to customize the CD as described above. Add the following files:
+you have to customize the CD. Create the following files:
 
 * /.autosshd
     This is the file that indicates that the sshd daemon should be
@@ -189,9 +183,6 @@ you have to customize the CD as described above. Add the following files:
 * /etc/sysconfig/network-devices/ifconfig.eth0
     Configure a known static IP address there, as described in the LFS book,
     section "7.12. Configuring the network Script".
-
-* /etc/udev/rules.d/50-network.rules
-    Create an empty file in order to prevent udev from running dhcpcd.
 
 INTERNATIONALIZATION
 ============================

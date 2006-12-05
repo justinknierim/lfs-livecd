@@ -1,13 +1,13 @@
 # FreeFont Makefile
 
-NM= freefont-ttf
-VRS= 20050407
+NM= freefont
+VRS= 20060126
 DIR= $(NM)-$(VRS)
 LOCATION= /usr/share/fonts
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 0ea665c57a5dea77e9336538547d6996e5576961
+FILE= $(NM)-ttf-$(VRS).tar.gz
+URL-$(FILE)= http://download.savannah.gnu.org/releases/$(NM)/$(FILE)
+SHA-$(FILE)= f3b53235bc1bebd228a8942068bd049693d71363
 
 # Targets
 
@@ -18,14 +18,10 @@ chroot:
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
-	mkdir $(DIR) 
-	cd $(DIR) ; unpack ../$(FILE)
-	make -C $(DIR) -f ../Makefile compile-$@ >$(DIR)-$@.log 2>&1
-	make clean
-	touch $@
+	$(std_build)
 
 compile-stage2:
-	cp -v sfd/*.ttf $(LOCATION)
+	cp -v *.ttf $(LOCATION)
 
 clean:
 	-rm -rf $(DIR)

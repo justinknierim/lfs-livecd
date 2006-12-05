@@ -1,7 +1,8 @@
 #!/bin/sh
 
 SRCDIR="$1"
-DSTDIR=/usr/src/`basename "$1"`
+KVERSION=`grep UTS_RELEASE "$SRCDIR/include/linux/version.h" | cut -d '"' -f 2`
+DSTDIR=/usr/src/linux-$KVERSION
 
 echo $SRCDIR $DSTDIR
 
@@ -20,6 +21,5 @@ cp -rv "$SRCDIR/include" "$SRCDIR/scripts" "$DSTDIR"
 	while read file ; do
 	    cp -v "$file" "$DSTDIR/$file"
 	done )
-KVERSION=`grep UTS_RELEASE "$SRCDIR/include/linux/version.h" | cut -d '"' -f 2`
 ln -nsf "$DSTDIR" "/lib/modules/$KVERSION/source"
 ln -nsf "$DSTDIR" "/lib/modules/$KVERSION/build"

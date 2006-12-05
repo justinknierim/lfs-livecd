@@ -1,12 +1,12 @@
 # DDCControl Makefile
 
 NM= ddccontrol
-VRS= 0.4.1
+VRS= 0.4.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
-SHA-$(FILE)= f224711bd7da96c3ed7fd75528aa794e2e7dc01d
+SHA-$(FILE)= fd5c53286315a61a18697a950e63ed0c8d5acff1
 
 # Targets
 
@@ -25,7 +25,7 @@ ifeq ($(LFS-ARCH),ppc)
 	sed -i '/sis/d' src/ddcpci/main.c
 	sed -i 's|sys/io.h|asm/io.h|' src/ddcpci/intel810.c
 endif
-	./configure --prefix=/usr --disable-gnome-applet
+	LIBS="-lz" ./configure --prefix=/usr --disable-gnome-applet
 	make $(PM)
 	make install
 

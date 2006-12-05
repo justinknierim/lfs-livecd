@@ -1,12 +1,12 @@
 # man-pages-it Makefile
 
 NM= man-pages-it
-VRS= 2.21
+VRS= 2.34
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.pluto.it/pub/pluto/ildp/man/$(FILE)
-SHA-$(FILE)= 802cdac169ddc170a3a0ffb6e9e73545f5a80aa7
+SHA-$(FILE)= 3304734c29de7d12694dfe6147fa78f63189a2aa
 
 # Targets
 

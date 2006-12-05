@@ -1324,7 +1324,7 @@ CONFIG_INOTIFY=y
 CONFIG_DNOTIFY=y
 # CONFIG_AUTOFS_FS is not set
 # CONFIG_AUTOFS4_FS is not set
-# CONFIG_FUSE_FS is not set
+CONFIG_FUSE_FS=m
 
 #
 # CD-ROM/DVD Filesystems

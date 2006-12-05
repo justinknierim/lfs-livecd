@@ -20,7 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sbindir=/sbin
+	# GRUB doesn't like shared libreiser4_minimal
+	./configure --prefix=/usr --sbindir=/sbin --enable-static
 	make $(PM)
 	make install
 	ln -sf mkfs.reiser4 /sbin/mkreiser4fs

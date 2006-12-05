@@ -1,12 +1,12 @@
 # ncftp Makefile
 
 NM= ncftp
-VRS= 3.1.9
+VRS= 3.2.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 052be99800b740a50b31619ccd65fd4f082a3386
+URL-$(FILE)= http://ftp.belnet.be/pub/mirror/ftp.ncftp.com/ncftp/$(FILE)
+SHA-$(FILE)= 708222170df81ed957e4f187213d69ea21e4f7dd
 
 # Targets
 

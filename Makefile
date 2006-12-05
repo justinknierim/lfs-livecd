@@ -169,7 +169,7 @@ lfs-base: $(MKTREE) lfsuser
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
 	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
 	@cp $(ROOT)/scripts/unpack $(WD)/bin
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'"
+	@make maybe-tools
 	@touch $(PKG)/wget/.pass2
 	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
 	@-ln -s $(WD)/bin/bash $(MP)/bin/bash
@@ -213,6 +213,15 @@ pre-wget:
 	@make -C $(PKG)/wget prebuild
 	@touch $@
 
+maybe-tools:
+	@if [ -f tools.tar.bz2 ] ; then \
+	    tar -C .. -jxpf tools.tar.bz2 ; \
+	else \
+	    su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'" ; \
+	    tar -C .. -jcpf tools.tar.bz2 tools ; \
+	fi
+	@touch $@
+
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
@@ -220,8 +229,10 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
 	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
 	lfs-m4-scpt lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
-	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt
+	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
+	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt
 	@cp /etc/resolv.conf $(WD)/etc
+	@touch $@
 
 pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-coreutils \
@@ -229,24 +240,28 @@ pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
 	ch-perl ch-readline ch-zlib ch-autoconf ch-automake ch-bash
 
 post-bash: ch-bzip2 ch-diffutils ch-e2fsprogs ch-file ch-findutils ch-flex \
-	ch-grub ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
+	ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
 	ch-iproute2 ch-kbd ch-less ch-make ch-man-db ch-mktemp \
 	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
 	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
 	final-environment
 
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
-	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
+	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
+	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
-	ch-fontconfig ch-Xorg-modular ch-synaptics ch-inputattach \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng \
+	ch-freetype ch-fontconfig \
+	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
+	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
+	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config \
+	ch-synaptics ch-inputattach \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
-	ch-gc ch-w3m ch-cairo ch-hicolor-icon-theme \
+	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-librsvg ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
-	ch-XML-Parser ch-Terminal ch-mousepad ch-irssi ch-libgpg-error \
-	ch-libgcrypt ch-gnutls ch-gaim \
+	ch-Terminal ch-mousepad ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc \
 	ch-dialog ch-ncftp ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
@@ -254,19 +269,20 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
-	ch-initramfs ch-zisofs-tools ch-cdrtools ch-blfs-bootscripts ch-oui-data \
+	ch-initramfs ch-blfs-bootscripts ch-oui-data \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-hibernate-script ch-parted
+	ch-hibernate-script ch-parted ch-slang ch-mc \
+	ch-fuse ch-dosfstools ch-ntfsprogs
 ifeq ($(LFS-ARCH),x86)
-	make ch-vbetool ch-bin86 ch-lilo ch-syslinux ch-gcc33 ch-proprietary-drivers
+	make ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux
+	# Proprietary drivers disabled - NVIDIA crashes, ATI is too fat
+	# make ch-gcc33 ch-proprietary-drivers
 	make ch-binutils64 ch-gcc64 ch-linux64
 endif
 ifeq ($(LFS-ARCH),ppc)
-	make ch-yaboot
-	make ch-hfsutils
-	make ch-mac-fdisk
+	make ch-yaboot ch-hfsutils ch-mac-fdisk
 endif
 	make update-caches
 
@@ -280,7 +296,7 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
 	ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-initramfs ch-cdrtools ch-zisofs-tools ch-blfs-bootscripts \
+	ch-initramfs ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-bin86 ch-lilo ch-syslinux
 ifeq ($(LFS-ARCH),ppc)
@@ -396,7 +412,7 @@ ifeq ($(LFS-ARCH),x86)
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
-	@install -m644 doc/README $(MP)/root/README
+	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/ 
@@ -432,7 +448,7 @@ clean: unmount
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget}
+	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget,maybe-tools}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;

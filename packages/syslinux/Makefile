@@ -1,12 +1,12 @@
 # Syslinux Makefile
 
 NM= syslinux
-VRS= 3.11
+VRS= 3.31
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/utils/boot/syslinux/$(FILE)
-SHA-$(FILE)= d04e012de1e6fed25083d1ba24d3c096493c2b3a
+SHA-$(FILE)= ce564807f90602e25255f76dbd2bb806931c2c55
 
 # Targets
 

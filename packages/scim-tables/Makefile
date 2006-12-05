@@ -1,12 +1,12 @@
 # SCIM-Tables Makefile
 
 NM= scim-tables
-VRS= 0.5.6
+VRS= 0.5.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= 25c3d800ae465cd9468a93c54398df59e0d3f743
+SHA-$(FILE)= 0764724368eab3975138a69b2f50ad1b753c35f7
 
 # Targets
 

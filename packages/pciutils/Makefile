@@ -1,12 +1,12 @@
 # PCI Utilities Makefile
 
 NM= pciutils
-VRS= 2.2.3
+VRS= 2.2.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 4a58d578cd0e0d81b85f8ee592c0c5e1d6ce6cda
+URL-$(FILE)= http://www.kernel.org/pub/software/utils/$(NM)/$(FILE)
+SHA-$(FILE)= 9b6e66774caea02790fc22546171bd2d8d75a7c4
 
 # Targets
 

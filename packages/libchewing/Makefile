@@ -1,12 +1,12 @@
 # libchewing Makefile
 
 NM= libchewing
-VRS= 0.2.7
+VRS= 0.3.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://chewing.csie.net/download/libchewing/$(FILE)
-SHA-$(FILE)= 7adcf9d24d3a16af9e580cc41dcd217adef56c8a
+SHA-$(FILE)= a3a29c663c05a055f83868251bb16363d0f8a1f5
 
 # Targets
 

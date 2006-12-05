@@ -16,9 +16,17 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
+stage1: Makefile $(FILE)
+	$(std_build)
+
 stage2: Makefile $(FILE)
 	$(std_build)
 	cp $(SRC)/$(FILE) $(LFSSRC)
+
+compile-stage1:
+	./configure --prefix=/tools/zlib
+	make
+	make install
 
 compile-stage2:
 	./configure --prefix=/usr --shared --libdir=/lib

@@ -1,12 +1,12 @@
 # Screen Makefile
 
 NM= screen
-VRS= 4.0.2
+VRS= 4.0.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 9a96705ad49ca3437e0ae068a3c8db1b55db83ec
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://ftp.uni-erlangen.de/pub/utilities/screen/$(FILE)
+SHA-$(FILE)= 7bc6e2f0959ffaae6f52d698c26c774e7dec3545
 
 # Targets
 

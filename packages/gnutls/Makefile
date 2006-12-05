@@ -1,12 +1,12 @@
 # gnutls Makefile
 
 NM= gnutls
-VRS= 1.4.0
+VRS= 1.4.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnupg.org/gcrypt/gnutls/$(FILE)
-SHA-$(FILE)=  71c2df8072796592bb20910f3554923b4178b352
+SHA-$(FILE)= 8f6ee112c8d93dd726e8e3d0e3fbf234f085a2cd
 
 # Targets
 

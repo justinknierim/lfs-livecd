@@ -1,12 +1,13 @@
 # libxslt Makefile
 
 NM= libxslt
-VRS= 1.1.16
+# Don't use 1.1.18 - see http://bugs.debian.org/399010
+VRS= 1.1.17
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 1ccd3a465b4b4db2d7c38176846a71cdadcbdb29
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://ftp.gnome.org/pub/gnome/sources/libxslt/1.1/$(FILE)
+SHA-$(FILE)= d9e7c23227664dba7da04f9bbcfbb470f797c6df
 
 # Targets
 

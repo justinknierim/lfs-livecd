@@ -1,12 +1,12 @@
 # LibXML2 Makefile
 
 NM= libxml2
-VRS= 2.6.23
+VRS= 2.6.26
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/$(FILE)
-SHA-$(FILE)= e0e58856532c49bd16447922ec802c7ac99d497d
+SHA-$(FILE)= 7a3e175253d47c924e285e3b8e344ba59b5f1797
 
 # Targets
 

@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Linux kernel version: 2.6.16.20
-# Sun Jul  9 18:12:38 2006
+# Linux kernel version: 2.6.16.27
+# Tue Sep  5 19:05:41 2006
 #
 # CONFIG_PPC64 is not set
 CONFIG_PPC32=y
@@ -418,7 +418,8 @@ CONFIG_MAC_FLOPPY=y
 # CONFIG_BLK_DEV_UMEM is not set
 # CONFIG_BLK_DEV_COW_COMMON is not set
 CONFIG_BLK_DEV_LOOP=y
-# CONFIG_BLK_DEV_CRYPTOLOOP is not set
+CONFIG_BLK_DEV_LOOP_AES=y
+# CONFIG_BLK_DEV_LOOP_KEYSCRUB is not set
 # CONFIG_BLK_DEV_NBD is not set
 # CONFIG_BLK_DEV_SX8 is not set
 # CONFIG_BLK_DEV_UB is not set
@@ -717,12 +718,15 @@ CONFIG_IEEE1394_SBP2=y
 #
 # Macintosh device drivers
 #
-# CONFIG_ADB is not set
+CONFIG_ADB=y
 CONFIG_ADB_CUDA=y
 CONFIG_ADB_PMU=y
 # CONFIG_PMAC_APM_EMU is not set
 CONFIG_PMAC_MEDIABAY=y
 CONFIG_PMAC_BACKLIGHT=y
+CONFIG_ADB_MACIO=y
+CONFIG_INPUT_ADBHID=y
+CONFIG_MAC_EMUMOUSEBTN=y
 CONFIG_THERM_WINDTUNNEL=m
 CONFIG_THERM_ADT746X=m
 CONFIG_WINDFARM=m
@@ -1496,7 +1500,7 @@ CONFIG_INOTIFY=y
 CONFIG_DNOTIFY=y
 # CONFIG_AUTOFS_FS is not set
 # CONFIG_AUTOFS4_FS is not set
-# CONFIG_FUSE_FS is not set
+CONFIG_FUSE_FS=m
 
 #
 # CD-ROM/DVD Filesystems

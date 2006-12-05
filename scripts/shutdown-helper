@@ -15,7 +15,7 @@ FILES="/lib/libc.so.6
 /sbin/reboot
 /usr/sbin/chroot
 /usr/sbin/dmsetup
-/usr/lib/libdevmapper.so.1.01
+/usr/lib/libdevmapper.so.1.02
 /usr/bin/eject
 /bin/sleep
 /lib/libm.so.6

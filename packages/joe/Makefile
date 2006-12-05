@@ -1,12 +1,12 @@
 # Joe Makefile
 
 NM= joe
-VRS= 3.3
+VRS= 3.5
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 657c47c13bc1c6d260d909c02d1478f50bbf00d5
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/joe-editor/$(FILE)
+SHA-$(FILE)= aeee6bb71ed1e9b9c9a2a64d8e078a06245957e5
 
 # Targets
 

@@ -1,12 +1,12 @@
 # libgpg-error Makefile
 
 NM= libgpg-error
-VRS= 1.3
+VRS= 1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnupg.org/gcrypt/libgpg-error/$(FILE)
-SHA-$(FILE)= 10bd8d8503b674e114ecc6620324d5d1c8c918b7
+SHA-$(FILE)= 6e6f701541e1ecf0a8e438b5b3d26ef05f6b1ffb
 
 # Targets
 

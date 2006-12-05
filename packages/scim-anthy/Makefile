@@ -1,12 +1,12 @@
 # SCIM-Anthy Makefile
 
 NM= scim-anthy
-VRS= 1.0.0
+VRS= 1.2.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/scim-imengine/19544/$(FILE)
-SHA-$(FILE)= a9f72807f7bdde413723340fc8bb67479ff01f28
+URL-$(FILE)= http://osdn.dl.sourceforge.jp/scim-imengine/21967/$(FILE)
+SHA-$(FILE)= 5f1a1a3084d32f660f0b430b24c441bcfe970764
 
 # Targets
 

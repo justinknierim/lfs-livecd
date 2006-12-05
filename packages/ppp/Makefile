@@ -1,12 +1,12 @@
 # ppp Makefile
 
 NM= ppp
-VRS= 2.4.3
+VRS= 2.4.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 6ca9c1d55d74cf65cc7238863a30d95c9870af9b
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://samba.org/ftp/ppp/$(FILE)
+SHA-$(FILE)= 9b91b0117e0a8bfaf8c4e894af79e0960dd36259
 
 # Targets
 

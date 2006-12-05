@@ -1,6 +1,4 @@
 plugin rp-pppoe.so
-eth0
-user "jdoe"
 noauth
 hide-password 
 debug

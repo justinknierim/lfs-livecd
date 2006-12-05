@@ -1,12 +1,12 @@
 # dmraid Makefile
 
 NM= dmraid
-VRS= 1.0.0.rc10
+VRS= 1.0.0.rc13
 DIR= $(NM)
 
 FILE= $(NM)-$(VRS).tar.bz2
 URL-$(FILE)= http://people.redhat.com/~heinzm/sw/$(NM)/src/$(FILE)
-SHA-$(FILE)= 34fae05d2697908f7bcdb6f063d0b127fe0a5c1c
+SHA-$(FILE)= 11c8e352849f7d00157169c672ff59a61b1bc111
 
 # Targets
 

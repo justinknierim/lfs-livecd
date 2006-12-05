@@ -40,7 +40,7 @@ compile-stage2:
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
 	cp $(CONFDIR)/[0-9]* /etc/udev/rules.d/
 	echo 'ACTION=="add", BUS=="pci", SYSFS{class}=="0x030000", RUN+="detect-video"' >/etc/udev/rules.d/30-video.rules
-	install -m755 ../detect-video /lib/udev
+	install -m755 ../detect-video ../dhcp-helper /lib/udev
 	install -m644 ../50-network.rules /etc/udev/rules.d/
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
