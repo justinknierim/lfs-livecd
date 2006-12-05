@@ -217,13 +217,13 @@ maybe-tools:
 	@if [ -f tools.tar.bz2 ] ; then \
 	    tar -C .. -jxpf tools.tar.bz2 ; \
 	else \
-	    su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'" ; \
+	    su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'" && \
 	    tar -C .. -jcpf tools.tar.bz2 tools ; \
 	fi
 	@touch $@
 
 tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
-	lfs-linux-libc-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
+	lfs-linux-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
 	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
 	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
@@ -234,12 +234,13 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	@cp /etc/resolv.conf $(WD)/etc
 	@touch $@
 
-pre-bash: createfiles ch-linux-libc-headers ch-man-pages \
-	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-coreutils \
-	ch-iana-etc ch-m4 ch-bison ch-gpm ch-ncurses ch-procps ch-sed ch-libtool \
-	ch-perl ch-readline ch-zlib ch-autoconf ch-automake ch-bash
+pre-bash: createfiles stop-here ch-linux-headers ch-man-pages \
+	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-sed \
+	ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison ch-gpm \
+	ch-ncurses ch-procps ch-libtool ch-perl ch-readline ch-zlib \
+	ch-autoconf ch-automake ch-bash
 
-post-bash: ch-bzip2 ch-diffutils ch-e2fsprogs ch-file ch-findutils ch-flex \
+post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 	ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
 	ch-iproute2 ch-kbd ch-less ch-make ch-man-db ch-mktemp \
 	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \

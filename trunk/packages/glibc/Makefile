@@ -1,27 +1,18 @@
 # Glibc Makefile
 
 NM= glibc
-VRS= 2.3.6
+VRS= 2.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 82d0487419f1bdbf2dee439c344e89d6af47e558
+SHA-$(FILE)= ec9a007c4875062099a4701ac9137fcdb5a71447
 
 FILE2= $(NM)-libidn-$(VRS).tar.bz2
-#URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
-URL-$(FILE2)= http://ftp.gnu.org/gnu/glibc/$(FILE2)
-SHA-$(FILE2)= 95d3a98495d4bd7138149fd312db88da56e735db
+URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+SHA-$(FILE2)= ee7e019e01aa338e28db1eeb34abb2cb09d2f30a
 
-PATCH1= $(NM)-$(VRS)-linux_types-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 0bdf2b15e20c176caf3c85e5b6a7bc957f636d6a
-
-PATCH2= $(NM)-$(VRS)-inotify-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.2/$(PATCH2)
-SHA-$(PATCH2)= d282d10108a4f6b9c6eddc4351a83abe22a5b5b6
-
-PATCH50= $(DIR)-supported_locales-2.patch
+PATCH50= $(DIR)-supported_locales-1.patch
 
 # Targets
 

@@ -1,20 +1,20 @@
 # Bash Makefile
 
 NM= bash
-VRS= 3.1
+VRS= 3.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 766e3fd9384616d8a103f812f662fd8ec791c129
+SHA-$(FILE)= fe6466c7ee98061e044dae0347ca5d1a8eab4a0d
 
-PATCH1= $(DIR)-fixes-8.patch
+PATCH1= $(DIR)-fixes-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 03d6781dd9ad6336eda906d5645c166e1641dd49
+SHA-$(PATCH1)= f2e145c311c52e264b3341cd6757c0ea67996fa8
 
 FILE1 = $(NM)-doc-$(VRS).tar.gz
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 9cacbbdf3b1be03819b1ea82cdaec0f5e61570c1
+SHA-$(FILE1)= 30e4a66c0974275384b90ffdbc4f54d53ba3d2b4
 
 # Targets
 
@@ -25,6 +25,7 @@ stage1: $(FILE) $(PATCH1)
 	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
+	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=$(WD) --without-bash-malloc
 	make
 	make install

@@ -1,12 +1,12 @@
 # Tcl Makefile
 
 NM= tcl
-VRS= 8.4.13
+VRS= 8.4.14
 DIR= $(NM)$(VRS)
 
 FILE= $(DIR)-src.tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4af6bec9a941d7d798df4287eebece7ded67489c
+SHA-$(FILE)= d7af7e0c7ed563e2344dda04bbe49961589244dd
 
 # Targets
 
