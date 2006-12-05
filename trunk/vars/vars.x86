@@ -1,4 +1,0 @@
-export VERSION := x86-6.2-1
-export CFLAGS := -Os -s -fno-strict-aliasing -mtune=i686
-export LINKER := ld-linux.so.2
-export LFS_TARGET := i486-pc-linux-gnu

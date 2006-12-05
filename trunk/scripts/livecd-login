@@ -1,8 +1,0 @@
-#!/bin/sh
-stty sane
-echo -en '\033(K'
-cat /etc/issue
-echo -en 'Press Enter to activate this virtual console...'
-read ENTER
-echo
-exec /bin/login -f root

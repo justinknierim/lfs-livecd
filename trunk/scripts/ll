@@ -1,3 +1,0 @@
-#!/bin/bash 
-/bin/ls --color=always --almost-all --format=long --time-style=+"%Y.%m.%d %T" --block-size=1K $@ | grep -e^d
-/bin/ls --color=always --almost-all --format=long --time-style=+"%Y.%m.%d %T" --block-size=1K $@ | grep -e^[-lbc]

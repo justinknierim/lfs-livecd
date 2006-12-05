@@ -1,7 +1,0 @@
-# Run dhcpcd when anything resembling a valid Ethernet-like interface appears
-ACTION=="add", SUBSYSTEM=="net", SYSFS{addr_len}=="6", SYSFS{address}!="00:00:00:00:00:00", RUN+="/bin/sh -c 'PATH=/sbin:/bin dhcpcd %k -t 20 &'"
-
-# "dhcpcd -k" is not good: it destroys the cache but fails to send DHCP_RELEASE
-# Since the interface is already gone, we choose to keep the cache
-# and thus avoid the IP address leak from the DHCP server pool
-ACTION=="remove", SUBSYSTEM=="net", RUN+="/bin/sh -c 'kill `cat /var/run/dhcpcd-%k.pid` ; exit 0'"
