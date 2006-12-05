@@ -71,8 +71,8 @@ compile-stage2:
 	make $(PM)
 	-make -k check
 	make install
-	ln -sf ../usr/bin/cpp /lib
-	ln -sf gcc /usr/bin/cc
+	ln -svf ../usr/bin/cpp /lib
+	ln -svf gcc /usr/bin/cc
 
 clean:
 	-rm -rf $(DIR)

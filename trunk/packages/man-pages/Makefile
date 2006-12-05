@@ -1,12 +1,12 @@
 # Man-pages Makefile
 
 NM= man-pages
-VRS= 2.34
+VRS= 2.42
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/docs/manpages/$(FILE)
-SHA-$(FILE)= 99278abd00613fa2409791f20c0ee175118a41d1
+SHA-$(FILE)= a4b1ba53e90ce4771d70b41da6c17a8f0a50a305
 
 # Targets
 

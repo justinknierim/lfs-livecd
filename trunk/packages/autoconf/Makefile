@@ -1,12 +1,12 @@
 # Autoconf Makefile
 
 NM= autoconf
-VRS= 2.59
+VRS= 2.61
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= d366a07b2d99c95b7f24395aa8a8e023d8b93b69
+SHA-$(FILE)= cc4b2f1a3e41f5542594b089ecdf7974890b3190
 
 # Targets
 
