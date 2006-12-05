@@ -1,16 +1,12 @@
 # DB Makefile
 
 NM= db
-VRS= 4.4.20
+VRS= 4.5.20
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= bb4c68a4afc14712eb2954b7991f5dc9fe93bf7b
-
-PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.2/$(PATCH1)
-SHA-$(PATCH1)= 46886ccdf1ea6daab392e5c46b4923f7e71e7d55
+SHA-$(FILE)= 0e5a6c152c5d7089899481d9de689d1f7e77bde1
 
 # Targets
 
@@ -20,12 +16,11 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
 	cd build_unix ; ../dist/configure --prefix=/usr \
 	    --enable-compat185 --enable-cxx
 	cd build_unix ; make

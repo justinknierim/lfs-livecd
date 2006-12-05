@@ -48,15 +48,14 @@ endif
 	patch -Np1 -i ../$(PATCH2)
 	patch -Np1 -i ../$(PATCH3)
 	chmod +x tests/sort/sort-mb-tests
-	sed -i 's/_LEN 6/_LEN 20/' src/who.c
 	./configure --prefix=/usr
 	make $(PM)
 	make install
-	$(WD)/bin/mv /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
-	$(WD)/bin/mv /usr/bin/{false,hostname,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
-	mv /usr/bin/{rmdir,stty,sync,true,uname} /bin
-	mv /usr/bin/chroot /usr/sbin
-	mv /usr/bin/{head,sleep,nice} /bin
+	$(WD)/bin/mv -v /usr/bin/{cat,chgrp,chmod,chown,cp,date,dd,df,echo} /bin
+	$(WD)/bin/mv -v /usr/bin/{false,hostname,ln,ls,mkdir,mknod,mv,pwd,rm} /bin
+	mv -v /usr/bin/{rmdir,stty,sync,true,uname} /bin
+	mv -v /usr/bin/chroot /usr/sbin
+	mv -v /usr/bin/{head,sleep,nice} /bin
 
 clean:
 	-rm -rf $(DIR)

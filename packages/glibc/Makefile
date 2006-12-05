@@ -40,13 +40,10 @@ chroot:
 
 stage2: $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 	$(sep_dir_build)
-	cp $(SRC)/{$(PATCH1),$(PATCH2)} $(LFSSRC)/
 	touch $@
 
 compile-stage2:
-	cd ../$(DIR) ; unpack ../$(FILE2)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
+	cd ../$(DIR) ; unpack ../$(FILE2) ; mv glibc-libidn-$(VRS) libidn
 # The vi_VN.TCVN locale doesn't work, testcase: "LC_ALL=vi_VN.TCVN bash"
 # Result: the prompt never comes back, CPU utilization is 100%
 # (This may be a bash bug. Not reproducible on Debian Etch, though)
@@ -63,7 +60,6 @@ compile-stage2:
 	-make -k check
 	touch /etc/ld.so.conf
 	PARALLELMFLAGS="$(PM)" make install
-	cp -v ../$(DIR)/sysdeps/unix/sysv/linux/inotify.h /usr/include/sys
 	PARALLELMFLAGS="$(PM)" make localedata/install-locales
 	cp $(ROOT)/etc/nsswitch.conf /etc
 	cp --remove-destination /usr/share/zoneinfo/$(timezone) /etc/localtime

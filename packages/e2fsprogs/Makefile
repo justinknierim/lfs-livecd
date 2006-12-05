@@ -21,7 +21,8 @@ stage2: Makefile $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	mkdir build
+	sed -i -e 's@/bin/rm@/tools&@' lib/blkid/test_probe.in
+	mkdir -v build
 	cd build ; ../configure --prefix=/usr --with-root-prefix="" \
 	 --enable-elf-shlibs --disable-evms
 	cd build ; make

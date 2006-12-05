@@ -36,9 +36,9 @@ stage2: $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	install -dv /usr/include/asm
-	cp -Rv include/$(LLH_ASM)/* /usr/include/asm
-	cp -Rv include/linux /usr/include
+	make mrproper
+	make headers_check
+	make INSTALL_HDR_PATH=/usr headers_install
 	chown -Rv root:root /usr/include/{asm,linux}
 	find /usr/include/{asm,linux} -type d -exec chmod -v 755 {} \;
 	find /usr/include/{asm,linux} -type f -exec chmod -v 644 {} \;

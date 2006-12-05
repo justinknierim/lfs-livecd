@@ -1,12 +1,12 @@
 # Automake Makefile
 
 NM= automake
-VRS= 1.9.6
+VRS= 1.10
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= d205dbb274d3ff5be1cf6734f27fb452c7131866
+SHA-$(FILE)= 966008107cc1fdb099f65de6496147ef05522fec
 
 # Targets
 

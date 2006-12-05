@@ -234,11 +234,11 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	@cp /etc/resolv.conf $(WD)/etc
 	@touch $@
 
-pre-bash: createfiles stop-here ch-linux-headers ch-man-pages \
+pre-bash: createfiles ch-linux-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-sed \
 	ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison ch-gpm \
 	ch-ncurses ch-procps ch-libtool ch-perl ch-readline ch-zlib \
-	ch-autoconf ch-automake ch-bash
+	ch-autoconf ch-automake ch-bash ch-stop-here
 
 post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 	ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
@@ -351,6 +351,7 @@ createfiles:
 	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
+	@-$(WD)/bin/ln -s $(WD)/lib/libstdc++.so{,.6} /usr/lib
 	@-$(WD)/bin/ln -s bash /bin/sh
 	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
 	@chgrp utmp /var/run/utmp /var/log/lastlog

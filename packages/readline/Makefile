@@ -1,16 +1,12 @@
 # Readline Makefile
 
 NM= readline
-VRS= 5.1
+VRS= 5.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4b2ee2bc9c6dd1d238c84a58f7e6db173600b850
-
-PATCH1= $(DIR)-fixes-3.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= f58bbd80c7aed462ab7e97e3ac4eae7cd9d1b835
+SHA-$(FILE)= 18f3412c73068509d5f491b7b4535aeaf9522834
 
 # Targets
 
@@ -22,12 +18,11 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
+	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	sed -i '/MV.*old/d' Makefile.in
 	sed -i '/{OLDSUFF}/c:' support/shlib-install
-	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --libdir=/lib
 	make $(PM) SHLIB_LIBS=-lncurses
 	make install
