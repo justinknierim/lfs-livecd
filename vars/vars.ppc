@@ -1,4 +1,4 @@
-export VERSION := ppc-6.2-4
+export VERSION := ppc-6.3-pre1
 export CFLAGS := -Os -s -fno-strict-aliasing
 export LINKER := ld.so.1
 export LFS_TARGET := powerpc-unknown-linux-gnu

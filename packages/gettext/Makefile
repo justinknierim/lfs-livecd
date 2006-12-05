@@ -1,12 +1,12 @@
 # Gettext Makefile
 
 NM= gettext
-VRS= 0.14.5
+VRS= 0.16
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 68737eee1a6427044eef901dc88e4144d371fb6b
+SHA-$(FILE)= ab42a62fcfbfc5adde199375a20c0ae252b40961
 
 # Targets
 
@@ -18,7 +18,7 @@ stage1: $(FILE)
 
 compile-stage1:
 	cd $(NM)-tools ; ./configure --prefix=$(WD) --disable-shared
-	cd $(NM)-tools ; make -C lib
+	cd $(NM)-tools ; make -C gnulib-lib
 	cd $(NM)-tools ; make -C src msgfmt
 	cd $(NM)-tools ; cp -v src/msgfmt $(WD)/bin
 

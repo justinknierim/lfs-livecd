@@ -1,12 +1,12 @@
 # M4 Makefile
 
 NM= m4
-VRS= 1.4.4
+VRS= 1.4.8
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4861140cb54b6c9e135d04b5fbf460ff57f969a5
+SHA-$(FILE)= 31589415022c2842f62f3b91186bc9e0a9a8e1a1
 
 # Targets
 

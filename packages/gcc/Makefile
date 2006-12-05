@@ -1,16 +1,16 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.0.3
+VRS= 4.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 5a94943d9ab823cf8d080cc7f9e8a4a91797afea
+SHA-$(FILE)= a398b95d38b6e35f4c4e02c34c0a3bff79811f8f
 
 PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 04d4b7d68bfd6b362e9b75678584641a2dde7c2f
+SHA-$(PATCH1)= 1bdfbb49437642d3e450f0e3ba25a3e30e25e857
 
 # Targets
 
@@ -36,9 +36,9 @@ pass2: $(FILE) $(PATCH1)
 	cp $(SRC)/$(PATCH1) $(LFSSRC)/
 
 compile-pass2:
-	cd ../$(DIR) ; cp gcc/Makefile.in{,.orig} && \
+	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.orig} && \
 	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
-	cd ../$(DIR) ; cp gcc/Makefile.in{,.tmp} && \
+	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.tmp} && \
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
 	 > gcc/Makefile.in
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
