@@ -38,6 +38,7 @@ stage2: Makefile $(FILE) $(PATCH50)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH50)
+	chmod +x tests/fmbtest.sh
 	./configure --prefix=/usr --bindir=/bin
 	make $(PM)
 	make install

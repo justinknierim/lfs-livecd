@@ -35,6 +35,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+	sed -i 's/tail +/tail -n +/' gzexe.in
 	./configure --prefix=/usr
 	sed -i 's@"BINDIR"@/bin@g' gzexe.in
 	make $(PM)

@@ -9,8 +9,6 @@ URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 3e78df609a2ff0fea6304cb662a7f10298d03667
 
 PATCH1= $(DIR)-reexec06-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= d06fd7274e767c1c98be27d1dc4adb135260e479
 
 # Targets
 

@@ -8,13 +8,13 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 093775da0e429d0768cf195ceb20fdd6d96aeeea
 
-PATCH1= $(DIR)-fixes-1.patch
+PATCH1= $(DIR)-fixes-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 4fbd5e56c212c8e37f363eb48ba86a5ecea21f4a
+SHA-$(PATCH1)= 905d17574d6972f494b8ec4cb62bfad1c9f3ff62
 
-PATCH50= $(DIR)-8bit-1.patch
-URL-$(PATCH50)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= edc01eceb4ae7af3d6a02e23a4dace8fee50f3eb
+PATCH2= $(DIR)-8bit-1.patch
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= edc01eceb4ae7af3d6a02e23a4dace8fee50f3eb
 
 # Targets
 
@@ -24,13 +24,13 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH50)} $(LFSSRC)
+	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH2)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH50)
+	patch -Np1 -i ../$(PATCH2)
 	make $(PM)
 	make install
 	install -m644 $(ROOT)/etc/syslog.conf /etc

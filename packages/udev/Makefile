@@ -1,18 +1,18 @@
 # Udev Makefile
 
 NM= udev
-VRS= 096
-CONFVRS= 6.2
+VRS= 103
+CONFVRS= 20061021
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 8d15b89fdf93ba84e2d33ff6061e140aed0a4dce
+SHA-$(FILE)= 015372f585beeba05217ad6568178820b2713571
 
 FILE1= $(CONFDIR).tar.bz2
-URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE1)
-SHA-$(FILE1)= 5cd22b8e9cf1e996871e2bc540d75e57a4f706a3
+URL-$(FILE1)= $(HTTP)/$(NM)-config/$(FILE1)
+SHA-$(FILE1)= 11b85243e0eec64be63be9e743f1ba7441a47e62
 
 # Targets
 
@@ -38,7 +38,8 @@ compile-stage2:
 	rm -rf extras/dasd_id
 	make EXTRAS="`echo extras/*/`"
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
-	cp $(CONFDIR)/[0-9]* /etc/udev/rules.d/
+	cp -v etc/udev/rules.d/[0-9]* /etc/udev/rules.d/
+	cd $(CONFDIR) ; make install install-doc install-extra-doc
 	echo 'ACTION=="add", BUS=="pci", SYSFS{class}=="0x030000", RUN+="detect-video"' >/etc/udev/rules.d/30-video.rules
 	install -m755 ../detect-video ../dhcp-helper /lib/udev
 	install -m644 ../50-network.rules /etc/udev/rules.d/
