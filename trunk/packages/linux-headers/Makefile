@@ -36,6 +36,7 @@ stage2: $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+	echo 'header-y += unaligned.h' >> include/asm-generic/Kbuild.asm
 	make mrproper
 	make headers_check
 	make INSTALL_HDR_PATH=/usr headers_install
