@@ -6,7 +6,7 @@ G_FILENAME_ENCODING=@locale
 
 XML_CATALOG_FILES="/usr/share/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog"
 
-WWW_HOME="/usr/share/LFS-BOOK-6.2-HTML/index.html"
+WWW_HOME="/usr/share/LFS-BOOK-SVN-HTML/index.html"
 
 NNTPSERVER=news.gmane.org
 
