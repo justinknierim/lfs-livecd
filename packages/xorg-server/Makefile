@@ -35,7 +35,7 @@ compile-stage2:
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
-	automake
+	autoreconf --force --install --verbose
 	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
 	    --with-mesa-source=`pwd`/$(DIR1) --with-default-font-path=built-ins
 	make

@@ -1,19 +1,19 @@
 # LFS Book Makefile
 
 NM= LFS-BOOK
-VRS= 6.2
+VRS= SVN
 DIRBASE= $(NM)-$(VRS)
 DIR= $(DIRBASE)-XML
 HTMLDIR= $(DIRBASE)-HTML
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
-SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
+#FILE= $(DIR).tar.bz2
+#URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
+#SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-#REV= 7646
-#REVPARM= -r $(REV)
-#
-#URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+REV= 7882
+REVPARM= -r $(REV)
+
+URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
@@ -27,8 +27,8 @@ chroot:
 
 stage2: Makefile $(FILE)
 	@$(call echo_message, Building)
-	#@svn co -q $(REVPARM) $(URL) $(DIR)-XML
-	tar xf $(FILE)
+	@svn co -q $(REVPARM) $(URL) $(DIR)
+	#tar xf $(FILE)
 	@cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
 	cp -av $(DIR) $(HTMLDIR) /usr/share
 	@sed -i \
