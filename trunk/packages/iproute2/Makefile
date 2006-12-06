@@ -1,13 +1,13 @@
 # Iproute2 Makefile
 
 NM= iproute2
-VRS= 2.6.16
-DATE= 060323
+VRS= 2.6.18
+DATE= 061002
 DIR= $(NM)-$(VRS)-$(DATE)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 76d866bb3b46a7b2e73d79a4faf6fa8971527633
+SHA-$(FILE)= 94f9b91d59e0e63b441130e158422a62a7a31b98
 
 # Targets
 

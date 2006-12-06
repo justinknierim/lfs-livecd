@@ -1,12 +1,12 @@
 # Shadow Makefile
 
 NM= shadow
-VRS= 4.0.15
+VRS= 4.0.17
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 0f7cd3366a032091fdffd2f8edf65056bd576cae
+SHA-$(FILE)= 326b3de0a81c1e1f9bfc75e67d45678c14fe282d
 
 # Targets
 
@@ -25,18 +25,12 @@ compile-stage2:
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
-	../convert-mans UTF-8 ISO-8859-2 man/cs/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/de/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/es/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/fi/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/fr/*.?
-	../convert-mans UTF-8 ISO-8859-2 man/hu/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/id/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/it/*.?
+	for i in de es fi fr id it pt_BR ; do \
+		../convert-mans UTF-8 ISO-8859-1 man/$$i/*.? ; done
+	for i in cs hu pl ; do \
+		../convert-mans UTF-8 ISO-8859-2 man/$$i/*.? ; done
 	../convert-mans UTF-8 EUC-JP man/ja/*.?
 	# ../convert-mans UTF-8 EUC-KR man/ko/*.?
-	../convert-mans UTF-8 ISO-8859-2 man/pl/*.?
-	../convert-mans UTF-8 ISO-8859-1 man/pt_BR/*.?
 	../convert-mans UTF-8 KOI8-R man/ru/*.?
 	../convert-mans UTF-8 ISO-8859-9 man/tr/*.?
 	# ../convert-mans UTF-8 GB2312 man/zh_CN/*.?

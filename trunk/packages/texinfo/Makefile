@@ -3,19 +3,18 @@
 NM= texinfo
 VRS= 4.8
 DIR= $(NM)-$(VRS)
-FILE= $(DIR).tar.bz2
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR)a.tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b19e906f7220294c1e8b087d583c50f5c4d7c420
+SHA-$(FILE)= cde723b115faebb81019154c320e108c5042c906
 
-PATCH1= $(DIR)-tempfile_fix-2.patch
+PATCH1= $(DIR)a-tempfile_fix-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 2ead28cb8e2679cdb53e1e4908209f0a31397dfe
 
-PATCH50= $(DIR)-multibyte-1.patch
-URL-$(PATCH50)= $(HTTP)/$(NM)/$(PATCH50)
-SHA-$(PATCH50)= b97ae3468c03f8389dbf5c9b6eed64f996f9ed5c
+PATCH2= $(DIR)a-multibyte-1.patch
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= b97ae3468c03f8389dbf5c9b6eed64f996f9ed5c
 
 # Targets
 
@@ -34,13 +33,13 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH50)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
-	cp $(SRC)/{$(PATCH1),$(PATCH50)} $(LFSSRC)
+	cp $(SRC)/{$(PATCH1),$(PATCH2)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH50)
+	patch -Np1 -i ../$(PATCH2)
 	./configure --prefix=/usr
 	make $(PM)
 	make install

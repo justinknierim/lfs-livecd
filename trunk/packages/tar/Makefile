@@ -27,12 +27,8 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
 	$(std_build)
-	cp $(SRC)/{$(PATCH2),$(PATCH3)} $(LFSSRC)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
-	patch -Np1 -i ../$(PATCH3)
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
 	make $(PM)
 	make install

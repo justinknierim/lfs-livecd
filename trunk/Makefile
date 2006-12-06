@@ -238,7 +238,7 @@ pre-bash: createfiles ch-linux-headers ch-man-pages \
 	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-sed \
 	ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison ch-gpm \
 	ch-ncurses ch-procps ch-libtool ch-perl ch-readline ch-zlib \
-	ch-autoconf ch-automake ch-bash ch-stop-here
+	ch-autoconf ch-automake ch-bash
 
 post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 	ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
@@ -250,7 +250,7 @@ post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
 	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
+	ch-subversion stop-here ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
 	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng \
 	ch-freetype ch-fontconfig \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \

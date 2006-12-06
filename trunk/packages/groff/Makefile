@@ -1,21 +1,21 @@
 # Groff Makefile
 
-# ascii8 and nippon devices exist only for groff-1.18.1.1 as a patch
+# ascii8 and nippon devices exist only for groff-1.18.1.x as a patch
 # rejected upstream.
 # Do not upgrade this package before Debian does it!
 # http://bugs.debian.org/196762
 
 NM= groff
-VRS= 1.18.1.1
+VRS= 1.18.1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 19c8c83e6ee29dd6041dae0daf1c1d0debd3d32a
+SHA-$(FILE)= 70580701fd90cf6fe7fb70fe951cb2d66bd14e7c
 
 PATCH= $(DIR)-debian_fixes-1.patch
 URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
-SHA-$(PATCH)= 39fb82b9673523cb2451a0491929693226ea97dd
+SHA-$(PATCH)= 4a171a1c7b6c493b5c4349aa18ff1905bddffcb0
 
 # Targets
 
