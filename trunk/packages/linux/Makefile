@@ -58,7 +58,6 @@ endif
 #	echo 'EXPORT_SYMBOL(page_cache_readahead);' >>mm/readahead.c
 	patch -Np1 -i ../$(PATCH3)
 	make mrproper
-	exit 1
 	cp ../config.$(LFS-ARCH) .config
 	make $(PM)
 	make modules_install

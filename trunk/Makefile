@@ -269,7 +269,7 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
-	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm stop-here ch-linux \
+	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
 	ch-initramfs ch-blfs-bootscripts ch-oui-data \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
