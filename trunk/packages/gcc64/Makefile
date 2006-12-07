@@ -27,10 +27,10 @@ compile-stage2:
 	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's/@have_mktemp_command@/yes/' gcc/gccbug.in
 # --enable-static overrides the unsuitable default in config.site
-	PATH=$$PATH:$(WD)/bin ../$(DIR)/configure --prefix=$(WD) --target=x86_64-unknown-linux-gnu \
+	unset CFLAGS ; PATH=$$PATH:$(WD)/bin ../$(DIR)/configure --prefix=$(WD) --target=x86_64-unknown-linux-gnu \
 	 --disable-shared --disable-threads --enable-languages=c --enable-static
-	PATH=$$PATH:$(WD)/bin make all-gcc
-	PATH=$$PATH:$(WD)/bin make install-gcc
+	unset CFLAGS ; PATH=$$PATH:$(WD)/bin make all-gcc
+	unset CFLAGS ;PATH=$$PATH:$(WD)/bin make install-gcc
 
 clean:
 	-rm -rf $(DIR)
