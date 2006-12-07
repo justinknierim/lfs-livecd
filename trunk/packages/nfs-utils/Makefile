@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's/UTS_RELEASE/"2.6.18.3"/' tools/getkversion/getkversion.c
 	./configure --prefix=/usr --sysconfdir=/etc --disable-nfsv4 \
 	 --disable-gss
 	make
