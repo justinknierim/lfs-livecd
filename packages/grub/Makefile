@@ -33,6 +33,7 @@ compile-stage2:
 	# This will fail to add -fno-strict-aliasing to CFLAGS,
 	# but this flag is already present on the CD. So ignore the reject.
 	patch -Np1 -i ../$(PATCH1) || true
+	sed -i 's/AM_INIT_AUTOMAKE/&\nAM_PROG_AS/' configure.ac
 	autoreconf --force --install --verbose
 	./configure --prefix=/usr
 	make $(PM)
