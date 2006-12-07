@@ -20,7 +20,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	./bootstrap
+	autoreconf --force --install --verbose
 	./configure --prefix=/usr
 	make $(PM)
 	make install

@@ -1,12 +1,12 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.0.3
+VRS= 4.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 5a94943d9ab823cf8d080cc7f9e8a4a91797afea
+SHA-$(FILE)= a398b95d38b6e35f4c4e02c34c0a3bff79811f8f
 
 # Targets
 

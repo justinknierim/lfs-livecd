@@ -9,10 +9,7 @@ Examples:
 792 = 1024x768x24    791 = 1024x768x16
 789 = 800x600x24     788 = 800x600x16
 
-There is also an alternative kernel image available that supports
-booting from SATA CD-ROMs. To use it, type "linux.ata". Note:
-it will rename your IDE disks from /dev/hdX to /dev/sdY. 64-bit
-kernels for use with CLFS are available as "linux64" and "linux64.ata"
+A 64-bit kernel for use with CLFS is available as "linux64"
 
 To set your timezone, add TZ=your_timezone anywhere
 after "linux" or "linux.ata". For example, TZ=EDT+4 means that the
