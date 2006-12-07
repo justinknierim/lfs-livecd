@@ -20,6 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's/ifdef PT_GETSIGINFO/if 0/' strace.c
+	sed -i '/CTL_PROC/d' system.c
 	./configure --prefix=/usr
 	make $(PM)
 	make install

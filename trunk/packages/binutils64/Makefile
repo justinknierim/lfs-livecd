@@ -1,11 +1,11 @@
 # Binutils Makefile
 
 NM= binutils
-VRS= 2.16.1
+VRS= 2.17
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 5c80fd5657da47efc16a63fdd93ef7395319fbbf
+SHA-$(FILE)= a557686eef68362ea31a3aa41ce274e3eeae1ef0
 
 # Targets
 
