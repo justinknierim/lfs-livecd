@@ -457,7 +457,7 @@ clean: unmount
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
 	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
 	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
-	@echo find $(PKG)/binutils/* ! -path '$(PKG)/binutils/vars*' -xtype d -exec rm -rf \{} \;
+	@rm -f $(PKG)/Xorg-*/*-stage2
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
 	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
