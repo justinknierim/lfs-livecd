@@ -36,8 +36,9 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	autoreconf --force --install --verbose
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-	    --with-mesa-source=`pwd`/$(DIR1) --with-default-font-path=built-ins
+	./configure --prefix=/usr --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var \
+	    --with-mesa-source=`pwd`/$(DIR1) --with-default-font-path=built-ins \
+	    --with-xkb-path=/usr/share/X11/xkb --with-xkb-output=/var/lib/xkb
 	make
 	make install
 
