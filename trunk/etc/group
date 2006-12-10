@@ -18,3 +18,4 @@ mail:x:34:
 rsyncd:x:48:
 sshd:x:50:
 nogroup:x:99:
+jhalfs:x:101:

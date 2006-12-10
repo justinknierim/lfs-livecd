@@ -69,25 +69,6 @@ jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
 Makefiles that can download, check and build each LFS package for you.)
 
-IMPORTANT NOTE ABOUT THE KERNEL
-===========================
-The LFS book recommends using "the latest available 2.6.16.x kernel version".
-At the time of the release of this CD, such version is 2.6.16.28. However,
-because of the way jhalfs works, the source for the 2.6.16.27 kernel
-must be present on the CD in order for jhalfs to be able to build a kernel.
-However, using jhalfs for building the kernel is acceptable only if
-you don't care about security.
-
-In order to get the 2.6.16.28 kernel from this CD, unpack the
-linux-2.6.16.27.tar.bz2 source tarball, and apply the upstream update patch:
-
-bzcat ../patch-2.6.16.27-28.bz2 | patch -Np1
-
-The patch-2.6.16.27-28.bz2 file is in the /lfs-sources directory.
-
-Further kernel updates may be available from
-http://www.kernel.org/pub/linux/kernel/v2.6/incr/
-
 CONFIGURING NET CONNECTION
 ===========================
 The LiveCD attempts to detect the network cards present in the system.
@@ -337,6 +318,21 @@ numbers to be used for hibernation. Ignore the error and hibernate when needed.
 
 On the second boot (i.e., after hibernating), this "echo" command will restore
 the computer state from the swap device.
+
+AUTOMATING THE BUILD
+===========================
+This CD comes with the "jhalfs" tool that allows extracting commands from the
+XML version of LFS or CLFS book into Makefiles and shell scripts. You can find
+the jhalfs installation in the home directory of the "jhalfs" user, and the
+XML LFS book is in /usr/share/LFS-BOOK-SVN-XML. In order to use jhalfs, you
+have to:
+
+* create a directory for your future LFS system and mount a partition there
+* change the ownership of that directory to the "jhalfs" user
+* run "su - jhalfs" in order to become that user
+* as user "jhalfs", follow the instructions in the jhalfs README file
+
+Note that this user already has the required sudo access.
 
 THANKS
 ===========================
