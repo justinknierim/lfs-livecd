@@ -29,6 +29,8 @@ compile-stage2:
 	 --enable-noargs-shell --with-ignore-dot --with-all-insults \
 	 --enable-shell-sets-home
 	make
+	rm -f /etc/sudoers
+	echo 'jhalfs    ALL=(ALL) NOPASSWD:ALL' >>sudoers
 	env -i PATH=$$PATH make install
 
 clean:
