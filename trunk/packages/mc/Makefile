@@ -30,7 +30,11 @@ compile-stage2:
 	rm debian/patches/08_awk.patch
 	rm debian/patches/36_developer_mode.patch
 	for a in debian/patches/*.patch ; do \
-	    echo $$a ; patch --force -Np1 -i $$a || patch -Np0 -i $$a ; \
+	    if egrep -q '+++.*mc-4' $$a ; then \
+		patch -Np1 -i $$a ; \
+	    else \
+		patch -Np0 -i $$a ; \
+	    fi ; \
 	done
 	CPPFLAGS="-DUTF8" ./configure --with-screen=slang --prefix=/usr \
 	    --enable-charset
