@@ -26,6 +26,6 @@ compile-stage2:
 	chmod -v 755 /usr/lib/libslang.so.$(VRS)
 
 clean:
-	-rm -rf $(NM)
+	-rm -rf $(DIR)
 
 .PHONY: clean chroot compile-stage2

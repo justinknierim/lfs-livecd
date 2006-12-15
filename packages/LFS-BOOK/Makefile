@@ -40,6 +40,6 @@ stage2: Makefile $(FILE)
 	@touch $@
 
 clean:
-	-rm -rf $(NM) $(DIR) $(HTMLDIR)
+	-rm -rf $(DIR) $(HTMLDIR)
 
 .PHONY: clean chroot compile-stage2
