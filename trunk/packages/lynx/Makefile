@@ -5,8 +5,8 @@ VRS= 2.8.6
 DIR= $(NM)2-8-6
 
 FILE= $(NM)$(VRS).tar.bz2
-URL-$(FILE)= http://lynx.isc.org/lynx2.8.6/lynx2.8.6.tar.bz2
-SHA-$(FILE)= ca1242464d25f0b0560ef516a5200da89532b24b
+URL-$(FILE)= http://lynx.isc.org/$(NM)$(VRS)/$(NM)$(VRS).tar.bz2
+SHA-$(FILE)= b4e37025e99aabaddb219b2f27b1b0ac5db89708
 
 # Targets
 
