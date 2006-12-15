@@ -27,6 +27,6 @@ compile-stage2:
 	install -v -m755 update-usbids.sh /usr/sbin/update-usbids
 
 clean:
-	-rm -rf $(NM)
+	-rm -rf $(DIR)
 
 .PHONY: clean chroot compile-stage2

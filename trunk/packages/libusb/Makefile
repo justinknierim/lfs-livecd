@@ -25,6 +25,6 @@ compile-stage2:
 	make install
 
 clean:
-	-rm -rf $(NM)
+	-rm -rf $(DIR)
 
 .PHONY: clean chroot compile-stage2

@@ -12,6 +12,9 @@ PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 1bdfbb49437642d3e450f0e3ba25a3e30e25e857
 
+PATCH2= gcc-4.1.1-newmake-1.patch
+PATCH3= gcc-4.1.1-pr13685-1.patch
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -23,6 +26,8 @@ pass1: $(FILE)
 	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-pass1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 # --enable-static overrides the unsuitable default in config.site
 	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
@@ -36,6 +41,8 @@ pass2: $(FILE) $(PATCH1)
 	cp $(SRC)/$(PATCH1) $(LFSSRC)/
 
 compile-pass2:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.orig} && \
 	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.tmp} && \
@@ -58,6 +65,8 @@ stage2: $(FILE)
 	$(sep_dir_build)
 
 compile-stage2:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH3)
 	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
 	 libiberty/Makefile.in
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
