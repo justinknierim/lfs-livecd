@@ -44,8 +44,6 @@ compile-stage2:
 	./configure --prefix=/usr --enable-multibyte
 	make $(PM)
 	make install
-	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{pl,ru}
-	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sfv vim /usr/bin/vi
 	for L in "" fr it pl ru ; do \
 	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
@@ -64,8 +62,6 @@ compile-stage3:
 	./configure --prefix=/usr --with-features=huge
 	make $(PM)
 	make install
-	rm -f /usr/share/vim/$(DIR)/tutor/tutor.{pl,sk}
-	rm -f /usr/share/vim/$(DIR)/tutor/tutor.??.*
 	ln -sfv vim /usr/bin/vi
 	for L in "" fr it pl ru ; do \
 	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
