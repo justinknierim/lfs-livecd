@@ -21,7 +21,6 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i -e "/*origOptString ==/c 0)" popt.c
-	#autoreconf -f -i -v
 	./configure --prefix=/usr
 	make $(PM)
 	make install
