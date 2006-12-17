@@ -23,9 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --disable-docs
 	make $(PM)
 	make install
-	sed -i -e 's/Bitstream Vera/DejaVu/' /etc/fonts/fonts.conf
-	sed -i -e 's,^\(\t\t\t<family>Kochi.*\)$$,\1\n\t\t\t<family>AR PL New Sung</family>,' /etc/fonts/fonts.conf
-	cp $(ROOT)/etc/fonts/local.conf /etc/fonts/local.conf
+	cp $(ROOT)/etc/fonts/{fonts,local}.conf /etc/fonts/
 
 clean:
 	-rm -rf $(DIR)

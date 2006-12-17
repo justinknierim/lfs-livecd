@@ -27,19 +27,20 @@ chroot:
 
 stage2: Makefile $(FILE)
 	@$(call echo_message, Building)
-	@svn co -q $(REVPARM) $(URL) $(DIR)
-	#tar xf $(FILE)
-	@cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
-	cp -av $(DIR) $(HTMLDIR) /usr/share
+	@mkdir tmp
+	@cd tmp ; svn co $(REVPARM) $(URL) $(DIR) >$(DIR)-$@.log 2>&1
+	#cd tmp ; tar xf $(FILE) >>$(DIR)-$@.log 2>&1
+	@cd tmp/$(DIR) ; make BASEDIR=../$(HTMLDIR) >>$(DIR)-$@.log 2>&1
+	@cd tmp ; cp -av $(DIR) $(HTMLDIR) /usr/share >>$(DIR)-$@.log 2>&1
 	@sed -i \
 	 's@file:///.*index.html@file:///usr/share/$(HTMLDIR)/index.html@' \
 	 $(SEAMONKEY_CONFIG)
 	@sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(HTMLDIR)/index.html\"@' \
 	 $(ROOT)/etc/profile
-	@make clean >$(DIR)-$@.log 2>&1
+	@make clean >>$(DIR)-$@.log 2>&1
 	@touch $@
 
 clean:
-	-rm -rf $(DIR) $(HTMLDIR)
+	-rm -rf tmp
 
 .PHONY: clean chroot compile-stage2

@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's,ln -s,ln -sf,' */Makefile
 	make
 	make install
 

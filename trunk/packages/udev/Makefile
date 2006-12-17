@@ -40,9 +40,11 @@ compile-stage2:
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
 	cp -v etc/udev/rules.d/[0-9]* /etc/udev/rules.d/
 	cd $(CONFDIR) ; make install install-doc install-extra-doc
-	echo 'ACTION=="add", BUS=="pci", SYSFS{class}=="0x030000", RUN+="detect-video"' >/etc/udev/rules.d/30-video.rules
+	rm /etc/udev/rules.d/81-cdrom.rules
+	echo 'ACTION=="add", SUBSYSTEM=="block", ENV{ID_TYPE}=="cd", IMPORT{program}="cdrom_id --export $tempnode", GROUP="cdrom"' >/etc/udev/rules.d/61-cdrom.rules
+	echo 'ACTION=="add", BUS=="pci", ATTR{class}=="0x030000", RUN+="detect-video"' >/etc/udev/rules.d/30-video.rules
 	install -m755 ../detect-video ../dhcp-helper /lib/udev
-	install -m644 ../50-network.rules /etc/udev/rules.d/
+	install -m644 ../76-network.rules /etc/udev/rules.d/
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
 
