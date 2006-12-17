@@ -73,11 +73,11 @@ guess_font() {
 	# Select font that has all characters in the language
 	# Base the selection on the language's non-UTF-8 locale charmap
 	F_CHARMAP=`LC_ALL=${F_LANG%.UTF-8} locale charmap`
-	while IFS="	" read CHARMAP FONT ERROR
+	while IFS="	" read CHARMAP G_FONT ERROR
 	do
 		if [ "$F_CHARMAP" = "$CHARMAP" ]
 		then
-			F_FONT="$FONT"
+			F_FONT="$G_FONT"
 			F_ERROR="$ERROR"
 			if [ "$F_ERROR" != "0" ]
 			then
