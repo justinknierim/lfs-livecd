@@ -2,12 +2,12 @@
 
 NM= vbetool
 VRS= 0.7
-VRS1= 1
+VRS1= 1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(NM)_$(VRS)-$(VRS1).tar.gz
 URL-$(FILE)= http://ftp.debian.org/debian/pool/main/v/$(NM)/$(FILE)
-SHA-$(FILE)= 49c86aa6fb877f35a0b336d6aa1d6b204c2cc66f
+SHA-$(FILE)= 889b9b61de44b05a247616d5013a79f6d44fc2ab
 
 # Targets
 
@@ -17,11 +17,11 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	LIBS="-lz" ./configure --prefix=/usr
+	./configure --prefix=/usr
 	make
 	make install
 
