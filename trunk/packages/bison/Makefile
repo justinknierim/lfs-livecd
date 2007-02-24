@@ -18,12 +18,11 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --prefix=/usr
 	echo '#define YYENABLE_NLS 1' >> config.h
-	make $(PM)
+	make
 	make install
 
 clean:

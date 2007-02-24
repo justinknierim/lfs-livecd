@@ -18,11 +18,10 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 	ln -sfv libfl.a /usr/lib/libl.a
 	echo "#!/bin/sh" > /usr/bin/lex

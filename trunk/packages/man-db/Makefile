@@ -18,7 +18,6 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	mv man/de{_DE.88591,}
@@ -26,7 +25,7 @@ compile-stage2:
 	mv man/it{_IT.88591,}
 	mv man/ja{_JP.eucJP,}
 	sed -i 's,\*_\*,??,'  man/Makefile.in
-	sed -i '/\t\/usr\/man/d' src/man_db.conf.in
+	sed -i -e '\%\t/usr/man%d' -e '\%\t/usr/local/man%d' src/man_db.conf.in
 	echo '#define WEB_BROWSER "exec /usr/bin/lynx"' >>include/manconfig.h.in
 	echo '#define COL "/usr/bin/col"' >>include/manconfig.h.in
 	echo '#define VGRIND "/usr/bin/vgrind"' >>include/manconfig.h.in
@@ -34,6 +33,7 @@ compile-stage2:
 	./configure --prefix=/usr --enable-mb-groff --disable-setuid
 	make
 	make install
+	install -m755 ../convert-mans /usr/bin
 
 clean:
 	-rm -rf $(DIR)

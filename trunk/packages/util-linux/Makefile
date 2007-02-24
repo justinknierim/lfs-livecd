@@ -8,10 +8,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 740b7eb5ae1148b2200b2cd34a0a6c4b0db577e4
 
-FILE1=loop-AES-v3.1d.tar.bz2
-URL-$(FILE1)= http://loop-aes.sourceforge.net/loop-AES/$(FILE1)
-SHA-$(FILE1)= 0be0d2e4e70c79a53b2ac6462659c1e36d2e69e6
-
 PATCH1= $(DIR)-cramfs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 00f5192493b939c2c996df9c1f3f769abfa3fa8c
@@ -21,7 +17,7 @@ URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= 5cebb93628a644b9e2b72944bdcb244f0b67374b
 
 STAGE1_DEPS = $(FILE)
-STAGE2_DEPS = $(FILE) $(FILE1) $(PATCH1) $(PATCH2)
+STAGE2_DEPS = $(FILE) $(PATCH1) $(PATCH2)
 
 # Targets
 
@@ -29,7 +25,6 @@ include $(ROOT)/scripts/functions
 
 stage1: $(STAGE1_DEPS)
 	$(std_build)
-	for i in $(STAGE1_DEPS) ; do cp $(SRC)/$$i $(LFSSRC) ; done
 
 compile-stage1:
 	sed -i 's@/usr/include@$(WD)/include@g' configure
@@ -45,17 +40,14 @@ chroot:
 
 stage2: Makefile $(STAGE2_DEPS)
 	$(std_build)
-	cp $(SRC)/{$(PATCH1),$(PATCH2)} $(LFSSRC)/
 
 compile-stage2:
-	tar jxf ../$(FILE1)
-	patch -Np1 -i */util-linux-2.12r.diff
 	sed -i 's@etc/adjtime@var/lib/hwclock/adjtime@g' hwclock/hwclock.c
-	mkdir -p /var/lib/hwclock
+	mkdir -pv /var/lib/hwclock
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	./configure
-	make $(PM) HAVE_KILL=yes HAVE_SLN=yes
+	make HAVE_KILL=yes HAVE_SLN=yes
 	make HAVE_KILL=yes HAVE_SLN=yes install
 
 clean:

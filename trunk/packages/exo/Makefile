@@ -21,7 +21,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	./configure --prefix=/usr --disable-python
-	make $(PM)
+	make
 	make install
 
 clean:

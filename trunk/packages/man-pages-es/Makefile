@@ -20,12 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	find man? -type f | \
-	 grep -v 'man7/iso_8859-7.7' | \
-	 while read F ; do \
-	  iconv -f UTF-8 -t ISO-8859-1 $$F >tmp ; mv tmp $$F ; \
-	 done
-	cp -r man? /usr/share/man/es
+	mv man7/iso_8859-2.7{,X}
+	mv man7/iso_8859-7.7{,X}
+	convert-mans UTF-8 ISO-8859-1 man?/*.?
+	mv man7/iso_8859-2.7{X,}
+	mv man7/iso_8859-7.7{X,}
+	make install
 
 clean:
 	-rm -rf $(DIR)

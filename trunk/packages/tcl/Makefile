@@ -14,11 +14,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
 	cd unix ; ./configure --prefix=$(WD)
-	cd unix ; make $(PM)
+	cd unix ; make
 	cd unix ; make install
 	cd unix ; make install-private-headers
 	ln -s tclsh8.4 $(WD)/bin/tclsh

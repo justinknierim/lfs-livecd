@@ -14,12 +14,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-	# CPPFLAGS=-D_GNU_SOURCE is for ppc
-	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=$(WD)
-	make $(PM)
+	./configure --prefix=$(WD)
+	make
 	make install
 
 chroot:
@@ -30,9 +28,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	# CPPFLAGS=-D_GNU_SOURCE is for ppc
-	CPPFLAGS=-D_GNU_SOURCE ./configure --prefix=/usr
-	make $(PM)
+	./configure --prefix=/usr
+	make
 	make install
 
 clean:

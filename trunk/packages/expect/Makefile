@@ -18,7 +18,6 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
@@ -26,7 +25,7 @@ compile-stage1:
 	sed 's:/usr/local/bin:/bin:' configure.bak > configure
 	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
 	--with-tclinclude=$(WD)/include --with-x=no
-	make $(PM)
+	make
 	make SCRIPTS="" install
 
 clean:

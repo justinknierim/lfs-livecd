@@ -1,18 +1,16 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.1.1
+VRS= 4.1.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a398b95d38b6e35f4c4e02c34c0a3bff79811f8f
+SHA-$(FILE)= 7981b8d1b58b10ddfd7d5142eab16352d9206f3b
 
 PATCH1= $(DIR)-specs-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 1bdfbb49437642d3e450f0e3ba25a3e30e25e857
-
-PATCH2= gcc-4.1.1-fixes-1.patch
 
 # Targets
 
@@ -22,24 +20,20 @@ export LFS_USE_TARGET := yes
 
 pass1: $(FILE)
 	$(sep_dir_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-pass1:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 # --enable-static overrides the unsuitable default in config.site
 	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
 	 --enable-languages=c --enable-static
-	unset CFLAGS ; make $(PM) bootstrap
+	unset CFLAGS ; make bootstrap
 	unset CFLAGS ; make install
-	ln -s gcc $(WD)/bin/cc
+	ln -vs gcc $(WD)/bin/cc
 
 pass2: $(FILE) $(PATCH1)
 	$(sep_dir_build)
-	cp $(SRC)/$(PATCH1) $(LFSSRC)/
 
 compile-pass2:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.orig} && \
 	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
 	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.tmp} && \
@@ -51,7 +45,7 @@ compile-pass2:
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
 	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
 	 --disable-libstdcxx-pch --enable-static
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -62,7 +56,6 @@ stage2: $(FILE)
 	$(sep_dir_build)
 
 compile-stage2:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
 	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
 	 libiberty/Makefile.in
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
@@ -73,7 +66,7 @@ compile-stage2:
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static
-	make $(PM)
+	make
 	-make -k check
 	make install
 	ln -svf ../usr/bin/cpp /lib

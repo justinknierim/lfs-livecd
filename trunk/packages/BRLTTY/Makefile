@@ -23,7 +23,7 @@ compile-stage2:
 	sed -i '/linux\/compiler\.h/d' Programs/usb_linux.c
 	./configure --prefix=/usr --sysconfdir=/etc --disable-speech-support \
 	    --disable-api
-	make $(PM)
+	make
 	make install
 
 clean:

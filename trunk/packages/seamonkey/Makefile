@@ -22,9 +22,6 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed 's:@TOPSRCDIR@:$(ROOT)/$(PKG)/$(NM)/mozilla:' ../.mozconfig \
 	 > .mozconfig
-ifeq ($(LFS-ARCH),ppc)
-	echo "ac_cv_visibility_pragma=no" >> .mozconfig
-endif
 	make -f client.mk build
 	make -f client.mk install
 	svn export --force $(ROOT)/root/.mozilla /root/.mozilla

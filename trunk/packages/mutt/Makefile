@@ -39,7 +39,7 @@ compile-stage2:
 	autoconf
 	./configure --prefix=/usr --sysconfdir=/etc --enable-imap \
 	 --enable-pop --enable-nntp --with-ssl --enable-hcache
-	make $(PM)
+	make
 	make install
 	install -m600  $(ROOT)/root/.muttrc /root
 

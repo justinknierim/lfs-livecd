@@ -1,14 +1,14 @@
 # Udev Makefile
 
 NM= udev
-VRS= 103
+VRS= 105
 CONFVRS= 20061021
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 015372f585beeba05217ad6568178820b2713571
+URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/hotplug/$(FILE)
+SHA-$(FILE)= c889d1d73a87813fd98a9f784486b0e0e3a228b8
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= $(HTTP)/$(NM)-config/$(FILE1)
@@ -24,7 +24,6 @@ chroot:
 
 stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(FILE1)} $(LFSSRC)
 
 compile-stage2:
 	tar xf ../$(FILE1)

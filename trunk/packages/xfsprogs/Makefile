@@ -1,12 +1,12 @@
 # XFS Progs Makefile
 
 NM= xfsprogs
-VRS= 2.8.11
+VRS= 2.8.18
 DIR= $(NM)-$(VRS)
 
 FILE=$(NM)_$(VRS)-1.tar.gz
 URL-$(FILE)= http://mirrors.sunsite.dk/xfs/download/cmd_tars/$(FILE)
-SHA-$(FILE)= 03d0f426848479562f9ce1c5dcb8cb17a150619d
+SHA-$(FILE)= 12ed1cbc5784e5df9a8a2a1c7a061ba459647e80
 
 # Targets
 
@@ -20,9 +20,11 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i '/autoconf/d' Makefile
 	unset CFLAGS ; \
-	    LOCAL_CONFIGURE_OPTIONS="--enable-static --disable-shared" \
-	    OPTIMIZER="$(CFLAGS)" make
+	    make DEBUG=-DNDEBUG INSTALL_USER=root INSTALL_GROUP=root \
+	    LOCAL_CONFIGURE_OPTIONS="--enable-static --disable-shared --enable-readline=yes" \
+	    OPTIMIZER="$(CFLAGS)"
 	make install
 
 clean:

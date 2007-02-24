@@ -51,8 +51,8 @@ Filesystem Programs
 Debugging Programs
 * strace
 
-Boot Loaders (only those applicable to the arch of the LiveCD)
-* grub, lilo, yaboot
+Boot Loaders
+* grub, lilo
 
 Other Programs
 * distcc

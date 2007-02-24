@@ -27,7 +27,7 @@ stage2: Makefile $(FILE) $(FILE1)
 compile-stage2:
 	sh build/gnuauto/setup.sh
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 	install -d -m755 /usr/share/doc/tidy
 	cp -R htmldoc /usr/share/doc/tidy

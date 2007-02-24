@@ -22,12 +22,11 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/ --enable-zlib
-	make $(PM)
+	make
 	make install
 	echo 'blacklist 8139cp' >/etc/modprobe.conf
 	echo 'blacklist eth1394' >>/etc/modprobe.conf

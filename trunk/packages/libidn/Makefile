@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --libdir=/usr/lib
-	make $(PM)
+	make
 	make install
 
 clean:

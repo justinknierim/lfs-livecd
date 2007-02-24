@@ -28,7 +28,7 @@ compile-stage2:
 	./configure --prefix=/usr --with-ssl \
 	 --with-editor=/usr/bin/vim \
 	 --with-installbuilddir=/usr/share/apr/build
-	make $(PM)
+	make
 	make install
 	install -v -d -m755 /usr/share/doc/$(DIR)
 	cp -v -R doc/* /usr/share/doc/$(DIR)

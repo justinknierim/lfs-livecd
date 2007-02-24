@@ -1,13 +1,13 @@
 # Iproute2 Makefile
 
 NM= iproute2
-VRS= 2.6.18
-DATE= 061002
+VRS= 2.6.19
+DATE= 061214
 DIR= $(NM)-$(VRS)-$(DATE)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 94f9b91d59e0e63b441130e158422a62a7a31b98
+URL-$(FILE)= http://developer.osdl.org/dev/iproute2/download/$(FILE)
+SHA-$(FILE)= f48c783c37e09a212cde65ae0370468af634fd65
 
 # Targets
 
@@ -19,10 +19,9 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build) 
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
-	make $(PM) SBINDIR=/sbin
+	make SBINDIR=/sbin
 	make SBINDIR=/sbin install
 	mv -v /sbin/arpd /usr/sbin
 

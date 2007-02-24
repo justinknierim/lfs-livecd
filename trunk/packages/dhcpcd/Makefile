@@ -21,7 +21,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	./configure --prefix="" --sysconfdir=/var/lib --mandir=/usr/share/man
-	make $(PM)
+	make
 	make install
 
 clean:

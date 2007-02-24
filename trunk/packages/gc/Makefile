@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i "s|\$$(datadir)/@PACKAGE@|&-$(VRS)|" doc/Makefile.in
 	./configure --prefix=/usr --datadir=/usr/share/doc --enable-cplusplus
-	make $(PM)
+	make
 	make install
 	install -v -m644 doc/gc.man /usr/share/man/man3/gc_malloc.3
 	ln -sf gc_malloc.3 /usr/share/man/man3/gc.3

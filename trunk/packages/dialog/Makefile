@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	./configure --prefix=/usr --enable-nls \
 	    --enable-widec --with-ncursesw
-	make $(PM)
+	make
 	make install
 
 clean:

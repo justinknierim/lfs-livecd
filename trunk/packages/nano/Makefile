@@ -1,12 +1,12 @@
 # Nano Makefile
 
 NM= nano
-VRS= 2.0.1
+VRS= 2.0.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.nano-editor.org/dist/v2.0/$(FILE)
-SHA-$(FILE)= 9c5e26893879355e41e417de30e9473439ceaf5d
+SHA-$(FILE)= 5012a57c3aeabd6f798f5c767970ba1d260854c4
 
 # Targets
 
@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --enable-color \
 	 --enable-multibuffer --enable-nanorc
-	make $(PM)
+	make
 	make install
 	mkdir -p /usr/share/doc/nano/examples
 	cp doc/nanorc.sample /usr/share/doc/nano/examples

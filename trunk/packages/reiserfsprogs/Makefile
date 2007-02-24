@@ -1,12 +1,12 @@
 # ReiserFS Progs Makefile
 
 NM= reiserfsprogs
-VRS= 3.6.19
+VRS= 3.6.20
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 615b070b05b4330a8ac45a7d3c985c7d34ebde8e
+FILE= $(DIR).tar.gz
+URL-$(FILE)= ftp://ftp.namesys.com/pub/reiserfsprogs/$(FILE)
+SHA-$(FILE)= 688b26c224769b46400e314c16f4185c55549e70
 
 # Targets
 
@@ -21,10 +21,8 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --sbindir=/sbin
-	make $(PM)
+	make
 	make install
-	ln -s reiserfsck /sbin/fsck.reiserfs
-	ln -s mkreiserfs /sbin/mkfs.reiserfs
 
 clean:
 	-rm -rf $(DIR)

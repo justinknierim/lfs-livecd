@@ -14,11 +14,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -30,7 +29,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --bindir=/bin --enable-html
-	make $(PM)
+	make
 	make install
 
 clean:

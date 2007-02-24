@@ -21,7 +21,6 @@ stage1: Makefile $(FILE)
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 	./configure --prefix=/tools/zlib
@@ -30,13 +29,13 @@ compile-stage1:
 
 compile-stage2:
 	./configure --prefix=/usr --shared --libdir=/lib
-	make $(PM)
+	make
 	make install
 	rm /lib/libz.so
 	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
 	make clean
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 	chmod 644 /usr/lib/libz.a
 

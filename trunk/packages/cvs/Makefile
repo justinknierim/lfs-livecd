@@ -26,7 +26,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --with-rsh=ssh
-	make $(PM)
+	make
 	make install
 	# install -m755 -d /usr/share/doc/$(DIR)
 	# install -m644 doc/*.pdf /usr/share/doc/$(DIR)

@@ -22,7 +22,6 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)/
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
@@ -30,9 +29,9 @@ compile-stage2:
 	--sysconfdir=/etc --localstatedir=/var --disable-ifconfig \
 	--disable-logger --disable-syslogd \
 	--disable-whois --disable-servers
-	make $(PM)
+	make
 	make install
-	mv /usr/bin/ping /bin
+	mv -v /usr/bin/ping /bin
 
 clean:
 	-rm -rf $(DIR)

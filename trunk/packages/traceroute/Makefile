@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i -e 's/-o bin/-o root/' Makefile.in
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 	make install-man
 	mv /usr/sbin/traceroute /usr/bin

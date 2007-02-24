@@ -18,24 +18,24 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --libdir=/lib --enable-shared --without-selinux
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
-	for i in de es fi fr id it pt_BR ; do \
-		../convert-mans UTF-8 ISO-8859-1 man/$$i/*.? ; done
-	for i in cs hu pl ; do \
-		../convert-mans UTF-8 ISO-8859-2 man/$$i/*.? ; done
-	../convert-mans UTF-8 EUC-JP man/ja/*.?
-	# ../convert-mans UTF-8 EUC-KR man/ko/*.?
-	../convert-mans UTF-8 KOI8-R man/ru/*.?
-	../convert-mans UTF-8 ISO-8859-9 man/tr/*.?
-	# ../convert-mans UTF-8 GB2312 man/zh_CN/*.?
-	# ../convert-mans UTF-8 BIG5 man/zh_TW/*.?
-	make $(PM)
+	for i in de es fi fr id it pt_BR; do \
+	    convert-mans UTF-8 ISO-8859-1 man/$$i/*.? ; \
+	done
+	
+	for i in cs hu pl; do \
+	    convert-mans UTF-8 ISO-8859-2 man/$$i/*.? ; \
+	done
+	
+	convert-mans UTF-8 EUC-JP man/ja/*.?
+	convert-mans UTF-8 KOI8-R man/ru/*.?
+	convert-mans UTF-8 ISO-8859-9 man/tr/*.?
+	make
 	make install
 	cp etc/{limits,login.access} /etc
 	sed -e 's@#MD5_CRYPT_ENAB.no@MD5_CRYPT_ENAB yes@' \

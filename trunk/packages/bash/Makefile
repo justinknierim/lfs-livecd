@@ -8,9 +8,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= fe6466c7ee98061e044dae0347ca5d1a8eab4a0d
 
-PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= f2e145c311c52e264b3341cd6757c0ea67996fa8
+PATCH1= $(DIR)-fixes-2.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+SHA-$(PATCH1)= 49bd15ad3579e69b841741408fd2bb3c63119376
 
 FILE1 = $(NM)-doc-$(VRS).tar.gz
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
@@ -22,7 +22,6 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
@@ -37,7 +36,6 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1) $(FILE1)
 	$(std_build)
-	cp $(SRC)/$(FILE1) $(LFSSRC)/
 
 compile-stage2:
 	unpack ../$(FILE1)
@@ -46,7 +44,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
 	 --with-installed-readline
-	make $(PM)
+	make
 	make install
 
 clean:

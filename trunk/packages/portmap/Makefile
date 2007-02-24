@@ -30,7 +30,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
-	make $(PM)
+	make
 	make install
 
 clean:

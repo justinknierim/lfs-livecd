@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --with-zlib --with-bzlib \
 	    --with-ssl --enable-charset-choice --enable-nls \
 	    --enable-locale-charset --with-screen=ncursesw
-	make $(PM)
+	make
 	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
 	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
 	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/doc

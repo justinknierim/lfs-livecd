@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	make $(PM) PREFIX=/usr LIBDIR=/lib BINDIR=/bin
+	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin
 	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin install
 
 clean:

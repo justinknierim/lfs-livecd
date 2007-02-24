@@ -1,3 +1,0 @@
-export VERSION := sparc-6.3-pre1
-export CFLAGS := -Os -s -fno-strict-aliasing
-export LFS_TARGET := sparc-unknown-linux-gnu
