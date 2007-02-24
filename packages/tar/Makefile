@@ -1,12 +1,12 @@
 # Tar Makefile
 
 NM= tar
-VRS= 1.16
+VRS= 1.16.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b98abe392cedb7fcef475a41d61c17a8f800b90c
+URL-$(FILE)= http://ftp.gnu.org/gnu/tar/$(FILE)
+SHA-$(FILE)= ab3ccbc09da1dc040fb92a0de85ae34fc70b03a9
 
 # Targets
 
@@ -14,11 +14,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)/
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -30,7 +29,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
 
 compile-stage2:
 	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
-	make $(PM)
+	make
 	make install
 
 clean:

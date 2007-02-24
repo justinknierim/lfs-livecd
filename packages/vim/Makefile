@@ -34,7 +34,6 @@ chroot3:
 
 stage2: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(FILE2),$(PATCH1),$(PATCH2)} $(LFSSRC)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
@@ -42,7 +41,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	./configure --prefix=/usr --enable-multibyte
-	make $(PM)
+	make
 	make install
 	ln -sfv vim /usr/bin/vi
 	for L in "" fr it pl ru ; do \
@@ -60,7 +59,7 @@ compile-stage3:
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h
 	./configure --prefix=/usr --with-features=huge
-	make $(PM)
+	make
 	make install
 	ln -sfv vim /usr/bin/vi
 	for L in "" fr it pl ru ; do \

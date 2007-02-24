@@ -18,7 +18,6 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	sed -i -e 's@/bin/rm@/tools&@' lib/blkid/test_probe.in

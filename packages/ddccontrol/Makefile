@@ -20,13 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),ppc)
-	sed -i -e '/sis.Po/d' -e 's|sis[^ ]*||' src/ddcpci/Makefile.in
-	sed -i '/sis/d' src/ddcpci/main.c
-	sed -i 's|sys/io.h|asm/io.h|' src/ddcpci/intel810.c
-endif
 	LIBS="-lz" ./configure --prefix=/usr --disable-gnome-applet
-	make $(PM)
+	make
 	make install
 
 clean:

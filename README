@@ -79,11 +79,6 @@ that you may want to customize to meet the needs of your own particular setup
 and for the type of CD you are hoping to produce. Here's a list of the main
 variables to look for:
 
-* LFS-ARCH
-  This variable sets the architecture of the CD you are attempting to build.
-The scripts assume that you are building the CD on such a host as well. At
-this time, possible values are 'x86', 'ppc' or 'sparc'.
-
 * VERSION
   This variable will be used in various places throughout the build and
 should equal the version of the CD you intend to build. If you are building

@@ -11,17 +11,15 @@ SHA-$(FILE)= a557686eef68362ea31a3aa41ce274e3eeae1ef0
 
 include $(ROOT)/scripts/functions
 
-LINKER ?= ld-linux.so.2
 export LFS_USE_TARGET := yes
 
 pass1: $(FILE)
 	$(sep_dir_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-pass1:
 # --disable-shared overrides unsuitable default from config.site
 	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) --disable-nls --disable-shared
-	unset CFLAGS ; make $(PM)
+	unset CFLAGS ; make
 	unset CFLAGS ; make install
 	unset CFLAGS ; make -C ld clean
 	unset CFLAGS ; make -C ld LIB_PATH=$(WD)/lib
@@ -47,7 +45,7 @@ compile-pass2:
 # --disable-shared overrides unsuitable default from config.site
 	../$(DIR)/configure --prefix=$(WD) --disable-nls \
 	 --with-lib-path=$(WD)/lib --disable-shared
-	make $(PM)
+	make
 	make install
 	make -C ld clean
 	make -C ld LIB_PATH=/usr/lib:/lib
@@ -63,7 +61,7 @@ re-adjust-toolchain:
 	mv -v $(WD)/bin/{ld-new,ld}
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
 	gcc -dumpspecs | \
-	perl -p -e 's@$(WD)/lib/$(LINKER)@/lib/$(LINKER)@g;' \
+	perl -p -e 's@$(WD)/lib/ld-linux.so.2@/lib/ld-linux.so.2@g;' \
 	    -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
 	    `dirname $$(gcc -print-libgcc-file-name)`/specs
 	touch $@
@@ -77,7 +75,7 @@ stage2: $(FILE)
 
 compile-stage2:
 	../$(DIR)/configure --prefix=/usr --enable-shared
-	make $(PM) tooldir=/usr
+	make tooldir=/usr
 	-make CFLAGS= -k check
 	make tooldir=/usr install
 	cp ../$(DIR)/include/libiberty.h /usr/include

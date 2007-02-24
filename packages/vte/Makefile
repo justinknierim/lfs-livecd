@@ -22,7 +22,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	sed -i -e 's%\\177:%&kh=\\EOH:@7=\\EOF:%g' termcaps/xterm
 	./configure --prefix=/usr --disable-python --libexecdir=/usr/sbin
-	make $(PM)
+	make
 	make install
 
 clean:

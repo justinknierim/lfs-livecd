@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:	
 	./configure --prefix=/usr --enable-static --enable-shared
-	make $(PM)
+	make
 	make install
 	/sbin/ldconfig
 

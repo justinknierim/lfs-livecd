@@ -10,10 +10,12 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 7883
+REV= 7937
 REVPARM= -r $(REV)
 
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+
+PATCH1= LFS-BOOK-SVN-XML-update-1.patch
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
@@ -28,17 +30,22 @@ chroot:
 stage2: Makefile $(FILE)
 	@$(call echo_message, Building)
 	@mkdir tmp
-	@cd tmp ; svn co $(REVPARM) $(URL) $(DIR) >$(DIR)-$@.log 2>&1
-	#cd tmp ; tar xf $(FILE) >>$(DIR)-$@.log 2>&1
-	@cd tmp/$(DIR) ; make BASEDIR=../$(HTMLDIR) >>$(DIR)-$@.log 2>&1
-	@cd tmp ; cp -av $(DIR) $(HTMLDIR) /usr/share >>$(DIR)-$@.log 2>&1
-	@sed -i \
-	 's@file:///.*index.html@file:///usr/share/$(HTMLDIR)/index.html@' \
-	 $(SEAMONKEY_CONFIG)
-	@sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(HTMLDIR)/index.html\"@' \
-	 $(ROOT)/etc/profile
+	@make CROSSVARS=../$(CROSSVARS) -C tmp -f ../Makefile compile-$@ >$(DIR)-$@.log 2>&1
 	@make clean >>$(DIR)-$@.log 2>&1
 	@touch $@
+
+compile-stage2:
+	svn co $(REVPARM) $(URL) $(DIR)
+	# tar xf $(FILE)
+	cd $(DIR) ; patch -Np1 -i ../../$(PATCH1)
+	cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
+	cp -av $(DIR) $(HTMLDIR) /usr/share
+	cd $(SRC) ; cp -v `sed 's@^.*/\([^/]*\)$$@\1@' /usr/share/$(HTMLDIR)/wget-list` $(LFSSRC)
+	sed -i \
+	 's@file:///.*index.html@file:///usr/share/$(HTMLDIR)/index.html@' \
+	 $(SEAMONKEY_CONFIG)
+	sed -i 's@WWW_HOME=\".*\"@WWW_HOME=\"/usr/share/$(HTMLDIR)/index.html\"@' \
+	 $(ROOT)/etc/profile
 
 clean:
 	-rm -rf tmp

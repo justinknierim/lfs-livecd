@@ -25,15 +25,7 @@ stage2: Makefile $(FILE) $(FILE1)
 
 compile-stage2:
 	unpack ../$(FILE1) --strip-components=1
-ifeq ($(LFS-ARCH),ppc)
-	make linux-dri-ppc OPT_FLAGS="$(CFLAGS)" MKDEP="gccmakedep" INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri
-else
-ifeq ($(LFS-ARCH),x86)
 	make linux-dri-x86 OPT_FLAGS="$(CFLAGS)" MKDEP="gccmakedep" INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri
-else
-	make linux-dri OPT_FLAGS="$(CFLAGS)" MKDEP="gccmakedep" INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri
-endif
-endif
 	make INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri install
 	sed -i 's@-l$$(GLUT_LIB)@@g' configs/default
 	cd progs/xdemos ; make PROGS='glxinfo glxgears'

@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 # --enable-static overrides unsuitable default from config.site
 	./configure --prefix=/usr --enable-static
-	make $(PM)
+	make
 	make install
 
 clean:

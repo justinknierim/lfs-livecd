@@ -21,7 +21,7 @@ prebuild: ftpget $(FILE)
 compile-prebuild:
 	unset CFLAGS ; ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared --disable-nls
-	unset CFLAGS ; make $(PM)
+	unset CFLAGS ; make
 	unset CFLAGS ; make install
 
 stage1: $(FILE)
@@ -30,7 +30,7 @@ stage1: $(FILE)
 compile-stage1:
 	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
 	 --enable-static --disable-shared --disable-nls
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -42,7 +42,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --with-ssl
-	make $(PM)
+	make
 	make install
 
 clean:

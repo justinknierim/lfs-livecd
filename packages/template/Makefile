@@ -18,11 +18,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build) # See the scripts/functions file for functions like this
-	cp $(SRC)/$(FILE) $(LFSSRC) # Copy LFS-Base packages to safe location
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make $(PM)
+	make
 	make install
 
 # The following target is for use with packages that must be built in chroot
@@ -53,7 +52,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

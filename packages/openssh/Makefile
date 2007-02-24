@@ -24,7 +24,7 @@ compile-stage2:
 	chown root:sys /var/lib/sshd
 	./configure --prefix=/usr --sysconfdir=/etc/ssh --libexecdir=/usr/sbin \
 	 --with-md5-passwords --with-privsep-path=/var/lib/sshd
-	make $(PM)
+	make
 	make install-nokeys
 	install -v -m755 -d /usr/share/doc/$(DIR)
 	install -v -m644 INSTALL LICENCE OVERVIEW README* WARNING.RNG \

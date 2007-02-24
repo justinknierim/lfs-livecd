@@ -17,7 +17,7 @@ stage1: Makefile $(FILE)
 
 compile-stage1:
 	./configure --prefix=/tools CFLAGS="-I/tools/zlib/include" LDFLAGS="-L/tools/zlib/lib"
-	make $(PM)
+	make
 	make install
 
 clean:

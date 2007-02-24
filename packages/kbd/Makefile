@@ -20,19 +20,11 @@ PATCH1= $(DIR)-backspace-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 39e332e42d5145dfc47786dba5eff63cda91d0ba
 
-PATCH30= $(DIR)-sparc_kbdrate-1.patch
-URL-$(PATCH30)= http://www.linuxfromscratch.org/patches/downloads/$(NM)/$(PATCH30)
-SHA-$(PATCH30)= 3fe2f0e6a311b8a580f09472dae1b1abbbb7ad21
-
 PATCH3= $(DIR)-gcc4_fixes-1.patch
 URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
 SHA-$(PATCH3)= 93ec9885a79ff79088f1533ec52f1a87dae69500
 
 STAGE2-DEPS = $(FILE) $(BELARUSIAN_FILE) $(THAI_FILE) $(PATCH1) $(PATCH3)
-ifeq ($(LFS-ARCH),sparc)
-STAGE2-DEPS += $(PATCH30)
-endif
-
 
 # Targets
 
@@ -44,7 +36,6 @@ chroot:
 
 stage2: Makefile $(STAGE2-DEPS)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH3)} $(LFSSRC)
 
 compile-stage2:
 	cd .. ; unpack $(BELARUSIAN_FILE) ; unpack $(THAI_FILE)
@@ -52,11 +43,8 @@ compile-stage2:
 	sed -i -e 's/\(50 = 0x.\)A/\1C/' data/keymaps/i386/qwerty/by2_win.map
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH3)
-ifeq ($(LFS-ARCH),sparc)
-	patch -Np1 -i ../$(PATCH30)
-endif
 	./configure --datadir=/lib/kbd
-	make $(PM)
+	make
 	make install
 	mv /usr/bin/{setfont,kbd_mode,openvt} /bin
 	# Turkish fixup

@@ -22,11 +22,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -35,13 +34,12 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
-	cp $(SRC)/{$(PATCH1),$(PATCH2)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

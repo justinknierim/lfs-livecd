@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --disable-docs
-	make $(PM)
+	make
 	make install
 	cp $(ROOT)/etc/fonts/{fonts,local}.conf /etc/fonts/
 

@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --disable-static
-	make $(PM)
+	make
 	make install
 
 clean:

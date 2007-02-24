@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --enable-included-msgs \
 	 --with-screen=ncursesw --with-mailer=/usr/bin/msmtp \
 	 --enable-nntp-only --disable-pgp-gpg --disable-printing
-	make $(PM) build
+	make build
 	make install
 	mkdir -p /etc/tin
 	cp $(ROOT)/etc/tin/tinrc /etc/tin

@@ -26,7 +26,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	sed -i -e "s,^extern char \*malloc();,/* & */," scaffold.c
-	make $(PM) REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux
+	make REAL_DAEMON_DIR=/usr/sbin STYLE=-DPROCESS_OPTIONS linux
 	make install
 
 clean:

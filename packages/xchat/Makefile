@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 	svn export --force $(ROOT)/root/.xchat2 /root/.xchat2
 

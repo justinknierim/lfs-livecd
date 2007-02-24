@@ -1,20 +1,16 @@
 # Bzip2 Makefile
 
 NM= bzip2
-VRS= 1.0.3
+VRS= 1.0.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7e749510f65c86fbfff37b97144a02f1b8b8617f
+URL-$(FILE)= http://www.bzip.org/$(VRS)/$(FILE)
+SHA-$(FILE)= f2388ec8f2c506e02aa89e67577b3c6331cbaa4c
 
 PATCH1= $(DIR)-install_docs-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= ead85296356efe99db45529cf7aeb9f61dd33daa
-
-PATCH2= $(DIR)-bzgrep_security-1.patch
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= 56a29bf1278f21bc30c72d19e5766bfda5c74e5b
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+SHA-$(PATCH1)= 86fa168b260bb12651ebfa6d47939e926e067036
 
 # Targets
 
@@ -22,28 +18,24 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
-	make $(PM)
+	make
 	make PREFIX=$(WD) install
 
 chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(PATCH1),$(PATCH2)} $(LFSSRC)/
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
-	sed -i 's@tempfile -d /tmp -p bz@mktemp -p /tmp@' bzdiff
-	make $(PM) -f Makefile-libbz2_so
+	make -f Makefile-libbz2_so
 	make clean
-	make $(PM)
-	make install
+	make
+	make PREFIX=/usr install
 	cp -v bzip2-shared /bin/bzip2
 	cp -av libbz2.so* /lib
 	ln -sv ../../lib/libbz2.so.1.0 /usr/lib/libbz2.so

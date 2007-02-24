@@ -20,11 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-ifeq ($(LFS-ARCH),x86)
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
-else
-	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux_noasm
-endif
 	make prefix=/usr install
 
 clean:

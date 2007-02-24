@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i -e "/*origOptString ==/c 0)" popt.c
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

@@ -1,0 +1,34 @@
+--- LFS-BOOK-SVN-XML/packages.ent	(revision 7937)
++++ LFS-BOOK-SVN-XML/packages.ent	(working copy)
+@@ -168,10 +168,10 @@
+ <!ENTITY gawk-ch6-du "18.2 MB">
+ <!ENTITY gawk-ch6-sbu "0.2 SBU">
+ 
+-<!ENTITY gcc-version "4.1.1">
+-<!ENTITY gcc-size "38,254 KB">
++<!ENTITY gcc-version "4.1.2">
++<!ENTITY gcc-size "38,777 KB">
+ <!ENTITY gcc-url "&gnu;gcc/gcc-&gcc-version;/gcc-&gcc-version;.tar.bz2">
+-<!ENTITY gcc-md5 "ad9f97a4d04982ccf4fd67cb464879f3">
++<!ENTITY gcc-md5 "a4a3eb15c96030906d8494959eeda23c">
+ <!ENTITY gcc-home "http://gcc.gnu.org/">
+ <!ENTITY gcc-ch5p1-du "655 MB">
+ <!ENTITY gcc-ch5p1-sbu "9.2 SBU">
+@@ -299,12 +299,12 @@
+ 
+ <!ENTITY linux-major-version "2.6">
+ <!ENTITY linux-minor-version "20">
+-<!ENTITY linux-patch-version "">
+-<!-- ENTITY linux-version "&linux-major-version;.&linux-minor-version;.&linux-patch-version;"-->
+-<!ENTITY linux-version "&linux-major-version;.&linux-minor-version;">
+-<!ENTITY linux-size "42,360 KB">
++<!ENTITY linux-patch-version "1">
++<!ENTITY linux-version "&linux-major-version;.&linux-minor-version;.&linux-patch-version;">
++<!--ENTITY linux-version "&linux-major-version;.&linux-minor-version;"-->
++<!ENTITY linux-size "42,361 KB">
+ <!ENTITY linux-url "&kernel;linux/kernel/v&linux-major-version;/linux-&linux-version;.tar.bz2">
+-<!ENTITY linux-md5 "34b0f354819217e6a345f48ebbd8f13e">
++<!ENTITY linux-md5 "3288ad6c10ba89e85041a8416bd9644d">
+ <!ENTITY linux-home "http://www.kernel.org/">
+ <!ENTITY linux-ch8-du "310 - 390 MB">
+ <!ENTITY linux-ch8-sbu "1.5 - 3.5 SBU">

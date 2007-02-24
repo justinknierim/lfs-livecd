@@ -20,18 +20,16 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
 	./configure.gnu --prefix=$(WD) \
 	 -Dstatic_ext='Data/Dumper Fcntl IO POSIX' \
-	 -Darchname=$${LFS_TARGET%%-*}-linux \
-	 $(EXTRA_CONF)
+	 -Darchname=$${LFS_TARGET%%-*}-linux
 	make perl utilities
-	cp perl pod/pod2man $(WD)/bin
-	mkdir -p $(WD)/lib/perl5/$(VRS)
-	cp -R lib/* $(WD)/lib/perl5/$(VRS)
+	cp -v perl pod/pod2man $(WD)/bin
+	mkdir -pv $(WD)/lib/perl5/$(VRS)
+	cp -Rv lib/* $(WD)/lib/perl5/$(VRS)
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \

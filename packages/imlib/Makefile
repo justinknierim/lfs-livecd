@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc/imlib
-	make $(PM)
+	make
 	make install
 	install -d -m755 /usr/share/doc/$(DIR)
 	install -m644 doc/{*.gif,index.html} /usr/share/doc/$(DIR)

@@ -18,11 +18,10 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

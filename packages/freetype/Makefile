@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i -r 's:.*(#.*BYTE.*) .*:\1:' include/freetype/config/ftoption.h
 	CFLAGS="$(CFLAGS) -fno-strict-aliasing" ./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

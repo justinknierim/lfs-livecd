@@ -28,7 +28,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 # --enable-static overrides unsuitable default from config.site
 	./configure --prefix=/usr --sysconfdir=/etc --enable-static
-	make $(PM)
+	make
 	make install
 	svn export --force $(ROOT)/root/.irssi /root/.irssi
 

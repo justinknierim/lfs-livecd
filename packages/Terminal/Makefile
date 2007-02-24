@@ -21,7 +21,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	./configure --prefix=/usr --libexecdir=/usr/sbin
-	make $(PM)
+	make
 	make install
 	mkdir -p /etc/xdg/Terminal
 	install -m644 ../terminalrc /etc/xdg/Terminal/terminalrc

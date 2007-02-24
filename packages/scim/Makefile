@@ -21,7 +21,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc
-	make $(PM)
+	make
 	make install
 	gtk-query-immodules-2.0 >/etc/gtk-2.0/gtk.immodules
 

@@ -30,7 +30,7 @@ compile-stage2:
 	 ./configure --prefix=/usr --sysconfdir=/etc \
 	 --enable-debug=no --enable-panel --enable-startup-notification \
 	 --libexecdir=/usr/sbin --enable-compositor ; \
-	make $(PM) ; \
+	make ; \
 	make install ; cd .. ; done
 	cp $(ROOT)/root/.xinitrc /etc/X11/xinit/xinitrc
 	cp ../desktop-files/* /usr/share/applications

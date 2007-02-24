@@ -1,12 +1,12 @@
 # Gettext Makefile
 
 NM= gettext
-VRS= 0.16
+VRS= 0.16.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= ab42a62fcfbfc5adde199375a20c0ae252b40961
+URL-$(FILE)= http://ftp.gnu.org/gnu/gettext/$(FILE)
+SHA-$(FILE)= 8642f4346dfd6a18ecd883329e150bfe9e0886c3
 
 # Targets
 
@@ -14,7 +14,6 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 	cd $(NM)-tools ; ./configure --prefix=$(WD) --disable-shared

@@ -26,12 +26,11 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1),$(PATCH2)} $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
-	make $(PM)
+	make
 	make install
 	install -m644 $(ROOT)/etc/syslog.conf /etc
 

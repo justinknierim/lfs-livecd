@@ -46,16 +46,11 @@ compile-stage2: init
 	$(MK) -m 660 $(WDIR)/dev/loop0 b 7 0
 	$(MK) -m 660 $(WDIR)/dev/loop1 b 7 1
 	cd $(WDIR); find . | cpio -o -H newc | gzip -9 > ../initramfs_data.cpio.gz
-ifeq ($(LFS-ARCH),x86)
-	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data_cpio.gz
-endif
-ifeq ($(LFS-ARCH),ppc)
-	$(CP) initramfs_data.cpio.gz /boot/initramfs_data_cpio.gz
-endif
+	$(CP) initramfs_data.cpio.gz /boot/isolinux/initramfs_data.cpio.gz
 	rm -rf temp
 
 init:
-	gcc $@.c -o $@ -static -ldevmapper -Os -s -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\" -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
+	gcc $@.c -o $@ -static -ldevmapper $(CFLAGS) -Wall -DVOLUME_ID=\"lfslivecd-$(VERSION)\" -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 
 clean:
 	-rm -rf temp

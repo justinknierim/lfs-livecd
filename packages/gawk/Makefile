@@ -18,13 +18,12 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/{$(FILE),$(PATCH1)} $(LFSSRC)
 
 compile-stage1:
 	./configure --prefix=$(WD)
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -39,7 +38,7 @@ compile-stage2:
 	./configure --prefix=/usr --libexecdir=/usr/lib
 	echo "#define HAVE_LANGINFO_CODESET 1" >> config.h
 	echo "#define HAVE_LC_MESSAGES 1" >> config.h
-	make $(PM)
+	make
 	make install
 
 clean:

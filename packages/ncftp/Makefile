@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc
 	make -C libncftp shared
 	make -C libncftp soinstall
-	make $(PM)
+	make
 	make install
 
 clean:

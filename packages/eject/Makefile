@@ -22,7 +22,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 compile-stage2:
 	autoreconf --force --install --verbose
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

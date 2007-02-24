@@ -1,12 +1,12 @@
 # File Makefile
 
 NM= file
-VRS= 4.18
+VRS= 4.19
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b733d3dd7e4ab4e16f52ef000163e92c99686c61
+URL-$(FILE)= ftp://ftp.gw.com/mirrors/pub/unix/file/$(FILE)
+SHA-$(FILE)= 035c2ddf46e1a80e8ddec8e74601d9d2ee4f6ce3
 
 # Targets
 
@@ -18,11 +18,10 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --prefix=/usr
-	make $(PM)
+	make
 	make install
 
 clean:

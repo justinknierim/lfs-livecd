@@ -20,12 +20,11 @@ chroot:
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	sed -i 's@Sending processes@& started by init@g' src/init.c
-	ROOT="" make $(PM) -C src
+	ROOT="" make -C src
 	ROOT="" make -C src install
 	cp $(ROOT)/etc/inittab /etc
 

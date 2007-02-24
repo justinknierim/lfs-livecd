@@ -1,12 +1,12 @@
 # Findutils Makefile
 
 NM= findutils
-VRS= 4.2.28
+VRS= 4.2.29
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 96f78e570f371c553699215857d7f992accce4d5
+URL-$(FILE)= http://ftp.gnu.org/gnu/findutils/$(FILE)
+SHA-$(FILE)= c93ee8b281f674383fd4ac2e9fb458a5eaab0217
 
 # Targets
 
@@ -14,11 +14,10 @@ include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make $(PM)
+	make
 	make install
 
 chroot:
@@ -31,7 +30,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	./configure --prefix=/usr --libexecdir=/usr/lib/findutils \
 	 --localstatedir=/var/lib/locate
-	make $(PM)
+	make
 	make install
 	mv -v /usr/bin/find /bin
 	sed -i -e 's@BINDIR=/usr/bin@BINDIR=/bin@' /usr/bin/updatedb

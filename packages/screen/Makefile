@@ -23,7 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr --with-socket-dir=/var/run/screen \
 	 --with-sys-screenrc=/etc/screenrc
 	sed -i -e "s@/usr/local/etc/screenrc@/etc/screenrc@" {etc,doc}/*
-	make $(PM)
+	make
 	make install
 	install -m 644 etc/etcscreenrc /etc/screenrc
 

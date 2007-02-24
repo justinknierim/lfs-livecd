@@ -25,7 +25,7 @@ compile-stage2:
 	 --libexecdir=/tmp --with-rmt=/usr/sbin/rmt
 	echo "#define HAVE_SETLOCALE 1" >>config.h
 	echo "#define HAVE_LSTAT 1" >>config.h
-	make $(PM)
+	make
 	make install
 
 clean:

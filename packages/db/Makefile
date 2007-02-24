@@ -18,14 +18,12 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	cd build_unix ; ../dist/configure --prefix=/usr \
 	    --enable-compat185 --enable-cxx
 	cd build_unix ; make
 	cd build_unix ; make docdir=/usr/share/doc/$(DIR) install
-	chown -v root:root /usr/bin/db_* /usr/lib/libdb* /usr/include/db*
 	chown -Rv root:root /usr/share/doc/$(DIR)
 
 clean:

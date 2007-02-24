@@ -30,7 +30,6 @@
 # HTTP:     Default http server for the lfs-base packages
 # HTTPBLFS: Default http server for the BLFS packages
 
-export LFS-ARCH ?= x86
 export MPBASE ?= /mnt/lfs
 export MP ?= $(MPBASE)/image
 export timezone ?= GMT
@@ -52,9 +51,10 @@ export CONFIG_SITE := $(ROOT)/scripts/config.site
 
 ROOTFS_MEGS := 1536
 
-export ARCHVARS := vars/vars.$(LFS-ARCH)
-
-include $(ARCHVARS)
+export VERSION := x86-6.3-pre2
+export CFLAGS := -O2 -pipe -s -fno-strict-aliasing -mtune=i686
+export LINKER := ld-linux.so.2
+export LFS_TARGET := i486-pc-linux-gnu
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
@@ -137,12 +137,10 @@ $(MKTREE): root.ext2
 	-install -d $(MP)/tmp $(MP)/var/tmp -m 1777
 	-install -d $(MP)/media/{floppy,cdrom}
 	-install -d $(MP)/usr/{bin,include,lib,sbin,share,src}
-	-ln -s share/{man,doc,info} $(MP)/usr
 	-install -d $(MP)/usr/share/{doc,info,locale,man}
 	-install -d $(MP)/usr/share/{misc,terminfo,zoneinfo}
 	-install -d $(MP)/usr/share/man/man{1,2,3,4,5,6,7,8}
 	-install -d $(MP)/usr/local/{bin,etc,include,lib,sbin,share,src}
-	-ln -s share/{man,doc,info} $(MP)/usr/local
 	-install -d $(MP)/usr/local/share/{doc,info,locale,man}
 	-install -d $(MP)/usr/local/share/{misc,terminfo,zoneinfo}
 	-install -d $(MP)/usr/local/share/man/man{1,2,3,4,5,6,7,8}
@@ -230,7 +228,7 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
 	lfs-m4-scpt lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
 	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
-	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt
+	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt lfs-grub-scpt
 	@cp /etc/resolv.conf $(WD)/etc
 	@touch $@
 
@@ -247,11 +245,11 @@ post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
 	final-environment
 
-blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
+blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
 	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng stop-here \
 	ch-freetype ch-fontconfig \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
 	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
@@ -276,16 +274,11 @@ blfs: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-parted ch-slang ch-mc \
-	ch-fuse ch-dosfstools ch-ntfsprogs
-ifeq ($(LFS-ARCH),x86)
-	make ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux
+	ch-fuse ch-dosfstools ch-ntfsprogs \
+	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
+	ch-binutils64 ch-gcc64 ch-linux64
 	# Proprietary drivers disabled - NVIDIA crashes, ATI is too fat
 	# make ch-gcc33 ch-proprietary-drivers
-	make ch-binutils64 ch-gcc64 ch-linux64
-endif
-ifeq ($(LFS-ARCH),ppc)
-	make ch-yaboot ch-hfsutils ch-mac-fdisk
-endif
 	make update-caches
 
 blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
@@ -349,7 +342,7 @@ gvim: $(MKTREE)
 #==============================================================================
 
 createfiles:
-	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,pwd,stty} /bin
+	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,grep,pwd,stty} /bin
 	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
 	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
 	@-$(WD)/bin/ln -s $(WD)/lib/libstdc++.so{,.6} /usr/lib

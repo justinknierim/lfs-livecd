@@ -18,11 +18,10 @@ chroot:
 
 stage2: Makefile $(FILE)
 	$(std_build)
-	cp $(SRC)/$(FILE) $(LFSSRC)
 
 compile-stage2:
 	./configure --prefix=/usr --exec-prefix=""
-	make $(PM)
+	make
 	make install
 	mv -v /bin/pstree* /usr/bin
 
