@@ -1,10 +1,10 @@
 NM= X.org-font
-VRS= X11R7.1
+VRS= X11R7.2
 URLBASE= http://xorg.freedesktop.org/releases/individual/font
 
-FILE101= encodings-1.0.0.tar.bz2
+FILE101= encodings-1.0.2.tar.bz2
 URL-$(FILE101)= $(URLBASE)/$(FILE101)
-SHA-$(FILE101)= daa208a7386ddda28d49de1dba708da9e2c2da79
+SHA-$(FILE101)= 63622374470204f6501ffb5f4df84228d859c9cf
 
 FILE102= font-bh-ttf-1.0.0.tar.bz2
 URL-$(FILE102)= $(URLBASE)/$(FILE102)

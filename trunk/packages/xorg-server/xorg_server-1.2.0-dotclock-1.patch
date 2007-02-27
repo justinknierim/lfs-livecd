@@ -1,26 +1,10 @@
 Submitted By: Alexander E. Patrakov
-Date: 2006-02-28
-Initial Package Version: 7.0.0
+Date: 2007-02-27
+Initial Package Version: 1.2.0
 Origin: Alexander E. Patrakov
 Upstream status: LiveCD specific
-Description: Makes it an error to exceed the DDC probed maximum dot clock.
-Deletes default modes with refresh rate less than 60 Hz
+Description: Deletes default modes with refresh rate less than 60 Hz
 
-Should fix "I get 2048x1536@60Hz instead of nice 1600x1200@75Hz" and
-"my LCD monitor gets confused" problems with unconfigured (i.e.,
-no "Modes" line) Xorg.
-
-diff -ur xorg-server-X11R7.0-1.1.1.orig/hw/xfree86/common/xf86Mode.c xorg-server-X11R7.0-1.1.1/hw/xfree86/common/xf86Mode.c
---- xorg-server-X11R7.0-1.1.1.orig/hw/xfree86/common/xf86Mode.c	2005-07-03 14:53:42.000000000 +0600
-+++ xorg-server-X11R7.0-1.1.1/hw/xfree86/common/xf86Mode.c	2006-02-28 13:05:12.000000000 +0500
-@@ -771,6 +771,7 @@
- 		   "(%s,%s) mode clock %gMHz exceeds DDC maximum %dMHz\n",
- 		   mode->name, monitor->id,
- 		   mode->Clock/1000.0, mon_range->max_clock);
-+		if (mon_range->max_clock > 0) return MODE_CLOCK_HIGH;
- 	    }
- 	}
-     }
 diff -ur xorg-server-X11R7.0-1.1.1.orig/hw/xfree86/common/extramodes xorg-server-X11R7.0-1.1.1/hw/xfree86/common/extramodes
 --- xorg-server-X11R7.0-1.1.1.orig/hw/xfree86/common/extramodes	2004-04-24 01:53:57.000000000 +0600
 +++ xorg-server-X11R7.0-1.1.1/hw/xfree86/common/extramodes	2006-02-28 18:07:35.000000000 +0500

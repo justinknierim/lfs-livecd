@@ -249,11 +249,11 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
 	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng stop-here \
+	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng \
 	ch-freetype ch-fontconfig \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
 	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
-	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config \
+	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config stop-here \
 	ch-synaptics ch-inputattach ch-fonts-thai \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \

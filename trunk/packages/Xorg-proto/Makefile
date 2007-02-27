@@ -1,10 +1,11 @@
 NM= X.org-proto
-VRS= X11R7.1
+VRS= X11R7.2
 URLBASE= http://xorg.freedesktop.org/releases/individual/proto
+XCBBASE= http://xcb.freedesktop.org/dist
 
-# FILE101= applewmproto-1.0.3.tar.bz2
-# URL-$(FILE101)= $(URLBASE)/$(FILE101)
-# SHA-$(FILE101)= c2c94755f453b6f8df53400f4e12f428cfefbb53
+FILE101= xcb-proto-1.0.tar.bz2
+URL-$(FILE101)= $(XCBBASE)/$(FILE101)
+SHA-$(FILE101)= c7252cc74f75c997227b4dcdba2cb654d89cecda
 
 FILE102= bigreqsproto-1.0.2.tar.bz2
 URL-$(FILE102)= $(URLBASE)/$(FILE102)
@@ -122,9 +123,9 @@ FILE130= xineramaproto-1.1.2.tar.bz2
 URL-$(FILE130)= $(URLBASE)/$(FILE130)
 SHA-$(FILE130)= d09ef306ffc0d058120051d88dd64776fd0de0d5
 
-FILE131= xproto-7.0.8.tar.bz2
+FILE131= xproto-7.0.10.tar.bz2
 URL-$(FILE131)= $(URLBASE)/$(FILE131)
-SHA-$(FILE131)= f3b3a8d65dc0d96902871ac4bb749cbf809f13a0
+SHA-$(FILE131)= be4f1e644edd2f010da25803d4471d7331ed517b
 
 FILE132= xproxymanagementprotocol-1.0.2.tar.bz2
 URL-$(FILE132)= $(URLBASE)/$(FILE132)

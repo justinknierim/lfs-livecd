@@ -1,5 +1,5 @@
 NM= X.org-app
-VRS= X11R7.1
+VRS= X11R7.2
 URLBASE= http://xorg.freedesktop.org/releases/individual/app
 FILE101= iceauth-1.0.1.tar.bz2
 
@@ -10,9 +10,9 @@ FILE102= mkfontdir-1.0.2.tar.bz2
 URL-$(FILE102)= $(URLBASE)/$(FILE102)
 SHA-$(FILE102)= f7e243cd26bacb9c5000eaf1595bb6c7b8bafb14
 
-FILE103= mkfontscale-1.0.2.tar.bz2
+FILE103= mkfontscale-1.0.3.tar.bz2
 URL-$(FILE103)= $(URLBASE)/$(FILE103)
-SHA-$(FILE103)= 9e33720a3c60b8cded82301a4b0e5d01a231e46c
+SHA-$(FILE103)= f635e66e8fc214a52c29c7fcb459fb65ba4ce1e4
 
 FILE104= rgb-1.0.1.tar.bz2
 URL-$(FILE104)= $(URLBASE)/$(FILE104)
@@ -22,21 +22,21 @@ FILE105= scripts-1.0.1.tar.bz2
 URL-$(FILE105)= $(URLBASE)/$(FILE105)
 SHA-$(FILE105)= e5785e243cea56c48a6492f6ec329c5cf7dbbca6
 
-FILE106= sessreg-1.0.0.tar.bz2
+FILE106= sessreg-1.0.2.tar.bz2
 URL-$(FILE106)= $(URLBASE)/$(FILE106)
-SHA-$(FILE106)= 2a583836ad049fe49bc4b968e63257ece676705b
+SHA-$(FILE106)= 2f2a36967ecffb29461ae28def3b013955e584dd
 
-FILE107= setxkbmap-1.0.2.tar.bz2
+FILE107= setxkbmap-1.0.3.tar.bz2
 URL-$(FILE107)= $(URLBASE)/$(FILE107)
-SHA-$(FILE107)= f823cad550b83da5fbc432b2f138d41915266a38
+SHA-$(FILE107)= 0e11546b3cedd8ba53a753685b60be15cf34316a
 
 FILE108= smproxy-1.0.2.tar.bz2
 URL-$(FILE108)= $(URLBASE)/$(FILE108)
 SHA-$(FILE108)= 18c49ba13a32dc83d00b2183455e31d5d96aec6f
 
-FILE109= xauth-1.0.1.tar.bz2
+FILE109= xauth-1.0.2.tar.bz2
 URL-$(FILE109)= $(URLBASE)/$(FILE109)
-SHA-$(FILE109)= d8a8f54a6c8921cbb605a074ddb030873c6dd7e5
+SHA-$(FILE109)= 64bf289e3b3776de7f6b5984eb6ed238cfe9e2aa
 
 FILE110= xcursorgen-1.0.1.tar.bz2
 URL-$(FILE110)= $(URLBASE)/$(FILE110)
@@ -62,9 +62,9 @@ FILE115= xinit-1.0.3.tar.bz2
 URL-$(FILE115)= $(URLBASE)/$(FILE115)
 SHA-$(FILE115)= caab4f9b56fc76edd8500d596d46cf1a9794caff
 
-FILE116= xkbcomp-1.0.2.tar.bz2
+FILE116= xkbcomp-1.0.3.tar.bz2
 URL-$(FILE116)= $(URLBASE)/$(FILE116)
-SHA-$(FILE116)= 2e01ea15e85a815a40d028df794bdc41aed1a25c
+SHA-$(FILE116)= b0e32f66dd9a18dd5d28cd582f062709b28e901a
 
 FILE117= xkbutils-1.0.1.tar.bz2
 URL-$(FILE117)= $(URLBASE)/$(FILE117)

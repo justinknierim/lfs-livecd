@@ -1,12 +1,15 @@
 # Fontconfig Makefile
 
 NM= fontconfig
-VRS= 2.3.2
+VRS= 2.4.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 89e67a477e6313aea7e55654fd5d9abdc1734bdd
+FILE= $(DIR).tar.gz
+URL-$(FILE)= http://www.fontconfig.org/release/$(FILE)
+SHA-$(FILE)= cd5e30625680a0435563b586275156eaf8d0d34a
+
+FILE1= 65-firefly.conf
+FILE2= 66-ttf-thai.conf
 
 # Targets
 
@@ -23,7 +26,9 @@ compile-stage2:
 	./configure --prefix=/usr --sysconfdir=/etc --disable-docs
 	make
 	make install
-	cp $(ROOT)/etc/fonts/{fonts,local}.conf /etc/fonts/
+	cp -v ../$(FILE1) ../$(FILE2) /etc/fonts/conf.avail
+	ln -sfv ../conf.avail/$(FILE1) ../conf.avail/$(FILE2) /etc/fonts/conf.d
+	cp -v ../local.conf /etc/fonts
 
 clean:
 	-rm -rf $(DIR)
