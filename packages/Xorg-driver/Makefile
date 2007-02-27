@@ -1,5 +1,5 @@
 NM= X.org-driver
-VRS= X11R7.1
+VRS= X11R7.2
 URLBASE= http://xorg.freedesktop.org/releases/individual/driver
 
 FILE101= xf86-input-evdev-1.1.2.tar.bz2
@@ -42,25 +42,25 @@ FILE110= xf86-video-cyrix-1.1.0.tar.bz2
 URL-$(FILE110)= $(URLBASE)/$(FILE110)
 SHA-$(FILE110)= e82a9384828ce3f43ea7d3623df76ffa17aa4813
 
-FILE111= xf86-video-fbdev-0.3.0.tar.bz2
+FILE111= xf86-video-fbdev-0.3.1.tar.bz2
 URL-$(FILE111)= $(URLBASE)/$(FILE111)
-SHA-$(FILE111)= 66b3890398b0ad8f2991e7403be6f902f1c14e22
+SHA-$(FILE111)= 6b1cc6fbe0d1b34daff6cb202db6827007ec1cb5
 
 FILE112= xf86-video-glint-1.1.1.tar.bz2
 URL-$(FILE112)= $(URLBASE)/$(FILE112)
 SHA-$(FILE112)= 0e70ae96862483e66e75553dd19ef6ef5bcb8132
 
-FILE113= xf86-video-i128-1.2.0.tar.bz2
+FILE113= xf86-video-i128-1.2.1.tar.bz2
 URL-$(FILE113)= $(URLBASE)/$(FILE113)
-SHA-$(FILE113)= 69a323b0f6d1cdec1bd77b1f955e2096c709800b
+SHA-$(FILE113)= 8906c29c25dc4b54958052b3327d4d2150d1155e
 
 FILE114= xf86-video-i740-1.1.0.tar.bz2
 URL-$(FILE114)= $(URLBASE)/$(FILE114)
 SHA-$(FILE114)= 99575052e29236d50db23d093a30ba0047d78e43
 
-FILE115= xf86-video-i810-1.7.2.tar.bz2
+FILE115= xf86-video-i810-1.6.5.tar.bz2
 URL-$(FILE115)= $(URLBASE)/$(FILE115)
-SHA-$(FILE115)= ed098545cc648bfd33ce06d0401a17bb77161ebb
+SHA-$(FILE115)= 7d9cf4fa18ec6dd7eefcb1589675c7bcffa384d0
 
 # FILE116= xf86-video-impact-0.2.0.tar.bz2
 # URL-$(FILE116)= $(URLBASE)/$(FILE116)
@@ -70,9 +70,9 @@ FILE117= xf86-video-imstt-1.1.0.tar.bz2
 URL-$(FILE117)= $(URLBASE)/$(FILE117)
 SHA-$(FILE117)= 2ae92a244bafef83e4b016cab204e2f5797cdb09
 
-FILE118= xf86-video-mga-1.4.3.tar.bz2
+FILE118= xf86-video-mga-1.4.6.1.tar.bz2
 URL-$(FILE118)= $(URLBASE)/$(FILE118)
-SHA-$(FILE118)= efe99a11f08eb39e8c31dfe3d6d9b1bf0159056d
+SHA-$(FILE118)= 8b9f619fc1baf711fcae38dbf4851d277a5cbc1a
 
 FILE119= xf86-video-neomagic-1.1.1.tar.bz2
 URL-$(FILE119)= $(URLBASE)/$(FILE119)
@@ -86,17 +86,17 @@ FILE121= xf86-video-nsc-2.8.2.tar.bz2
 URL-$(FILE121)= $(URLBASE)/$(FILE121)
 SHA-$(FILE121)= 58ea8edbdf18dc8dd194f9d08761f829bfd09a01
 
-FILE122= xf86-video-nv-1.2.0.tar.bz2
+FILE122= xf86-video-nv-1.2.2.1.tar.bz2
 URL-$(FILE122)= $(URLBASE)/$(FILE122)
-SHA-$(FILE122)= d98cb84e7220251fdcd278c4269763f17aef1e9b
+SHA-$(FILE122)= d630ec2dd7f326650c5b73f4913ac65f0b817060
 
-FILE123= xf86-video-rendition-4.1.1.tar.bz2
+FILE123= xf86-video-rendition-4.1.3.tar.bz2
 URL-$(FILE123)= $(URLBASE)/$(FILE123)
-SHA-$(FILE123)= 1ca209d9a22bf9daf1c7f7f9c79150dc9ab7c72b
+SHA-$(FILE123)= 9cbd77ad6cba6807823fff3b74923b955580a540
 
-FILE124= xf86-video-s3-0.4.1.tar.bz2
+FILE124= xf86-video-s3-0.5.0.tar.bz2
 URL-$(FILE124)= $(URLBASE)/$(FILE124)
-SHA-$(FILE124)= de1d269f906ea811a1428a485d7cde6b76dafd3c
+SHA-$(FILE124)= 1ae624635f71f82ecc73999cad5499a1d5d69be6
 
 FILE125= xf86-video-s3virge-1.9.1.tar.bz2
 URL-$(FILE125)= $(URLBASE)/$(FILE125)
@@ -110,33 +110,33 @@ FILE127= xf86-video-siliconmotion-1.4.2.tar.bz2
 URL-$(FILE127)= $(URLBASE)/$(FILE127)
 SHA-$(FILE127)= ba0e2f08d97841df8925b609925b1328164ca6ab
 
-FILE128= xf86-video-sis-0.9.2.tar.bz2
+FILE128= xf86-video-sis-0.9.3.tar.bz2
 URL-$(FILE128)= $(URLBASE)/$(FILE128)
-SHA-$(FILE128)= ac7d2c5d19d93e28a3331c2a05349c468e1d88cb
+SHA-$(FILE128)= fb386185a91bbc6764445ef251d4a0216ec9b9d0
 
 FILE129= xf86-video-sisusb-0.8.1.tar.bz2
 URL-$(FILE129)= $(URLBASE)/$(FILE129)
 SHA-$(FILE129)= d1c925b0e899f543a32842a6bfbff4476b9b66e1
 
-FILE130= xf86-video-tdfx-1.2.2.tar.bz2
+FILE130= xf86-video-tdfx-1.3.0.tar.bz2
 URL-$(FILE130)= $(URLBASE)/$(FILE130)
-SHA-$(FILE130)= 3a831921f249574d4a387b7917a39c4b9240fecc
+SHA-$(FILE130)= 8089883c87b64c2876b9152b4820901cc6273f57
 
 FILE131= xf86-video-tga-1.1.0.tar.bz2
 URL-$(FILE131)= $(URLBASE)/$(FILE131)
 SHA-$(FILE131)= 448600dd45aedfaf0ba8a46eaf04d03895a712ed
 
-FILE132= xf86-video-trident-1.2.2.tar.bz2
+FILE132= xf86-video-trident-1.2.3.tar.bz2
 URL-$(FILE132)= $(URLBASE)/$(FILE132)
-SHA-$(FILE132)= 9518c21662562229b6a285f39c6bde0a038880e9
+SHA-$(FILE132)= d75ca064bee6817209266fc85bbcfac671ed0642
 
 FILE133= xf86-video-tseng-1.1.1.tar.bz2
 URL-$(FILE133)= $(URLBASE)/$(FILE133)
 SHA-$(FILE133)= 7eb1cd73983aaa874dbb480efc7982063eab6af8
 
-FILE134= xf86-video-vesa-1.2.2.tar.bz2
+FILE134= xf86-video-vesa-1.3.0.tar.bz2
 URL-$(FILE134)= $(URLBASE)/$(FILE134)
-SHA-$(FILE134)= aa22994fac3dadf41b7b641a816f704129831a77
+SHA-$(FILE134)= 09d74f838c07c58b6eba3600f3afa5fb74420ff4
 
 FILE135= xf86-video-vga-4.1.0.tar.bz2
 URL-$(FILE135)= $(URLBASE)/$(FILE135)
@@ -146,9 +146,9 @@ FILE136= xf86-video-via-0.2.2.tar.bz2
 URL-$(FILE136)= $(URLBASE)/$(FILE136)
 SHA-$(FILE136)= 34297439a05d054b343df407e86b6bd7d1cece97
 
-FILE137= xf86-video-vmware-10.13.0.tar.bz2
+FILE137= xf86-video-vmware-10.14.1.tar.bz2
 URL-$(FILE137)= $(URLBASE)/$(FILE137)
-SHA-$(FILE137)= 188d53150240a7879e042f545c49d007b8af8d9f
+SHA-$(FILE137)= 7c03d3b18d4765c5abd800ed301f8b705a889adb
 
 FILE138= xf86-video-voodoo-1.1.1.tar.bz2
 URL-$(FILE138)= $(URLBASE)/$(FILE138)

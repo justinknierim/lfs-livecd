@@ -1,10 +1,10 @@
 NM= X.org-util
-VRS= X11R7.1
+VRS= X11R7.2
 URLBASE= http://xorg.freedesktop.org/releases/individual/util
 
-FILE101= util-macros-1.1.1.tar.bz2
+FILE101= util-macros-1.1.5.tar.bz2
 URL-$(FILE101)= $(URLBASE)/$(FILE101)
-SHA-$(FILE101)= c1ad23bbdd3c087e061000ae998401b671686406
+SHA-$(FILE101)= c4bbfa389df7e5f568599d6313f2460a381f0502
 
 FILE102= gccmakedep-1.0.2.tar.bz2
 URL-$(FILE102)= $(URLBASE)/$(FILE102)

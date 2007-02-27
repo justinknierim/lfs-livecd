@@ -1,16 +1,16 @@
 # Mesa Makefile
 
 NM= Mesa
-VRS= 6.5.1
+VRS= 6.5.2
 DIR= $(NM)-$(VRS)
 
 FILE= MesaLib-$(VRS).tar.bz2
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/mesa3d/$(FILE)
-SHA-$(FILE)= cd3b314808534b0306c7f89e9a72c9c23dbff239
+SHA-$(FILE)= ba860bb6ee57c02202342dfd5927464a068ea18f
 
 FILE1= MesaDemos-$(VRS).tar.bz2
 URL-$(FILE1)= http://heanet.dl.sourceforge.net/sourceforge/mesa3d/$(FILE1)
-SHA-$(FILE1)= 6576410f51ff2c2bf68cec1dcb188ea26307bf56
+SHA-$(FILE1)= beac8b2fa9c6e25efd44b911d2d7952b2f87534c
 
 # Targets
 

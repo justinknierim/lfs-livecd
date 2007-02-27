@@ -1,12 +1,12 @@
 # FreeType Makefile
 
 NM= freetype
-VRS= 2.1.10
+VRS= 2.3.1
 DIR= $(NM)-$(VRS)
 	 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= f9e5c52e466c3e41483d5d6d44b4f3135a9c4b16
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/freetype/$(FILE)
+SHA-$(FILE)= f87c12c67abb5885486a248a1b83232877f074fe
 
 # Targets
 
@@ -21,7 +21,8 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i -r 's:.*(#.*BYTE.*) .*:\1:' include/freetype/config/ftoption.h
-	CFLAGS="$(CFLAGS) -fno-strict-aliasing" ./configure --prefix=/usr
+	sed -i '/define .*PATENT/s/define/undef/' include/freetype/config/ftoption.h
+	./configure --prefix=/usr
 	make
 	make install
 
