@@ -21,12 +21,10 @@
 
 -include Makefile.personal
 
-# LFS-ARCH: architecture for which the CD should be built.
 # MP:       mount point
 # timezone: default timezone
 # pagesize: default paper size for groff.
 # ROOT:     name of this directory, as seen from chroot
-# PM:       Parallel Build Level
 # HTTP:     Default http server for the lfs-base packages
 # HTTPBLFS: Default http server for the BLFS packages
 
@@ -35,7 +33,6 @@ export MP ?= $(MPBASE)/image
 export timezone ?= GMT
 export pagesize ?= letter
 export ROOT ?= /lfs-livecd
-#export PM ?= -j3
 export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
 export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
 
@@ -253,12 +250,12 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-freetype ch-fontconfig \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
 	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
-	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config stop-here \
+	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config \
 	ch-synaptics ch-inputattach ch-fonts-thai \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
+	ch-pango ch-atk ch-gtk2 stop-here ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-librsvg ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
 	ch-Terminal ch-mousepad ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
@@ -294,12 +291,6 @@ blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-initramfs ch-blfs-bootscripts \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-bin86 ch-lilo ch-syslinux
-ifeq ($(LFS-ARCH),ppc)
-	make ch-yaboot
-	make ch-hfsutils
-	make ch-parted
-	make ch-mac-fdisk
-endif
 
 wget-list:
 	@>wget-list ; \
@@ -403,10 +394,8 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-ifeq ($(LFS-ARCH),x86)
 	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
-endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
 	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
@@ -420,21 +409,10 @@ iso: prepiso
 	@make unmount
 	@sync
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
-ifeq ($(LFS-ARCH),x86)
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
 	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
-endif
-ifeq ($(LFS-ARCH),ppc)
-	@cd $(MPBASE) ; $(WD)/bin/mkisofs -z -hfs -part -l --allow-leading-dots \
-	-map $(MPBASE)/$(ROOT)/$(PKG)/yaboot/map.hfs -no-desktop \
-	-hfs-volid "lfslivecd-$(VERSION)" -V "lfslivecd-$(VERSION)" \
-	-hfs-bless iso/boot -r -v -o $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso iso \
-	 >$(MPBASE)$(ROOT)/iso.log 2>&1
-	@if ! grep -q "Blessing" $(MPBASE)$(ROOT)/iso.log ; then \
-	 echo "Iso incorrectly made! Boot directory not blessed." ; fi
-endif
 
 # Targets to clean your tree. 
 #==============================================================================
