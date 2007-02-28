@@ -1,12 +1,12 @@
 # lftp Makefile
 
 NM= lftp
-VRS= 3.5.6
+VRS= 3.5.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.yars.free.net/pub/source/lftp/$(FILE)
-SHA-$(FILE)= ca28df9b2bb1db37a295db56015a1b082d9bc60d
+SHA-$(FILE)= ce4f7abb5a74e90218bb2ee94170ace747025298
 
 # Targets
 

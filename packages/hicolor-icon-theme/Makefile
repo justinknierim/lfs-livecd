@@ -1,12 +1,12 @@
 # hicolor-icon-theme Makefile
 
 NM= hicolor-icon-theme
-VRS= 0.9
+VRS= 0.10
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://icon-theme.freedesktop.org/releases/$(FILE)
-SHA-$(FILE)= 640e0f3c0d4a7d0cc983944cba626b8f025deb14
+SHA-$(FILE)= 30a1526cd337ecbd9aaecfff2737884b86c72508
 
 # Targets
 
