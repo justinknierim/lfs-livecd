@@ -8,7 +8,7 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnu.org/non-gnu/cvs/source/stable/$(VRS)/$(FILE)
 SHA-$(FILE)= 5dfa11da84a890d7d61516fd450c001dc24bcc0d
 
-PATCH1= $(NM)-1.11.21-zlib-1.patch
+PATCH1= $(NM)-1.11.22-zlib-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 0d20bab8a6b6e419a8c900d082b487ad6a3aec38
 
