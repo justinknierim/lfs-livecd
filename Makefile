@@ -255,7 +255,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-gtk2 stop-here ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
+	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey stop-here \
 	ch-librsvg ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
 	ch-Terminal ch-mousepad ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
