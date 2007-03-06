@@ -10,12 +10,10 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 7937
+REV= 7961
 REVPARM= -r $(REV)
 
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
-
-PATCH1= LFS-BOOK-SVN-XML-update-1.patch
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
@@ -37,7 +35,6 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	svn co $(REVPARM) $(URL) $(DIR)
 	# tar xf $(FILE)
-	cd $(DIR) ; patch -Np1 -i ../../$(PATCH1)
 	cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
 	cp -av $(DIR) $(HTMLDIR) /usr/share
 	cd $(SRC) ; cp -v `sed 's@^.*/\([^/]*\)$$@\1@' /usr/share/$(HTMLDIR)/wget-list` $(LFSSRC)

@@ -1,12 +1,12 @@
 # vte Makefile
 
 NM= vte
-VRS= 0.12.2
+VRS= 0.14.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.12/$(FILE)
-SHA-$(FILE)= cc76a380dfe23cfc8aba606b146015a6954d67ae
+URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.14/$(FILE)
+SHA-$(FILE)= 938e6ca0416191c6ac60745a96bfa84c5eb8519e
 
 # Targets
 

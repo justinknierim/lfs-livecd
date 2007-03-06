@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --libdir=/lib --enable-shared --without-selinux
+	./configure --libdir=/lib --sysconfdir=/etc --enable-shared --without-selinux
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile

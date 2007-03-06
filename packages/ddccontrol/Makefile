@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	LIBS="-lz" ./configure --prefix=/usr --disable-gnome-applet
+	./configure --prefix=/usr --disable-gnome-applet
 	make
 	make install
 
