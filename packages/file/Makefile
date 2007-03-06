@@ -8,7 +8,7 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= ftp://ftp.gw.com/mirrors/pub/unix/file/$(FILE)
 SHA-$(FILE)= af5878e3c61c725a82ff185fcef5b631ad8468ab
 
-PATCH1-$(DIR)-reg_startend-1.patch
+PATCH1= $(DIR)-reg_startend-1.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
 SHA-$(PATCH1)= e55056a4f3d4204870f8db2ad51113d46b8032f5
 
