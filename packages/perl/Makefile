@@ -12,8 +12,6 @@ PATCH1= $(DIR)-libc-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= b72468149c5eee6faefde7f32bb05bda6e2a1c9d
 
-STAGE2_DEPS = $(FILE)
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -35,7 +33,7 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(STAGE2_DEPS)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
