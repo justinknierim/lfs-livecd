@@ -12,9 +12,9 @@ FILE2= $(NM)-$(VRS)-lang.tar.gz
 URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
 SHA-$(FILE2)= 3db6b0004d213490cc00d361835e7a7c685adb52
 
-PATCH1= $(NM)-$(VRS)-fixes-14.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 53682430a0673e15d20b435702f2e9132249fb77
+PATCH1= $(NM)-$(VRS)-fixes-15.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+SHA-$(PATCH1)= cd6e5ff0d92a23384ff43d702f9f1457c71cff69
 
 PATCH2= $(NM)-$(VRS)-mandir-1.patch
 URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)

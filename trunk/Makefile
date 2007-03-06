@@ -223,7 +223,7 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
 	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
 	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
-	lfs-m4-scpt lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
+	lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
 	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
 	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt lfs-grub-scpt
 	@cp /etc/resolv.conf $(WD)/etc
@@ -251,26 +251,29 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
 	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
 	ch-Xorg-font ch-Xorg-driver ch-XML-Parser ch-xkeyboard-config \
-	ch-synaptics ch-inputattach ch-fonts-thai \
+	ch-synaptics ch-inputattach ch-915resolution ch-fonts-thai \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey stop-here \
-	ch-librsvg ch-startup-notification chroot-gvim ch-xfce ch-vte ch-exo \
-	ch-Terminal ch-mousepad ch-irssi ch-gaim \
+	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
+	ch-alsa-lib ch-alsa-utils ch-alsa-firmware ch-alsa-oss \
+	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss \
+	ch-libtheora ch-librcc ch-taglib ch-xine-lib \
+	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal \
+	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI \
+	ch-recode ch-fortune-mod ch-xfce ch-xfmedia ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
-	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc \
-	ch-dialog ch-ncftp ch-pciutils ch-libusb ch-usbutils \
+	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
 	ch-device-mapper ch-LVM2 ch-dmraid \
-	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
+	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
+	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY  \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
 	ch-initramfs ch-blfs-bootscripts ch-oui-data \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-hibernate-script ch-parted ch-slang ch-mc \
+	ch-hibernate-script ch-slang ch-mc \
 	ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
 	ch-binutils64 ch-gcc64 ch-linux64

@@ -12,14 +12,6 @@ SHA-$(FILE)= 31589415022c2842f62f3b91186bc9e0a9a8e1a1
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE)
-	$(std_build)
-
-compile-stage1:
-	./configure --prefix=$(WD)
-	make
-	make install
-
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
