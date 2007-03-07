@@ -1,7 +1,7 @@
 #!/bin/sh
 
 SRCDIR="$1"
-KVERSION=`grep UTS_RELEASE "$SRCDIR/include/linux/version.h" | cut -d '"' -f 2`
+KVERSION=`grep UTS_RELEASE "$SRCDIR/include/linux/utsrelease.h" | cut -d '"' -f 2`
 DSTDIR=/usr/src/linux-$KVERSION
 
 echo $SRCDIR $DSTDIR
