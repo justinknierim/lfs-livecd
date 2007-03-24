@@ -29,7 +29,7 @@ same_locale() {
 }
 
 guess_selection() {
-	while read F_DESCRIPTION F_LANG F_KEYMAP F_LEGACYCHARSET F_XKEYMAP
+	while read F_DESCRIPTION F_LANG F_KEYMAP F_LEGACYCHARSET F_XKEYMAP F_CODEPAGE
 	do
 		if [ -z "$F_DESCRIPTION" ] || [ "$F_DESCRIPTION" = "#" ]
 		then
@@ -45,6 +45,7 @@ guess_selection() {
 	F_KEYMAP=defkeymap
 	F_LEGACYCHARSET=""
 	F_XKEYMAP="us"
+	F_CODEPAGE="cp437"
 	return 1
 }
 
@@ -112,7 +113,8 @@ cost of unavailable bright colors, use the LatArCyrHeb-16 font.\" 0 0 5 \
 	\"Console keymap:\" 2 1 \"$F_KEYMAP\" 2 30 40 0 \
 	\"  autoconverted from charset:\" 3 1 \"$F_LEGACYCHARSET\" 3 30 40 0 \
 	\"Console font:\" 4 1 \"$F_FONT\" 4 30 40 0 \
-	\"X keymap:\" 5 1 \"$F_XKEYMAP\" 5 30 40 0"
+	\"X keymap:\" 5 1 \"$F_XKEYMAP\" 5 30 40 0 \
+	\"DOS charset:\" 6 1 \"$F_CODEPAGE\" 6 30 40 0"
 	SELECTION=`eval $DLG_COMMAND 3>&2 2>&1 1>&3`
 	STATUS=$?
 	[ "$STATUS" != 0 ] && exit 1
@@ -121,7 +123,8 @@ cost of unavailable bright colors, use the LatArCyrHeb-16 font.\" 0 0 5 \
 		-e '2s,^,F_KEYMAP=",' \
 		-e '3s,^,F_LEGACYCHARSET=",' \
 		-e '4s,^,F_FONT=",' \
-		-e '5s,^,F_XKEYMAP=",' | sed -e 's,$,",'`"
+		-e '5s,^,F_XKEYMAP=",' \
+		-e '6s,^,F_CODEPAGE=",' | sed -e 's,$,",'`"
 	return 0
 }
 
@@ -134,7 +137,8 @@ interactive_config() {
 		-e '2s,^,F_LANG=",' \
 		-e '3s,^,F_KEYMAP=",' \
 		-e '4s,^,F_LEGACYCHARSET=",' \
-		-e '5s,^,F_XKEYMAP=",' | sed -e 's,$,",'`"
+		-e '5s,^,F_XKEYMAP=",' \
+		-e '6s,^,F_CODEPAGE=",' | sed -e 's,$,",'`"
 	[ -z "$F_KEYMAP" ] && F_KEYMAP=defkeymap
 	guess_font
 	[ -z "$F_XKEYMAP" ] && F_XKEYMAP=us
@@ -152,6 +156,7 @@ noninteractive_config() {
 	[ -n "$FONT" ] && F_FONT=${FONT//+/ }
 	[ -n "$LEGACY_CHARSET" ] && F_LEGACYCHARSET=$LEGACY_CHARSET
 	[ -n "$XKEYMAP" ] && F_XKEYMAP=$XKEYMAP
+	[ -n "$CODEPAGE" ] && CODEPAGE=cp437
 }
 
 # Assume that noninteractive configuration is wanted if LANG is set
@@ -167,7 +172,8 @@ echo "LANG=\"$F_LANG\" ; export LANG" >>/etc/profile
 
 echo "KEYMAP=\"$F_KEYMAP\"" >/etc/sysconfig/console
 
-if [ "`LC_ALL="$F_LANG" locale charmap`" = "UTF-8" ]
+CHARMAP=`LC_ALL="$F_LANG" locale charmap`
+if [ "$CHARMAP" = "UTF-8" ]
 then
 	echo "UNICODE=1" >>/etc/sysconfig/console
 	echo "BROKEN_COMPOSE=0" >>/etc/sysconfig/console
@@ -183,6 +189,21 @@ else
 fi
 
 sed -i "s/\"us\"/\"$F_XKEYMAP\"/" /etc/X11/xorg.conf
+sed -i -e "s/cp437/$F_CODEPAGE/" -e "s/ISO-8859-1/$CHARMAP/" /etc/samba/smb.conf
+
+echo -n $F_CODEPAGE >/sys/module/nls_base/parameters/codepage
+CHARMAP=`echo $CHARMAP | tr A-Z a-z | \
+    sed -e 's/iso-8859/iso8859/' \
+	-e 's/utf-8/utf8/' \
+	-e 's/koi8-t/koi8-r/' \
+	-e 's/ANSI_X3.4-1968/ascii/' \
+	-e 's/big5-hkscs/big5/' \
+	-e 's/euc-tw/ascii/ ' \
+	-e 's/gb18030/ascii/ ' \
+	-e 's/gbk/ascii/' \
+	-e 's/georgian-ps/ascii/' \
+	-e 's/pt154/cp1251/'`
+echo -n $CHARMAP >/sys/module/nls_base/parameters/iocharset
 
 if [ "$F_ERROR" = "3" ]
 then
