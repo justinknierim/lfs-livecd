@@ -259,7 +259,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-alsa-lib ch-alsa-utils ch-alsa-firmware ch-alsa-oss \
 	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss \
 	ch-libtheora ch-librcc ch-taglib ch-xine-lib \
-	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal \
+	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal ch-hal-info \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI \
 	ch-recode ch-fortune-mod ch-xfce ch-xfmedia ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
