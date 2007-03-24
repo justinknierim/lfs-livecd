@@ -24,6 +24,8 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
+	make -C examples rcc-gtk2-config
+	install -m755 examples/rcc-gtk2-config /usr/bin
 
 clean:
 	-rm -rf $(DIR)

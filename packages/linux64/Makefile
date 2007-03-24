@@ -10,6 +10,8 @@ SHA-$(FILE)= 2a53ce04db3500d55433c9a25b2949eb342589e0
 
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
+PATCH50= linux-2.6.20.1-iocharset-2.patch
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -23,6 +25,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH3)
+	patch -Np1 -i ../$(PATCH50)
 	make mrproper
 	cp ../config.x86_64 .config
 	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
