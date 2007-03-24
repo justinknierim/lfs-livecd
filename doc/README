@@ -83,11 +83,6 @@ The LiveCD attempts to configure X for your video card automatically. The
 process may fail if you have more than one video card, if your video card
 doesn't support 24-bit color depth, or if your monitor is not Plug-n-Play
 compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
-Also, in the following cases, the autodetection process is known to suggest
-a non-working driver even for 2D graphics:
-
-    * ATI Radeon X1000 or higher (needs the "vesa" driver)
-
 In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
 vim, joe or nano.
 
@@ -119,6 +114,8 @@ example, this means that the following information should be added in the
 Section "Monitor"
 	Identifier	"Generic Monitor"
 	Option		"DPMS"
+	# Option	"NoDDC" # for broken monitors that
+				# report max dot clock = 0 MHz
 	HorizSync	30-92   # because gtf said "hsync: 91.38 kHz"
 	VertRefresh	56-86   # because a 85 Hz mode has been requested
 	# the Modeline may also be pasted here
