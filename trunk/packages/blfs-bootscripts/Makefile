@@ -29,6 +29,8 @@ compile-stage2:
 	make install-service-pppoe
 	make install-gpm
 	make install-autosshd
+	make install-dbus
+	make install-haldaemon
 	install -m754 blfs/init.d/sshd /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/random /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/portmap /etc/rc.d/init.d/ 

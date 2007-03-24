@@ -1,12 +1,12 @@
 # hal Makefile
 
 NM= hal
-VRS= 0.5.8.1
+VRS= 0.5.9
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).rc1.tar.gz
 URL-$(FILE)= http://people.freedesktop.org/~david/dist/$(FILE)
-SHA-$(FILE)= 35675b6701b9e953edfabf0d91b68ccee5a5a491
+SHA-$(FILE)= 024f748d296647b580e16f78f909ee6d1737b173
 
 # Targets
 

@@ -26,6 +26,7 @@ stage1: $(FILE) $(FILE2)
 	$(sep_dir_build)
 
 compile-stage1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 # --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
