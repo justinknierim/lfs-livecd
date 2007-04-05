@@ -27,6 +27,7 @@ compile-stage2:
 	cd src; for i in `cat ../../list`; \
 	do unpack $$i*.tar.bz2 ; \
 	cd $$i* ; \
+	 sed -i '/xfce4-tips/d' Makefile.in ; \
 	 ./configure --prefix=/usr --sysconfdir=/etc \
 	 --enable-debug=no --enable-panel --enable-startup-notification \
 	 --libexecdir=/usr/sbin --enable-compositor --disable-python \

@@ -1,4 +1,4 @@
-PATH=/bin:/usr/bin:/sbin:/usr/sbin:/usr/games
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
 
 INPUTRC=/etc/inputrc
 

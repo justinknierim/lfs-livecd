@@ -1,12 +1,12 @@
-# fortune-mod Makefile
+# libnotify Makefile
 
-NM= fortune-mod
-VRS= 1.99.1
+NM= libnotify
+VRS= 0.4.4
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.redellipse.net/code/downloads/$(FILE)
-SHA-$(FILE)= 53aa354025094d7c0e544bb1662714815fa63918
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://www.galago-project.org/files/releases/source/libnotify/$(FILE)
+SHA-$(FILE)= 24b86673c6673c72b9ad85a8082c884af26e9ce0
 
 # Targets
 
@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	./configure --prefix=/usr
 	make
 	make install
 
