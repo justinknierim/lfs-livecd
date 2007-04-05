@@ -261,7 +261,8 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-libtheora ch-librcc ch-taglib ch-xine-lib \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal ch-hal-info \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI \
-	ch-recode ch-fortune-mod ch-xfce ch-xfmedia ch-irssi ch-gaim \
+	ch-libsexy ch-libnotify ch-xfce ch-notification-daemon-xfce \
+	ch-xfmedia ch-irssi ch-gaim \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
 	ch-device-mapper ch-LVM2 ch-dmraid \
