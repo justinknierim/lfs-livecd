@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i 's/glib-server/glib-server --prefix=/' src/daemon/Makefile.in
-	./configure --prefix=/usr
+	./configure --prefix=/usr --libexecdir=/usr/sbin
 	make
 	make install
 

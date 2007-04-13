@@ -1,12 +1,13 @@
 # DocBook XML DTD Makefile
 
 NM= docbook-xml
-VRS= 4.4
+VRS= 4.5
+OLDVERSIONS= 4.1.2 4.2 4.3 4.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).zip
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 7c4d91c82ad3747e1b5600c91782758e5d91c22b
+SHA-$(FILE)= b9124233b50668fb508773aa2b3ebc631d7c1620
 
 # Targets
 
@@ -16,7 +17,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) install
 	mkdir $(DIR)
 	cd $(DIR) ; unzip ../$(FILE)
 	make -C $(DIR) -f ../Makefile compile-$@
@@ -24,7 +25,7 @@ stage2: Makefile $(FILE)
 	touch $@
 
 compile-stage2:
-	../install
+	../install $(VRS) $(OLDVERSIONS)
 
 clean:
 	-rm -rf $(DIR)

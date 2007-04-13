@@ -1,13 +1,13 @@
 # Iproute2 Makefile
 
-NM= iproute2
-VRS= 2.6.19
-DATE= 061214
+NM= iproute
+VRS= 2.6.20
+DATE= 070313
 DIR= $(NM)-$(VRS)-$(DATE)
 
-FILE= $(DIR).tar.gz
+FILE= $(NM)2-$(VRS)-$(DATE).tar.gz
 URL-$(FILE)= http://developer.osdl.org/dev/iproute2/download/$(FILE)
-SHA-$(FILE)= f48c783c37e09a212cde65ae0370468af634fd65
+SHA-$(FILE)= 6c46d381a9840c94a12faf3b2d64577c4e74323d
 
 # Targets
 

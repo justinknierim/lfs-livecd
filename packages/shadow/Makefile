@@ -1,12 +1,16 @@
 # Shadow Makefile
 
 NM= shadow
-VRS= 4.0.17
+VRS= 4.0.18.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 326b3de0a81c1e1f9bfc75e67d45678c14fe282d
+SHA-$(FILE)= 1a30458e9db05560bfc82529048bd5d60b45cf9b
+
+PATCH1= $(DIR)-useradd_fix-2.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 08618217ae8ce554f7d7171b7a920cb7c31254c0
 
 # Targets
 
@@ -16,10 +20,11 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
 	./configure --libdir=/lib --sysconfdir=/etc --enable-shared --without-selinux
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
 	find man -name Makefile -exec sed -i '/groups/d' {} \;
@@ -49,6 +54,8 @@ compile-stage2:
 	mkdir -pv /etc/default
 	pwconv
 	grpconv
+	useradd -D -b /home
+	sed -i 's/yes/no/' /etc/default/useradd
 
 clean:
 	-rm -rf $(DIR)

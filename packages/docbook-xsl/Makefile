@@ -2,6 +2,7 @@
 
 NM= docbook-xsl
 VRS= 1.69.1
+OLDVERSIONS= 1.67.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
@@ -20,12 +21,12 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
+stage2: Makefile $(FILE) $(FILE1) install
 	$(std_build)
 
 compile-stage2:
 	cd .. ; unpack $(FILE1)
-	../install
+	../install $(VRS) $(OLDVERSIONS)
 	ln -sf xsl-stylesheets-$(VRS) /usr/share/xml/docbook/xsl-stylesheets-current
 
 clean:

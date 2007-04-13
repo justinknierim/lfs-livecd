@@ -52,7 +52,7 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(FILE)
+stage2: $(FILE) $(PATCH1)
 	$(sep_dir_build)
 
 compile-stage2:
