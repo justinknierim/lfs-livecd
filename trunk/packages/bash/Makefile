@@ -8,9 +8,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= fe6466c7ee98061e044dae0347ca5d1a8eab4a0d
 
-PATCH1= $(DIR)-fixes-2.patch
+PATCH1= $(DIR)-fixes-4.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-SHA-$(PATCH1)= 49bd15ad3579e69b841741408fd2bb3c63119376
+SHA-$(PATCH1)= 7c6207253e2201a2b9d8d925250e3ef0c23d44ef
 
 FILE1 = $(NM)-doc-$(VRS).tar.gz
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)

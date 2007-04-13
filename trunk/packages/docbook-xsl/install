@@ -1,37 +1,45 @@
-#!/bin/bash
+#!/bin/bash -e
 
-install -v -d -m755 /usr/share/xml/docbook/xsl-stylesheets-1.69.1 &&
+VERSION=$1
+shift
+OLDVERSIONS="$@"
+
+install -v -d -m755 /usr/share/xml/docbook/xsl-stylesheets-$VERSION
 cp -v -R VERSION common eclipse extensions fo html \
          htmlhelp images javahelp lib manpages params \
          profiling slides template website xhtml \
-    /usr/share/xml/docbook/xsl-stylesheets-1.69.1 &&
-install -v -m755 -d /usr/share/doc/docbook-xsl-1.69.1 &&
-cp -v -R doc/* /usr/share/doc/docbook-xsl-1.69.1 &&
-if [ ! -d /etc/xml ]; then install -v -m755 -d /etc/xml; fi &&
+    /usr/share/xml/docbook/xsl-stylesheets-$VERSION
+install -v -m755 -d /usr/share/doc/docbook-xsl-$VERSION
+cp -v -R doc/* /usr/share/doc/docbook-xsl-$VERSION
+if [ ! -d /etc/xml ]; then install -v -m755 -d /etc/xml; fi
 if [ ! -f /etc/xml/catalog ]; then
     xmlcatalog --noout --create /etc/xml/catalog
-fi &&
+fi
 xmlcatalog --noout --add "rewriteSystem" \
-           "http://docbook.sourceforge.net/release/xsl/1.69.1" \
-           "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
-    /etc/xml/catalog &&
-xmlcatalog --noout --add "rewriteURI" \
-           "http://docbook.sourceforge.net/release/xsl/1.69.1" \
-           "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
-    /etc/xml/catalog &&
-xmlcatalog --noout --add "rewriteSystem" \
-           "http://docbook.sourceforge.net/release/xsl/current" \
-           "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
-    /etc/xml/catalog &&
-xmlcatalog --noout --add "rewriteURI" \
-           "http://docbook.sourceforge.net/release/xsl/current" \
-           "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
-    /etc/xml/catalog &&
-xmlcatalog --noout --add "rewriteSystem" \
-    "http://docbook.sourceforge.net/release/xsl/1.67.2" \
-    "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
-    /etc/xml/catalog &&
-xmlcatalog --noout --add "rewriteURI" \
-    "http://docbook.sourceforge.net/release/xsl/1.67.2" \
-    "/usr/share/xml/docbook/xsl-stylesheets-1.69.1" \
+           "http://docbook.sourceforge.net/release/xsl/$VERSION" \
+           "/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
     /etc/xml/catalog
+xmlcatalog --noout --add "rewriteURI" \
+           "http://docbook.sourceforge.net/release/xsl/$VERSION" \
+           "/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
+    /etc/xml/catalog
+xmlcatalog --noout --add "rewriteSystem" \
+           "http://docbook.sourceforge.net/release/xsl/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
+    /etc/xml/catalog
+xmlcatalog --noout --add "rewriteURI" \
+           "http://docbook.sourceforge.net/release/xsl/current" \
+           "/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
+    /etc/xml/catalog
+
+for OLDVERSION in $OLDVERSIONS
+do
+    xmlcatalog --noout --add "rewriteSystem" \
+	"http://docbook.sourceforge.net/release/xsl/$OLDVERSION" \
+	"/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
+	/etc/xml/catalog
+    xmlcatalog --noout --add "rewriteURI" \
+	"http://docbook.sourceforge.net/release/xsl/$OLDVERSION" \
+	"/usr/share/xml/docbook/xsl-stylesheets-$VERSION" \
+	/etc/xml/catalog
+done

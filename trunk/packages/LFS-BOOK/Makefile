@@ -10,7 +10,7 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 7961
+REV= 8043
 REVPARM= -r $(REV)
 
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
@@ -34,6 +34,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	svn co $(REVPARM) $(URL) $(DIR)
+	cd $(DIR) ; patch -Np0 -i ../../update.patch
 	# tar xf $(FILE)
 	cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
 	cp -av $(DIR) $(HTMLDIR) /usr/share

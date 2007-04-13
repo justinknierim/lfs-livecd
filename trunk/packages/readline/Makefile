@@ -8,9 +8,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 18f3412c73068509d5f491b7b4535aeaf9522834
 
-PATCH1= $(DIR)-fixes-1.patch
+PATCH1= $(DIR)-fixes-2.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-SHA-$(PATCH1)= 08d64da9885d1616e715d009fba1e93103193718
+SHA-$(PATCH1)= 738883d299e0dafa403e4d6df4dd22bf3c02efad
 
 # Targets
 

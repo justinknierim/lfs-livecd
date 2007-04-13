@@ -43,7 +43,7 @@ pass2: $(FILE)
 
 compile-pass2:
 # --disable-shared overrides unsuitable default from config.site
-	../$(DIR)/configure --prefix=$(WD) --disable-nls \
+	CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) --disable-nls \
 	 --with-lib-path=$(WD)/lib --disable-shared
 	make
 	make install
@@ -60,10 +60,11 @@ re-adjust-toolchain:
 	mv -v $(WD)/$$(gcc -dumpmachine)/bin/{ld,ld-old}
 	mv -v $(WD)/bin/{ld-new,ld}
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
-	gcc -dumpspecs | \
-	perl -p -e 's@$(WD)/lib/ld-linux.so.2@/lib/ld-linux.so.2@g;' \
-	    -e 's@\*startfile_prefix_spec:\n@$$_/usr/lib/ @g;' > \
-	    `dirname $$(gcc -print-libgcc-file-name)`/specs
+	gcc -dumpspecs | sed \
+	    -e 's@/tools/lib/ld-linux.so.2@/lib/ld-linux.so.2@g' \
+	    -e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
+	    -e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' &gt; \
+	     `dirname $(gcc --print-libgcc-file-name)`/specs
 	touch $@
 
 chroot:
