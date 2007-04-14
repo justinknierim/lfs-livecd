@@ -22,7 +22,7 @@ PATCH50= $(DIR)-supported_locales-1.patch
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE) $(FILE2)
+stage1: $(FILE) $(FILE2) $(PATCH1)
 	$(sep_dir_build)
 
 compile-stage1:
