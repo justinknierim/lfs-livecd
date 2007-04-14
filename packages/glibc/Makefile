@@ -49,7 +49,7 @@ stage2: $(FILE) $(FILE2) $(PATCH1)
 compile-stage2:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 	cd ../$(DIR) ; unpack ../$(FILE2) ; mv glibc-libidn-$(VRS) libidn
-	sed -i \
+	cd ../$(DIR) ; sed -i \
 	's|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=/lib/$(LINKER) -o|' \
 	        ../$(DIR)/scripts/test-installation.pl
 # LiveCD specific locale additions
