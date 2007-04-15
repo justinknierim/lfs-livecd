@@ -63,7 +63,7 @@ re-adjust-toolchain:
 	gcc -dumpspecs | sed \
 	    -e 's@/tools/lib/ld-linux.so.2@/lib/ld-linux.so.2@g' \
 	    -e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
-	    -e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' &gt; \
+	    -e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' > \
 	     `dirname $$(gcc --print-libgcc-file-name)`/specs
 	touch $@
 
