@@ -5,7 +5,7 @@ VRS= 3.5.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.yars.free.net/pub/source/lftp/$(FILE)
+URL-$(FILE)= http://ftp.yars.free.net/pub/source/lftp/old/$(FILE)
 SHA-$(FILE)= ce4f7abb5a74e90218bb2ee94170ace747025298
 
 # Targets
