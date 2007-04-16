@@ -1,13 +1,13 @@
 # DejaVu fonts Makefile
 
 NM= dejavu-ttf
-VRS= 2.15
+VRS= 2.16
 DIR= $(NM)-$(VRS)
 LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://heanet.dl.sourceforge.net/dejavu/$(FILE)
-SHA-$(FILE)= 2133fbae14e51fc364972c4a4ee2fdc3ccee4072
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/dejavu/$(FILE)
+SHA-$(FILE)= cfe09fc5c5a4edb2c42e8db60eb9311518ed5733
 
 # Targets
 
