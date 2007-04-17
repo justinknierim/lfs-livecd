@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Linux kernel version: 2.6.20.1
-# Mon Mar  5 19:53:14 2007
+# Linux kernel version: 2.6.20.6
+# Tue Apr 17 11:43:15 2007
 #
 CONFIG_X86_64=y
 CONFIG_64BIT=y
@@ -923,6 +923,11 @@ CONFIG_IEEE1394_RAWIO=m
 # I2O device support
 #
 # CONFIG_I2O is not set
+
+#
+# Macintosh device drivers
+#
+# CONFIG_MAC_EMUMOUSEBTN is not set
 
 #
 # Network device support

@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
-# Linux kernel version: 2.6.20.1
-# Mon Mar  5 17:03:52 2007
+# Linux kernel version: 2.6.20.6
+# Tue Apr 17 09:02:51 2007
 #
 CONFIG_X86_32=y
 CONFIG_GENERIC_TIME=y
@@ -936,6 +936,11 @@ CONFIG_IEEE1394_RAWIO=m
 # I2O device support
 #
 # CONFIG_I2O is not set
+
+#
+# Macintosh device drivers
+#
+# CONFIG_MAC_EMUMOUSEBTN is not set
 
 #
 # Network device support
@@ -1916,7 +1921,6 @@ CONFIG_SUNRPC=m
 # CONFIG_RPCSEC_GSS_KRB5 is not set
 # CONFIG_RPCSEC_GSS_SPKM3 is not set
 CONFIG_SMB_FS=m
-CONFIG_SMB_NLS_DEFAULT=y
 CONFIG_CIFS=m
 # CONFIG_CIFS_STATS is not set
 CONFIG_CIFS_WEAK_PW_HASH=y
