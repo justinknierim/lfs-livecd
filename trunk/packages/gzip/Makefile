@@ -1,12 +1,12 @@
 # Gzip Makefile
 
 NM= gzip
-VRS= 1.3.11
+VRS= 1.3.12
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= ftp://alpha.gnu.org/gnu/gzip/$(FILE)
-SHA-$(FILE)= e514095796d83b7bc1e6507ee6a1e32fe76cff41
+URL-$(FILE)= http://ftp.gnu.org/gnu/gzip/$(FILE)
+SHA-$(FILE)= 264e82876f201d9576626fbb1e0e9fe458efe9b9
 
 # Targets
 

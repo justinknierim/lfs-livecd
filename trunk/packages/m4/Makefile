@@ -1,12 +1,12 @@
 # M4 Makefile
 
 NM= m4
-VRS= 1.4.8
+VRS= 1.4.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 31589415022c2842f62f3b91186bc9e0a9a8e1a1
+URL-$(FILE)= http://ftp.gnu.org/gnu/m4/$(FILE)
+SHA-$(FILE)= 28b8493688ceb752ee5a96ea8fc3a335cf44beb6
 
 # Targets
 
