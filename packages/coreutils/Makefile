@@ -1,12 +1,12 @@
 # Coreutils Makefile
 
 NM= coreutils
-VRS= 6.7
+VRS= 6.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnu.org/gnu/coreutils/$(FILE)
-SHA-$(FILE)= 55a6037365f749a4ebb9e88a92132a4f938ac90e
+SHA-$(FILE)= 10310a78c4e1d9f742f3815ac28e9bf1086a5885
 
 PATCH1= $(DIR)-uname-1.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
@@ -18,7 +18,7 @@ SHA-$(PATCH2)= e1e783efd515639b78627c37025b96168594f408
 
 PATCH3= $(DIR)-i18n-1.patch
 URL-$(PATCH3)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH3)
-SHA-$(PATCH3)= e5a7ab810f4032db0b8f829297c70e10f825f41e
+SHA-$(PATCH3)= 5db7b7919910ccda018d01f2fc1b65e1c1da954d
 
 # Targets
 

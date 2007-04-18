@@ -1,12 +1,12 @@
 # man-db Makefile
 
 NM= man-db
-VRS= 2.4.3
+VRS= 2.4.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a9f6ac22ccd97186005920cedb5f6611df13d4fa
+URL-$(FILE)= http://savannah.nongnu.org/download/man-db/$(FILE)
+SHA-$(FILE)= 5c6ba8eb287a69f14433feb34e720b066536d163
 
 # Targets
 
