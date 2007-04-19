@@ -108,21 +108,20 @@ root.ext2:
 	tune2fs -c 0 -i 0 root.ext2
 
 # This target populates the root.ext2 image and sets up some mounts
-# Basically, replaces the prep-chroot and createdirs targets
 $(MKTREE): root.ext2
 	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
 	mount -o loop root.ext2 $(MP)
-	-rm $(MP)/boot
-	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD) $(MP)/boot
+	-rm -f $(MP)/boot $(MP)$(LFSSRC)
+	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD)
+	mkdir -p $(MP)/boot $(MP)$(LFSSRC) $(MPBASE)/iso$(LFSSRC)
 	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
 	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
 	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
 	mount --bind $(MPBASE)/iso/boot $(MP)/boot
-	mkdir -p $(MP)$(LFSSRC)
+	mount --bind $(MPBASE)/iso$(LFSSRC) $(MP)$(LFSSRC)
 	-ln -nsf $(MPBASE)$(WD) /
 	-ln -nsf $(MPBASE)$(SRC) /
 	-ln -nsf $(MPBASE)$(ROOT) /
-	-ln -nsf $(MP)$(LFSSRC) /
 	-mkdir -p $(MP)/{proc,sys,dev/shm,dev/pts}
 	-mount -t proc proc $(MP)/proc
 	-mount -t sysfs sysfs $(MP)/sys
@@ -162,7 +161,7 @@ $(MKTREE): root.ext2
 #==============================================================================
 lfs-base: $(MKTREE) lfsuser
 	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
-	 $(LFSSRC) $(MP)$(LFSSRC) $(SRC) $(MP)$(SRC) $(MKTREE)
+	 $(MP)$(SRC) $(MKTREE)
 	@cp $(ROOT)/scripts/unpack $(WD)/bin
 	@make maybe-tools
 	@touch $(PKG)/wget/.pass2
@@ -411,7 +410,10 @@ prepiso: $(MKTREE)
 
 iso: prepiso
 	@make unmount
-	@sync
+	# FIXME: sometimes e2fsck bombs out even after a clean build.
+	# Kernel bug?
+	@sync ; sleep 1 ; sync
+	@-e2fsck -f -p root.ext2
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
 	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
@@ -453,12 +455,13 @@ unmount:
 	-umount $(MP)/proc
 	-umount $(MP)/sys
 	-umount $(MP)/boot
+	-umount $(MP)$(LFSSRC)
 	-umount $(MP)$(SRC)
 	-umount $(MP)$(WD)
 	-umount $(MP)$(ROOT)
 	-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
-	-rmdir $(MP)/boot
-	-ln -s /dev/shm/.cdrom/boot $(MP)
+	-rmdir $(MP)/boot $(MP)$(LFSSRC)
+	-ln -s /dev/shm/.cdrom/boot /dev/shm/.cdrom$(LFSSRC) $(MP)
 	-umount $(MP)
 
 zeroes: $(MKTREE)
