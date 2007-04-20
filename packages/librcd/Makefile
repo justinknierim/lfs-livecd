@@ -1,12 +1,12 @@
 # librcc Makefile
 
-NM= librcc
-VRS= 0.2.3
+NM= librcd
+VRS= 0.1.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://easynews.dl.sourceforge.net/rusxmms/$(FILE)
-SHA-$(FILE)= ee583a26d18bd546b9e46b6dc9dbe53fe539fbe7
+SHA-$(FILE)= 84f6734c2b542aa2d3c333ae373c8e44dd9a1735
 
 # Targets
 
@@ -20,12 +20,9 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./autogen.sh
 	./configure --prefix=/usr
 	make
 	make install
-	make -C examples rcc-gtk2-config
-	install -m755 examples/.libs/rcc-gtk2-config /usr/bin
 
 clean:
 	-rm -rf $(DIR)
