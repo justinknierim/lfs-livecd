@@ -26,10 +26,10 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	autoconf
 	./configure --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc \
-	     --enable-image --with-mailer=/usr/bin/mutt \
-	     --with-browser=/usr/bin/mozilla
-	make
-	make install
+	    --datarootdir=/usr/share --enable-image \
+	    --with-mailer=/usr/bin/mutt --with-browser=/usr/bin/mozilla
+	make datarootdir=/usr/share
+	make datarootdir=/usr/share install
 	install -v -D -m 644 doc/keymap.default /etc/w3m/keymap
 	install -v -D -m 644 doc/menu.default /etc/w3m/menu
 	install -v -d -m 755 /usr/share/doc/w3m-$(VRS)/html
