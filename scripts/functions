@@ -67,6 +67,47 @@ wget-list-entry:
 	@echo $(URL-$(FILE3)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(FILE4)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(FILE5)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE101)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE102)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE103)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE104)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE105)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE106)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE107)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE108)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE109)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE110)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE111)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE112)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE113)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE114)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE115)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE116)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE117)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE118)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE119)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE120)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE121)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE122)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE123)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE124)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE125)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE126)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE127)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE128)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE129)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE130)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE131)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE132)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE133)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE134)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE135)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE136)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE137)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE138)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE139)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE140)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(FILE141)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(PATCH)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(PATCH1)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(PATCH2)) >>$(MPBASE)$(ROOT)/wget-list
@@ -75,3 +116,5 @@ wget-list-entry:
 	@echo $(URL-$(PATCH5)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(PATCH6)) >>$(MPBASE)$(ROOT)/wget-list
 	@echo $(URL-$(PATCH7)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH50)) >>$(MPBASE)$(ROOT)/wget-list
+	@echo $(URL-$(PATCH51)) >>$(MPBASE)$(ROOT)/wget-list
