@@ -257,7 +257,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-alsa-lib ch-alsa-utils ch-alsa-firmware ch-alsa-oss \
 	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss \
-	ch-libtheora ch-librcc ch-taglib ch-xine-lib \
+	ch-libtheora ch-librcd ch-librcc ch-taglib ch-xine-lib \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal ch-hal-info \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI \
 	ch-libsexy ch-libnotify ch-xfce ch-notification-daemon-xfce \
