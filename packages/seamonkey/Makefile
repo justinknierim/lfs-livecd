@@ -1,12 +1,14 @@
 # Firefox Makefile
 
 NM= seamonkey
-VRS= 1.1
+VRS= 1.1.1
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://ftp.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= 8e778d72d0bab597a641ce02cc2872bc1e3d9f82
+SHA-$(FILE)= 08a6a66a1e69e112680e8ad2116c54d7ccb54c3b
+
+MFH=/usr/lib/seamonkey-$(VRS)
 
 # Targets
 
@@ -26,6 +28,9 @@ compile-stage2:
 	make -f client.mk install
 	svn export --force $(ROOT)/root/.mozilla /root/.mozilla
 	ln -sf seamonkey /usr/bin/mozilla
+	MOZILLA_FIVE_HOME=$(MFH) LD_LIBRARY_PATH=$(MFH) $(MFH)/regxpcom
+	MOZILLA_FIVE_HOME=$(MFH) LD_LIBRARY_PATH=$(MFH) $(MFH)/regchrome
+	touch $(MFH)/chrome/user-{skins,locales}.rdf
 
 clean:
 	-rm -rf $(DIR)
