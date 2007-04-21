@@ -444,9 +444,6 @@ clean: unmount
 scrub: clean
 	@-rm lfslivecd-$(VERSION).iso
 
-clean_sources:
-	@-rm $(SRC) ; rm -rf $(LFSSRC) $(MP)$(LFSSRC)
-
 mount: $(MKTREE)
 
 unmount:
