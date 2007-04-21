@@ -1,12 +1,12 @@
 # xfce Makefile
 
 NM= xfce
-VRS= 4.4.0
+VRS= 4.4.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
 URL-$(FILE)= http://www.xfce.org/archive/$(DIR)/fat_tarballs/$(FILE)
-SHA-$(FILE)= 208c3682c9018fa05831c5e86f4ac9561579dbe1
+SHA-$(FILE)= 8b809291dc081557c2513b38c640246be5e8d2ca
 
 BG= lfsrules-1600-1200.jpg
 URL-$(BG)= http://www.linuxfromscratch.org/blfs/artwork/wallpapers/$(BG)
@@ -36,6 +36,8 @@ compile-stage2:
 	make install ; cd .. ; rm -rf $$i*/ ; done
 	cp $(ROOT)/root/.xinitrc /etc/X11/xinit/xinitrc
 	cp ../desktop-files/* /usr/share/applications
+	install -D -m644 ../helpers.rc /etc/xdg/xfce4/helpers.rc
+	install -D -m644 ../terminalrc /etc/xdg/Terminal/terminalrc
 	sed -i -e '/Xft.dpi/d' /etc/xdg/xfce4/xinitrc
 	sed -i 's/mice/simple/' /etc/xdg/xfce4-session/xfce4-session.rc
 	mkdir -p /etc/xdg/xfce4/mcs_settings
