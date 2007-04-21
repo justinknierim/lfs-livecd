@@ -424,7 +424,7 @@ iso: prepiso
 #==============================================================================
 
 clean: unmount
-	@-rm -rf $(WD) $(MPBASE)$(WD)
+	@-rm -rf $(WD) $(MPBASE)$(WD) $(MPBASE)/iso
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
@@ -437,15 +437,15 @@ clean: unmount
 	@rm -f $(PKG)/Xorg-*/*-stage2
 	@rm -f $(PKG)/wget/prebuild
 	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
-	@-rm -f $(SRC) $(ROOT) $(LFSSRC)
+	@-rm -f $(SRC) $(ROOT)
+	@find packages/* -xtype l -exec rm -f \{} \;
+	@-rm root.ext2
 
 scrub: clean
-	@-rm root.ext2
 	@-rm lfslivecd-$(VERSION).iso
 
 clean_sources:
 	@-rm $(SRC) ; rm -rf $(LFSSRC) $(MP)$(LFSSRC)
-	@find packages/* -xtype l -exec rm -f \{} \;
 
 mount: $(MKTREE)
 
