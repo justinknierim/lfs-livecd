@@ -15,7 +15,7 @@ user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-SVN-HTML/index
 user_pref("browser.startup.homepage_override.mstone", "rv:1.8.1.2");
 user_pref("dom.disable_open_during_load", true);
 user_pref("extensions.disabledObsolete", true);
-user_pref("extensions.irc.bugURL", "http://bugs.linuxfromscratch.org/show_bug.cgi?id=%s");
+user_pref("extensions.irc.bugURL", "http://wiki.linuxfromscratch.org/lfs/ticket/%s");
 user_pref("extensions.irc.charset", "UTF-8");
 user_pref("extensions.irc.desc", "New Now Know How");
 user_pref("extensions.irc.initialScripts", "");
