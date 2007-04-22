@@ -10,7 +10,7 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 8080
+REV= 8096
 REVPARM= -r $(REV)
 
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
