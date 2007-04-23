@@ -1,15 +1,15 @@
 # OpenSSL Makefile
 
 NM= openssl
-VRS= 0.9.8d
+VRS= 0.9.8e
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.openssl.org/source/$(FILE)
-SHA-$(FILE)= 4136fba00303a3d319d2052bfa8e1f09a2e12fc2
+SHA-$(FILE)= b429872d2a287714ab37e42296e6a5fbe23d32ff
 
-PATCH1= $(NM)-0.9.8d-fix_manpages-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
+PATCH1= $(NM)-0.9.8e-fix_manpages-1.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/blfs/svn/$(PATCH1)
 SHA-$(PATCH1)= afb498051e466131ae90dfc678234e8876af88a4
 
 DEPS= $(FILE) $(PATCH1)
