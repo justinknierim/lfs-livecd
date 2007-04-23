@@ -1,12 +1,12 @@
 # libgcrypt Makefile
 
 NM= libgcrypt
-VRS= 1.2.3
+VRS= 1.2.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnupg.org/gcrypt/libgcrypt/$(FILE)
-SHA-$(FILE)= a9efab77c764a57ac13e11cf89396f945d0da85d
+SHA-$(FILE)= c72406c69d6ad9fb3fa1e9824b04566cf204093b
 
 # Targets
 
