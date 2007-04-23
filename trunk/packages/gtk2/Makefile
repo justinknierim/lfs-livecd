@@ -1,12 +1,12 @@
 # Gtk+ Makefile
 
 NM= gtk+
-VRS= 2.10.9
+VRS= 2.10.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/gtk+/2.10/$(FILE)
-SHA-$(FILE)= aa3260d9093398445cfbecf355f4728db3e827bf
+SHA-$(FILE)= 3c68f3fa13ab72f6b190cbe958813d29955042e2
 
 # Targets
 

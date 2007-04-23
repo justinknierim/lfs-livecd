@@ -1,12 +1,12 @@
 # 915resolution Makefile
 
 NM= 915resolution
-VRS= 0.5.2
+VRS= 0.5.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.geocities.com/stomljen/$(FILE)
-SHA-$(FILE)= 9f26eb1b728ca0b2d28c948207b034a49b477089
+SHA-$(FILE)= 377a32d33f1987adf372341c8c6664d5673da9b8
 
 # Targets
 

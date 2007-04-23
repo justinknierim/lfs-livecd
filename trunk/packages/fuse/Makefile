@@ -1,12 +1,12 @@
 # fuse Makefile
 
 NM= fuse
-VRS= 2.6.1
+VRS= 2.6.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://switch.dl.sourceforge.net/sourceforge/fuse/$(FILE)
-SHA-$(FILE)= 85ec4458d0ab2647b6b43605f0200006d89981ed
+SHA-$(FILE)= d6ecda7341008ac157f55cf901309dda10f58faf
 
 # Targets
 

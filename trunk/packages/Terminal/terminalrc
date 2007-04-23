@@ -1,9 +1,0 @@
-[Configuration]
-CommandUpdateRecords=FALSE
-FontName=Monospace 12
-MiscCursorBlinks=TRUE
-ShortcutsNoMenukey=TRUE
-ShortcutsNoMnemonics=TRUE
-TitleInitial=LFS LiveCD
-HelperWebbrowser=mozilla-browser
-HelperMailreader=mozilla-mailer

@@ -4,9 +4,9 @@ NM= hal
 VRS= 0.5.9
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).rc1.tar.gz
+FILE= $(DIR).tar.gz
 URL-$(FILE)= http://people.freedesktop.org/~david/dist/$(FILE)
-SHA-$(FILE)= 024f748d296647b580e16f78f909ee6d1737b173
+SHA-$(FILE)= 5832d97bcaf3dabb9aeb919226e3c38d366057ac
 
 # Targets
 
