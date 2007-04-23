@@ -1,12 +1,12 @@
 # cairo Makefile
 
 NM= cairo
-VRS= 1.2.6
+VRS= 1.4.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://cairographics.org/releases/$(FILE)
-SHA-$(FILE)= b86b4017a9abd565ef11c72b7faee9082a04118f
+SHA-$(FILE)= 71a7ce8352500944f7b2b73d4dc25ee947ec56ec
 
 # Targets
 

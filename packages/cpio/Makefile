@@ -1,12 +1,12 @@
 # cpio Makefile
 
 NM= cpio
-VRS= 2.6
+VRS= 2.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 1da70fd85c9a085504d892f318c884d299db83d8
+URL-$(FILE)= http://ftp.gnu.org/pub/gnu/cpio/$(FILE)
+SHA-$(FILE)= ce1c8ab703d62fc1d30ca59e044ba9f43c3db574
 
 # Targets
 
@@ -20,11 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i -e "s/invalid_arg/argmatch_invalid/" src/mt.c
 	./configure CPIO_MT_PROG=mt --prefix=/usr --bindir=/bin \
 	 --libexecdir=/tmp --with-rmt=/usr/sbin/rmt
-	echo "#define HAVE_SETLOCALE 1" >>config.h
-	echo "#define HAVE_LSTAT 1" >>config.h
 	make
 	make install
 

@@ -1,12 +1,12 @@
 # hdparm Makefile
 
 NM= hdparm
-VRS= 6.7
+VRS= 6.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/hdparm/$(FILE)
-SHA-$(FILE)= ecb4b093a2be691aa41e663ec057a5642b3215db
+SHA-$(FILE)= 10e8dcdde0fe4ed482bbb1e4b19cb3ea07b2f58a
 
 # Targets
 

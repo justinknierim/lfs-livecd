@@ -1,16 +1,12 @@
 # HTML Tidy Makefile
 
 NM= tidy
-VRS= 051026
-DIR= $(NM)
+VRS= cvs_20070326
+DIR= $(NM)-$(VRS)
 
-FILE= $(NM)_src_$(VRS).tgz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 53be36945344af0c4080c34ebc95728bf8617f1c
-
-FILE1= $(NM)_docs_051020.tgz
-URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 04988d51267566db6899e8061d9f2e5b58fbeec4
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://anduin.linuxfromscratch.org/files/BLFS/sources/$(FILE)
+SHA-$(FILE)= 8a775dea48fac5dacff7879813bce60fd44c2ed0
 
 # Targets
 
@@ -20,18 +16,13 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-html_$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
-	unpack $(FILE1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sh build/gnuauto/setup.sh
 	./configure --prefix=/usr
 	make
 	make install
-	install -d -m755 /usr/share/doc/tidy
-	cp -R htmldoc /usr/share/doc/tidy
-	chown -R root:root /usr/share/doc/tidy
 
 clean:
 	-rm -rf $(DIR)

@@ -20,9 +20,10 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix="" --sysconfdir=/var/lib --mandir=/usr/share/man
+	./configure --prefix="" --mandir=/usr/share/man
 	make
 	make install
+	chmod -v 754 /etc/dhcpc/dhcpcd.exe
 
 clean:
 	-rm -rf $(DIR)

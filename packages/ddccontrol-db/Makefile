@@ -1,12 +1,12 @@
 # DDCControl Monitor Database Makefile
 
 NM= ddccontrol-db
-VRS= 20060730
+VRS= 20061014
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/ddccontrol/$(FILE)
-SHA-$(FILE)= da30c27ad166978290281db3209953ed8e8332f0
+SHA-$(FILE)= 9d06570fdbb4d25e397202a518265cc1173a5de3
 
 # Targets
 

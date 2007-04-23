@@ -1,12 +1,12 @@
 # FreeType Makefile
 
 NM= freetype
-VRS= 2.3.1
+VRS= 2.3.4
 DIR= $(NM)-$(VRS)
 	 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/freetype/$(FILE)
-SHA-$(FILE)= f87c12c67abb5885486a248a1b83232877f074fe
+URL-$(FILE)= http://download.savannah.gnu.org/releases/freetype/$(FILE)
+SHA-$(FILE)= 09b8f5ecbb3e06a14cc1c2f2dc7c04fe34c48eca
 
 # Targets
 

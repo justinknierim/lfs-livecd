@@ -1,12 +1,12 @@
 # device-mapper Makefile
 
 NM= device-mapper
-VRS= 1.02.13
+VRS= 1.02.18
 DIR= $(NM).$(VRS)
 
 FILE= $(DIR).tgz
 URL-$(FILE)= http://downloads.planetmirror.com/pub/sourceware/dm/$(FILE)
-SHA-$(FILE)= 54ab22fa9ecc307f10c6761f574f663ba080f6e1
+SHA-$(FILE)= 61fb505bf634b7c026551d98030fe7fc004367fb
 
 # Targets
 

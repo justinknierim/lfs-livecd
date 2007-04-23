@@ -1,12 +1,12 @@
 # Anthy Makefile
 
 NM= anthy
-VRS= 7900
+VRS= 8819
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/anthy/20887/$(FILE)
-SHA-$(FILE)= 9b3ae54ebf81e7aedb095f7c4a3b97027557c258
+URL-$(FILE)= http://osdn.dl.sourceforge.jp/anthy/25046/$(FILE)
+SHA-$(FILE)= 231d98518b55f85865bc7c18d365015999cfd179
 
 # Targets
 

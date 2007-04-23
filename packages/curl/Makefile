@@ -1,12 +1,12 @@
 # Curl Makefile
 
 NM= curl
-VRS= 7.15.5
+VRS= 7.16.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://curl.haxx.se/download/$(FILE)
-SHA-$(FILE)= b79ee06d1da58c12c23a1b8aeccdb2b74a692cc7
+SHA-$(FILE)= b23d35b5af7b75e53c6632cd4c9d0cb0c08cafe5
 
 # Targets
 
