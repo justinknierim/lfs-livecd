@@ -21,7 +21,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr
 	make
 	make install
