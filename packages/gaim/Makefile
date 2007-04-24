@@ -21,7 +21,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	# D-BUS support is disabled because it wants Python
+	./configure --prefix=/usr --disable-dbus
 	make
 	make install
 	svn export --force $(ROOT)/root/.gaim /root/.gaim
