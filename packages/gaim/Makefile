@@ -8,7 +8,6 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://puzzle.dl.sourceforge.net/sourceforge/gaim/$(FILE)
 SHA-$(FILE)= 39345fe6e0519f2e126f7f60f7d9905e3460517b
 
-PATCH1= $(DIR)-simhtml-1.patch
 # Targets
 
 include $(ROOT)/scripts/functions
