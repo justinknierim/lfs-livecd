@@ -1,6 +1,6 @@
 # gaim-libnotify Makefile
 
-NM= gaim
+NM= gaim-libnotify
 VRS= 0.12
 DIR= $(NM)-$(VRS)
 
