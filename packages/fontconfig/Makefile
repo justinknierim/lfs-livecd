@@ -28,7 +28,6 @@ compile-stage2:
 	make install
 	cp -v ../$(FILE1) ../$(FILE2) /etc/fonts/conf.avail
 	ln -sfv ../conf.avail/$(FILE1) ../conf.avail/$(FILE2) /etc/fonts/conf.d
-	cp -v ../local.conf /etc/fonts
 
 clean:
 	-rm -rf $(DIR)
