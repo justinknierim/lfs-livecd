@@ -1,12 +1,12 @@
 # manpages-de Makefile
 
 NM= manpages-de
-VRS= 0.4
+VRS= 0.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.infodrom.org/projects/manpages-de/download/$(FILE)
-SHA-$(FILE)= 0ab8d3350aca0db90b04aab201bbc3f1b7016375
+SHA-$(FILE)= afab7e0ecb27b04a126ad89fd5ea557af66cd329
 
 # Targets
 

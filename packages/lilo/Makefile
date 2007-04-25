@@ -1,12 +1,12 @@
 # lilo Makefile
 
 NM= lilo
-VRS= 22.7.3
+VRS= 22.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).src.tar.gz
 URL-$(FILE)= http://home.san.rr.com/johninsd/pub/linux/lilo/$(FILE)
-SHA-$(FILE)= d6de449607dfca518ca4e0d5d3be5d7d98eab0e5
+SHA-$(FILE)= 59852eab59b93dcea63b39eef1db7963b7268b0d
 
 # Targets
 
