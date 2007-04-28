@@ -1,12 +1,12 @@
 # SCIM Makefile
 
 NM= scim
-VRS= 1.4.5
+VRS= 1.4.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
-SHA-$(FILE)= b9dd07a49abdba6d86385c92f8103ebf6df7f341
+SHA-$(FILE)= 3b8d26ff5a4ebab1ca90928d0363d2d2b0028ccf
 
 # Targets
 

@@ -1,12 +1,12 @@
 # SCIM-Hangul Makefile
 
 NM= scim-hangul
-VRS= 0.2.2
+VRS= 0.3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= 4218af5cf6d45e3bc8b89bef8a9a2ddc142cf8ad
+SHA-$(FILE)= 3ae31e00ea2555089edf0666ac4c76fb5a30381e
 
 # Targets
 
