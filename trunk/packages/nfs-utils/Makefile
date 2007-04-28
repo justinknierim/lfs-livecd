@@ -1,12 +1,12 @@
 # NFS Utilities Makefile
 
 NM= nfs-utils
-VRS= 1.0.10
+VRS= 1.0.12
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/nfs/$(FILE)
-SHA-$(FILE)= 4950150df3f5049950b18345fc3f61532d1077ce
+SHA-$(FILE)= 477e3eb387b0ccde2eaeb8e67c6437cc0d2668e3
 
 # Targets
 
@@ -20,7 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's/UTS_RELEASE/"2.6.18.3"/' tools/getkversion/getkversion.c
 	./configure --prefix=/usr --sysconfdir=/etc --disable-nfsv4 \
 	 --disable-gss
 	make

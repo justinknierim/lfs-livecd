@@ -1,12 +1,12 @@
 # Nano Makefile
 
 NM= nano
-VRS= 2.0.3
+VRS= 2.0.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.nano-editor.org/dist/v2.0/$(FILE)
-SHA-$(FILE)= 5012a57c3aeabd6f798f5c767970ba1d260854c4
+SHA-$(FILE)= 00102580404cdb1c8594e5f6193000d5acac2249
 
 # Targets
 

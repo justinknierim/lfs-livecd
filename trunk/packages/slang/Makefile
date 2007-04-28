@@ -1,12 +1,12 @@
 # slang Makefile
 
 NM= slang
-VRS= 2.0.6
+VRS= 2.0.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(NM)-$(VRS).tar.bz2
 URL-$(FILE)= http://gd.tuwien.ac.at/editors/davis/slang/v2.0/$(FILE)
-SHA-$(FILE)= 56eac43d825e7e6a643b044d393f2020a34fae7b
+SHA-$(FILE)= c246a18dde8b61e66ed7095217ae3c0406d78ba6
 
 # Targets
 

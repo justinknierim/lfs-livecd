@@ -1,12 +1,12 @@
 # mdadm Makefile
 
 NM= mdadm
-VRS= 2.5.4
+VRS= 2.6.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tgz
 URL-$(FILE)= http://www.cse.unsw.edu.au/~neilb/source/$(NM)/$(FILE)
-SHA-$(FILE)= 4852d1efa96da56bfbd3f40681c7cb07b56b0dc7
+SHA-$(FILE)= c0f523853a9c816986c24c699fa80b2c02336f3d
 
 # Targets
 
