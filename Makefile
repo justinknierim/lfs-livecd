@@ -156,6 +156,7 @@ $(MKTREE): root.ext2
 	-ln -s /proc/self/fd/1 $(MP)/dev/stdout
 	-ln -s /proc/self/fd/2 $(MP)/dev/stderr
 	-ln -s /proc/kcore $(MP)/dev/core
+	touch $(MKTREE)
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
