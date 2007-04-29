@@ -1,12 +1,12 @@
 # msmtp Makefile
 
 NM= msmtp
-VRS= 1.4.7
+VRS= 1.4.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/msmtp/$(FILE)
-SHA-$(FILE)= 0e907a2269babe5eeb04e5aa8b766b13c8ab714e
+SHA-$(FILE)= d485bc77aa938e4655b7127455d254f32f60b213
 
 # Targets
 
