@@ -21,8 +21,8 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	sed -i -e 's@$$(INSTALL) man/zip.1@$$(INSTALL_PROGRAM) man/zip.1@' unix/Makefile
-	make prefix=/usr -f unix/Makefile generic_gcc
-	make prefix=/usr -f unix/Makefile install
+	make prefix=/usr MANDIR=/usr/share/man/man1 -f unix/Makefile generic_gcc
+	make prefix=/usr MANDIR=/usr/share/man/man1 -f unix/Makefile install
 
 clean:
 	-rm -rf $(DIR)

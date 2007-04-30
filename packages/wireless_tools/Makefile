@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	make PREFIX=/usr
-	make PREFIX=/usr install
+	make PREFIX=/usr INSTALL_MAN=/usr/share/man install
 
 clean:
 	-rm -rf $(DIR)

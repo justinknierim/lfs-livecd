@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:	
 	./configure --prefix=/usr --enable-static --enable-shared
 	make
-	make install
+	make mandir=/usr/share/man/man1 install
 	/sbin/ldconfig
 
 clean:

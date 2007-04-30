@@ -22,7 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	sed -i 's,ln -s,ln -sf,' */Makefile
 	make
-	make install
+	make MANDIR=/usr/share/man/man8 install
 
 clean:
 	-rm -rf $(DIR)

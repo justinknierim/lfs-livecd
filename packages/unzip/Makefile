@@ -21,7 +21,7 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
-	make prefix=/usr install
+	make prefix=/usr MANDIR=/usr/share/man/man1 install
 
 clean:
 	-rm -rf $(DIR)
