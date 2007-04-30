@@ -15,11 +15,11 @@ Web Tools
 * lynx (text web browser)
 * w3m (text web browser)
 * irssi (console irc client, unstable version)
-* mozilla (graphical web browser, mail and news reader and irc client)
+* seamonkey (graphical web browser, mail and news reader and irc client)
 * xchat (x-based irc client)
 * GAIM (multiprotocol x-based chat client)
 * msmtp (SMTP client for use with mutt and tin)
-* mutt (console mail and news reader)
+* mutt (console email client)
 * tin (console news reader)
 
 Text Editors
