@@ -20,7 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --enable-imap \
+	./configure --prefix=/usr --sysconfdir=/etc \
+	 --with-docdir=/usr/share/doc/mutt --enable-imap \
 	 --enable-pop --with-ssl --enable-hcache
 	make
 	make install

@@ -20,8 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	make PREFIX=/usr
-	make PREFIX=/usr install
+	make PREFIX=/usr MANDIR=/usr/share/man
+	make PREFIX=/usr MANDIR=/usr/share/man install
 
 clean:
 	-rm -rf $(DIR)

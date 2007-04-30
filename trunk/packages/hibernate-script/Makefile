@@ -24,7 +24,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	rm -rf /etc/hibernate
-	yes | PREFIX=/usr ./install.sh
+	yes | PREFIX=/usr MAN_DIR=/usr/share/man ./install.sh
 
 clean:
 	-rm -rf $(DIR)
