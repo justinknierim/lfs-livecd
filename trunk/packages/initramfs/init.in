@@ -1,0 +1,189 @@
+#!/bin/sh
+
+EXPECTED_LABEL="lfslivecd-@VERSION@"
+EXPECTED_LABEL="$EXPECTED_LABEL                                "
+EXPECTED_LABEL=${EXPECTED_LABEL:0:32}
+PATA=0
+
+init=/sbin/init
+root=
+rootfstype=ext3,ext2,auto
+ro="ro"
+noresume=0
+resume=
+all_generic_ide=0
+
+find_cd() {
+	for SYS in /sys/block/hd* /sys/block/sr* ; do
+		[ ! -d "$SYS" ] && continue
+		[ -f "$SYS/media" ] && read MEDIA <"$SYS/media" [ "$MEDIA" != "cdrom" ] && continue
+		DEV=/dev/${SYS##*/}
+		LABEL=`dd if=$DEV bs=1 skip=32808 count=32 2>/dev/null`
+		[ "$LABEL" = "$EXPECTED_LABEL" ] && ln -s "$DEV" /dev/lfs-cd && break
+	done
+}
+
+do_resume() {
+	case "$resume" in
+	*:*)
+		echo "$resume" >/sys/power/resume
+		;;
+	/dev/*)
+		dev=${resume#/dev/}
+		if [ -f /sys/block/${dev%?}/${dev}/dev ] ; then
+			cat /sys/block/${dev%?}/${dev}/dev >/sys/power/resume
+		elif [ -f /sys/block/${dev}/dev ] ; then
+			cat /sys/block/${dev}/dev >/sys/power/resume
+		else
+			echo "Cannot resume from unknown device $dev"
+		fi
+		;;
+	esac
+}
+
+do_mount_cd() {
+	while [ ! -L /dev/lfs-cd ] ; do
+		find_cd
+		if [ ! -L /dev/lfs-cd ] ; then
+			echo ""
+			echo "LFS LiveCD could not find its device, perhaps due to"
+			echo "unsupported or undetected hardware. Or maybe this is"
+			echo "just a slow SCSI or USB controller that needs some time"
+			echo "to settle (workaround: add rootdelay=10 to the kernel"
+			echo "command line in the boot loader)."
+			echo ""
+			echo "Dropping you to a shell."
+			echo "Please load the needed modules and, optionally, make"
+			echo "/dev/lfs-cd a symlink pointing to the correct device."
+			echo ""
+			sh
+		fi
+	done
+	mkdir /.tmpfs
+	mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
+	mkdir /.tmpfs/.cdrom
+	mount -n -t iso9660 -o ro /dev/lfs-cd /.tmpfs/.cdrom
+	/sbin/losetup /dev/loop0 /.tmpfs/.cdrom/root.ext2
+	SIZE=`/sbin/blockdev --getsize /dev/loop0`
+	OVERHEAD=$(( 0x1000 + $SIZE * 2 ))
+	OVLSIZE=$(( $SIZE + ( $OVERHEAD + 511 ) / 512 ))
+	dd if=/dev/null of=/.tmpfs/.overlay bs=512 seek=$OVLSIZE 2>/dev/null
+	/sbin/losetup /dev/loop1 /.tmpfs/.overlay
+	echo "0 $SIZE snapshot /dev/loop0 /dev/loop1 p 8" | /sbin/dmsetup create lfs-cd
+	mount -n -t ext2 /dev/mapper/lfs-cd /.root
+	mount -n --move /.tmpfs /.root/dev/shm
+	cp -a /dev/lfs-cd /.root/dev/lfs-cd
+	cat /etc/modprobe.conf >>/.root/etc/modprobe.conf
+}
+
+do_mount_root() {
+	mkdir /.root
+	[ -n "$rootflags" ] && rootflags="$rootflags,"
+	rootflags="$rootflags$ro"
+	case "$root" in
+	*:*)
+		( IFS=":" ; mknod /dev/root b $root )
+		mount -n -t "$rootfstype" -o "$rootflags" /dev/root /.root
+		;;
+	/dev/*)
+		mount -n -t "$rootfstype" -o "$rootflags" "$root" /.root
+		;;
+	"")
+		do_mount_cd
+		;;
+	esac
+}
+
+mount -n -t proc proc /proc
+mount -n -t sysfs sysfs /sys
+
+read -r cmdline </proc/cmdline
+
+( IFS="," ; for module in $blacklist ; do
+	echo "blacklist $module" >>/etc/modprobe.conf
+done )
+
+for param in $cmdline ; do
+	case $param in
+	*.*=*)
+		module=${param%%.*}
+		option=${param#*.}
+		echo "options $module $option" >>/etc/modprobe.conf
+		;;
+	pata)
+		PATA=1
+		;;
+	all_generic_ide)
+		all_generic_ide=1
+		;;
+	init=*)
+		init=${param#init=}
+		;;
+	root=*)
+		root=${param#root=}
+		;;
+	rootfstype=*)
+		rootfstype=${param#rootfstype=}
+		;;
+	ro)
+		ro="ro"
+		;;
+	rw)
+		ro="rw"
+		;;
+	noresume)
+		noresume=1
+		;;
+	resume=*)
+		resume=${param#resume=}
+		;;
+	esac
+done
+
+case "$PATA" in
+	0)
+		for driver in /lib/modules/`uname -r`/kernel/drivers/ata/pata-*.ko ; do
+			drv=${driver##*/}
+			drv=${drv%.ko}
+			echo "blacklist $drv" >>/etc/modprobe.conf
+		done
+		echo "blacklist ata-piix" >>/etc/modprobe.conf
+		;;
+	1)
+		for driver in /lib/modules/`uname -r`/kernel/drivers/ide/pci/*.ko ; do
+			drv=${driver##*/}
+			drv=${drv%.ko}
+			echo "blacklist $drv" >>/etc/modprobe.conf
+		done
+		echo "blacklist ide-cs" >>/etc/modprobe.conf
+		;;
+esac
+
+if [ "$all_generic_ide" = 1 ] ; then
+	echo "options generic all_generic_ide=1" >>/etc/modprobe.conf
+	echo "options ata-generic all_generic_ide=1" >>/etc/modprobe.conf
+fi
+
+/sbin/udevd &
+PIDOF_UDEVD=$!
+
+( IFS="," ; for module in $load ; do
+	/sbin/modprobe "$module"
+done )
+
+/sbin/udevtrigger
+/sbin/udevsettle
+if [ -n "$rootdelay" ] ; then sleep "$rootdelay" ; fi
+
+do_resume
+do_mount_root
+
+kill $PIDOF_UDEVD
+
+umount /sys
+umount /proc
+cd /.root
+# Clean up and free some memory
+rm -rf /bin /sbin /lib /sys /proc /dev /.tmpfs /init
+./lib/ld-linux.so.2 --library-path ./lib ./bin/mount -n --move . /
+exec ../lib/ld-linux.so.2 --library-path ./lib ./usr/sbin/chroot . /sbin/init "$@"
