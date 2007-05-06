@@ -1,12 +1,12 @@
 # Linux-headers Makefile
 
 NM= linux
-VRS= 2.6.20.7
+VRS= 2.6.21.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= 9b40a59f936393ed548d76607375aaee02108c76
+SHA-$(FILE)= 22d5885f87f4b63455891e2042fcae96900af57a
 
 # Targets
 
