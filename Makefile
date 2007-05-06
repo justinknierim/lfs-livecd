@@ -270,31 +270,17 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY  \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
-	ch-initramfs ch-blfs-bootscripts ch-oui-data \
+	ch-blfs-bootscripts ch-oui-data \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-slang ch-mc \
 	ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
-	ch-binutils64 ch-gcc64 ch-linux64
+	ch-binutils64 ch-gcc64 ch-linux64 ch-initramfs
 	# Proprietary drivers disabled - NVIDIA crashes, ATI is too fat
 	# make ch-gcc33 ch-proprietary-drivers
 	make update-caches
-
-blfs-minimal: ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
-	ch-screen ch-pkgconfig ch-libidn ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 \
-	ch-expat ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-openssh ch-glib2 ch-cvs \
-	ch-popt ch-samba ch-irssi ch-wireless_tools ch-tcpwrappers ch-portmap \
-	ch-nfs-utils ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-dialog ch-ncftp \
-	ch-pciutils ch-device-mapper ch-LVM2 ch-dmraid \
-	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-libaal ch-reiser4progs \
-	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-BRLTTY \
-	ch-strace ch-iptables ch-eject ch-hdparm ch-linux \
-	ch-initramfs ch-blfs-bootscripts \
-	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-bin86 ch-lilo ch-syslinux
 
 wget-list:
 	@>wget-list ; \
