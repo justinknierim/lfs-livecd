@@ -1,7 +1,7 @@
 #!/bin/sh
 
 FILES="/lib/libc.so.6
-/lib/_LINKER_
+/lib/ld-linux.so.2
 /lib/libreadline.so.5
 /lib/libhistory.so.5
 /lib/libncursesw.so.5
