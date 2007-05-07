@@ -81,8 +81,8 @@ CONFIGURING X
 ===========================
 The LiveCD attempts to configure X for your video card automatically. The
 process may fail if you have more than one video card, if your video card
-doesn't support 24-bit color depth, or if your monitor is not Plug-n-Play
-compatible (in other words, doesn't tell its characteristics to Xorg via DDC).
+does not support 24-bit color depth, or if your monitor is not Plug-n-Play
+compatible (in other words, does not tell its characteristics to Xorg via DDC).
 In such cases, you have to edit the /etc/X11/xorg.conf file manually, using
 vim, joe or nano.
 
@@ -117,7 +117,7 @@ Section "Monitor"
 	# Option	"NoDDC" # for broken monitors that
 				# report max dot clock = 0 MHz
 	HorizSync	30-92   # because gtf said "hsync: 91.38 kHz"
-	VertRefresh	56-86   # because a 85 Hz mode has been requested
+	VertRefresh	56-86   # because an 85 Hz mode has been requested
 	# the Modeline may also be pasted here
 EndSection
 
@@ -154,8 +154,8 @@ you have to customize the CD. Create the following files:
 
 * /etc/ssh/ssh_host_dsa_key, /etc/ssh/ssh_host_rsa_key
     Create those files as described in the ssh-keygen(1) manual page. If you
-    don't do that, random host keys will be generated for you automatically
-    during the boot process. This is less secure, because you can't verify
+    do not do that, random host keys will be generated for you automatically
+    during the boot process. This is less secure, because you cannot verify
     them.
 
 * /etc/sysconfig/network-devices/ifconfig.eth0
@@ -193,7 +193,7 @@ For some locales (e.g. lv_LV.ISO-8859-13) there is no valid console keymap,
 but there is a keymap for X. In this case, the only solution is to use X.
 
 While this CD configures the LANG environment variable, console font and
-keymap for you, it's your responsibility to configure other locale-dependent
+keymap for you, it is your responsibility to configure other locale-dependent
 parameters manually. You may want to configure character sets for SAMBA in
 /etc/samba/smb.conf, and to explicitly specify the "iocharset" and "codepage"
 options when mounting filesystems with Windows origin (e.g., vfat and isofs).
@@ -219,13 +219,14 @@ parameter to the X server command line there.
 BRAILLE DISPLAY SUPPORT
 ===========================
 The LiveCD includes the "brltty" program that allows a blind person to read
-the contents of Linux text console on a Braille display. In order to
+the contents of the Linux text console on a Braille display. In order to
 activate it:
 
-* Insert the CD into the drive, reboot the computer. The BIOS will produce
-  a beep, indicating successful power-on self-testing. Then it will load
-  the boot loader from the CD, and the boot loader will produce a second beep.
-* After the second beep, type:
+* Insert the CD into the drive, reboot the computer. Some BIOSes will produce
+  a beep indicating successful power-on self-testing. If so, the boot loader
+  will produce a second beep indicating the boot prompt is available.
+* After that beep (first or second depending on if your computer normally beeps
+* upon startup), type:
 
 linux brltty=eu,ttyS0
 
@@ -235,20 +236,22 @@ linux brltty=eu,ttyS0
 
 Note: in some locales, brltty displays incorrect Braille patterns. This is
 related to the fact that Braille tables in brltty are indexed with
-encoding-dependent byte representing the character. Such representation
+encoding-dependent bytes representing the character. Such representation
 becomes invalid when another encoding for the same language is used.
-E.g., that's why the "ru" table (designed for KOI8-R encoding) produces
+E.g., that is why the "ru" table (designed for KOI8-R encoding) produces
 wrong result in the ru_RU.CP1251 locale.
 
 Known non-working cases:
     All CP1251-based locales (no CP1251 Braille table in brltty)
-    zh_TW (configuration instructions available in Chinese only)
+    zh_TW (configuration instructions available in Chinese only). If you use
+      this locale, please email livecd@linuxfromscratch.org and help us add
+      support for it.
     All other Chinese, Japanese and Korean locales (no support in brltty)
 
-If brltty displays incorrect Braille patterns displays incorrect Braille
-patterns in your locale, please revert to the en_US locale, thus avoiding
-the use of non-ASCII characters. If you know how to fix this problem
-for your locale, mail this information to livecd@linuxfromscratch.org.
+If brltty displays incorrect Braille patterns in your locale, please revert to
+the en_US locale, thus avoiding the use of non-ASCII characters. If you know how
+to fix this problem for your locale, mail this information to
+livecd@linuxfromscratch.org.
 
 RESUMING THE BUILD
 ===========================
@@ -258,7 +261,7 @@ LFS stages" available at:
 http://www.linuxfromscratch.org/hints/downloads/files/stages-stop-and-resume.txt
 
 Instructions from there should work on this CD, however, there is a simpler
-(but highly experimental) method described below.
+method (hibernation) described below.
 
 1) Make sure you have (or are planning to create) a swap partition not used
    by other Linux systems installed on your hard drive. The text below assumes
@@ -268,11 +271,22 @@ Instructions from there should work on this CD, however, there is a simpler
    I.e., the complete boot line may look as:
    linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg resume=/dev/hda2
 
-3) In chapter 2, the book tells you to create (if you didn't do it already),
-   format that partition with mkswap, and activate it with swapon. Follow the
-   instructions in the book.
+   On some systems, hibernation refuses to work if ACPI is enabled. You
+   can disable ACPI by adding "acpi=off" to the kernel arguments.
 
-4) If you use X window system, take the following into account:
+   Alternatively, once the system is running, you can activate hibernation by
+   echoing the major and minor numbers of the partition to /sys/power/resume as
+   such:
+
+   # ls -l /dev/hda2
+   brw-rw---- 1 root disk 3, 2 2006-07-10 17:51 /dev/hda2
+   # echo 3:2 >/sys/power/resume
+
+3) At this point, the system is up and running. If you do not already have a
+   swap partition, or wish to create a new one, chapter 2 of the LFS book will
+   show you how to create, format, and activate one.
+
+4) If you use the X window system, take the following into account:
    * Users of old S3 video cards should uncomment the "EnableVbetool" line
      in the /etc/hibernate/common.conf file.
    * Hibernation is incompatible with the proprietary "nvidia" driver.
@@ -284,7 +298,7 @@ Instructions from there should work on this CD, however, there is a simpler
    testsuite may lead to failures that would not occur otherwise.
 
 NOTE: you must unmount all USB flash drives and all partitions used by other
-operating systems installed on your computer before hibernating! Don't
+operating systems installed on your computer before hibernating! Do not
 attempt to mount partitions used by a hibernated system from other systems
 (even read-only, because there is no true read-only mount on journaled
 filesystems)!
@@ -296,13 +310,13 @@ filesystems)!
    the same "vga=..." and "resume=..." arguments that you used earlier.
 
 9) The computer will load its state from the swap partition and behave as if
-   you didn't power it off at all (except breaking all network connections).
+   you did not power it off at all (except breaking all network connections).
    The build will automatically continue.
 
-The procedure is a bit more complicated if your swap is on a LVM volume
+The procedure is a bit more complicated if your swap is on an LVM volume
 or on software RAID. In this case, instead of passing the resume=... argument,
 you should boot the CD as usual and make actions needed for the kernel to see
-the swap device (for LVM, that's "vgchange -ay"). After doing that, note
+the swap device (for LVM, that is "vgchange -ay"). After doing that, note
 the major and minor device number for that device (assigning persistent numbers
 is highly recommended), and echo them to /sys/power/resume. E.g., for LVM:
 
@@ -319,17 +333,18 @@ the computer state from the swap device.
 AUTOMATING THE BUILD
 ===========================
 This CD comes with the "jhalfs" tool that allows extracting commands from the
-XML version of LFS or CLFS book into Makefiles and shell scripts. You can find
-the jhalfs installation in the home directory of the "jhalfs" user, and the
-XML LFS book is in /usr/share/LFS-BOOK-SVN-XML. In order to use jhalfs, you
-have to:
+XML version of the LFS or CLFS book into Makefiles and shell scripts. You can
+find the jhalfs installation in the home directory of the "jhalfs" user, and the
+XML LFS book is in /usr/share/LFS-BOOK-SVN-XML. In order to use jhalfs, you have
+to:
 
 * create a directory for your future LFS system and mount a partition there
 * change the ownership of that directory to the "jhalfs" user
 * run "su - jhalfs" in order to become that user
 * as user "jhalfs", follow the instructions in the jhalfs README file
 
-Note that this user already has the required sudo access.
+Note that this user already has the required root access (via sudo) to complete
+the build.
 
 THANKS
 ===========================

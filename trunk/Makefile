@@ -21,37 +21,45 @@
 
 -include Makefile.personal
 
-# MP:       mount point
-# timezone: default timezone
-# pagesize: default paper size for groff.
-# ROOT:     name of this directory, as seen from chroot
-# HTTP:     Default http server for the lfs-base packages
-# HTTPBLFS: Default http server for the BLFS packages
+#==============================================================================
+
+# Here are the various variables you might want/need to change. You can change
+# them here or in Makefile.personal. Variables mentioned in the README will not
+# be commented on here.
 
 export MPBASE ?= /mnt/lfs
-export MP ?= $(MPBASE)/image
+
+# Free disk space needed for the build.
+ROOTFS_MEGS := 1536
+
+export VERSION ?= x86-6.3-pre2
+export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing -mtune=i686
+export CXXFLAGS ?= $(CFLAGS)
+export LFS_TARGET ?= i486-pc-linux-gnu
+
+
+# Default timezone
 export timezone ?= GMT
+# Default paper size for groff.
 export pagesize ?= letter
-export ROOT ?= /lfs-livecd
+
+# HTTP:     Default http server for the lfs-base packages
+# HTTPBLFS: Default http server for the BLFS packages
 export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
 export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
 
-# Directory variables
 #==============================================================================
-export HOSTNAME := lfslivecd
+# The following variables are not expected to be changed
+
 export WD := /tools
+export MP := $(MPBASE)/image
+export ROOT := /lfs-livecd
 export SRC := /sources
 export LFSSRC := /lfs-sources
 export PKG := packages
+
 export MKTREE := $(MP)$(ROOT)
 export CONFIG_SITE := $(ROOT)/scripts/config.site
-
-ROOTFS_MEGS := 1536
-
-export VERSION := x86-6.3-pre2
-export CFLAGS := -O2 -pipe -s -fno-strict-aliasing -mtune=i686
-export LINKER := ld-linux.so.2
-export LFS_TARGET := i486-pc-linux-gnu
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
@@ -68,8 +76,6 @@ export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) 
 
 # More Environment Variables
 #==============================================================================
-export CXXFLAGS := $(CFLAGS)
-
 export chbash-pre-bash := SHELL=$(WD)/bin/bash
 export chbash-post-bash := SHELL=/bin/bash
 export WHICH ?= $(WD)/bin/which
@@ -90,9 +96,6 @@ export WHITE= "[00m"
 # lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
 
 all: test-host lfs-base extend-lfs iso
-	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
-
-minimal: test-host lfs-base extend-minimal iso
 	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
 
 test-host:
@@ -184,15 +187,6 @@ extend-lfs: $(MKTREE)
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
 	@install -m644 etc/issue $(MP)/etc/issue
-
-extend-minimal: $(MKTREE)
-	@cp $(WD)/bin/which $(MP)/usr/bin
-	@cp $(ROOT)/scripts/unpack $(MP)/bin
-	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make blfs-minimal $(chbash-post-bash)'
-	@rm -rf $(LFSSRC) $(MP)$(LFSSRC)
-	@sed '/sources/d' etc/issue >$(MP)/etc/issue
-	@chmod 644 $(MP)/etc/issue
 
 lfsuser:
 	@-groupadd lfs
@@ -390,10 +384,9 @@ prepiso: $(MKTREE)
 	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-	@install -m755 scripts/{net-setup,greeting,livecd-login,ll} $(MP)/usr/bin/ 
-	@sed 's|_LINKER_|$(LINKER)|' scripts/shutdown-helper > $(MP)/usr/bin/shutdown-helper
-	@chmod 755 $(MP)/usr/bin/shutdown-helper
-	@cp -ra root $(MP)/etc/skel
+	@install -m755 scripts/{net-setup,greeting,ll} $(MP)/usr/bin/ 
+	@install -m755 scripts/{livecd-login,shutdown-helper} $(MP)/usr/bin/
+	@svn export --force root $(MP)/etc/skel
 
 iso: prepiso
 	@make unmount

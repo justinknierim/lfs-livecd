@@ -2,48 +2,20 @@
 LFS LiveCD Makefiles
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I.   Introduction
-II.  Using the Makefiles
-  A.    How These Makefiles Work
-  B. 	Configuring the Environment
-  C.    Obtaining the Sources
-  D. 	Running the Scripts
-III. Editing the Makefiles
-IV.  End Notes
+I.   Using the Makefiles
+  A.   How These Makefiles Work
+  B.   Configuring the Environment
+  C.   Obtaining the Sources
+  D.   Running the Scripts
+II.  Editing the Makefiles
+III. End Notes
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-I. Introduction
-
-  There have been many LiveCDs (aka BootCDs) made and used within the LFS
-community. Of particular note were Chris Lingard's and Jeremy Utley's. By some
-random freak of chance, and perhaps a bit of persistence on my part, a CD of
-mine was chosen to be used as the 'Official' LFS CD with the release of
-LFS 6.0.
-
-  I based much of my work on the ideas and work of Chris and Jeremy, and from
-suggestions and comments from various LFS users, but the originalCD had still
-been largely my work. However, for the idea of an official CD to survive and
-grow within the community, help and ideas need to continue to come from more
-than just one source.
-
-  My intention with the LFS LiveCD project, then, was to devise a framework, a
-usable setting in which others may contribute and build CDs that live up to the
-official standard. Originally, the idea was just to keep config files and a
-list of required packages in a Subversion repository. What actually happened
-was that a fully automated scripting system was devised specifically for the
-purpose of building the LiveCD iso. This allows both an easily repeatable way
-of building the CD and a means to track its configuration and history.
-
-  Many thanks to all who have contributed to the production of these Makefiles
-(and the CDs they in turn produce) by either suggestions, ideas, support, or
-submitted edits.
-
-	- Jeremy Huntwork
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-II. Using the Makefiles
+I. Using the Makefiles
 
 A. How These Makefiles Work
 
@@ -52,10 +24,9 @@ the build. It contains the instructions to control and direct the build,
 including the order in which the packages are built. It also contains variables
 that are used throughout the build. Inside the packages directory there is
 a sub-directory for each package the LiveCD will build and install. Each of
-those directories contains a Makefile specific for that package, with the
-specific instructions it needs in order to compile. Any patches which that
-package needs (and which are not part of the LFS or BLFS books) are included
-in that directory as well.
+those directories contains a Makefile with the specific instructions it needs to
+compile that package. Any patches which that package needs (and which are not
+part of the LFS or BLFS books) are included in that directory as well.
 
   Part of the build is run as an unprivileged user, 'lfs', and the rest is
 done after chroot-ing into the $(MP) directory (see the Configuring the
@@ -67,16 +38,16 @@ the proper target. So the Makefile is essentially re-calling itself as a
 different user or in a different environment.
 
   In the correct order, and in the proper environment, each package's Makefile
-is called and run. These download the source files it needs, verifies that
-they are correct via sha1sum, unpacks the tarballs into its own directory,
-runs the build instructions and sends the output into a log-file.
+is called and run. These download the source files needed, verify the SHA1 sums,
+unpack the tarball(s) into its own directory, run the build instructions, and
+send the output into a log-file.
 
 B. Configuring the Environment
 
   You should visually inspect the main Makefile, the one in the same directory
 as this README before attempting to run the scripts. There are a few variables
 that you may want to customize to meet the needs of your own particular setup
-and for the type of CD you are hoping to produce. Here's a list of the main
+and for the type of CD you are hoping to produce. Here is a list of the main
 variables to look for:
 
 * VERSION
@@ -85,46 +56,37 @@ should equal the version of the CD you intend to build. If you are building
 this CD for personal use, you can enter anything here. LFS LiveCD editors will
 follow a specific versioning scheme.
 
-* KVERS
-  This is the version of the Linux kernel to include on the CD
-
-* MP
+* MPBASE
   This is the Mount Point, the directory that you will be using to house the
 build as it runs. These scripts (this entire directory and its sub-directories)
-should be placed inside the MP directory and run from there. Default is
+should be placed inside the $MPBASE directory and run from there. Default is
 /mnt/lfs.
 
 * ROOT
-  This signifies the root-point of the build scripts. In other words, this
-is the name of the actual directory containing the build scripts. Default is
-/lfs-livecd. If you accept the defaults for both this variable and MP, then
-this directory and all its sub-directories should exist as 'lfs-livecd' within
-the direcotry '/mnt/lfs'. It is important that this variable have a leading
-'/' as it is referenced by the scripts in both the host environment and the
-chroot environment.
+  This signifies the root-point of the build scripts. In other words, this is
+the name of the directory containing the build scripts. A symlink will be made
+from this directory to the root of the host filesystem. The default name of this
+directory is lfs-livecd. If you accept the defaults for both this variable and
+$MPBASE, then this directory will exist as /mnt/lfs/lfs-livecd. A symlink will
+be made to /lfs-livecd on the host system. It is important that this variable
+have a leading '/' as it is referenced by the scripts in both the host
+environment and the chroot environment.
 
-* PM
-  This is the level of parallel building you want make to use for each
-package. Default is -j3, but you may wish to increase or decrease it slightly
-as the case may be.
-
-Any of the other variables could be changed, but that isn't recommended. Some
-of them are crucial to the successful building of the CD, especially the ones
-containing environment variables.
+  All of the above variables (and others) can be edited directly in the
+top-level Makefile (the one in the same directory as this README). However, if
+you are tracking SVN, then each 'svn up' will overwrite your custom changes. To
+overcome that, you can create a file called 'Makefile.personal' and add the
+desired changes there. The original Makefile will source that file. 'svn up'
+will not affect 'Makefile.personal'.
 
 C. Obtaining the Sources
 
-  The scripts will attempt to download the sources as it needs them. Since it
-is highly unlikely that you will have all the correct sources already
-downloaded to your system, a working internet connection is almost a
-necessity when using these scripts.
-
-  If you want to gather the source packages you'll need beforehand, you will
-need to create a directory called 'sources' in the $(MP) directory and place
-your packages there. You should either ensure that you download the *exact*
-same package from the same URL the scripts use, or you should verify that
-the SHA1 sum in that package's Makefile matches the tarball you have
-downloaded.
+  The scripts will attempt to download the sources and book patches as it needs
+them. If you want to gather the sources and book patches beforehand, create a
+directory called 'sources' in the $(MPBASE) directory and place the sources and
+book patches there. You should ensure that you download the *exact* same sources
+and book patches the scripts use and then verify the SHA1 sums. This will
+prevent the build from failing unexpectedly on a bad checksum during the build.
 
 D. Running the Scripts
 
@@ -138,12 +100,13 @@ scripts)
 cd /mnt/lfs/lfs-livecd
 make
 
-  The above example makes use of the default variables for $(MP) and $(ROOT).
+  The above example makes use of the default variables for $(MPBASE) and
+$(ROOT).
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-III. Editing the Makefiles
+II. Editing the Makefiles
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-IV. End Notes
+III. End Notes
