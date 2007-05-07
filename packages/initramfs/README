@@ -5,6 +5,8 @@ in order to get a valid iso image containing that single file as /root.ext2.
 
 DWORDs to change:
 
+Offset 0x8050: volume size in 2K blocks, little-endian
+Offset 0x8054: volume size in 2K blocks, big-endian
 Offset 0xb8f8: compressed length, little-endian
 Offset 0xb8fc: compressed length, big-endian
 Offset 0xb973: uncompressed length, little-endian
