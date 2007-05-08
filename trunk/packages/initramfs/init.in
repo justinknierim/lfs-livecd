@@ -7,6 +7,7 @@ PATA=0
 
 init=/sbin/init
 root=
+rootdelay=
 rootfstype=ext3,ext2,auto
 ro="ro"
 noresume=0
@@ -29,13 +30,10 @@ do_resume() {
 		echo "$resume" >/sys/power/resume
 		;;
 	/dev/*)
-		dev=${resume#/dev/}
-		if [ -f /sys/block/${dev%?}/${dev}/dev ] ; then
-			cat /sys/block/${dev%?}/${dev}/dev >/sys/power/resume
-		elif [ -f /sys/block/${dev}/dev ] ; then
-			cat /sys/block/${dev}/dev >/sys/power/resume
+		if [ -b ${resume} ] ; then
+			eval echo $( stat -L -c '$(( 0x%t )):$(( 0x%T ))' ${resume} ) >/sys/power/resume
 		else
-			echo "Cannot resume from unknown device $dev"
+			echo "Cannot resume from device $resume, which doesn't exist"
 		fi
 		;;
 	esac
@@ -121,6 +119,9 @@ for param in $cmdline ; do
 		;;
 	root=*)
 		root=${param#root=}
+		;;
+	rootdelay=*)
+		rootdelay=${param#rootdelay=}
 		;;
 	rootfstype=*)
 		rootfstype=${param#rootfstype=}
