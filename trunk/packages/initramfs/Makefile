@@ -25,6 +25,7 @@ compile-stage2:
 	sed -i 's/, *GROUP="[^"]*"//' $(WDIR)/etc/udev/rules.d/*
 	sed s/@VERSION@/$(VERSION)/ init.in >$(WDIR)/init
 	chmod 755 $(WDIR)/init
+	cp fakecd.iso.head $(WDIR)
 	mknod -m 640 $(WDIR)/dev/console c 5 1
 	mknod -m 664 $(WDIR)/dev/null c 1 3
 	cp /bin/{sh,dd,cat,cp,mkdir,mount,umount,sed,sleep,ln,rm,uname} $(WDIR)/bin
