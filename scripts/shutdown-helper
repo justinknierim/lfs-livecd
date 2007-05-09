@@ -35,6 +35,13 @@ case "$RUNLEVEL" in
 		HALT="/sbin/reboot -d -f -i"
 		;;
 esac
+
+if [ ! -b /dev/lfs-cd ] ; then
+	# The CD has been loaded into RAM
+	$HALT
+	while true ; do sleep 1 ; done
+fi
+
 mkdir /dev/shm/old /dev/shm/proc /dev/shm/etc
 ln -s /proc/mounts /dev/shm/etc/mtab
 echo "$FILES" | cpio -pLd --quiet /dev/shm
