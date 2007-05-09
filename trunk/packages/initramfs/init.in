@@ -188,12 +188,12 @@ done
 
 case "$PATA" in
 	0)
-		for driver in /lib/modules/`uname -r`/kernel/drivers/ata/pata-*.ko ; do
+		for driver in /lib/modules/`uname -r`/kernel/drivers/ata/pata_*.ko ; do
 			drv=${driver##*/}
 			drv=${drv%.ko}
 			echo "blacklist $drv" >>/etc/modprobe.conf
 		done
-		echo "blacklist ata-piix" >>/etc/modprobe.conf
+		echo "blacklist ata_piix" >>/etc/modprobe.conf
 		;;
 	1)
 		for driver in /lib/modules/`uname -r`/kernel/drivers/ide/pci/*.ko ; do
