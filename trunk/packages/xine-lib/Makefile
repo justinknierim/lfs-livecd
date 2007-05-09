@@ -1,12 +1,12 @@
 # xine-lib Makefile
 
 NM= xine-lib
-VRS= 1.1.4
+VRS= 1.1.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://easynews.dl.sourceforge.net/xine/$(FILE)
-SHA-$(FILE)= ee3496a3de8d9935ca23ff1fae3677a61ce1cb21
+SHA-$(FILE)= f7c865d08991be875eb986dab2640e788946e426
 
 # Targets
 
