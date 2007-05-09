@@ -1,12 +1,12 @@
 # tin Makefile
 
 NM= tin
-VRS= 1.8.2
+VRS= 1.8.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://gd.tuwien.ac.at/infosys/newsreaders/tin/v1.8/$(FILE)
-SHA-$(FILE)= 59f13c9eeda414c42f61c408cbac6a59efdc4134
+SHA-$(FILE)= 3822e7281d22433862075270b06bfa6b82226b0e
 
 # Targets
 

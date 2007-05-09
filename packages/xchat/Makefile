@@ -1,12 +1,12 @@
 # xchat Makefile
 
 NM= xchat
-VRS= 2.6.6
+VRS= 2.8.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://xchat.org/files/source/2.6/$(FILE)
-SHA-$(FILE)= ba674165ad9f8e48acd2c0437bea6b1acc2871b9
+URL-$(FILE)= http://xchat.org/files/source/2.8/$(FILE)
+SHA-$(FILE)= 5cff7a974819ad8788962742df785aabfe844af0
 
 # Targets
 

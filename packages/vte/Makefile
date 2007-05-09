@@ -1,12 +1,12 @@
 # vte Makefile
 
 NM= vte
-VRS= 0.14.2
+VRS= 0.16.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.14/$(FILE)
-SHA-$(FILE)= 938e6ca0416191c6ac60745a96bfa84c5eb8519e
+URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.16/$(FILE)
+SHA-$(FILE)= 048925c933240cc877cb746a91943688fec3ff60
 
 # Targets
 
@@ -16,7 +16,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
