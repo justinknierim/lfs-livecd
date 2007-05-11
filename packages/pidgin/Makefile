@@ -1,12 +1,12 @@
-# gaim Makefile
+# pidgin Makefile
 
-NM= gaim
-VRS= 2.0.0beta6
+NM= pidgin
+VRS= 2.0.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://puzzle.dl.sourceforge.net/sourceforge/gaim/$(FILE)
-SHA-$(FILE)= 39345fe6e0519f2e126f7f60f7d9905e3460517b
+URL-$(FILE)= http://puzzle.dl.sourceforge.net/sourceforge/pidgin/$(FILE)
+SHA-$(FILE)= 7bfe348abc25307845e8de1d0fe2b761293ab071
 
 # Targets
 
