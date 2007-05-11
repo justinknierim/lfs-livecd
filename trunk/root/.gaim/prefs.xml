@@ -8,11 +8,6 @@
 				<pref name='command' type='string' value='' />
 				<pref name='browser' type='string' value='mozilla' />
 			</pref>
-			<pref name='plugins'>
-				<pref name='loaded' type='pathlist'>
-					<item value='/usr/lib/gaim/gaim-libnotify.so'/>
-				</pref>
-			</pref>
 		</pref>
 	</pref>
 </pref>
