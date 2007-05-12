@@ -194,6 +194,7 @@ case "$PATA" in
 			echo "blacklist $drv" >>/etc/modprobe.conf
 		done
 		echo "blacklist ata_piix" >>/etc/modprobe.conf
+		echo "blacklist ata_generic" >>/etc/modprobe.conf
 		;;
 	1)
 		for driver in /lib/modules/`uname -r`/kernel/drivers/ide/pci/*.ko ; do
