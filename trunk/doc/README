@@ -272,9 +272,6 @@ method (hibernation) described below.
    I.e., the complete boot line may look as:
    linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg resume=/dev/hda2
 
-   On some systems, hibernation refuses to work if ACPI is enabled. You
-   can disable ACPI by adding "acpi=off" to the kernel arguments.
-
    Alternatively, once the system is running, you can activate hibernation by
    echoing the major and minor numbers of the partition to /sys/power/resume as
    such:
@@ -303,6 +300,19 @@ operating systems installed on your computer before hibernating! Do not
 attempt to mount partitions used by a hibernated system from other systems
 (even read-only, because there is no true read-only mount on journaled
 filesystems)!
+
+   On some systems, hibernation refuses to work due to a broken ACPI
+   implementation, with the following message in "dmesg | tail"  output:
+
+       acpi_pm_prepare does not support 4
+
+   Possible solutions:
+
+   a) run the following command before hibernating the computer:
+
+       echo shutdown >/sys/power/disk
+
+   b) disable ACPI completely by adding "acpi=off" to the kernel arguments.
 
 7) The computer will save its state to your swap partition and power down.
    This CD will remain in the drive.
