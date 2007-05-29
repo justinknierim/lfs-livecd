@@ -27,7 +27,7 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	./configure --libdir=/lib --sysconfdir=/etc --enable-shared --without-selinux
 	sed -i 's/groups$$(EXEEXT) //' src/Makefile
-	find man -name Makefile -exec sed -i '/groups/d' {} \;
+	find man -name Makefile -exec sed -i 's/groups\.1 / /' {} \;
 	sed -i -e 's/ ko//' -e 's/ zh_CN zh_TW//' man/Makefile
 	for i in de es fi fr id it pt_BR; do \
 	    convert-mans UTF-8 ISO-8859-1 man/$$i/*.? ; \
