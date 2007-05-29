@@ -10,8 +10,6 @@ SHA-$(FILE)= 22d5885f87f4b63455891e2042fcae96900af57a
 
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
-PATCH50= linux-2.6.20.1-iocharset-2.patch
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -25,7 +23,6 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH3)
-	patch -Np1 -i ../$(PATCH50)
 	mkdir -p /boot/isolinux
 	make mrproper
 	cp ../config.x86 .config
