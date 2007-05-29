@@ -245,7 +245,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
 	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
 	ch-Xorg-font ch-Xorg-driver ch-xorg-udev-rules ch-XML-Parser ch-xkeyboard-config \
-	ch-synaptics ch-inputattach ch-915resolution ch-fonts-thai \
+	ch-synaptics ch-inputattach ch-fonts-thai \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
 	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
 	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
