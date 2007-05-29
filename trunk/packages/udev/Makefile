@@ -1,14 +1,14 @@
 # Udev Makefile
 
 NM= udev
-VRS= 110
+VRS= 111
 CONFVRS= 20070304
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/hotplug/$(FILE)
-SHA-$(FILE)= 29014f65eb0d42b1836928fa4114a2ebbf58ec0b
+SHA-$(FILE)= 910e8f31835528ec45cd59ba4a00f88c7f93670e
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/development/$(FILE1)

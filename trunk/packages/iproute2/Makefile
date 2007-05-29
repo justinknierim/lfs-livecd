@@ -21,6 +21,7 @@ stage2: Makefile $(FILE)
 	$(std_build) 
 
 compile-stage2:
+	sed -i -e '/tc-bfifo.8/d' -e '/tc-pfifo.8/s/pbfifo/bfifo/' Makefile
 	make SBINDIR=/sbin
 	make SBINDIR=/sbin install
 	mv -v /sbin/arpd /usr/sbin

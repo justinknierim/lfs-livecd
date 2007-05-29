@@ -1,23 +1,23 @@
 # Vim Makefile
 
 NM= vim
-VRS= 7.0
-DIR= $(NM)70
+VRS= 7.1
+DIR= $(NM)71
 
 FILE= $(NM)-$(VRS).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 38ef48cabf942d0dc804a794dcc6f002b9457fc8
+URL-$(FILE)= http://ftp.vim.org/pub/vim/unix/$(FILE)
+SHA-$(FILE)= 981e1acecc4d8f15680b6e160de84aed038d857d
 
 FILE2= $(NM)-$(VRS)-lang.tar.gz
-URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
-SHA-$(FILE2)= 3db6b0004d213490cc00d361835e7a7c685adb52
+URL-$(FILE2)= http://ftp.vim.org/pub/vim/extra/$(FILE2)
+SHA-$(FILE2)= 7c1e2f498e1f8304879e73b88562f9036801c7ee
 
-PATCH1= $(NM)-$(VRS)-fixes-16.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-SHA-$(PATCH1)= 548bfc2931fe34d4f9c52cf6a357607f524b38a6
+#PATCH1= $(NM)-$(VRS)-fixes-16.patch
+#URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+#SHA-$(PATCH1)= 548bfc2931fe34d4f9c52cf6a357607f524b38a6
 
 PATCH2= $(NM)-$(VRS)-mandir-1.patch
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/lfs/downloads/development/$(PATCH2)
 SHA-$(PATCH2)= 182f46dfacefdd3bf6f821dea71f90547d414230
 
 # Targets
@@ -37,7 +37,7 @@ stage2: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
-	patch -Np1 -i ../$(PATCH1)
+	#patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	./configure --prefix=/usr --enable-multibyte
@@ -49,7 +49,7 @@ compile-stage2:
 	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
-stage3: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2) $(PATCH3)
+stage3: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 	$(std_build)
 
 compile-stage3:
