@@ -17,7 +17,7 @@ SHA-$(FILE2)= 7c1e2f498e1f8304879e73b88562f9036801c7ee
 #SHA-$(PATCH1)= 548bfc2931fe34d4f9c52cf6a357607f524b38a6
 
 PATCH2= $(NM)-$(VRS)-mandir-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/lfs/downloads/development/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
 SHA-$(PATCH2)= 182f46dfacefdd3bf6f821dea71f90547d414230
 
 # Targets
