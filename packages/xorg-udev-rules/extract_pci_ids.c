@@ -52,11 +52,13 @@ int main(int argc, char *argv[])
 		/* dlopen would fail anyway */
 		return 0;
 
-	/* radeon and r128 should not be used directly,
+	/* radeon and r128 should not be used directly, i810 is an alias for intel,
 	   and sisusb is too different */
 	if (!strcmp(driver_name, "radeon"))
 		return 0;
 	if (!strcmp(driver_name, "r128"))
+		return 0;
+	if (!strcmp(driver_name, "i810"))
 		return 0;
 	if (!strcmp(driver_name, "sisusb"))
 		return 0;
