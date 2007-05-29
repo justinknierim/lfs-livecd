@@ -253,9 +253,8 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-alsa-lib ch-alsa-utils ch-alsa-firmware ch-alsa-oss \
 	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss \
 	ch-libtheora ch-librcd ch-librcc ch-taglib ch-xine-lib \
-	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted ch-hal ch-hal-info \
-	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI \
-	ch-libsexy ch-libnotify ch-xfce ch-notification-daemon-xfce \
+	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
+	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
 	ch-xfmedia ch-irssi ch-pidgin \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
