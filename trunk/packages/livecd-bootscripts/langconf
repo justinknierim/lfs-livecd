@@ -191,20 +191,6 @@ fi
 sed -i "s/\"us\"/\"$F_XKEYMAP\"/" /etc/X11/xorg.conf
 sed -i -e "s/cp437/$F_CODEPAGE/" -e "s/ISO-8859-1/$CHARMAP/" /etc/samba/smb.conf
 
-echo -n $F_CODEPAGE >/sys/module/nls_base/parameters/codepage
-CHARMAP=`echo $CHARMAP | tr A-Z a-z | \
-    sed -e 's/iso-8859/iso8859/' \
-	-e 's/utf-8/utf8/' \
-	-e 's/koi8-t/koi8-r/' \
-	-e 's/ANSI_X3.4-1968/ascii/' \
-	-e 's/big5-hkscs/big5/' \
-	-e 's/euc-tw/ascii/ ' \
-	-e 's/gb18030/ascii/ ' \
-	-e 's/gbk/ascii/' \
-	-e 's/georgian-ps/ascii/' \
-	-e 's/pt154/cp1251/'`
-echo -n $CHARMAP >/sys/module/nls_base/parameters/iocharset
-
 if [ "$F_ERROR" = "3" ]
 then
 	echo '[ "$TERM" = "linux" ] && LC_ALL=C' >>/etc/profile
