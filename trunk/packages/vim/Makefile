@@ -54,7 +54,7 @@ stage3: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 
 compile-stage3:
 	unpack ../$(FILE2) --strip-components=1
-	patch -Np1 -i ../$(PATCH1)
+	#patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h
