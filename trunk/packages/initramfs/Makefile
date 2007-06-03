@@ -28,7 +28,7 @@ compile-stage2:
 	cp fakecd.iso.head $(WDIR)
 	mknod -m 640 $(WDIR)/dev/console c 5 1
 	mknod -m 664 $(WDIR)/dev/null c 1 3
-	cp /bin/{sh,dd,cat,cp,mkdir,mount,umount,sed,sleep,ln,rm,uname} $(WDIR)/bin
+	cp /bin/{sh,dd,cat,cp,killall,mkdir,mount,umount,sed,sleep,ln,rm,uname} $(WDIR)/bin
 	cp /lib/{libblkid.so.1,libc.so.6,libdl.so.2,ld-linux.so.2} $(WDIR)/lib
 	cp /lib/{libncursesw.so.5,libreadline.so.5,libhistory.so.5} $(WDIR)/lib
 	cp /lib/{libpthread.so.0,librt.so.1,libuuid.so.1} $(WDIR)/lib
