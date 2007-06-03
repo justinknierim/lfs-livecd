@@ -193,7 +193,7 @@ case "$PATA" in
 			drv=${drv%.ko}
 			echo "blacklist $drv" >>/etc/modprobe.conf
 		done
-		echo "blacklist ata_piix" >>/etc/modprobe.conf
+		echo "install ata_piix /sbin/modprobe piix ; /sbin/modprobe -i ata_piix" >>/etc/modprobe.conf
 		echo "blacklist ata_generic" >>/etc/modprobe.conf
 		;;
 	1)
@@ -211,8 +211,7 @@ if [ "$all_generic_ide" = 1 ] ; then
 	echo "options ata-generic all_generic_ide=1" >>/etc/modprobe.conf
 fi
 
-/sbin/udevd &
-PIDOF_UDEVD=$!
+/sbin/udevd --daemon
 
 ( IFS="," ; for module in $load ; do
 	/sbin/modprobe "$module"
@@ -225,7 +224,7 @@ if [ -n "$rootdelay" ] ; then sleep "$rootdelay" ; fi
 do_resume
 do_mount_root
 
-kill $PIDOF_UDEVD
+killall -w /sbin/udevd
 
 umount /sys
 umount /proc
