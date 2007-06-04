@@ -6,7 +6,7 @@ DIR= $(NM)2-8-6
 
 FILE= $(NM)$(VRS).tar.bz2
 URL-$(FILE)= http://lynx.isc.org/$(NM)$(VRS)/$(NM)$(VRS).tar.bz2
-SHA-$(FILE)= b4e37025e99aabaddb219b2f27b1b0ac5db89708
+SHA-$(FILE)= 019246b83fc7b6cb32bac0023f2ae6c5d330d18c
 
 # Targets
 
