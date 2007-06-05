@@ -1,12 +1,12 @@
 # Tcl Makefile
 
 NM= tcl
-VRS= 8.4.14
+VRS= 8.4.15
 DIR= $(NM)$(VRS)
 
 FILE= $(DIR)-src.tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= d7af7e0c7ed563e2344dda04bbe49961589244dd
+URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/tcl/$(FILE)
+SHA-$(FILE)= fbfae3ca68633a10b3fe870018588ade0944caed
 
 # Targets
 
