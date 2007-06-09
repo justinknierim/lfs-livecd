@@ -232,4 +232,4 @@ cd /.root
 # Clean up and free some memory
 rm -rf /bin /sbin /lib /sys /proc /dev /.tmpfs /init /fakecd.iso.head
 ./lib/ld-linux.so.2 --library-path ./lib ./bin/mount -n --move . /
-exec ../lib/ld-linux.so.2 --library-path ./lib ./usr/sbin/chroot . /sbin/init "$@"
+exec ../lib/ld-linux.so.2 --library-path ./lib ./usr/sbin/chroot . "$init" "$@"
