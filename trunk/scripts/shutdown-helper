@@ -79,6 +79,8 @@ chmod 755 /dev/shm/sbin/init
 ln -nsf /old/dev/initctl /dev/shm/dev/initctl
 # "-t no" because otherwise /dev/pts isn't unmounted.
 umount -na -t no
+# brltty quirk - it mounts /etc/brltty/usbfs. "not mounted" goes to /dev/null
+umount -n /etc/brltty/usbfs 2>/dev/null
 cd /dev/shm
 mount -n -t proc proc /dev/shm/proc
 pivot_root . old
