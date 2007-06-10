@@ -150,6 +150,9 @@ for param in $cmdline ; do
 		option=${param#*.}
 		echo "options $module $option" >>/etc/modprobe.conf
 		;;
+	ide=*|idebus=*|ide[0123]=*|hd[a-z]=*)
+		ide_core_opts="$ide_core_opts $param"
+		;;
 	pata)
 		PATA=1
 		;;
@@ -185,6 +188,12 @@ for param in $cmdline ; do
 		;;
 	esac
 done
+
+if [ -n "$ide_core_opts" ] ; then
+	# remove the extra space from the beginning
+	ide_core_opts="${ide_core_opts# }"
+	echo "options ide_core options=\"$ide_core_opts\"" >>/etc/modprobe.conf
+fi
 
 case "$PATA" in
 	0)
