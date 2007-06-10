@@ -81,14 +81,32 @@ copy_cd_to_ram() {
 }
 
 do_mount_cd() {
+	i=1
 	while [ ! -L /dev/lfs-cd ] ; do
 		find_cd
+
+		if [ ! -L /dev/lfs-cd ] ; then
+			echo "LFS LiveCD not found."
+			TRIES=5
+			DELAY=6    # 30 seconds total
+
+			for (( ; i<=$TRIES ; i++ )) ; do
+				[ -L /dev/lfs-cd ] && break
+
+				echo -n "Retry attempt $i of $TRIES... "
+				sleep $DELAY
+				find_cd
+
+				[ -L /dev/lfs-cd ] && echo "success!" || echo "failed!"
+			done
+		fi
+
 		if [ ! -L /dev/lfs-cd ] ; then
 			echo ""
 			echo "LFS LiveCD could not find its device, perhaps due to"
 			echo "unsupported or undetected hardware. Or maybe this is"
-			echo "just a slow SCSI or USB controller that needs some time"
-			echo "to settle (workaround: add rootdelay=10 to the kernel"
+			echo "just a slow SCSI or USB controller that needs more time"
+			echo "to settle (workaround: add rootdelay=30 to the kernel"
 			echo "command line in the boot loader)."
 			echo ""
 			echo "Dropping you to a shell."
