@@ -18,7 +18,7 @@ toram=0
 find_cd() {
 	for SYS in /sys/block/hd* /sys/block/sr* ; do
 		[ ! -d "$SYS" ] && continue
-		[ -f "$SYS/media" ] && read MEDIA <"$SYS/media" [ "$MEDIA" != "cdrom" ] && continue
+		[ -f "$SYS/media" ] && read MEDIA <"$SYS/media" && [ "$MEDIA" != "cdrom" ] && continue
 		DEV=/dev/${SYS##*/}
 		LABEL=`dd if=$DEV bs=1 skip=32808 count=32 2>/dev/null`
 		[ "$LABEL" = "$EXPECTED_LABEL" ] && ln -s "$DEV" /dev/lfs-cd && break
@@ -230,7 +230,7 @@ done )
 /sbin/udevsettle
 if [ -n "$rootdelay" ] ; then sleep "$rootdelay" ; fi
 
-do_resume
+[ "$noresume" = 0 ] && do_resume
 do_mount_root
 
 killall -w /sbin/udevd
