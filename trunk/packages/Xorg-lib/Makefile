@@ -179,6 +179,12 @@ compile-%-stage2:
 	make
 	make install
 
+compile-libX11-1.1.2-stage2:
+	patch -Np1 -i ../libX11-1.1.2-bug11222-1.patch
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	make
+	make install
+
 %-stage2:
 	$(std_build)
 
