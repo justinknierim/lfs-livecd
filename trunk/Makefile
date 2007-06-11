@@ -398,6 +398,10 @@ iso: prepiso
 	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(VERSION)" ./
+	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
+	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION)-nosrc.iso -b boot/isolinux/isolinux.bin \
+	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
+	-m lfs-sources -V "lfslivecd-$(VERSION)" ./
 
 # Targets to clean your tree. 
 #==============================================================================
