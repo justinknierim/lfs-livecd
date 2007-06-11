@@ -93,13 +93,13 @@ In the chroot, change the current directory to /build, and install any
 additional packages you want. Modify other files as necessary.
 
 Get the initramfs files as a zip archive from
-	http://wiki.linuxfromscratch.org/livecd/browser/tags/6.2-1/packages/initramfs
+	http://wiki.linuxfromscratch.org/livecd/browser/trunk/packages/initramfs
 
 Unzip the archive. Remove the "include $(ROOT)/scripts/functions" line from the
 Makefile. Generate the initramfs image for your CD:
-	make compile-stage2 VERSION="x86-6.2-custom"
+	make compile-stage2 VERSION="x86-6.3-custom"
 
-(you can replace the "x86-6.2-custom" with your own string). This produces the
+(you can replace the "x86-6.3-custom" with your own string). This produces the
 initramfs_data.cpio.gz file in the current directory. If this directory is not
 "/build", copy it to /build:
 	cp initramfs_data.cpio.gz /build
@@ -137,23 +137,21 @@ that leads to a filesystem with errors otherwise.
 Now make the directory structure for your LiveCD:
 	mkdir $WORK/iso
 
-Copy the boot directory from the original LiveCD:
-	cp -r /media/cdrom/boot $WORK/iso
+Copy the directory structure from the original LiveCD:
+	cp -r /media/cdrom/*/ $WORK/iso
 
 Replace the stock initramfs image with your own:
 	cp $WORK/build/initramfs_data.cpio.gz \
-	    $WORK/iso/boot/isolinux/iniramfs_data_cpio.gz
-
-(the underscore before "cpio" in the previous command is not a typo).
+	    $WORK/iso/boot/isolinux/iniramfs_data.cpio.gz
 
 Recompress the root.ext2 file:
 	mkzftree -F $WORK/root.ext2 $WORK/iso/root.ext2
 
 Recreate the CD image:
 	cd $WORK/iso ; mkisofs -z -R -l --allow-leading-dots -D -o \
-        ../lfslivecd-x86-6.2-custom.iso -b boot/isolinux/isolinux.bin \
+        ../lfslivecd-x86-6.3-custom.iso -b boot/isolinux/isolinux.bin \
         -c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
-        -V "lfslivecd-x86-6.2-custom" ./
+        -V "lfslivecd-x86-6.3-custom" ./
 
 Burn and test. Have a fun.
 
@@ -170,3 +168,6 @@ CHANGELOG:
 
    [2006-08-06]
     * Updated to LFS LiveCD based on device mapper (6.2-pre4 and later)
+
+   [2007-06-11]
+    * Updated for 6.3-pre2
