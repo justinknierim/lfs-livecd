@@ -2,7 +2,7 @@
 Name=Tin
 Comment=Read news
 Exec=tin
-Terminal=1
+Terminal=true
 MultipleArgs=false
 Type=Application
 Categories=Application;Network

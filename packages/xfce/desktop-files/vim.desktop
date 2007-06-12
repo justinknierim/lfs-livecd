@@ -74,5 +74,5 @@ Name=Vim
 MimeType=text/plain
 Exec=vim %f
 Type=Application
-Terminal=1
+Terminal=true
 Categories=Application;TextEditor;

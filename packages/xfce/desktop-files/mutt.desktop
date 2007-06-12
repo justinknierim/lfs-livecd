@@ -2,7 +2,7 @@
 Name=Mutt
 Comment=Read and write your email
 Exec=mutt
-Terminal=1
+Terminal=true
 MultipleArgs=false
 Type=Application
 Categories=Application;Network

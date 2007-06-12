@@ -74,5 +74,5 @@ Name=Nano
 MimeType=text/plain
 Exec=nano -w %f
 Type=Application
-Terminal=1
+Terminal=true
 Categories=Application;TextEditor;

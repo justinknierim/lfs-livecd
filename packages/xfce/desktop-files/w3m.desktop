@@ -2,7 +2,7 @@
 Type=Application
 Exec=w3m %u
 Name=W3M
-Terminal=1
+Terminal=true
 Comment=W3M
 Icon=html
 MimeType=text/html
