@@ -2,6 +2,6 @@
 Type=Application
 Exec=top
 Name=Top
-Terminal=1
+Terminal=true
 Comment=Display Linux tasks
 Categories=Application;System

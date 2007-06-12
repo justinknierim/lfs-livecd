@@ -2,6 +2,6 @@
 Type=Application
 Exec=ftp
 Name=FTP
-Terminal=1
+Terminal=true
 Comment=FTP Client
 Categories=Application;Network;

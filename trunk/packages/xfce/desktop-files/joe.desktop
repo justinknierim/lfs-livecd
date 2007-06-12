@@ -75,5 +75,5 @@ Comment=Joe's Own Editor
 MimeType=text/plain
 Exec=joe %f
 Type=Application
-Terminal=1
+Terminal=true
 Categories=Application;TextEditor;
