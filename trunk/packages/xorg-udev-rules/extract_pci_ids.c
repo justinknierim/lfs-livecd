@@ -164,11 +164,35 @@ int xf86MatchPciInstances(const char *driverName, int vendorID,
 void xf86PrintChipsets(const char *drvname, const char *drvmsg,
                        SymTabPtr chips)
 {
+	/* NVidia detection special cases, see the switch(token & 0xfff0)
+	   in NVProbe(), xf86-video-nv/src/nv_driver.c.
+	   Risky - the driver may try to support more than it actually can */
+	unsigned short wildcards[] = {
+	    0x0170, 0x0180, 0x0250, 0x0280, 0x0300, 0x0310, 0x0320, 0x0330,
+	    0x0340, 0x0040, 0x00C0, 0x0120, 0x0140, 0x0160, 0x01D0, 0x0090,
+	    0x0210, 0x0220, 0x0240, 0x0290, 0x0390, 0x03D0, 0x0000 };
+
+	int i;
+
 	while(chips->token != -1) {
-		WriteUdevRule(chips->name,
-		    chips->token >> 16, chips->token & 0xffff);
+		i = 0;
+		/* Filter out cases when the last digit doesn't matter.
+		   They will be caught by wildcard rules below. */
+		while (wildcards[i] && ((chips->token & 0xfff0) != wildcards[i]))
+			i++;
+		if ((chips->token >> 16) != 0x10de || !wildcards[i])
+			WriteUdevRule(chips->name,
+			    chips->token >> 16, chips->token & 0xffff);
 		chips++;
 	}
+	/* Write out wildcard rules */
+	printf("# Generic NVidia families\n");
+	for (i = 0; wildcards[i]; i++)
+		printf("ATTR{vendor}==\"0x10de\", "
+                "ATTR{device}==\"0x%03x?\", "
+                "RUN+=\"/bin/sed -i s/vesa/nv/ /etc/X11/xorg.conf\"\n",
+		wildcards[i] >> 4);
+	printf("\n");
 }
 
 int xf86MatchIsaInstances(const char *driverName, SymTabPtr chipsets,
