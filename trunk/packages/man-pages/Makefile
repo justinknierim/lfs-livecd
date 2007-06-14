@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/docs/manpages/$(FILE)
-SHA-$(FILE)= c0bf66824bf995cc692adfe7fe6c51890a1489c0
+SHA-$(FILE)= 96cdd349325c37e46d40cf66567f3c904e79d583
 
 # Targets
 

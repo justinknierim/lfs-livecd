@@ -1,16 +1,13 @@
 # Less Makefile 
 
 NM= less
-VRS= 394
+VRS= 403
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= fa0d9aa30ec461866786c4080bb594fc3337bb02
+URL-$(FILE)= http://www.greenwoodsoftware.com/less/$(FILE)
+SHA-$(FILE)= f9fa97a9e215b6c62c1bfd049e03725a26ae71e8
 
-PATCH1= $(DIR)-signal_fix-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 6951f821ad33dae0ed4cee99ab89023216db848c
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -19,11 +16,10 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --sysconfdir=/etc
 	make
 	make install
