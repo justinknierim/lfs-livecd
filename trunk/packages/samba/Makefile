@@ -1,12 +1,12 @@
 # Samba Makefile
 
 NM= samba
-VRS= 3.0.24
+VRS= 3.0.25
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://us3.samba.org/$(NM)/ftp/old-versions/$(FILE)
-SHA-$(FILE)= 216020b58abca191b8146f76f98a8bda3508fcd3
+SHA-$(FILE)= 413fb84366e4bc98a64398996d6944f8fb8e0f7f
 
 # Targets
 
