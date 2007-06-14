@@ -1,7 +1,7 @@
 # Man-pages Makefile
 
 NM= man-pages
-VRS= 2.51
+VRS= 2.55
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
