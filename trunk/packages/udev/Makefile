@@ -8,7 +8,7 @@ CONFDIR=$(NM)-config-$(CONFVRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/hotplug/$(FILE)
-SHA-$(FILE)= 910e8f31835528ec45cd59ba4a00f88c7f93670e
+SHA-$(FILE)= f55270798370eb7f432c8ec0c83627ae57cc6274
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/development/$(FILE1)

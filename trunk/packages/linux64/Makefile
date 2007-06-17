@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.21.3
+VRS= 2.6.21.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= 13e5d58040ea4bf5434a6957ff04df91955b1250
+SHA-$(FILE)= f6e5507bf9d46563a845edfa174ac22bfa2f8896
 
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
