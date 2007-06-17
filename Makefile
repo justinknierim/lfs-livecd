@@ -255,7 +255,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-libtheora ch-librcd ch-librcc ch-taglib ch-xine-lib \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
-	ch-xfmedia ch-irssi ch-pidgin \
+	ch-xfmedia ch-irssi ch-pidgin ch-net-tools \
 	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
 	ch-device-mapper ch-LVM2 ch-dmraid \
