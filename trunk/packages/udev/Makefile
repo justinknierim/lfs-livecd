@@ -1,7 +1,7 @@
 # Udev Makefile
 
 NM= udev
-VRS= 111
+VRS= 112
 CONFVRS= 20070304
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
