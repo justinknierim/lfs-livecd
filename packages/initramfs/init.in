@@ -14,6 +14,7 @@ noresume=0
 resume=
 all_generic_ide=0
 toram=0
+cdtype=
 
 find_cd() {
 	for SYS in /sys/block/hd* /sys/block/sr* ; do
@@ -41,6 +42,7 @@ do_resume() {
 }
 
 copy_cd_to_ram() {
+	echo "Copying LFS LiveCD to RAM. This will take several minutes..."
 	mount -n -t iso9660 -o ro,norock /dev/lfs-cd /.tmpfs/.cdrom
 	cat /fakecd.iso.head >/.tmpfs/.fakecd.iso
 	dd if=/.tmpfs/.cdrom/root.ext2 bs=2048 conv=sync >>/.tmpfs/.fakecd.iso
@@ -79,6 +81,21 @@ copy_cd_to_ram() {
 	/sbin/losetup /dev/loop2 /.tmpfs/.fakecd.iso
 	ln -sf /dev/loop2 /dev/lfs-cd
 }
+
+detect_cd_type() {
+	mount -n -t iso9660 -o ro /dev/lfs-cd /.tmpfs/.cdrom
+	if [ -d /.tmpfs/.cdrom/lfs-sources ] ; then
+		if [ "$toram" = 1 ] ; then
+			cdtype=toram
+		else
+			cdtype=fullcd
+		fi
+	else
+		cdtype=nosrc
+	fi
+	umount -n /.tmpfs/.cdrom
+}
+
 
 do_mount_cd() {
 	i=1
@@ -119,6 +136,7 @@ do_mount_cd() {
 	mkdir /.tmpfs
 	mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
 	mkdir /.tmpfs/.cdrom
+	detect_cd_type
 	if [ "$toram" = 1 ] ; then copy_cd_to_ram ; fi
 	mount -n -t iso9660 -o ro /dev/lfs-cd /.tmpfs/.cdrom
 	/sbin/losetup /dev/loop0 /.tmpfs/.cdrom/root.ext2
@@ -132,6 +150,10 @@ do_mount_cd() {
 	mount -n --move /.tmpfs /.root/dev/shm
 	if [ "$toram" != 1 ] ; then cp -a /dev/lfs-cd /.root/dev/lfs-cd ; fi
 	cat /etc/modprobe.conf >>/.root/etc/modprobe.conf
+	ln -sf issue.$cdtype /.root/etc/issue
+	if [ "$cdtype" = "fullcd" ] ; then
+		ln -sf /dev/shm/.cdrom/lfs-sources /.root/lfs-sources
+	fi
 }
 
 do_mount_root() {

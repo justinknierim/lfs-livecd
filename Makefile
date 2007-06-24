@@ -114,7 +114,7 @@ root.ext2:
 $(MKTREE): root.ext2
 	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
 	mount -o loop root.ext2 $(MP)
-	-rm -f $(MP)/boot $(MP)$(LFSSRC)
+	-rm -f $(MP)/boot
 	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD)
 	mkdir -p $(MP)/boot $(MP)$(LFSSRC) $(MPBASE)/iso$(LFSSRC)
 	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
@@ -186,7 +186,7 @@ extend-lfs: $(MKTREE)
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
 	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
 	 make blfs $(chbash-post-bash)'
-	@install -m644 etc/issue $(MP)/etc/issue
+	@install -m644 etc/issue* $(MP)/etc
 
 lfsuser:
 	@-groupadd lfs
@@ -362,7 +362,7 @@ update-caches:
 	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
 	mandb -c 2>/dev/null
 	echo 'dummy / ext2 defaults 0 0' >/etc/mtab
-	updatedb --prunepaths='/sources /tools /lfs-livecd /proc /sys /dev /tmp /var/tmp'
+	updatedb --prunepaths='/sources /tools /lfs-livecd /lfs-sources /proc /sys /dev /tmp /var/tmp'
 	echo >/etc/mtab
 
 chroot-gvim:
@@ -379,7 +379,7 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/lastlog
 	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue
+	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue*
 	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
@@ -441,7 +441,7 @@ unmount:
 	-umount $(MP)$(ROOT)
 	-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
 	-rmdir $(MP)/boot $(MP)$(LFSSRC)
-	-ln -s /dev/shm/.cdrom/boot /dev/shm/.cdrom$(LFSSRC) $(MP)
+	-ln -s /dev/shm/.cdrom/boot $(MP)
 	-umount $(MP)
 
 zeroes: $(MKTREE)
