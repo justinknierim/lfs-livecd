@@ -8,12 +8,8 @@ FILE1= $(UNCOMPRESSED_FILE1).gz
 URL-$(FILE1)= http://service.chelsio.com/drivers/firmware/t3/$(FILE1)
 SHA-$(FILE1)= 6c2965f7eaa7e0f18c2e7d7e9afe470850b502ee
 
-# The magic number below is available only after accepting the license at
-# http://www.myri.com/scs/download-Myri10GE-firmware-only.html
-DIR2= myri-fw-v1.4.21
-FILE2= $(DIR2).tar.gz
-URL-$(FILE2)= http://www.myri.com/download/files/14339216127782641291/$(FILE2)
-SHA-$(FILE2)= a0e6aada257bf2599261e03a91b0d6f41be7bd4f
+# FILE2 was for Myri10GE, but there is no way to automate the download
+# due to one-time URLs used for license checks. Removed.
 
 DIR3= atmel-firmware-1.3
 FILE3= $(DIR3).tar.gz
@@ -79,9 +75,6 @@ chroot:
 
 stage2: Makefile $(ALLFILES)
 	@zcat $(FILE1) >/lib/firmware/$(UNCOMPRESSED_FILE1)
-	@tar xf $(FILE2)
-	@cd $(DIR2) ; for a in "" p r ; do \
-	    cp eth$${a}_z8e.dat /lib/firmware/myri10ge_eth$${a}_z8e.dat ; done
 	@tar xf $(FILE3)
 	@find $(DIR3) -name \*.bin | xargs -i cp \{\} /lib/firmware
 	@tar xf $(FILE5)
