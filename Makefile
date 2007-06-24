@@ -256,7 +256,8 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
 	ch-xfmedia ch-irssi ch-pidgin ch-net-tools \
-	ch-xchat ch-wireless_tools ch-tcpwrappers ch-portmap ch-nfs-utils \
+	ch-xchat ch-wireless_tools ch-wpa_supplicant \
+	ch-tcpwrappers ch-portmap ch-nfs-utils \
 	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
 	ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe \
@@ -270,7 +271,8 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-hibernate-script ch-slang ch-mc \
 	ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
-	ch-binutils64 ch-gcc64 ch-linux64 ch-initramfs
+	ch-binutils64 ch-gcc64 ch-linux64 ch-scsi-firmware ch-net-firmware \
+	ch-initramfs
 	# Proprietary drivers disabled - NVIDIA crashes, ATI is too fat
 	# make ch-gcc33 ch-proprietary-drivers
 	make update-caches

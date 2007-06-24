@@ -14,6 +14,7 @@ noresume=0
 resume=
 all_generic_ide=0
 toram=0
+nodhcp=0
 cdtype=
 
 find_cd() {
@@ -148,11 +149,16 @@ do_mount_cd() {
 	echo "0 $SIZE snapshot /dev/loop0 /dev/loop1 p 8" | /sbin/dmsetup create lfs-cd
 	mount -n -t ext2 /dev/mapper/lfs-cd /.root
 	mount -n --move /.tmpfs /.root/dev/shm
-	if [ "$toram" != 1 ] ; then cp -a /dev/lfs-cd /.root/dev/lfs-cd ; fi
+	if [ "$toram" != 1 ] ; then
+		cp -a /dev/lfs-cd /.root/dev/lfs-cd
+	fi
 	cat /etc/modprobe.conf >>/.root/etc/modprobe.conf
 	ln -sf issue.$cdtype /.root/etc/issue
 	if [ "$cdtype" = "fullcd" ] ; then
 		ln -sf /dev/shm/.cdrom/lfs-sources /.root/lfs-sources
+	fi
+	if [ "$nodhcp" = "1" ] ; then
+		rm -f /.root/etc/udev/rules.d/76-network.rules
 	fi
 }
 
@@ -225,6 +231,9 @@ for param in $cmdline ; do
 		;;
 	toram)
 		toram=1
+		;;
+	nodhcp)
+		nodhcp=1
 		;;
 	esac
 done
