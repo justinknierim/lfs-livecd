@@ -7,7 +7,7 @@ FILE1= aic94xx-seq.fw
 URL-$(FILE1)= http://kernel.org/pub/linux/kernel/people/jejb/$(FILE1)
 SHA-$(FILE1)= fd4e5b1a1cc6ca077a3e7a537d7b5a911d6737d9
 
-QLOGIC= http://ftp.qlogic.com/outgoing/linux/firmware
+QLOGIC= ftp://ftp.qlogic.com/outgoing/linux/firmware
 
 FILE2= ql2100_fw.bin
 URL-$(FILE2)= $(QLOGIC)/$(FILE2)
