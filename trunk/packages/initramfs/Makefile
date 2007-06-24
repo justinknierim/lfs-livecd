@@ -19,7 +19,7 @@ stage2: Makefile init.in
 	@touch $@
 
 compile-stage2:
-	mkdir -p $(WDIR)/{bin,dev,etc/udev/rules.d,lib,sbin,sys,proc}
+	mkdir -p $(WDIR)/{bin,dev,etc/udev/rules.d,lib/firmware,sbin,sys,proc}
 	cp /etc/udev/udev.conf $(WDIR)/etc/udev/udev.conf
 	cp /etc/udev/rules.d/{05-*,2*,60-*} $(WDIR)/etc/udev/rules.d
 	sed -i 's/, *GROUP="[^"]*"//' $(WDIR)/etc/udev/rules.d/*
@@ -35,6 +35,7 @@ compile-stage2:
 	cp /lib/{libvolume_id.so.0,libsysfs.so.2} $(WDIR)/lib
 	cp /usr/lib/libdevmapper.so.1.02 $(WDIR)/lib
 	cp -a /lib/udev $(WDIR)/lib
+	cp -a /lib/firmware/{aic94xx-seq.fw,ql*.bin} $(WDIR)/lib/firmware
 	cp /sbin/{losetup,blockdev,udevd,udevtrigger,udevsettle,modprobe} $(WDIR)/sbin
 	cp /sbin/pcmcia-{check-broken-cis,socket-startup} $(WDIR)/sbin
 	cp /usr/bin/stat $(WDIR)/bin
