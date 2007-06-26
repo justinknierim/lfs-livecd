@@ -156,7 +156,6 @@ do_mount_cd() {
 	ln -sf issue.$cdtype /.root/etc/issue
 	if [ "$cdtype" = "fullcd" ] ; then
 		ln -sf /dev/shm/.cdrom/lfs-sources /.root/lfs-sources
-		ln -sf /dev/shm/.cdrom/drivers /.root/drivers
 	fi
 	if [ "$nodhcp" = "1" ] ; then
 		rm -f /.root/etc/udev/rules.d/76-network.rules
