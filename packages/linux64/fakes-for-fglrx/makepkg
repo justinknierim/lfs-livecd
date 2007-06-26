@@ -1,0 +1,3 @@
+#!/bin/sh
+rm -rf install
+tar --exclude $5 -zcvf $5 .
