@@ -2,7 +2,7 @@
 
 case "$1" in
 -a)
-	echo "Linux lfslivecd VERSION #1 SMP x86_64 GNU/Linux"
+	echo "Linux lfslivecd VERSION #1 SMP i486 GNU/Linux"
 	;;
 -s)
 	echo "Linux"
@@ -17,7 +17,7 @@ case "$1" in
 	echo "#1 SMP"
 	;;
 -m)
-	echo "x86_64"
+	echo "i486"
 	;;
 -p|-i)
 	echo "unknown"
