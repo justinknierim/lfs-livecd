@@ -114,14 +114,15 @@ root.ext2:
 $(MKTREE): root.ext2
 	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
 	mount -o loop root.ext2 $(MP)
-	-rm -f $(MP)/boot
 	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD)
 	mkdir -p $(MP)/boot $(MP)$(LFSSRC) $(MPBASE)/iso$(LFSSRC)
+	mkdir -p $(MP)/drivers $(MPBASE)/iso/drivers
 	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
 	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
 	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
 	mount --bind $(MPBASE)/iso/boot $(MP)/boot
 	mount --bind $(MPBASE)/iso$(LFSSRC) $(MP)$(LFSSRC)
+	mount --bind $(MPBASE)/iso/drivers $(MP)/drivers
 	-ln -nsf $(MPBASE)$(WD) /
 	-ln -nsf $(MPBASE)$(SRC) /
 	-ln -nsf $(MPBASE)$(ROOT) /
@@ -272,9 +273,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
 	ch-binutils64 ch-gcc64 ch-linux64 ch-scsi-firmware ch-net-firmware \
-	ch-initramfs
-	# Proprietary drivers disabled - NVIDIA crashes, ATI is too fat
-	# make ch-gcc33 ch-proprietary-drivers
+	ch-initramfs ch-gcc33
 	make update-caches
 
 wget-list:
@@ -437,13 +436,13 @@ unmount:
 	-umount $(MP)/proc
 	-umount $(MP)/sys
 	-umount $(MP)/boot
+	-umount $(MP)/drivers
 	-umount $(MP)$(LFSSRC)
 	-umount $(MP)$(SRC)
 	-umount $(MP)$(WD)
 	-umount $(MP)$(ROOT)
 	-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
-	-rmdir $(MP)/boot $(MP)$(LFSSRC)
-	-ln -s /dev/shm/.cdrom/boot $(MP)
+	-rmdir $(MP)/boot $(MP)$(LFSSRC) $(MP)/drivers
 	-umount $(MP)
 
 zeroes: $(MKTREE)
