@@ -1,0 +1,2 @@
+#!/bin/sh
+/tools/bin/x86_64-unknown-linux-gnu-ld "$@"
