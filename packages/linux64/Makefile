@@ -10,6 +10,10 @@ SHA-$(FILE)= f6e5507bf9d46563a845edfa174ac22bfa2f8896
 
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
+FILE1= ati-driver-installer-8.38.6-x86.x86_64.run
+URL-$(FILE1)= http://www2.ati.com/drivers/linux/$(FILE1)
+SHA-$(FILE1)= a4320c6d3c6716740971c18bbd5e62b0b452cc67
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -18,7 +22,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM)64 $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
 
 compile-stage2:
@@ -27,10 +31,16 @@ compile-stage2:
 	cp ../config.x86_64 .config
 	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	PATH=$$PATH:$(WD)/bin make modules_install ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
+	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
+	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
+	chmod 755 ../fakes-for-fglrx/{uname,cat}
+	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/Only_Module
+	mv *.tgz /drivers
 	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
 
 clean:
 	-rm -rf $(DIR)
+	-rm -f fakes-for-fglrx/{uname,cat}
 
 .PHONY: clean chroot compile-stage2
