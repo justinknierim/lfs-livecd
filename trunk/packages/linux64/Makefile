@@ -14,6 +14,21 @@ FILE1= ati-driver-installer-8.38.6-x86.x86_64.run
 URL-$(FILE1)= http://www2.ati.com/drivers/linux/$(FILE1)
 SHA-$(FILE1)= a4320c6d3c6716740971c18bbd5e62b0b452cc67
 
+DIR2= NVIDIA-Linux-x86_64-100.14.11-pkg0
+FILE2= $(DIR2).run
+URL-$(FILE2)= http://us.download.nvidia.com/XFree86/Linux-x86_64/100.14.11/$(FILE2)
+SHA-$(FILE2)= 11c4f7ab736262e20db937ec410de3511e3e6aad
+
+DIR3= NVIDIA-Linux-x86_64-1.0-9639-pkg0
+FILE3= $(DIR3).run
+URL-$(FILE3)= http://us.download.nvidia.com/XFree86/Linux-x86_64/1.0-9639/$(FILE3)
+SHA-$(FILE3)= 6294d421131b9dc4514634ecde171869f589dae3
+
+DIR4= NVIDIA-Linux-x86_64-1.0-7185-pkg0
+FILE4= $(DIR4).run
+URL-$(FILE4)= http://us.download.nvidia.com/XFree86/Linux-x86_64/1.0-7185/$(FILE4)
+SHA-$(FILE4)= ffe1eb012707d5bffbe39756be54cb687b4ef498
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -22,7 +37,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM)64 $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4)
 	$(std_build)
 
 compile-stage2:
@@ -35,6 +50,8 @@ compile-stage2:
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
 	chmod 755 ../fakes-for-fglrx/{uname,cat}
 	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/Only_Module
+	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
+	    sh ../$$a.run -x ; ../build-nvidia-driver $$a $(VRS)-64bit ; done
 	mv *.tgz /drivers
 	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
