@@ -107,7 +107,7 @@ test-host:
 # preserve as many zeroed sectors as possible.
 root.ext2:
 	dd if=/dev/null of=root.ext2 bs=1M seek=$(ROOTFS_MEGS)
-	echo y | mke2fs root.ext2
+	mke2fs -F root.ext2
 	tune2fs -c 0 -i 0 root.ext2
 
 # This target populates the root.ext2 image and sets up some mounts
