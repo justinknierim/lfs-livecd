@@ -5,7 +5,7 @@ VRS= 3.5.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.yars.free.net/pub/source/lftp/$(FILE)
+URL-$(FILE)= http://www.kanshima.net/mirrors/lftp/$(FILE)
 SHA-$(FILE)= d9a3add50667cbdf98ee765d521b77f628612c0d
 
 # Targets
