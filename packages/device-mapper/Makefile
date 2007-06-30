@@ -1,12 +1,12 @@
 # device-mapper Makefile
 
 NM= device-mapper
-VRS= 1.02.18
+VRS= 1.02.20
 DIR= $(NM).$(VRS)
 
 FILE= $(DIR).tgz
-URL-$(FILE)= http://downloads.planetmirror.com/pub/sourceware/dm/$(FILE)
-SHA-$(FILE)= 61fb505bf634b7c026551d98030fe7fc004367fb
+URL-$(FILE)= ftp://sources.redhat.com/pub/dm/$(FILE)
+SHA-$(FILE)= d6827fbb817a4a8557916aa3a134bf091ca476d7
 
 # Targets
 
