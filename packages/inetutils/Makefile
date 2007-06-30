@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f2dc4d7fa5f5590ea71260c464f60eb3b1fc7505
+SHA-$(FILE)= 825834b94cd387b2d088ef1cfe727de824b9589e
 
 PATCH1= $(DIR)-no_server_man_pages-2.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
