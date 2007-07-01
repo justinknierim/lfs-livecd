@@ -1,12 +1,12 @@
 # Less Makefile 
 
 NM= less
-VRS= 403
+VRS= 406
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.greenwoodsoftware.com/less/$(FILE)
-SHA-$(FILE)= f9fa97a9e215b6c62c1bfd049e03725a26ae71e8
+SHA-$(FILE)= 7aeab848682c3ac7cd9ba54e4c96199f9fdf25e5
 
 # Targets
 

@@ -1,5 +1,5 @@
 NM= X.org-base
-VRS=X11R7.1
+VRS=X11R7.2
 
 include $(ROOT)/scripts/functions
 

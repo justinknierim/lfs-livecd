@@ -12,9 +12,9 @@ FILE2= $(NM)-$(VRS)-lang.tar.gz
 URL-$(FILE2)= http://ftp.vim.org/pub/vim/extra/$(FILE2)
 SHA-$(FILE2)= 7c1e2f498e1f8304879e73b88562f9036801c7ee
 
-#PATCH1= $(NM)-$(VRS)-fixes-16.patch
-#URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-#SHA-$(PATCH1)= 548bfc2931fe34d4f9c52cf6a357607f524b38a6
+PATCH1= $(NM)-$(VRS)-fixes-1.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+SHA-$(PATCH1)= 6005e12fc31ce07a4da2806ea4c503cb569f235e
 
 PATCH2= $(NM)-$(VRS)-mandir-1.patch
 URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
@@ -37,7 +37,7 @@ stage2: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
-	#patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	./configure --prefix=/usr --enable-multibyte
@@ -54,7 +54,7 @@ stage3: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
 
 compile-stage3:
 	unpack ../$(FILE2) --strip-components=1
-	#patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	echo '#define SYS_GVIMRC_FILE "/etc/gvimrc"' >> src/feature.h
