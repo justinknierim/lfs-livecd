@@ -1,19 +1,19 @@
 # Texinfo Makefile
 
 NM= texinfo
-VRS= 4.8
+VRS= 4.9
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR)a.tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= cde723b115faebb81019154c320e108c5042c906
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= http://ftp.gnu.org/texinfo/$(FILE)
+SHA-$(FILE)= 19a0cc0b56cbfcfe610925bef31e0bdf749492c9
 
-PATCH1= $(DIR)a-tempfile_fix-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+PATCH1= $(DIR)-tempfile_fix-1.patch
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
 SHA-$(PATCH1)= 2ead28cb8e2679cdb53e1e4908209f0a31397dfe
 
-PATCH2= $(DIR)a-multibyte-1.patch
-URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+PATCH2= $(DIR)-multibyte-1.patch
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
 SHA-$(PATCH2)= b97ae3468c03f8389dbf5c9b6eed64f996f9ed5c
 
 # Targets
