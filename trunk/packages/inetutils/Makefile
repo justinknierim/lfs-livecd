@@ -5,7 +5,7 @@ VRS= 1.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/inetutils/$(FILE)
+URL-$(FILE)= http://ftp.gnu.org/gnu/inetutils/$(FILE)
 SHA-$(FILE)= 825834b94cd387b2d088ef1cfe727de824b9589e
 
 PATCH1= $(DIR)-no_server_man_pages-2.patch
