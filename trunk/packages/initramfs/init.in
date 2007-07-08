@@ -8,7 +8,7 @@ PATA=0
 init=/sbin/init
 root=
 rootdelay=
-rootfstype=ext3,ext2,auto
+rootfstype=auto
 ro="ro"
 noresume=0
 resume=
@@ -80,6 +80,10 @@ copy_cd_to_ram() {
 		bs=1 count=1 skip=8 seek=47482 conv=notrunc 2>/dev/null
 	umount -n /.tmpfs/.cdrom
 	/sbin/losetup /dev/loop2 /.tmpfs/.fakecd.iso
+	if [ -d /.tmpfs/.partition ] ; then
+		/sbin/losetup -d /dev/loop3
+		umount -n /.tmpfs/.partition && rm -rf /.tmpfs/.partition
+	fi
 	ln -sf /dev/loop2 /dev/lfs-cd
 }
 
@@ -96,7 +100,6 @@ detect_cd_type() {
 	fi
 	umount -n /.tmpfs/.cdrom
 }
-
 
 do_mount_cd() {
 	i=1
@@ -134,8 +137,6 @@ do_mount_cd() {
 			sh
 		fi
 	done
-	mkdir /.tmpfs
-	mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
 	mkdir /.tmpfs/.cdrom
 	detect_cd_type
 	if [ "$toram" = 1 ] ; then copy_cd_to_ram ; fi
@@ -149,8 +150,10 @@ do_mount_cd() {
 	echo "0 $SIZE snapshot /dev/loop0 /dev/loop1 p 8" | /sbin/dmsetup create lfs-cd
 	mount -n -t ext2 /dev/mapper/lfs-cd /.root
 	mount -n --move /.tmpfs /.root/dev/shm
-	if [ "$toram" != 1 ] ; then
+	if [ "$toram" != 1 ] && [ ! -d /.root/dev/shm/.partition ] ; then
 		cp -a /dev/lfs-cd /.root/dev/lfs-cd
+	fi
+	if [ "$toram" != 1 ] ; then
 		ln -sf /dev/shm/.cdrom/drivers /.root/drivers
 	fi
 	cat /etc/modprobe.conf >>/.root/etc/modprobe.conf
@@ -163,11 +166,27 @@ do_mount_cd() {
 	fi
 }
 
+do_mount_iso() {
+	DEVICE=${root#iso:}
+	FILE=${DEVICE#*:}
+	DEVICE=${DEVICE%%:*}
+	mkdir /.tmpfs/.partition
+	mount -n -t "$rootfstype" -o "$rootflags" "$DEVICE" /.tmpfs/.partition
+	/sbin/losetup /dev/loop3 "/.tmpfs/.partition/$FILE"
+	ln -sf /dev/loop3 /dev/lfs-cd
+	do_mount_cd
+}
+
 do_mount_root() {
 	mkdir /.root
 	[ -n "$rootflags" ] && rootflags="$rootflags,"
 	rootflags="$rootflags$ro"
 	case "$root" in
+	iso:*)
+		mkdir /.tmpfs
+		mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
+		do_mount_iso
+		;;
 	*:*)
 		( IFS=":" ; mknod /dev/root b $root )
 		mount -n -t "$rootfstype" -o "$rootflags" /dev/root /.root
@@ -176,6 +195,8 @@ do_mount_root() {
 		mount -n -t "$rootfstype" -o "$rootflags" "$root" /.root
 		;;
 	"")
+		mkdir /.tmpfs
+		mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
 		do_mount_cd
 		;;
 	esac
