@@ -23,8 +23,8 @@ FILES="/lib/libc.so.6
 /lib/libpthread.so.0
 /dev/console
 /dev/null
-/dev/lfs-cd
 /dev/loop0
+/dev/loop3
 /dev/mapper/control"
 
 case "$RUNLEVEL" in
@@ -36,7 +36,7 @@ case "$RUNLEVEL" in
 		;;
 esac
 
-if [ ! -b /dev/lfs-cd ] ; then
+if [ ! -b /dev/lfs-cd ] && [ ! -d /.tmpfs/.partition ] ; then
 	# The CD has been loaded into RAM
 	$HALT
 	while true ; do sleep 1 ; done
@@ -45,6 +45,8 @@ fi
 mkdir /dev/shm/old /dev/shm/proc /dev/shm/etc
 ln -s /proc/mounts /dev/shm/etc/mtab
 echo "$FILES" | cpio -pLd --quiet /dev/shm
+if [ -b /dev/lfs-cd ] ; then cp -a /dev/lfs-cd /dev/shm/dev/lfs-cd ; fi
+
 cat >/dev/shm/sbin/init <<EOF
 #!/bin/sh
 
@@ -66,13 +68,22 @@ while ! umount -n /old 2>/dev/null && [ "\$TIMEOUT" != "....." ] ; do
 	TIMEOUT=".\$TIMEOUT"
 done
 [ "\$TIMEOUT" = "....." ] && fail
+
 dmsetup remove_all || fail
 losetup -d /dev/loop0 || fail
 umount -n /.cdrom || fail
-eject -r /dev/lfs-cd
-echo -n "Take the CD, close the CD-ROM tray and press Enter..."
-( sleep 30 ; halt ) &
-read ENTER
+
+if [ -d /.partition ] ; then
+	losetup -d /dev/loop3 || fail
+	umount -n /.partition || fail
+fi
+
+if [ -b /dev/lfs-cd ] ; then
+	eject -r /dev/lfs-cd
+	echo -n "Take the CD, close the CD-ROM tray and press Enter..."
+	( sleep 30 ; halt ) &
+	read ENTER
+fi
 halt
 EOF
 chmod 755 /dev/shm/sbin/init
