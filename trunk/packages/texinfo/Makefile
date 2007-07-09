@@ -5,7 +5,7 @@ VRS= 4.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnu.org/texinfo/$(FILE)
+URL-$(FILE)= http://ftp.gnu.org/gnu/texinfo/$(FILE)
 SHA-$(FILE)= 19a0cc0b56cbfcfe610925bef31e0bdf749492c9
 
 PATCH1= $(DIR)-tempfile_fix-1.patch
