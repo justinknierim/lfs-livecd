@@ -23,7 +23,7 @@ pass1: $(FILE)
 
 compile-pass1:
 # --enable-static overrides the unsuitable default in config.site
-	unset CFLAGS ; ../$(DIR)/configure --prefix=$(WD) \
+	unset CFLAGS ; CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
 	 --enable-languages=c --enable-static
 	unset CFLAGS ; make bootstrap
