@@ -36,7 +36,7 @@ case "$RUNLEVEL" in
 		;;
 esac
 
-if [ ! -b /dev/lfs-cd ] && [ ! -d /.tmpfs/.partition ] ; then
+if [ ! -b /dev/lfs-cd ] && [ ! -d /dev/shm/.partition ] ; then
 	# The CD has been loaded into RAM
 	$HALT
 	while true ; do sleep 1 ; done
@@ -45,7 +45,7 @@ fi
 mkdir /dev/shm/old /dev/shm/proc /dev/shm/etc
 ln -s /proc/mounts /dev/shm/etc/mtab
 echo "$FILES" | cpio -pLd --quiet /dev/shm
-if [ -b /dev/lfs-cd ] ; then cp -a /dev/lfs-cd /dev/shm/dev/lfs-cd ; fi
+if [ -b /dev/lfs-cd ] ; then cp -RH /dev/lfs-cd /dev/shm/dev/lfs-cd ; fi
 
 cat >/dev/shm/sbin/init <<EOF
 #!/bin/sh
