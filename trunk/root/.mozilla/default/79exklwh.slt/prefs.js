@@ -25,6 +25,7 @@ user_pref("extensions.irc.nickCompleteStr", ":");
 user_pref("extensions.irc.nickname", "lfs-livecd");
 user_pref("extensions.irc.username", "guest");
 user_pref("extensions.lastAppVersion", "1.0");
+user_pref("general.skins.selectedSkin", "modern/1.0");
 user_pref("intl.charsetmenu.browser.cache", "UTF-8, ISO-8859-1");
 user_pref("mailnews.send_default_charset", "UTF-8");
 user_pref("network.cookie.prefsMigrated", true);
