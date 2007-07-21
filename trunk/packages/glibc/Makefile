@@ -12,9 +12,9 @@ FILE2= $(NM)-libidn-$(VRS).tar.bz2
 URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
 SHA-$(FILE2)= ee7e019e01aa338e28db1eeb34abb2cb09d2f30a
 
-PATCH1= $(DIR)-branch_update-2.patch
+PATCH1= $(DIR)-branch_update-3.patch
 URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-SHA-$(PATCH1)= e1f19b65f695bdac94245212e3b3f6b5aa18b82c
+SHA-$(PATCH1)= 3af17e283bf76659c189ee05f2ae56f19a88478c
 
 PATCH50= $(DIR)-supported_locales-1.patch
 

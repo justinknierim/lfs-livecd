@@ -40,7 +40,7 @@ compile-stage2:
 	cp /sbin/pcmcia-{check-broken-cis,socket-startup} $(WDIR)/sbin
 	cp /usr/bin/stat $(WDIR)/bin
 	cp /usr/sbin/dmsetup $(WDIR)/sbin
-	find /lib/modules/*/kernel/drivers/{ata,base,block,cdrom,ide,message,scsi,pcmcia,usb/{core,host,storage,input}} \
+	find /lib/modules/*/kernel/drivers/{ata,base,block,cdrom,ide,ieee1394,firewire,hid,message,scsi,pcmcia,usb/{core,host,storage}} \
 	    /lib/modules/*/kernel/fs/{mbcache.ko,ext2,ext3,ext4,jbd,reiserfs,xfs,fat,vfat,ntfs,isofs,udf,nls} \
 	    /lib/modules/*/kernel/lib -type f | cpio --make-directories -p $(WDIR)
 	for a in /lib/modules/* ; do ver=$${a##*/} ; depmod -b $(WDIR) $$ver ; done

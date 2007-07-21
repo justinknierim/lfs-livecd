@@ -4,6 +4,7 @@ EXPECTED_LABEL="lfslivecd-@VERSION@"
 EXPECTED_LABEL="$EXPECTED_LABEL                                "
 EXPECTED_LABEL=${EXPECTED_LABEL:0:32}
 PATA=0
+NEW_FIREWIRE=0
 
 init=/sbin/init
 root=
@@ -224,6 +225,9 @@ for param in $cmdline ; do
 	pata)
 		PATA=1
 		;;
+	new_firewire)
+		NEW_FIREWIRE=1
+		;;
 	all_generic_ide)
 		all_generic_ide=1
 		;;
@@ -286,9 +290,32 @@ case "$PATA" in
 		;;
 esac
 
+case "$NEW_FIREWIRE" in
+	0)
+		for driver in /lib/modules/`uname -r`/kernel/drivers/firewire/*.ko ; do
+			drv=${driver##*/}
+			drv=${drv%.ko}
+			echo "blacklist $drv" >>/etc/modprobe.conf
+		done
+		;;
+	1)
+		for driver in /lib/modules/`uname -r`/kernel/drivers/ieee1394/*.ko ; do
+			drv=${driver##*/}
+			drv=${drv%.ko}
+			echo "blacklist $drv" >>/etc/modprobe.conf
+		done
+		;;
+esac
+
 if [ "$all_generic_ide" = 1 ] ; then
 	echo "options generic all_generic_ide=1" >>/etc/modprobe.conf
 	echo "options ata-generic all_generic_ide=1" >>/etc/modprobe.conf
+else
+	if [ "$PATA" = 0 ] ; then
+		echo "blacklist generic" >>/etc/modprobe.conf
+	else
+		echo "blacklist ata-generic" >>/etc/modprobe.conf
+	fi
 fi
 
 /sbin/udevd --daemon

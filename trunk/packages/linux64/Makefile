@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.21.5
+VRS= 2.6.22.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= f6e5507bf9d46563a845edfa174ac22bfa2f8896
+SHA-$(FILE)= 7aa119f88768c3070f96a48562ea68b2ecd8a2ef
 
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
@@ -44,6 +44,8 @@ compile-stage2:
 	patch -Np1 -i ../$(PATCH3)
 	make mrproper
 	cp ../config.x86_64 .config
+	# Hack for fglrx
+	touch include/linux/ioctl32.h
 	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	PATH=$$PATH:$(WD)/bin make modules_install ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
