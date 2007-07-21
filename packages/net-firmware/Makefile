@@ -63,6 +63,15 @@ FILE13= MC&DriverOnlyInstallers.zip
 URL-$(FILE13)= ftp://symstore.longisland.com/Symstore/services_download/wirless_prod/$(FILE13)
 SHA-$(FILE13)= b597eb9afc23beca309e8e8001edd88e5521dd92
 
+FILE14= usb8388_A1_W8015FP14_FW2.bin
+URL-$(FILE14)= http://www.marvell.com/drivers/upload/$(FILE14)
+SHA-$(FILE14)= 5e351ab2ac01e8648a2012800ad2d67b06d2870e
+
+DIR15= stir4210_4220_4116_patch_files
+FILE15= $(DIR15).tar.gz
+URL-$(FILE15)= http://www.sigmatel.com/documents/$(FILE15)
+SHA-$(FILE15)= bee20b114e3f29c28819ec6a716472621bf6ac47
+
 ALLFILES= $(foreach FILE,$(sort $(filter FILE%,$(.VARIABLES))),$($(FILE)))
 
 # Targets
@@ -89,6 +98,8 @@ stage2: Makefile $(ALLFILES)
 	    cp $(DIR11)/zd* /lib/firmware/zd1211
 	@tar xf $(FILE12) ; cd $(DIR12) ; cp "../$(FILE13)" . ; \
 	    ./get_symbol_fw ; cp symbol_* /lib/firmware
+	@cp $(FILE14) /lib/firmware/usb8388.bin
+	@mkdir $(DIR15) ; cd $(DIR15) ; tar xf ../$(FILE15) ; install -m 644 *.sb /lib/firmware
 	@make clean
 	@touch $@
 
