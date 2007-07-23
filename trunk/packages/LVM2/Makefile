@@ -1,12 +1,12 @@
 # lvm2 Makefile
 
 NM= LVM2
-VRS= 2.02.26
+VRS= 2.02.27
 DIR= $(NM).$(VRS)
 
 FILE= $(DIR).tgz
 URL-$(FILE)= ftp://sources.redhat.com/pub/lvm2/$(FILE)
-SHA-$(FILE)= 10b59327f08d62c835513d04429066150ebd27a8
+SHA-$(FILE)= 0deae8047c934a370d8e825675a514c6f413428f
 
 # Targets
 
