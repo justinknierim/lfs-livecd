@@ -1,12 +1,12 @@
 # iptables Makefile
 
 NM= iptables
-VRS= 1.3.7
+VRS= 1.3.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.netfilter.org/projects/iptables/files/$(FILE)
-SHA-$(FILE)= 2f25e7a81fb3e81f92b0121d9dcd5a536854dc60
+SHA-$(FILE)= 948f361b194e989b39de4cfa3e95dbe634269ed0
 
 # Targets
 
@@ -20,8 +20,8 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man
-	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man install
+	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man KERNEL_DIR=/usr
+	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man KERNEL_DIR=/usr install
 
 clean:
 	-rm -rf $(DIR)
