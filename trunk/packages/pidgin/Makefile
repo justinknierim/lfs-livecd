@@ -1,12 +1,12 @@
 # pidgin Makefile
 
 NM= pidgin
-VRS= 2.0.0
+VRS= 2.0.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://puzzle.dl.sourceforge.net/sourceforge/pidgin/$(FILE)
-SHA-$(FILE)= 7bfe348abc25307845e8de1d0fe2b761293ab071
+SHA-$(FILE)= 7f5cdc3e8fb8b8af9646bb0635b2852c24f7e059
 
 # Targets
 
@@ -24,7 +24,7 @@ compile-stage2:
 	./configure --prefix=/usr --disable-dbus
 	make
 	make install
-	svn export --force $(ROOT)/root/.gaim /root/.gaim
+	svn export --force $(ROOT)/root/.purple /root/.purple
 
 clean:
 	-rm -rf $(DIR)

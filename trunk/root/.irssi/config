@@ -124,7 +124,7 @@ chatnets = {
     type = "IRC";
     nick = "lfs-livecd";
     username = "guest";
-    realname = "guest";
+    realname = "LFS LiveCD";
   };
 };
 
