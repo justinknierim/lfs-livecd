@@ -1,12 +1,12 @@
-# Firefox Makefile
+# Seamonkey Makefile
 
 NM= seamonkey
-VRS= 1.1.2
+VRS= 1.1.3
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://releases.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= d0aa219b54a54cd75e690a458280b0d12bcf9607
+SHA-$(FILE)= 3f7136c8b746d8c789e41839e99465ad4baa1ccb
 
 MFH=/usr/lib/seamonkey-$(VRS)
 
