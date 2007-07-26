@@ -1,12 +1,12 @@
 # XFS Progs Makefile
 
 NM= xfsprogs
-VRS= 2.8.18
+VRS= 2.9.3
 DIR= $(NM)-$(VRS)
 
 FILE=$(NM)_$(VRS)-1.tar.gz
-URL-$(FILE)= http://mirrors.sunsite.dk/xfs/download/cmd_tars/$(FILE)
-SHA-$(FILE)= 12ed1cbc5784e5df9a8a2a1c7a061ba459647e80
+URL-$(FILE)= ftp://oss.sgi.com/projects/xfs/cmd_tars/$(FILE)
+SHA-$(FILE)= 79996d24faefa89d46eb678d4c1c08d25d20dec7
 
 # Targets
 
