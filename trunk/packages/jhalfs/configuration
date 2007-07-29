@@ -25,6 +25,9 @@ BOOK="/usr/share/LFS-BOOK-SVN-XML"
 # ARCH_SPARC is not set
 # ARCH_ALPHA is not set
 # ARCH_ARM is not set
+# ARCH_HPPA is not set
+# PLATFORM_GENERIC is not set
+# PLATFORM_WRT is not set
 # DATA_32 is not set
 # DATA_64 is not set
 # DATA_MULTI is not set
@@ -33,11 +36,33 @@ BOOK="/usr/share/LFS-BOOK-SVN-XML"
 # PROC_i686 is not set
 # PROC_mipsel is not set
 # PROC_mips is not set
+# PROC_unknown is not set
+# PROC_hppa1 is not set
+# PROC_hppa2 is not set
+# PROC_EV5 is not set
+# PROC_EV56 is not set
+# PROC_PCA56 is not set
+# PROC_PCA57 is not set
+# PROC_EV6 is not set
+# PROC_EV67 is not set
+# PROC_EV68 is not set
+# PROC_ARM is not set
+# PROC_ARM5L is not set
+# PROC_ARM5B is not set
+# PROC_ULTRA1 is not set
+# PROC_ULTRA2 is not set
+# PROC_ULTRA3 is not set
+# ABI_32 is not set
+# ABI_N32 is not set
+# ABI_64 is not set
 TARGET=""
 TARGET32=""
+PLATFORM="GENERIC"
+SPARC64_PROC="none"
 ARCH=""
 MIPS_LEVEL=""
 ABI=""
+ENDIAN=""
 # BUILD_CHROOT is not set
 # BUILD_BOOT is not set
 METHOD=""
@@ -46,6 +71,16 @@ BOOT_CONFIG=""
 # LIB_GLIBC is not set
 # LIB_UCLIBC is not set
 MODEL=""
+# KERNEL_26 is not set
+# KERNEL_24 is not set
+KERNEL=""
+SSP=",ssp,"
+ASLR=",aslr,"
+PAX=",pax,"
+HARDENED_TMP=",hardened_tmp,"
+WARNINGS=",warnings,"
+MISC=",misc,"
+BLOWFISH=",blowfish,"
 # CUSTOM_TOOLS is not set
 # BLFS_TOOL is not set
 # BLFS_SVN is not set
@@ -56,12 +91,11 @@ BLFS_BRANCH_ID=""
 # DEP_TIDY is not set
 # DEP_DBXML is not set
 # DEP_UNZIP is not set
-# DEP_DBXSL is not set
 # DEP_LINKS is not set
 # DEP_SUDO is not set
 # DEP_WGET is not set
-# DEP_SVN is not set
 # DEP_GPM is not set
+# DEP_SVN is not set
 BLFS_ROOT=""
 BLFS_XML=""
 TRACKING_DIR=""
@@ -74,8 +108,11 @@ DEF_USER="lfs"
 SET_USER=""
 # CONFIG_GROUP is not set
 SET_GROUP=""
+# CONFIG_HOME is not set
+SET_HOME=""
 LUSER="lfs"
 LGROUP="lfs"
+LHOME="/home"
 BUILDDIR="/mnt/build_dir"
 GETPKG=y
 SRC_ARCHIVE="/lfs-sources"
@@ -95,6 +132,7 @@ TEST=1
 NO_BOMB=y
 # BOMB is not set
 # BOMB_TEST is not set
+# INSTALL_LOG is not set
 # HAVE_FSTAB is not set
 FSTAB=""
 # CONFIG_BUILD_KERNEL is not set
@@ -103,7 +141,6 @@ STRIP=y
 VIMLANG=y
 TIMEZONE="GMT"
 LANG="$LANG"
-LC_ALL=""
 PAGE_LETTER=y
 # PAGE_A4 is not set
 PAGE="letter"
@@ -126,8 +163,12 @@ OPTIMIZE=0
 #
 SCRIPT_ROOT="jhalfs"
 JHALFSDIR="$BUILDDIR/$SCRIPT_ROOT"
+LOGDIRBASE="logs"
 LOGDIR="$JHALFSDIR/logs"
+TESTLOGDIRBASE="test-logs"
 TESTLOGDIR="$JHALFSDIR/test-logs"
+FILELOGDIRBASE="installed-files"
+FILELOGDIR="$JHALFSDIR/$FILELOGDIRBASE"
 ICALOGDIR="$LOGDIR/ICA"
 FARCELOGDIR="$LOGDIR/farce"
 MKFILE="$JHALFSDIR/Makefile"
