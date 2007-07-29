@@ -1,12 +1,12 @@
 # jhalfs Makefile
 
 NM= jhalfs
-VRS= 2.2
+VRS= 2.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/jhalfs/stable/$(FILE)
-SHA-$(FILE)= cd62df2c35c3502f26a85f7f96fcae4a8f7afddb
+SHA-$(FILE)= 1d4d9530692cced7bccf10122d28ff814d5195a6
 
 FILE1= configuration
 # Targets
