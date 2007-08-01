@@ -75,7 +75,6 @@ ifeq ($(CD_ARCH),x86_64)
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver.native $$a $(VRS)-64bit ; done
 	mv *.tgz /drivers
-	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 endif
 
