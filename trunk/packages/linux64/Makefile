@@ -8,6 +8,10 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
 SHA-$(FILE)= 7aa119f88768c3070f96a48562ea68b2ecd8a2ef
 
+PATCH1= reiser4-for-2.6.22-2.patch.gz
+URL-$(PATCH1)= ftp://ftp.namesys.com/pub/reiser4-for-2.6/2.6.22/$(PATCH1)
+SHA-$(PATCH1)= a49f8a6d9851915c31f4c44e00519e0e4d2461c7
+
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
 FILE1= ati-driver-installer-8.38.6-x86.x86_64.run
@@ -37,10 +41,11 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM)64 $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
+	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH3)
 	make mrproper
 	cp ../config.x86_64 .config

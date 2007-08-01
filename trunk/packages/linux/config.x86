@@ -1,7 +1,7 @@
 #
 # Automatically generated make config: don't edit
 # Linux kernel version: 2.6.22.1
-# Sat Jul 21 15:07:32 2007
+# Wed Aug  1 18:31:58 2007
 #
 CONFIG_X86_32=y
 CONFIG_GENERIC_TIME=y
@@ -1966,6 +1966,8 @@ CONFIG_JBD=m
 CONFIG_JBD2=m
 # CONFIG_JBD2_DEBUG is not set
 CONFIG_FS_MBCACHE=m
+CONFIG_REISER4_FS=m
+# CONFIG_REISER4_DEBUG is not set
 CONFIG_REISERFS_FS=m
 # CONFIG_REISERFS_CHECK is not set
 CONFIG_REISERFS_PROC_INFO=y

@@ -1,12 +1,12 @@
 # Reiser4progs Makefile
 
 NM= reiser4progs
-VRS= 1.0.5
+VRS= 1.0.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.namesys.com/pub/reiser4progs/$(FILE) 
-SHA-$(FILE)= c2a173d34a87776da79a13c85b17cd3a14fb3abc
+SHA-$(FILE)= 9acc4f829c5760ee159cb3f507e58478e578990d
 
 # Targets
 
@@ -20,8 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	# GRUB doesn't like shared libreiser4_minimal
-	./configure --prefix=/usr --sbindir=/sbin --enable-static
+	./configure --prefix=/usr --sbindir=/sbin
 	make
 	make install
 	ln -sf mkfs.reiser4 /sbin/mkreiser4fs
