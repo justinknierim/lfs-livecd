@@ -12,31 +12,40 @@
 # Unless otherwise noted, please try to keep all line lengths below 80 chars. 
 #
 
-# Machine architecure, LiveCD version, and specific arch variables.
-#==============================================================================
-
 # Place your personal customizations in Makefile.personal
 # instead of editing this Makefile.
 # Makefile.personal is deliberately not in SVN.
 
 -include Makefile.personal
 
-#==============================================================================
-
-# Here are the various variables you might want/need to change. You can change
-# them here or in Makefile.personal. Variables mentioned in the README will not
-# be commented on here.
+# Here are the various variables you might want/need to change.
+# Variables mentioned in the README will not be commented on here.
 
 export MPBASE ?= /mnt/lfs
 
 # Free disk space needed for the build.
 ROOTFS_MEGS := 1536
 
-export VERSION ?= x86-6.3-pre2
-export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing -mtune=i686
-export CXXFLAGS ?= $(CFLAGS)
-export LFS_TARGET ?= i486-pc-linux-gnu
+# Machine architecure, LiveCD version, and specific arch variables.
+#==============================================================================
 
+export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
+export VERSION ?= $(CD_ARCH)-6.3-pre2
+export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing
+
+ifeq ($(CD_ARCH),x86)
+export LFS_TARGET ?= i486-pc-linux-gnu
+export CFLAGS := $(CFLAGS) -mtune=i686
+export LINKER := ld-linux.so.2
+endif
+
+ifeq ($(CD_ARH),x86_64)
+export 64bit = true
+export LFS_TARGET ?= $(MACHTYPE)
+export LINKER := ld-linux-x86-64.so.2
+endif
+
+export CXXFLAGS ?= $(CFLAGS)
 
 # Default timezone
 export timezone ?= GMT
@@ -102,6 +111,9 @@ test-host:
 	@if [ `whoami` != "root" ] ; then \
 	 echo "You must be logged in as root." && exit 1 ; fi
 
+test-env:
+	env
+
 # This image should be kept as clean as possible, i.e.:
 # avoid creating files on it that you will later delete,
 # preserve as many zeroed sectors as possible.
@@ -161,6 +173,10 @@ $(MKTREE): root.ext2
 	-ln -s /proc/self/fd/2 $(MP)/dev/stderr
 	-ln -s /proc/kcore $(MP)/dev/core
 	touch $(MKTREE)
+ifdef 64bit
+	-if [ ! -L $(MP)/lib64 ] ; then ln -s lib $(MP)/lib64 ; fi
+	-if [ ! -L $(MP)/usr/lib64 ] ; then ln -s lib $(MP)/usr/lib64 ; fi
+endif
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
 #==============================================================================
@@ -263,17 +279,24 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-device-mapper ch-LVM2 ch-dmraid \
 	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-pptp \
 	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which ch-brltty  \
-	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm ch-linux \
+	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
 	ch-blfs-bootscripts ch-oui-data \
 	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-hibernate-script ch-slang ch-mc \
-	ch-fuse ch-dosfstools ch-ntfsprogs ch-libaal ch-reiser4progs \
-	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
-	ch-binutils64 ch-gcc64 ch-linux64 ch-scsi-firmware ch-net-firmware \
-	ch-initramfs ch-gcc33
+	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
+	ch-libaal ch-reiser4progs ch-vbetool ch-bin86 ch-lilo ch-syslinux \
+	ch-scsi-firmware ch-net-firmware
+ifeq ($(CD_ARCH),x86)
+	make ch-grub
+	make ch-linux
+	make ch-binutils64
+	make ch-gcc64
+endif
+	make ch-linux64
+	make ch-initramfs
+	make ch-gcc33
 	make update-caches
 
 wget-list:
@@ -360,7 +383,6 @@ final-environment:
 	@-cp $(ROOT)/etc/fstab /etc
 
 update-caches:
-	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
 	mandb -c 2>/dev/null
 	echo 'dummy / ext2 defaults 0 0' >/etc/mtab
 	updatedb --prunepaths='/sources /tools /lfs-livecd /lfs-sources /proc /sys /dev /tmp /var/tmp'
@@ -378,7 +400,11 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
+	@install -m644 isolinux/{isolinux.cfg,splash.lss} $(MP)/boot/isolinux
+ifeq ($(CD_ARCH),x86_64)
+	@sed -i -e '/linux64/d' -e 's/ 32-bit//' $(MP)/boot/isolinux/options.msg
+	@sed -i '/linux64/,$$d' $(MP)/boot/isolinux/isolinux.cfg
+endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue*
 	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root

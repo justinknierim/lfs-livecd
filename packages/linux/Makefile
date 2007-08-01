@@ -47,7 +47,7 @@ stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(PATCH1)
 compile-stage2:
 	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH3)
-	mkdir -p /boot/isolinux
+	install -d /boot/isolinux
 	make mrproper
 	cp ../config.x86 .config
 	make

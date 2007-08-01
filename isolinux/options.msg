@@ -1,27 +1,31 @@
-7007To use a framebuffer console, type "linux vga=xxx"
-where xxx denotes a screen resolution and color depth.
-This has nothing to do with X server resolution, and bug reports
-about X window system will be ignored if you pass this parameter.
+7007To specify options at boot time, type [kernel] [options]
+Available kernels:
+linux - The default 32-bit kernel
+linux64 - A 64-bit kernel for use with CLFS
 
-Examples:
+Basic options:
+vga=[res]
+  Examples:
+  vga=795 (1280x1024x24)  vga=794 (1280x1024x16)
+  vga=792 (1024x768x24)   vga=791 (1024x768x16)
+  vga=789 (800x600x24)    vga=788 (800x600x16)
 
-795 = 1280x1024x24   794 = 1280x1024x16
-792 = 1024x768x24    791 = 1024x768x16
-789 = 800x600x24     788 = 800x600x16
+  NOTE: This is for the framebuffer console and has nothing
+  to do with X server resolution.
 
-A 64-bit kernel for use with CLFS is available as "linux64"
+TZ=[timezone]
+  Examples:
+  TZ=EDT-4    TZ=America/New_York
 
-To set your timezone, add TZ=your_timezone anywhere
-after "linux" or "linux.ata". For example, TZ=EDT+4 means that the
-timezone is named "EDT" and is 4 hours behind (west) of UTC.
-Specifications like TZ=America/New_York also work.
-Also, add UTC=1 if the hardware clock in your computer
-is set to UTC instead of local time.
+  The first example means that the timezone is named "EDT"
+  and is 4 hours behind (west) of UTC.
 
-Set your locale by adding LANG=your_locale anywhere after "linux".
+UTC=[0,1]
+  Use UTC=1 if the hardware clock is set to UTC or
+  use UTC=0 if the hardware clock is set to local time.
+
+LANG=[locale]
 
 If you don't specify your timezone or locale at the boot prompt,
 a configuration dialog will appear later during boot.
-
-More information is available in /root/README on this CD.
 

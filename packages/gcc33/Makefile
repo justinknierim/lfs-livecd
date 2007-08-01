@@ -34,7 +34,8 @@ compile-stage2:
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
 	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static \
-	 --build=$(LFS_TARGET) --host=$(LFS_TARGET) --target=$(LFS_TARGET)
+	 --build=$(LFS_TARGET) --host=$(LFS_TARGET) --target=$(LFS_TARGET) \
+	 --disable-multilib
 	make bootstrap
 	cp -av $(LFS_TARGET)/libstdc++-v3/src/.libs/libstdc++.so.5* /usr/lib
 

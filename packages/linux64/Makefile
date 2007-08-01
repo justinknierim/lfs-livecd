@@ -47,10 +47,12 @@ stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(PATCH1)
 compile-stage2:
 	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH3)
+	install -d /boot/isolinux
 	make mrproper
 	cp ../config.x86_64 .config
 	# Hack for fglrx
 	touch include/linux/ioctl32.h
+ifeq ($(CD_ARCH),x86)
 	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	PATH=$$PATH:$(WD)/bin make modules_install ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
@@ -62,6 +64,20 @@ compile-stage2:
 	mv *.tgz /drivers
 	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
+endif
+ifeq ($(CD_ARCH),x86_64)
+	make
+	make modules_install
+	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
+	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
+	chmod 755 ../fakes-for-fglrx/{uname,cat}
+	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/All
+	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
+	    sh ../$$a.run -x ; ../build-nvidia-driver.native $$a $(VRS)-64bit ; done
+	mv *.tgz /drivers
+	rm /lib/modules/*-64bit/{source,build}
+	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
+endif
 
 clean:
 	-rm -rf $(DIR)
