@@ -270,7 +270,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-slang ch-mc \
-	ch-fuse ch-dosfstools ch-ntfsprogs \
+	ch-fuse ch-dosfstools ch-ntfsprogs ch-libaal ch-reiser4progs \
 	ch-vbetool ch-bin86 ch-grub ch-lilo ch-syslinux \
 	ch-binutils64 ch-gcc64 ch-linux64 ch-scsi-firmware ch-net-firmware \
 	ch-initramfs ch-gcc33
