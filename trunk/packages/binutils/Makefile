@@ -24,13 +24,16 @@ compile-pass1:
 	unset CFLAGS ; make -C ld clean
 	unset CFLAGS ; make -C ld LIB_PATH=$(WD)/lib
 	cp -v ld/ld-new $(WD)/bin
+ifdef 64bit
+	ln -s lib $(WD)/lib64
+endif
 
 adjust-toolchain:
 	mv -v $(WD)/bin/{ld,ld-old}
 	mv -v $(WD)/$$(gcc -dumpmachine)/bin/{ld,ld-old}
 	mv -v $(WD)/bin/{ld-new,ld}
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
-	gcc -dumpspecs | sed 's@^/lib/ld-linux.so.2@/tools&@g' \
+	gcc -dumpspecs | sed 's@/lib[64]*/$(LINKER)@/tools&@g' \
 	  > `dirname $$(gcc -print-libgcc-file-name)`/specs
 	GCC_INCLUDEDIR=`dirname $$(gcc -print-libgcc-file-name)`/include && \
 	find $${GCC_INCLUDEDIR}/* -maxdepth 0 -xtype d -exec rm -rvf '{}' \; && \
@@ -60,8 +63,7 @@ re-adjust-toolchain:
 	mv -v $(WD)/$$(gcc -dumpmachine)/bin/{ld,ld-old}
 	mv -v $(WD)/bin/{ld-new,ld}
 	ln -sv $(WD)/bin/ld $(WD)/$$(gcc -dumpmachine)/bin/ld
-	gcc -dumpspecs | sed \
-	    -e 's@/tools/lib/ld-linux.so.2@/lib/ld-linux.so.2@g' \
+	gcc -dumpspecs | sed -e 's@/tools@@g' \
 	    -e '/\*startfile_prefix_spec:/{n;s@.*@/usr/lib/ @}' \
 	    -e '/\*cpp:/{n;s@$$@ -isystem /usr/include@}' > \
 	     `dirname $$(gcc --print-libgcc-file-name)`/specs

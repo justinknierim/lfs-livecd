@@ -28,14 +28,14 @@ compile-stage1:
 	make install
 
 compile-stage2:
-	./configure --prefix=/usr --shared --libdir=/lib
-	make
+	unset CFLAGS ; ./configure --prefix=/usr --shared --libdir=/lib
+	unset CFLAGS ; make
 	make install
 	rm /lib/libz.so
 	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
 	make clean
-	./configure --prefix=/usr
-	make
+	unset CFLAGS ; ./configure --prefix=/usr
+	unset CFLAGS ; make
 	make install
 	chmod 644 /usr/lib/libz.a
 

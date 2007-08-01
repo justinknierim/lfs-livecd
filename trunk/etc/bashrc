@@ -12,7 +12,7 @@ case $TERM in
 	xterm*)
 		BOLD=$WHITE ;;
 	*)
-		BOLD="\[\033[0;38m\]" ;;
+		BOLD="\[\033[0;1m\]" ;;
 esac
 
 # Prompt

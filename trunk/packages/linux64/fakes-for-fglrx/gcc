@@ -4,6 +4,13 @@ case "$1" in
 	echo "gcc (GCC) 4.1.2"
 	;;
 *)
-	/tools/bin/x86_64-unknown-linux-gnu-gcc "$@"
+	case `/bin/uname -m` in
+		x86_64)
+			/usr/bin/gcc "$@"
+			;;
+		*)
+			/tools/bin/x86_64-unknown-linux-gnu-gcc "$@"
+			;;
+	esac
 	;;
 esac

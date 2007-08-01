@@ -25,7 +25,7 @@ compile-pass1:
 # --enable-static overrides the unsuitable default in config.site
 	unset CFLAGS ; CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
-	 --enable-languages=c --enable-static
+	 --enable-languages=c --enable-static --disable-multilib
 	unset CFLAGS ; make bootstrap
 	unset CFLAGS ; make install
 	ln -vs gcc $(WD)/bin/cc
@@ -40,11 +40,16 @@ compile-pass2:
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
 	 > gcc/Makefile.in
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+ifdef 64bit
+	cd ../$(DIR) ; cp -v gcc/config/i386/t-linux64{,.tmp} && \
+	 sed '/MULTILIB_OSDIRNAMES/d' gcc/config/i386/t-linux64.tmp \
+	 > gcc/config/i386/t-linux64
+endif
 # --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
 	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
-	 --disable-libstdcxx-pch --enable-static
+	 --disable-libstdcxx-pch --enable-static --disable-multilib
 	make
 	make install
 
@@ -65,7 +70,8 @@ compile-stage2:
 # --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static
+	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static \
+	 --disable-multilib
 	make
 	-make -k check
 	make install

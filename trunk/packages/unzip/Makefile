@@ -20,7 +20,11 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifeq ($(CD_ARCH),x86)
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
+else
+	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux_noasm
+endif
 	make prefix=/usr MANDIR=/usr/share/man/man1 install
 
 clean:

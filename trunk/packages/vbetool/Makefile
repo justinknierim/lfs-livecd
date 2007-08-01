@@ -21,7 +21,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+ifeq ($(CD_ARCH),x86)
 	./configure --prefix=/usr
+endif
+ifeq ($(CD_ARCH),x86_64)
+	./configure --prefix=/usr --with-x86emu
+endif
 	make
 	make install
 

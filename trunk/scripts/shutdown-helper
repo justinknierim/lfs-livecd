@@ -1,7 +1,13 @@
 #!/bin/sh
 
+case `uname -m` in
+        i[3456]86) LINKER="ld-linux.so.2" ;;
+
+        x86_64) LINKER="ld-linux-x86-64.so.2" ;;
+esac
+
 FILES="/lib/libc.so.6
-/lib/ld-linux.so.2
+/lib/${LINKER}
 /lib/libreadline.so.5
 /lib/libhistory.so.5
 /lib/libncursesw.so.5
@@ -45,6 +51,12 @@ fi
 mkdir /dev/shm/old /dev/shm/proc /dev/shm/etc
 ln -s /proc/mounts /dev/shm/etc/mtab
 echo "$FILES" | cpio -pLd --quiet /dev/shm
+case `uname -m` in
+	x86_64)
+		ln -s lib /dev/shm/lib64
+		ln -s lib /dev/shm/usr/lib64
+		;;
+esac
 if [ -b /dev/lfs-cd ] ; then cp -RH /dev/lfs-cd /dev/shm/dev/lfs-cd ; fi
 
 cat >/dev/shm/sbin/init <<EOF

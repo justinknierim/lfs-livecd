@@ -50,7 +50,7 @@ compile-stage2:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 	cd ../$(DIR) ; unpack ../$(FILE2) ; mv glibc-libidn-$(VRS) libidn
 	sed -i \
-	's|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=/lib/ld-linux.so.2 -o|' \
+	's|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=/lib/$(LINKER) -o|' \
 	        ../$(DIR)/scripts/test-installation.pl
 # LiveCD specific locale additions
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH50)

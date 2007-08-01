@@ -10,10 +10,15 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 8225
+REV= 8250
 REVPARM= -r $(REV)
 
+ifeq ($(CD_ARCH),x86)
 URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+endif
+ifeq ($(CD_ARCH),x86_64)
+URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK
+endif
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
@@ -46,5 +51,6 @@ compile-stage2:
 
 clean:
 	-rm -rf tmp
+	-rm -rf $(ROOT)/root/tmp
 
 .PHONY: clean chroot compile-stage2
