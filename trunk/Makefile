@@ -383,6 +383,7 @@ final-environment:
 	@-cp $(ROOT)/etc/fstab /etc
 
 update-caches:
+	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
 	mandb -c 2>/dev/null
 	echo 'dummy / ext2 defaults 0 0' >/etc/mtab
 	updatedb --prunepaths='/sources /tools /lfs-livecd /lfs-sources /proc /sys /dev /tmp /var/tmp'
@@ -400,7 +401,7 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-	@install -m644 isolinux/{isolinux.cfg,splash.lss} $(MP)/boot/isolinux
+	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
 ifeq ($(CD_ARCH),x86_64)
 	@sed -i -e '/linux64/d' -e 's/ 32-bit//' $(MP)/boot/isolinux/options.msg
 	@sed -i '/linux64/,$$d' $(MP)/boot/isolinux/isolinux.cfg
