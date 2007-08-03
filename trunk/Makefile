@@ -453,7 +453,7 @@ clean: unmount
 	@-rm root.ext2
 
 scrub: clean
-	@-rm lfslivecd-$(VERSION).iso
+	@rm -f lfslivecd-$(VERSION).iso lfslivecd-$(VERSION)-nosrc.iso
 
 mount: $(MKTREE)
 
