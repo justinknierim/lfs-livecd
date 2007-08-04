@@ -27,6 +27,8 @@ export MPBASE ?= /mnt/lfs
 ROOTFS_MEGS := 1536
 
 # Machine architecure, LiveCD version, and specific arch variables.
+# When building a 32-bit CD from a 64-bit multilib host,
+# please use "linux32 make" instead of plain "make".
 #==============================================================================
 
 export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
@@ -39,9 +41,9 @@ export CFLAGS := $(CFLAGS) -mtune=i686
 export LINKER := ld-linux.so.2
 endif
 
-ifeq ($(CD_ARH),x86_64)
+ifeq ($(CD_ARCH),x86_64)
 export 64bit = true
-export LFS_TARGET ?= $(MACHTYPE)
+export LFS_TARGET ?= x86_64-unknown-linux-gnu
 export LINKER := ld-linux-x86-64.so.2
 endif
 
