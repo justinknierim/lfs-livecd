@@ -1,20 +1,16 @@
 # Glibc Makefile
 
 NM= glibc
-VRS= 2.5
+VRS= 2.5.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= ec9a007c4875062099a4701ac9137fcdb5a71447
+URL-$(FILE)= http://ftp.gnu.org/gnu/glibc/$(FILE)
+SHA-$(FILE)= 2b7da136df025bb8c787be3351cba58374226d9c
 
-FILE2= $(NM)-libidn-$(VRS).tar.bz2
-URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
-SHA-$(FILE2)= ee7e019e01aa338e28db1eeb34abb2cb09d2f30a
-
-PATCH1= $(DIR)-branch_update-3.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
-SHA-$(PATCH1)= 3af17e283bf76659c189ee05f2ae56f19a88478c
+FILE2= $(NM)-libidn-$(VRS).tar.gz
+URL-$(FILE2)= http://ftp.gnu.org/gnu/glibc/$(FILE2)
+SHA-$(FILE2)= 816f410835a8d4ecbccdfed2d86ccc6284c2fa92
 
 PATCH50= $(DIR)-supported_locales-1.patch
 
@@ -22,11 +18,10 @@ PATCH50= $(DIR)-supported_locales-1.patch
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE) $(FILE2) $(PATCH1)
+stage1: $(FILE) $(FILE2)
 	$(sep_dir_build)
 
 compile-stage1:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 # --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
@@ -42,12 +37,11 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(FILE) $(FILE2) $(PATCH1)
+stage2: $(FILE) $(FILE2)
 	$(sep_dir_build)
 	touch $@
 
 compile-stage2:
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 	cd ../$(DIR) ; unpack ../$(FILE2) ; mv glibc-libidn-$(VRS) libidn
 	sed -i \
 	's|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=/lib/$(LINKER) -o|' \

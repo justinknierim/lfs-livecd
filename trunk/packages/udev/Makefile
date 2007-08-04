@@ -2,7 +2,7 @@
 
 NM= udev
 VRS= 113
-CONFVRS= 20070304
+CONFVRS= 20070731
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
 
@@ -12,7 +12,7 @@ SHA-$(FILE)= 55bea7ec61026b2ecc9d2013da0ef4eed76de948
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/development/$(FILE1)
-SHA-$(FILE1)= 22264702f2de999c513e43af04c8ef9262a15343
+SHA-$(FILE1)= f2163c98f3cae0312ec13e4efbbbe9a9af4a8d19
 
 # Targets
 

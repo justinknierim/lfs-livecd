@@ -10,11 +10,11 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 8250
+REV= 8271
 REVPARM= -r $(REV)
 
 ifeq ($(CD_ARCH),x86)
-URL= svn://svn.linuxfromscratch.org/LFS/trunk/BOOK
+URL= svn://svn.linuxfromscratch.org/LFS/branches/6.3/BOOK
 endif
 ifeq ($(CD_ARCH),x86_64)
 URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK
