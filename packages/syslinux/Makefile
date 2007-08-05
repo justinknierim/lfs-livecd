@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	mkdir -p /boot/isolinux
 	cp -v isolinux.bin /boot/isolinux
 	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
 

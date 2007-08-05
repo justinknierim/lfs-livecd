@@ -1,3 +1,7 @@
 #!/bin/sh
 rm -rf install
+if [ -d usr/lib64 ] ; then
+	rm -rf usr/lib
+	mv usr/lib64 usr/lib
+fi
 tar --exclude $5 -zcvf $5 .
