@@ -176,8 +176,9 @@ $(MKTREE): root.ext2
 	-ln -s /proc/kcore $(MP)/dev/core
 	touch $(MKTREE)
 ifdef 64bit
-	-if [ ! -L $(MP)/lib64 ] ; then ln -s lib $(MP)/lib64 ; fi
-	-if [ ! -L $(MP)/usr/lib64 ] ; then ln -s lib $(MP)/usr/lib64 ; fi
+	-ln -nsf lib $(WD)/lib64
+	-ln -nsf lib $(MP)/lib64
+	-ln -nsf lib $(MP)/usr/lib64
 endif
 
 # This target builds just a base LFS system, minus the kernel and bootscripts
