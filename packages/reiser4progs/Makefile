@@ -5,7 +5,7 @@ VRS= 1.0.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.namesys.com/pub/reiser4progs/$(FILE) 
+URL-$(FILE)= http://ftp.namesys.com/pub/reiser4progs/$(FILE)
 SHA-$(FILE)= 9acc4f829c5760ee159cb3f507e58478e578990d
 
 # Targets
