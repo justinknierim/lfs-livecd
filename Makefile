@@ -35,8 +35,6 @@ export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
 export VERSION ?= $(CD_ARCH)-6.3-pre2
 export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing
 
-export HOST_GCC ?= gcc
-
 ifeq ($(CD_ARCH),x86)
 export LFS_TARGET ?= i486-pc-linux-gnu
 export CFLAGS := $(CFLAGS) -mtune=i686
@@ -239,7 +237,6 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
 	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
 	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
-	lfs-m4-scpt lfs-bison-scpt lfs-flex-scpt \
 	lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
 	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
 	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt lfs-grub-scpt
