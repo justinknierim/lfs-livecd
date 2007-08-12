@@ -14,7 +14,7 @@ Web Tools
 * curl (command line file retriever)
 * lynx (text web browser)
 * w3m (text web browser)
-* irssi (console irc client, unstable version)
+* irssi (console irc client)
 * seamonkey (graphical web browser, mail and news reader and irc client)
 * xchat (x-based irc client)
 * pidgin (multiprotocol x-based chat client)
@@ -25,13 +25,13 @@ Web Tools
 
 Text Editors
 * vim
-* nano (unstable version)
+* nano
 * joe
 
 Network Tools
 * SSH server & client
 * NFS server & client
-* Samba (client only)
+* Samba server & client
 * Subversion
 * cvs
 * pppd
@@ -70,6 +70,16 @@ jhalfs
 (A tool for extracting commands from the Linux From Scratch book and creating
 Makefiles that can download, check and build each LFS package for you.)
 
+VMWARE ISSUE
+===========================
+This CD does not detect virtual SCSI disks connected to a virtual machine in
+VMware Workstation 5.x or earlier or VMware Server 1.0.x or earlier. This is
+a known VMware bug. The solution is to upgrade to VMware Workstation 6.x, or
+to choose "BusLogic" as the virtual SCSI controller type instead of the
+default "LSI Logic".
+
+The same issue will be present on an LFS system built from this CD.
+
 CONFIGURING NET CONNECTION
 ===========================
 The LiveCD attempts to detect the network cards present in the system.
@@ -77,6 +87,10 @@ On each detected network card, dhcpcd is automatically started in the
 background. If it is not correct to acquire the network settings via DHCP
 in your location, or if you want to use dialup or GPRS connection, run the
 "net-setup" command.
+
+If you don't want the CD to start dhcpcd on the detected network cards,
+type "linux nodhcp" at the boot loader prompt. This may be required for
+wireless connections that utilize WEP or WPA encryption.
 
 CONFIGURING X
 ===========================
@@ -120,6 +134,7 @@ Section "Monitor"
 	HorizSync	30-92   # because gtf said "hsync: 91.38 kHz"
 	VertRefresh	56-86   # because an 85 Hz mode has been requested
 	# the Modeline may also be pasted here
+	Option "PreferredMode" "1280x1024_85.00" # only for the "intel" driver
 EndSection
 
 3) In the Section "Screen", change the DefaultDepth and add the "Modes"
@@ -129,6 +144,32 @@ in the example above. The built-in Modelines have names similar to "1024x768",
 without explicit specification of the refresh rate.
 
 When you are finished editing /etc/X11/xorg.conf, run startx.
+
+PROPRIETARY VIDEO DRIVERS
+=========================
+
+The CD contains pre-built proprietary video drivers in the /drivers directory
+(if you loaded the CD contents to RAM, you have to mount the CD and look into
+/media/cdrom/drivers instead). They are never selected by default by the
+autoconfiguration process. Here is how to enable them:
+
+NVIDIA:
+
+cd /drivers
+tar -C / -xf NVIDIA-Linux-[userspace_arch]-[version]-glx.tgz
+tar -C / -xf NVIDIA-Linux-[kernel_arch]-[version]-kernel-[kernel_version].tgz
+depmod -ae
+ldconfig
+vim /etc/X11/xorg.conf   # use the "nvidia" driver instead of "vesa" or "nv"
+
+FGLRX:
+
+cd /drivers
+tar -C / -xf fglrx-x710-[version]-[userspace_arch]-1.tgz
+tar -C / -xf fglrx-module-[version]-[kernel_arch]-1_kernel_[kernel_version].tgz
+depmod -ae
+ldconfig
+vim /etc/X11/xorg.conf   # use the "fglrx" driver instead of "vesa" or "ati"
 
 CUSTOMIZING THE CD CONTENTS
 ===========================
@@ -244,6 +285,7 @@ wrong result in the ru_RU.CP1251 locale.
 
 Known non-working cases:
     All CP1251-based locales (no CP1251 Braille table in brltty)
+    All UTF-8 locales (kernel deficiency)
     zh_TW (configuration instructions available in Chinese only). If you use
       this locale, please email livecd@linuxfromscratch.org and help us add
       support for it.
@@ -335,11 +377,9 @@ is highly recommended), and echo them to /sys/power/resume. E.g., for LVM:
 brw------- 1 root root 254, 3 2006-07-10 17:51 /dev/myvg/swap
 # echo 254:3 >/sys/power/resume
 
-In the case of the first boot, this will print an error, but store the device
-numbers to be used for hibernation. Ignore the error and hibernate when needed.
-
-On the second boot (i.e., after hibernating), this "echo" command will restore
-the computer state from the swap device.
+In the case of the first boot, this will store the device numbers to be used
+for hibernation. On the second boot (i.e., after hibernating), this "echo"
+command will restore the computer state from the swap device.
 
 AUTOMATING THE BUILD
 ===========================
@@ -356,6 +396,56 @@ to:
 
 Note that this user already has the required root access (via sudo) to complete
 the build.
+
+LOADING CD CONTENTS TO RAM
+===========================
+The CD works much faster if you load all its contents to RAM. As a bonus, you
+will be able to eject the CD immediately and use the CD-ROM drive for other
+purposes (e.g., for watching a DVD while compiling LFS).
+
+To load the CD contents to RAM, type "linux toram" at the boot prompt.
+
+The minimum required amount of RAM is 512 MB. If you have less than 768 MB of
+RAM, add swap when the CD boot finishes.
+
+Note: in order to save RAM, sources and proprietary drivers are not loaded
+there. In order to access them, please mount this CD and look into
+/media/cdrom/sources and /media/cdrom/drivers.
+
+BOOTING FROM ISO IMAGE
+===========================
+If you want to boot this CD on a computer without a CD-ROM drive, follow
+the steps below:
+
+1) Store the ISO image of this CD as a file on a partition formatted with
+   one of the following filesystems:
+   vfat, ntfs, ext2, ext3, ext4, reiserfs, reiser4, xfs
+2) Copy the boot/isolinux/{linux,initramfs_data.cpio.gz} files from the CD
+   to your hard disk
+3) Configure the boot loader to load "linux" as a kernel image and
+   "initramfs_data.cpio.gz" as an initrd. The following parameters have to
+   be passed to the kernel:
+
+   rw root=iso:/dev/XXX:/path/to/lfslivecd.iso rootfstype=[fs_type]
+
+   where /dev/XXX is a partition where you stored the LiveCD image, and
+   [fs_type] is the type of the filesystem on that partition. You may
+   also want to add rootflags=... option if mounting this partition requires
+   special flags.
+
+If there is only Windows on the target computer, please use grub4dos as a boot
+loader. It is available from http://sourceforge.net/projects/grub4dos
+
+MAKING A BOOTABLE USB DRIVE
+===========================
+Install GRUB on a flash drive, then follow instructions in the
+"BOOTING FROM ISO IMAGE" above, using a partition on your flash drive.
+The following tips will ensure that the flash drive is bootable in any
+computer:
+
+* Use the persistent symlink such as /dev/disk/by-uuid/890C-F46A to identify
+  the target partition.
+* Add "rootdelay=20" to the kernel arguments.
 
 THANKS
 ===========================
