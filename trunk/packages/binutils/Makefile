@@ -18,7 +18,8 @@ pass1: $(FILE)
 
 compile-pass1:
 # --disable-shared overrides unsuitable default from config.site
-	unset CFLAGS ; CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) --disable-nls --disable-shared
+	unset CFLAGS ; CC="gcc -B/usr/bin/" ../$(DIR)/configure \
+	    --prefix=$(WD) --disable-nls --disable-shared --disable-werror
 	unset CFLAGS ; make
 	unset CFLAGS ; make install
 	unset CFLAGS ; make -C ld clean
