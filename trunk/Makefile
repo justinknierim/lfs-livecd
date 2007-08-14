@@ -290,7 +290,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-libaal ch-reiser4progs ch-vbetool ch-bin86 ch-lilo ch-syslinux \
-	ch-scsi-firmware ch-net-firmware
+	ch-scsi-firmware ch-net-firmware ch-linux32
 ifeq ($(CD_ARCH),x86)
 	make ch-grub
 	make ch-linux
