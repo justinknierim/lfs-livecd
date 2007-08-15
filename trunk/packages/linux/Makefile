@@ -53,6 +53,11 @@ FILE7= $(DIR7).tar.gz
 URL-$(FILE7)= http://www.linuxfromscratch.org/~alexander/$(FILE7)
 SHA-$(FILE7)= 3eba4dc8e08ce256280adff492b541bda9c0198b
 
+DIR8= madwifi-0.9.3.2
+FILE8= $(DIR8).tar.bz2
+URL-$(FILE8)= http://easynews.dl.sourceforge.net/sourceforge/madwifi/$(FILE8)
+SHA-$(FILE8)= ccd8f4ba267df75ca002d8dbf66b09347e1bc0b6
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -61,7 +66,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
@@ -81,11 +86,17 @@ compile-stage2:
 	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/All
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver $$a $(VRS) ; done
-	mv *.tgz /drivers
 	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
 	    sed -i '/depmod/d' Makefile ; \
 	    patch -Np0 -i ../../$(PATCH2) ; make KERNDIR=`pwd`/.. ; \
 	    make KERNDIR=`pwd`/.. install
+	tar xf ../$(FILE8) ; cd $(DIR8) ; \
+	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. ; \
+	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-modules install-modules ; \
+	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-tools install-tools ; \
+	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS).tgz . ; cd .. ; \
+	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
+	mv *.tgz /drivers
 	cd .. ; ./debian-style-headers.sh $(DIR)
 
 clean:
