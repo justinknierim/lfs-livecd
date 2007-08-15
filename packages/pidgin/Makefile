@@ -1,12 +1,12 @@
 # pidgin Makefile
 
 NM= pidgin
-VRS= 2.0.2
+VRS= 2.1.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://puzzle.dl.sourceforge.net/sourceforge/pidgin/$(FILE)
-SHA-$(FILE)= 7f5cdc3e8fb8b8af9646bb0635b2852c24f7e059
+SHA-$(FILE)= 33f78d07c3c7797a710bb7d2032a8d0bd89a6ab3
 
 # Targets
 
