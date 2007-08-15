@@ -434,7 +434,7 @@ the steps below:
 
 1) Store the ISO image of this CD as a file on a partition formatted with
    one of the following filesystems:
-   vfat, ntfs, ext2, ext3, ext4, reiserfs, reiser4, xfs
+   vfat, ntfs, ext2, ext3, ext4, jfs, reiserfs, reiser4, xfs
 2) Copy the boot/isolinux/{linux,initramfs_data.cpio.gz} files from the CD
    to your hard disk
 3) Configure the boot loader to load "linux" as a kernel image and
