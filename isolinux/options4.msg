@@ -12,6 +12,6 @@ nomsi noapic nolapic pci=noacpi acpi=off blacklist=yenta-socket ide=nodma
 brltty=drv[,dev[,tbl]]
   Example: brltty=bm,usb:
 
-  Enables a refreshable Braille display supported by reiver drv, connected to
+  Enables a refreshable Braille display supported by driver drv, connected to
   device dev, with a translation table tbl. The example specifies a BAUM
   SuperVario 40 Braille display connected by USB with default Braille table.
