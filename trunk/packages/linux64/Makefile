@@ -12,6 +12,10 @@ PATCH1= reiser4-for-2.6.22-2.patch.gz
 URL-$(PATCH1)= ftp://ftp.namesys.com/pub/reiser4-for-2.6/2.6.22/$(PATCH1)
 SHA-$(PATCH1)= a49f8a6d9851915c31f4c44e00519e0e4d2461c7
 
+# Undoes some upstream changes that are needed for linux-2.6.23-rcX
+# but break the build with 2.6.22
+PATCH2= rt2x00-fixes-1.patch
+
 PATCH3= tulip-is-not-a-proper-driver-for-dm910x.patch
 
 FILE1= ati-driver-installer-8.38.6-x86.x86_64.run
@@ -33,6 +37,22 @@ FILE4= $(DIR4).run
 URL-$(FILE4)= http://us.download.nvidia.com/XFree86/Linux-x86_64/1.0-7185/$(FILE4)
 SHA-$(FILE4)= ffe1eb012707d5bffbe39756be54cb687b4ef498
 
+DIR5= mac80211-9.0.4
+FILE5= $(DIR5).tgz
+URL-$(FILE5)= http://intellinuxwireless.org/mac80211/downloads/$(FILE5)
+SHA-$(FILE5)= c15acff74a7c736cdb997546083f1e34278c6387
+
+DIR6= iwlwifi-1.0.0-1
+FILE6= $(DIR6).tgz
+URL-$(FILE6)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE6)
+SHA-$(FILE6)= 879a636b63cd1c8aebc8bc1a6205656b491107bb
+
+DIR7= rt2x00-cvs-2007081406
+FILE7= $(DIR7).tar.gz
+# Originally from http://rt2x00.serialmonkey.com/rt2x00-cvs-daily.tar.gz
+URL-$(FILE7)= http://www.linuxfromscratch.org/~alexander/$(FILE7)
+SHA-$(FILE7)= 3eba4dc8e08ce256280adff492b541bda9c0198b
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -41,10 +61,12 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM)64 $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
+	tar xf ../$(FILE5) ; cd $(DIR5) ; make KSRC=.. patch_kernel
+	tar xf ../$(FILE6) ; cd $(DIR6) ; echo "Y" | make KSRC=.. patch_kernel
 	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH3)
 	install -d /boot/isolinux
@@ -62,6 +84,11 @@ ifeq ($(CD_ARCH),x86)
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver $$a $(VRS)-64bit ; done
 	mv *.tgz /drivers
+	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
+	    sed -i '/depmod/d' Makefile ; \
+	    patch -Np0 -i ../../$(PATCH2) ; \
+	    PATH=$$PATH:$(WD)/bin make KERNDIR=`pwd`/.. ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu- ; \
+	    PATH=$$PATH:$(WD)/bin make KERNDIR=`pwd`/.. ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu- install
 	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
 endif
@@ -75,6 +102,10 @@ ifeq ($(CD_ARCH),x86_64)
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver.native $$a $(VRS)-64bit ; done
 	mv *.tgz /drivers
+	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
+	    sed -i '/depmod/d' Makefile ; \
+	    patch -Np0 -i ../../$(PATCH2) ; \
+	    make KERNDIR=`pwd`/.. ; make KERNDIR=`pwd`/.. install
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 endif
 

@@ -72,6 +72,31 @@ FILE15= $(DIR15).tar.gz
 URL-$(FILE15)= http://www.sigmatel.com/documents/$(FILE15)
 SHA-$(FILE15)= bee20b114e3f29c28819ec6a716472621bf6ac47
 
+DIR16= RT61_Firmware_V1.2
+FILE16= $(DIR16).zip
+URL-$(FILE16)= http://www.ralinktech.com.tw/data/$(FILE16)
+SHA-$(FILE16)= fded9f76ce620595b876b23b6a8c416af596dc5b
+
+DIR17= RT71W_Firmware_V1.8
+FILE17= $(DIR17).zip
+URL-$(FILE17)= http://www.ralinktech.com.tw/data/$(FILE17)
+SHA-$(FILE17)= 8f40bd8448c136e7edcc005f45e657258085ab8e
+
+DIR18= iwlwifi-3945-ucode-2.14.1.5
+FILE18= $(DIR18).tgz
+URL-$(FILE18)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE18)
+SHA-$(FILE18)= aeeeccb2fddeff86ee7dbdca0f0d627d0c99d45c
+
+DIR19= iwlwifi-4965-ucode-4.44.1.18
+FILE19= $(DIR19).tgz
+URL-$(FILE19)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE19)
+SHA-$(FILE19)= 01bf0264cfc4f60957a7242264050a81c56858bf
+
+DIR20= iwlwifi-4965-ucode-4.44.17
+FILE20= $(DIR20).tgz
+URL-$(FILE20)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE20)
+SHA-$(FILE20)= 955d8718419dc2670d9b8167e22df118a36666a5
+
 ALLFILES= $(foreach FILE,$(sort $(filter FILE%,$(.VARIABLES))),$($(FILE)))
 
 # Targets
@@ -100,6 +125,11 @@ stage2: Makefile $(ALLFILES)
 	    ./get_symbol_fw ; cp symbol_* /lib/firmware
 	@cp $(FILE14) /lib/firmware/usb8388.bin
 	@mkdir $(DIR15) ; cd $(DIR15) ; tar xf ../$(FILE15) ; install -m 644 *.sb /lib/firmware
+	@unzip $(FILE16) ; cp $(DIR16)/*.bin /lib/firmware
+	@unzip $(FILE17) ; cp $(DIR17)/*.bin /lib/firmware
+	@tar xf $(FILE18) ; cp $(DIR18)/* /lib/firmware
+	@tar xf $(FILE19) ; cp $(DIR19)/* /lib/firmware
+	@tar xf $(FILE20) ; cp $(DIR20)/* /lib/firmware
 	@make clean
 	@touch $@
 
