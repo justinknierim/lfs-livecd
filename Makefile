@@ -256,7 +256,7 @@ post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
 	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
 	final-environment
 
-blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
+blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
 	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
 	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
