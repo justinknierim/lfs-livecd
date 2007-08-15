@@ -53,6 +53,18 @@ FILE7= $(DIR7).tar.gz
 URL-$(FILE7)= http://www.linuxfromscratch.org/~alexander/$(FILE7)
 SHA-$(FILE7)= 3eba4dc8e08ce256280adff492b541bda9c0198b
 
+DIR8= madwifi-0.9.3.2
+FILE8= $(DIR8).tar.bz2
+URL-$(FILE8)= http://easynews.dl.sourceforge.net/sourceforge/madwifi/$(FILE8)
+SHA-$(FILE8)= ccd8f4ba267df75ca002d8dbf66b09347e1bc0b6
+
+ifeq ($(CD_ARCH),x86)
+CROSS_MAKE= PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
+endif
+ifeq ($(CD_ARCH),x86_64)
+CROSS_MAKE= make
+endif
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -61,7 +73,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM)64 $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
@@ -74,40 +86,44 @@ compile-stage2:
 	cp ../config.x86_64 .config
 	# Hack for fglrx
 	touch include/linux/ioctl32.h
-ifeq ($(CD_ARCH),x86)
-	PATH=$$PATH:$(WD)/bin make ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
-	PATH=$$PATH:$(WD)/bin make modules_install ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu-
+	$(CROSS_MAKE)
+	$(CROSS_MAKE) modules_install
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
 	chmod 755 ../fakes-for-fglrx/{uname,cat}
+ifeq ($(CD_ARCH),x86)
 	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/Only_Module
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver $$a $(VRS)-64bit ; done
-	mv *.tgz /drivers
+endif
+ifeq ($(CD_ARCH),x86_64)
+	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/All
+	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
+	    sh ../$$a.run -x ; ../build-nvidia-driver.native $$a $(VRS)-64bit ; done
+endif
 	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
 	    sed -i '/depmod/d' Makefile ; \
 	    patch -Np0 -i ../../$(PATCH2) ; \
-	    PATH=$$PATH:$(WD)/bin make KERNDIR=`pwd`/.. ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu- ; \
-	    PATH=$$PATH:$(WD)/bin make KERNDIR=`pwd`/.. ARCH=x86_64 CROSS_COMPILE=x86_64-unknown-linux-gnu- install
+	    $(CROSS_MAKE) KERNDIR=`pwd`/.. ; \
+	    $(CROSS_MAKE) KERNDIR=`pwd`/.. install
+ifeq ($(CD_ARCH),x86)
+	tar xf ../$(FILE8) ; cd $(DIR8) ; \
+	    $(CROSS_MAKE) KERNELPATH=`pwd`/.. modules ; \
+	    $(CROSS_MAKE) KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-modules install-modules ; \
+	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS)-64bit.tgz .
 	rm /lib/modules/*-64bit/{source,build}
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
 endif
 ifeq ($(CD_ARCH),x86_64)
-	make
-	make modules_install
-	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
-	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
-	chmod 755 ../fakes-for-fglrx/{uname,cat}
-	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/All
-	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
-	    sh ../$$a.run -x ; ../build-nvidia-driver.native $$a $(VRS)-64bit ; done
-	mv *.tgz /drivers
-	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
-	    sed -i '/depmod/d' Makefile ; \
-	    patch -Np0 -i ../../$(PATCH2) ; \
-	    make KERNDIR=`pwd`/.. ; make KERNDIR=`pwd`/.. install
+	tar xf ../$(FILE8) ; cd $(DIR8) ; \
+	    $(CROSS_MAKE) BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. ; \
+	    $(CROSS_MAKE) BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-modules install-modules ; \
+	    $(CROSS_MAKE) BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-tools install-tools ; \
+	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS).tgz . ; cd .. ; \
+	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 endif
+	mv *.tgz /drivers
 
 clean:
 	-rm -rf $(DIR)
