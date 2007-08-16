@@ -73,7 +73,7 @@ compile-stage2:
 	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static \
 	 --disable-multilib
 	make
-	#-make -k check
+	-make -k check
 	make install
 	ln -svf ../usr/bin/cpp /lib
 	ln -svf gcc /usr/bin/cc

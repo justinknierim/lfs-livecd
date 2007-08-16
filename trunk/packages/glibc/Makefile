@@ -54,7 +54,7 @@ compile-stage2:
 	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc \
 	 --enable-static
 	make
-	#-make -k check
+	-make -k check
 	touch /etc/ld.so.conf
 	make install
 	make localedata/install-locales
