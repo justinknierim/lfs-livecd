@@ -18,12 +18,6 @@ toram=0
 nodhcp=0
 cdtype=
 
-case `uname -m` in 
-	i[3456]86) LINKER="ld-linux.so.2" ;;
-
-	x86_64) LINKER="ld-linux-x86-64.so.2" ;;
-esac
-
 find_cd() {
 	for SYS in /sys/block/hd* /sys/block/sr* ; do
 		[ ! -d "$SYS" ] && continue
@@ -344,5 +338,5 @@ umount /proc
 cd /.root
 # Clean up and free some memory
 rm -rf /bin /sbin /lib /sys /proc /dev /.tmpfs /init /fakecd.iso.head
-./lib/${LINKER} --library-path ./lib ./bin/mount -n --move . /
-exec ../lib/${LINKER} --library-path ./lib ./usr/sbin/chroot . "$init" "$@"
+./lib/@LINKER@ --library-path ./lib ./bin/mount -n --move . /
+exec ../lib/@LINKER@ --library-path ./lib ./usr/sbin/chroot . "$init" "$@"
