@@ -80,7 +80,7 @@ stage2: $(FILE)
 compile-stage2:
 	../$(DIR)/configure --prefix=/usr --enable-shared
 	make tooldir=/usr
-	-make CFLAGS= -k check
+	#-make CFLAGS= -k check
 	make tooldir=/usr install
 	cp ../$(DIR)/include/libiberty.h /usr/include
 
