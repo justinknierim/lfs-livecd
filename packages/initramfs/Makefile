@@ -26,7 +26,7 @@ endif
 	cp /etc/udev/udev.conf $(WDIR)/etc/udev/udev.conf
 	cp /etc/udev/rules.d/{05-*,2*,60-*} $(WDIR)/etc/udev/rules.d
 	sed -i 's/, *GROUP="[^"]*"//' $(WDIR)/etc/udev/rules.d/*
-	sed s/@VERSION@/$(VERSION)/ init.in >$(WDIR)/init
+	sed -e s/@VERSION@/$(VERSION)/ -e s/@LINKER@/$(LINKER)/ init.in >$(WDIR)/init
 	chmod 755 $(WDIR)/init
 	cp fakecd.iso.head $(WDIR)
 	mknod -m 640 $(WDIR)/dev/console c 5 1
