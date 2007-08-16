@@ -414,8 +414,9 @@ endif
 	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
-	@install -m755 scripts/{net-setup,greeting} $(MP)/usr/bin/ 
-	@install -m755 scripts/{livecd-login,shutdown-helper} $(MP)/usr/bin/
+	@install -m755 scripts/{net-setup,greeting,livecd-login} $(MP)/usr/bin/ 
+	@sed s/@LINKER@/$(LINKER)/ scripts/shutdown-helper.in >$(MP)/usr/bin/shutdown-helper
+	@chmod 755 $(MP)/usr/bin/shutdown-helper
 	@svn export --force root $(MP)/etc/skel
 
 iso: prepiso
