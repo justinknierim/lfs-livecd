@@ -82,20 +82,15 @@ FILE17= $(DIR17).zip
 URL-$(FILE17)= http://www.ralinktech.com.tw/data/$(FILE17)
 SHA-$(FILE17)= 8f40bd8448c136e7edcc005f45e657258085ab8e
 
-DIR18= iwlwifi-3945-ucode-2.14.1.5
+DIR18= iwlwifi-3945-ucode-2.14.4
 FILE18= $(DIR18).tgz
 URL-$(FILE18)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE18)
-SHA-$(FILE18)= aeeeccb2fddeff86ee7dbdca0f0d627d0c99d45c
+SHA-$(FILE18)= c715e4f0ab4ddddb45f6b5c36644e13dc0cd0b2c
 
-DIR19= iwlwifi-4965-ucode-4.44.1.18
+DIR19= iwlwifi-4965-ucode-4.44.17
 FILE19= $(DIR19).tgz
 URL-$(FILE19)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE19)
-SHA-$(FILE19)= 01bf0264cfc4f60957a7242264050a81c56858bf
-
-DIR20= iwlwifi-4965-ucode-4.44.17
-FILE20= $(DIR20).tgz
-URL-$(FILE20)= http://intellinuxwireless.org/iwlwifi/downloads/$(FILE20)
-SHA-$(FILE20)= 955d8718419dc2670d9b8167e22df118a36666a5
+SHA-$(FILE19)= 955d8718419dc2670d9b8167e22df118a36666a5
 
 ALLFILES= $(foreach FILE,$(sort $(filter FILE%,$(.VARIABLES))),$($(FILE)))
 
@@ -129,7 +124,6 @@ stage2: Makefile $(ALLFILES)
 	@unzip $(FILE17) ; cp $(DIR17)/*.bin /lib/firmware
 	@tar xf $(FILE18) ; cp $(DIR18)/* /lib/firmware
 	@tar xf $(FILE19) ; cp $(DIR19)/* /lib/firmware
-	@tar xf $(FILE20) ; cp $(DIR20)/* /lib/firmware
 	@make clean
 	@touch $@
 
