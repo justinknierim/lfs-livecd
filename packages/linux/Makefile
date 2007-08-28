@@ -1,12 +1,12 @@
 # Linux Kernel Makefile
 
 NM= linux
-VRS= 2.6.22.4
+VRS= 2.6.22.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= cc729d89add08c6fd7b91e440eda459b9c284950
+SHA-$(FILE)= a04e4efb32884ab95fe0ec38d60552cf3e0c49b8
 
 PATCH1= reiser4-for-2.6.22-2.patch.gz
 URL-$(PATCH1)= ftp://ftp.namesys.com/pub/reiser4-for-2.6/2.6.22/$(PATCH1)
