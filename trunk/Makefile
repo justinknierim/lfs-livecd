@@ -32,7 +32,9 @@ ROOTFS_MEGS := 1536
 #==============================================================================
 
 export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
-export VERSION ?= $(CD_ARCH)-6.3-pre2
+# A dirty hack to get the current revision
+# needed because in the beginning of Chapter6 there is no subversion
+export VERSION ?= $(CD_ARCH)-6.3-r`sed -n 4p .svn/entries`
 export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing
 
 ifeq ($(CD_ARCH),x86)

@@ -10,7 +10,7 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 8333
+REV= 8340
 REVPARM= -r $(REV)
 
 ifeq ($(CD_ARCH),x86)
