@@ -1,19 +1,20 @@
-
 AUTHOR:		Alexander E. Patrakov <patrakov@ums.usu.ru>, Sylvie Migneault <alisou@alixe.org>
 
-DATE:		2006-08-06
+DATE:		2007-08-28
 
 LICENSE:	GNU Free Documentation License Version 1.2
 
-SYNOPSIS:	lfscd-remastering-HOWTO, for LFS LiveCD version 6.2-x
+SYNOPSIS:	lfscd-remastering-HOWTO, for LFS LiveCD version 6.3
 
-DESCRIPTION:	This is a guide that will show you how to remaster LFS liveCD-x86-6.2-x
+DESCRIPTION:	This is a guide that shows you how to remaster LFS LiveCD 6.3
 
-PREREQUISITES:	LFS LiveCD 6.2-x.
+PREREQUISITES:	LFS LiveCD 6.3
 
 For LFS LiveCD 6.1-x, see the old "lfscd-remastering-howto-6.1.txt" hint by
 Sylvie Migneault. For LFS LiveCD 6.1.1-x, the old hint should work if one
-globally replaces LFS_CD with lfslivecd-VERSION, e.g. lfslivecd-x86-6.1.1-3
+globally replaces LFS_CD with lfslivecd-VERSION, e.g. lfslivecd-x86-6.1.1-3.
+
+For LFS LiveCD 6.2-x, see the old "lfscd-remastering-howto-6.2.txt" hint.
 
 HINT:
 
@@ -86,22 +87,31 @@ Note: contrary to the instructions in the LFS book, tmpfs is not mounted on
 $WORK/root/dev. This is because all the necessary devices are already created
 as static nodes.
 
+Copy the DNS configuration into the chroot:
+	cp /etc/resolv.conf $WORK/root/etc/resolv.conf
+
 Chroot to the filesystem:
 	chroot $WORK/root
 
 In the chroot, change the current directory to /build, and install any
 additional packages you want. Modify other files as necessary.
 
-Get the initramfs files as a zip archive from
-	http://wiki.linuxfromscratch.org/livecd/browser/trunk/packages/initramfs
+Check out the initramfs files:
+	svn co svn://svn.linuxfromscratch.org/livecd/trunk/packages/initramfs
 
-Unzip the archive. Remove the "include $(ROOT)/scripts/functions" line from the
-Makefile. Generate the initramfs image for your CD:
-	make compile-stage2 VERSION="x86-6.3-custom"
+Remove the "include $(ROOT)/scripts/functions" and
+"cp initramfs_data.cpio.gz /boot/isolinux/initramfs_data.cpio.gz" lines
+from the Makefile. Generate the initramfs image for your CD:
 
-(you can replace the "x86-6.3-custom" with your own string). This produces the
-initramfs_data.cpio.gz file in the current directory. If this directory is not
-"/build", copy it to /build:
+For x86:
+	make compile-stage2 VERSION="x86-6.3-custom" LINKER=ld-linux.so.2
+
+For x86_64:
+	make compile-stage2 VERSION="x86_64-6.3-custom" \
+	    LINKER=ld-linux-x86-64.so.2 64bit=true
+
+(you can replace the "6.3-custom" with your own string). This produces the
+initramfs_data.cpio.gz file in the current directory. Copy it to /build:
 	cp initramfs_data.cpio.gz /build
 
 Exit from the chroot and clean up the mounts:
@@ -113,8 +123,9 @@ Exit from the chroot and clean up the mounts:
 	umount $WORK/root/build
 	rmdir $WORK/root/build
 
-Clean up bash history:
+Clean up bash history and DNS configuration:
 	rm $WORK/root/root/.bash_history
+	rm $WORK/root/etc/resolv.conf
 
 You may also want to remove other history files.
 
@@ -147,7 +158,8 @@ Replace the stock initramfs image with your own:
 Recompress the root.ext2 file:
 	mkzftree -F $WORK/root.ext2 $WORK/iso/root.ext2
 
-Recreate the CD image:
+Recreate the CD image (the string avter "lfslivecd-" must be the same as you
+used when creating the initramfs):
 	cd $WORK/iso ; mkisofs -z -R -l --allow-leading-dots -D -o \
         ../lfslivecd-x86-6.3-custom.iso -b boot/isolinux/isolinux.bin \
         -c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
@@ -164,10 +176,13 @@ ACKNOWLEDGEMENTS:
 CHANGELOG:
 
    [2005-11-07]
-    * Initial hint by Sylvie Migneault.
+    * Initial hint by Sylvie Migneault
 
    [2006-08-06]
     * Updated to LFS LiveCD based on device mapper (6.2-pre4 and later)
 
    [2007-06-11]
     * Updated for 6.3-pre2
+
+   [2007-08-28]
+    * Updated for the final 6.3 version
