@@ -4,17 +4,13 @@ linux - The default 32-bit kernel
 linux64 - A 64-bit kernel for use with CLFS
 
 Options [page 2 of 4]:
+
 toram
   Loads the whole CD contents (except sources and proprietary video
   drivers) to RAM.
 
   Note: this needs at least 512 MB of RAM, and you also need
   to enable swap if you have less than 768 MB of RAM.
-
-nodhcp
-  Prevents the CD from attempting to obtain an IP address automatically.
-  May be required for wireless networking, because the WEP or WPA key
-  needs to be set up first.
 
 rootdelay=X
   Waits X seconds before attempting to find the CD. Required (with X=20)
@@ -28,4 +24,5 @@ all_generic_ide
 resume=/dev/XXX
   Uses /dev/XXX for software suspending (AKA hibernation) and resuming.
   See /root/README for details.
+
 
