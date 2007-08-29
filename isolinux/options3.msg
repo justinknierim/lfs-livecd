@@ -14,9 +14,6 @@ pata
   VIA, or Winbond. Drivers for other chipsets are likely to contain bugs that
   lead to data loss.
 
-new_firewire
-  Uses the new FireWire drivers.
-
 load=module1,module2,...
   Loads the specified modules unconditionally from initramfs. Use if your SCSI
   or IDE controller is not autodetected. If you don't specify this parameter
