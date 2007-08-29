@@ -9,7 +9,7 @@ URL-$(FILE)= http://savannah.nongnu.org/download/man-db/$(FILE)
 SHA-$(FILE)= 5c6ba8eb287a69f14433feb34e720b066536d163
 
 PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= 5ac2a79c2e471991503173982728e65f60f3e071
 
 # Targets

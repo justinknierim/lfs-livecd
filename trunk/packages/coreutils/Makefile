@@ -9,15 +9,15 @@ URL-$(FILE)= http://ftp.gnu.org/gnu/coreutils/$(FILE)
 SHA-$(FILE)= 10310a78c4e1d9f742f3815ac28e9bf1086a5885
 
 PATCH1= $(DIR)-uname-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= 42cc795e56b96994a4dc9e8f2a8dd72b6a25665f
 
 PATCH2= $(DIR)-suppress_uptime_kill_su-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH2)
 SHA-$(PATCH2)= e1e783efd515639b78627c37025b96168594f408
 
 PATCH3= $(DIR)-i18n-1.patch
-URL-$(PATCH3)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH3)
+URL-$(PATCH3)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH3)
 SHA-$(PATCH3)= 5db7b7919910ccda018d01f2fc1b65e1c1da954d
 
 # Targets

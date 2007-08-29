@@ -9,7 +9,7 @@ URL-$(FILE)= http://www.bzip.org/$(VRS)/$(FILE)
 SHA-$(FILE)= f2388ec8f2c506e02aa89e67577b3c6331cbaa4c
 
 PATCH1= $(DIR)-install_docs-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= 86fa168b260bb12651ebfa6d47939e926e067036
 
 # Targets

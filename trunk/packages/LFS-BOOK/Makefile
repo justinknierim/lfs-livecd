@@ -1,7 +1,7 @@
 # LFS Book Makefile
 
 NM= LFS-BOOK
-VRS= SVN
+VRS= 6.3
 DIRBASE= $(NM)-$(VRS)
 DIR= $(DIRBASE)-XML
 HTMLDIR= $(DIRBASE)-HTML
@@ -14,7 +14,7 @@ REV= 8340
 REVPARM= -r $(REV)
 
 ifeq ($(CD_ARCH),x86)
-URL= svn://svn.linuxfromscratch.org/LFS/branches/6.3/BOOK
+URL= svn://svn.linuxfromscratch.org/LFS/tags/6.3/BOOK
 endif
 ifeq ($(CD_ARCH),x86_64)
 URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK

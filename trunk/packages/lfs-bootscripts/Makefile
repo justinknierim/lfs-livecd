@@ -1,12 +1,12 @@
 # LFS-Bootscripts Makefile
 
 NM= lfs-bootscripts
-VRS= 20070813
+VRS= 6.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/development/$(FILE)
-SHA-$(FILE)= ab777ce44476494caba80518be9ced4f724a89d5
+URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.3/$(FILE)
+SHA-$(FILE)= 0177e3b1d43c087b677ba10ddfd4cb2cc7dcd7eb
 
 PATCH1= $(NM)-livecd-1.patch
 
