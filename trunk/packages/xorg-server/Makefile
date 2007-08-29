@@ -32,6 +32,7 @@ compile-stage2:
 	unpack ../$(FILE1)
 	sed -i -e '/DPI/s,75,92,' hw/xfree86/common/xf86Priv.h hw/dmx/dmxinit.c
 	sed -i -e 's,#ifdef KDRIVESERVER,#if 1,' dix/dixfonts.c
+	sed '$$i#undef XFree86Server' include/xorg-server.h.in
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --datadir=/usr/share --sysconfdir=/etc --localstatedir=/var \
 	    --with-mesa-source=`pwd`/$(DIR1) --with-default-font-path=built-ins \
