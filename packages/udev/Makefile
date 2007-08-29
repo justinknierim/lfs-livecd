@@ -2,7 +2,7 @@
 
 NM= udev
 VRS= 113
-CONFVRS= 20070731
+CONFVRS= 6.3
 DIR= $(NM)-$(VRS)
 CONFDIR=$(NM)-config-$(CONFVRS)
 
@@ -11,8 +11,8 @@ URL-$(FILE)= http://www.kernel.org/pub/linux/utils/kernel/hotplug/$(FILE)
 SHA-$(FILE)= 55bea7ec61026b2ecc9d2013da0ef4eed76de948
 
 FILE1= $(CONFDIR).tar.bz2
-URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/development/$(FILE1)
-SHA-$(FILE1)= f2163c98f3cae0312ec13e4efbbbe9a9af4a8d19
+URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/6.3/$(FILE1)
+SHA-$(FILE1)= 02fac7eec2763cce6c0698040221ce1f771c40a5
 
 # Targets
 

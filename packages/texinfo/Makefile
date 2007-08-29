@@ -9,11 +9,11 @@ URL-$(FILE)= http://ftp.gnu.org/gnu/texinfo/$(FILE)
 SHA-$(FILE)= 19a0cc0b56cbfcfe610925bef31e0bdf749492c9
 
 PATCH1= $(DIR)-tempfile_fix-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= 2ead28cb8e2679cdb53e1e4908209f0a31397dfe
 
 PATCH2= $(DIR)-multibyte-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH2)
 SHA-$(PATCH2)= b97ae3468c03f8389dbf5c9b6eed64f996f9ed5c
 
 # Targets

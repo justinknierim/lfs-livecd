@@ -9,7 +9,7 @@ URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= fe6466c7ee98061e044dae0347ca5d1a8eab4a0d
 
 PATCH1= $(DIR)-fixes-5.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= b85f303e6317fe50b6f5d0c204e2e68824010a88
 
 FILE1 = $(NM)-doc-$(VRS).tar.gz

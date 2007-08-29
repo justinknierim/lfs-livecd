@@ -11,7 +11,7 @@
 
 user_pref("browser.preferences.lastpanel", 0);
 user_pref("browser.search.defaultengine", "engine:///usr/lib/seamonkey-1.1.3/searchplugins/google.src");
-user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-SVN-HTML/index.html");
+user_pref("browser.startup.homepage", "file:///usr/share/LFS-BOOK-6.3-HTML/index.html");
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("dom.disable_open_during_load", true);
 user_pref("extensions.disabledObsolete", true);

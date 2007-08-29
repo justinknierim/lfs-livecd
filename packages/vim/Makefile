@@ -13,11 +13,11 @@ URL-$(FILE2)= http://ftp.vim.org/pub/vim/extra/$(FILE2)
 SHA-$(FILE2)= 7c1e2f498e1f8304879e73b88562f9036801c7ee
 
 PATCH1= $(NM)-$(VRS)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= 6005e12fc31ce07a4da2806ea4c503cb569f235e
 
 PATCH2= $(NM)-$(VRS)-mandir-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH2)
+URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH2)
 SHA-$(PATCH2)= 182f46dfacefdd3bf6f821dea71f90547d414230
 
 # Targets

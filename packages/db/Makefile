@@ -9,7 +9,7 @@ URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 0e5a6c152c5d7089899481d9de689d1f7e77bde1
 
 PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/development/$(PATCH1)
+URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
 SHA-$(PATCH1)= adf217ef8606f25b6fd4e7c9a0c1ea9f01c4f250
 
 # Targets
