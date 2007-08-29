@@ -153,7 +153,7 @@ Copy the directory structure from the original LiveCD:
 
 Replace the stock initramfs image with your own:
 	cp $WORK/build/initramfs_data.cpio.gz \
-	    $WORK/iso/boot/isolinux/iniramfs_data.cpio.gz
+	    $WORK/iso/boot/isolinux/initramfs_data.cpio.gz
 
 Recompress the root.ext2 file:
 	mkzftree -F $WORK/root.ext2 $WORK/iso/root.ext2
