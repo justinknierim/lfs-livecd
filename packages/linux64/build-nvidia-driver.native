@@ -10,6 +10,7 @@ cp usr/src/nv/nvidia.ko kernel/lib/modules/$2/external
 mkdir -p glx/usr/{bin,lib/xorg/modules}
 cp usr/bin/{nvidia-settings,nvidia-xconfig} glx/usr/bin
 cp usr/lib/{libGL*,libnvidia-cfg*,tls/libnvidia-tls*} glx/usr/lib
+rm glx/usr/lib/libGL.la
 cp usr/X11R6/lib/lib* glx/usr/lib
 cp -r usr/{include,share} glx/usr
 cp -r usr/X11R6/lib/modules/* glx/usr/lib/xorg/modules
