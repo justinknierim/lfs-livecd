@@ -6,7 +6,7 @@ DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.3/$(FILE)
-SHA-$(FILE)= 0177e3b1d43c087b677ba10ddfd4cb2cc7dcd7eb
+SHA-$(FILE)= f2447b29f99e9b4d6700d89a4d572584951531b8
 
 PATCH1= $(NM)-livecd-1.patch
 

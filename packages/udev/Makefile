@@ -12,7 +12,7 @@ SHA-$(FILE)= 55bea7ec61026b2ecc9d2013da0ef4eed76de948
 
 FILE1= $(CONFDIR).tar.bz2
 URL-$(FILE1)= http://www.linuxfromscratch.org/lfs/downloads/6.3/$(FILE1)
-SHA-$(FILE1)= 02fac7eec2763cce6c0698040221ce1f771c40a5
+SHA-$(FILE1)= c21ade3df7c121694dd56668b0fdc2f3995e2779
 
 # Targets
 
