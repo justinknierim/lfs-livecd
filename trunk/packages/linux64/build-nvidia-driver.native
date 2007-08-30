@@ -13,6 +13,11 @@ cp usr/lib/{libGL*,libnvidia-cfg*,tls/libnvidia-tls*} glx/usr/lib
 cp usr/X11R6/lib/lib* glx/usr/lib
 cp -r usr/{include,share} glx/usr
 cp -r usr/X11R6/lib/modules/* glx/usr/lib/xorg/modules
-ldconfig -n glx/usr/lib glx/usr/lib/xorg/modules glx/usr/lib/xorg/modules/extensions
+cd glx/usr/lib/xorg/modules
+if [ -f libnvidia-wfb.so.* ] ; then
+	ln -s libnvidia-wfb.so.* libwfb.so
+fi
+cd ../../../../..
+ldconfig -n glx/usr/lib
 cd kernel ; tar zcvf ../../${1%-pkg0}-kernel-$2.tgz . ; cd ..
 cd glx ; tar zcvf ../../${1%-pkg0}-glx.tgz . ; cd ..
