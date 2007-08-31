@@ -48,6 +48,7 @@ Filesystem Programs
 * xfsprogs
 * dosfstools
 * ntfsprogs
+* jfsutils
 
 Debugging Programs
 * strace
