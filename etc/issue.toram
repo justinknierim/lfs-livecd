@@ -13,7 +13,7 @@ All source packages needed to build an LFS system are located on the CD,
 but were not loaded into RAM. After mounting the CD, you can find them in
 the [1;32mlfs-sources[00m subdirectory of the mount point.
 
-You can find the LFS book in [1;32m/usr/share/LFS-BOOK-SVN-HTML[00m.
+You can find the LFS book in [1;32m/usr/share/LFS-BOOK-6.3-HTML[00m.
 
 Support questions concerning this CD should be directed to
 [1;32mlivecd@linuxfromscratch.org[00m
