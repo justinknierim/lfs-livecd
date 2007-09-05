@@ -34,7 +34,6 @@ compile-stage2:
 	ln -nsfv /proc/self/fd/1 /lib/udev/devices/stdout
 	ln -nsfv /proc/self/fd/2 /lib/udev/devices/stderr
 	ln -nsfv /proc/kcore /lib/udev/devices/core
-	rm -rf extras/dasd_id
 	make EXTRAS="`echo extras/*/`"
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
 	cp -v etc/udev/rules.d/[0-9]* /etc/udev/rules.d/
