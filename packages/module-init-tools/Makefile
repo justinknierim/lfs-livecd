@@ -31,6 +31,7 @@ compile-stage2:
 	echo 'blacklist 8139cp' >/etc/modprobe.conf
 	echo 'blacklist eth1394' >>/etc/modprobe.conf
 	echo 'blacklist sk98lin' >>/etc/modprobe.conf
+	echo 'blacklist eepro100' >>/etc/modprobe.conf
 
 clean:
 	-rm -rf $(DIR)
