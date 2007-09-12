@@ -16,6 +16,8 @@ PATCH2= $(DIR)-silent-1.patch
 URL-$(PATCH2)= $(HTTPBLFS)/$(NM)/$(PATCH2)
 SHA-$(PATCH2)= 8899a212eadfbda201d8da3e44590bd05b97f9f6
 
+PATCH3= $(DIR)-default_client-1.patch
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -30,6 +32,7 @@ stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
 	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
 	./configure --prefix=/usr --sysconfdir=/etc --without-curses
 	LDFLAGS="-lm" make
 	make install
