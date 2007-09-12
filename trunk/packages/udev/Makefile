@@ -40,6 +40,7 @@ compile-stage2:
 	cd $(CONFDIR) ; make install install-doc install-extra-doc
 	install -m755 ../dhcp-helper /lib/udev
 	install -m644 ../76-network.rules /etc/udev/rules.d/
+	echo 'SUBSYSTEM=="pnp", ENV{MODALIAS}!="?*", RUN+="/bin/sh -c '\''while read id; do /sbin/modprobe pnp:d$$$$id; done < /sys$$devpath/id'\''"' >>/etc/udev/rules.d/26-modprobe.rules
 	install -m644 -D docs/writing_udev_rules/index.html \
 	 /usr/share/doc/$(DIR)/index.html
 
