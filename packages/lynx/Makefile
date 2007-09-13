@@ -27,7 +27,8 @@ compile-stage2:
 	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
 	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
 	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/doc
-	sed -i 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' /etc/lynx.cfg
+	sed -i -e 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' \
+	    -e 's/#DEFAULT_EDITOR:/DEFAULT_EDITOR:vi/' /etc/lynx.cfg
 
 clean:
 	-rm -rf $(DIR)
