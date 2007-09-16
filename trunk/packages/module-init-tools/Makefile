@@ -28,10 +28,7 @@ compile-stage2:
 	./configure --prefix=/ --enable-zlib
 	make
 	make install
-	echo 'blacklist 8139cp' >/etc/modprobe.conf
-	echo 'blacklist eth1394' >>/etc/modprobe.conf
-	echo 'blacklist sk98lin' >>/etc/modprobe.conf
-	echo 'blacklist eepro100' >>/etc/modprobe.conf
+	install -m644 $(ROOT)/etc/modprobe.conf /etc/modprobe.conf
 
 clean:
 	-rm -rf $(DIR)
