@@ -37,6 +37,7 @@ compile-stage2:
 	make EXTRAS="`echo extras/*/`"
 	make DESTDIR=/ EXTRAS="`echo extras/*/`" install
 	cp -v etc/udev/rules.d/[0-9]* /etc/udev/rules.d/
+	sed -i "s/ -M 0640//" $(CONFDIR)/25-lfs.rules
 	cd $(CONFDIR) ; make install install-doc install-extra-doc
 	install -m755 ../dhcp-helper /lib/udev
 	install -m644 ../76-network.rules /etc/udev/rules.d/
