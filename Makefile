@@ -285,7 +285,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
 	ch-blfs-bootscripts ch-oui-data \
-	ch-man-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
+	ch-man-pages-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
