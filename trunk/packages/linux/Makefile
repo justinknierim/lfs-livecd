@@ -58,6 +58,12 @@ FILE8= $(DIR8).tar.bz2
 URL-$(FILE8)= http://easynews.dl.sourceforge.net/sourceforge/madwifi/$(FILE8)
 SHA-$(FILE8)= ccd8f4ba267df75ca002d8dbf66b09347e1bc0b6
 
+DIR9=rtl-mac80211-20070729
+FILE9= $(DIR9).tar.bz2
+URL-$(FILE9)= http://www.hauke-m.de/fileadmin/rtl-wifi/$(FILE9)
+SHA-$(FILE9)= 001787fe6556cdfe02ec77665e83f7747d71b953
+
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -66,7 +72,7 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(FILE9) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
@@ -86,8 +92,14 @@ compile-stage2:
 	PATH=$$PWD/../fakes-for-fglrx:$$PATH sh ../$(FILE1) --buildpkg Slackware/All
 	for a in $(DIR2) $(DIR3) $(DIR4) ; do \
 	    sh ../$$a.run -x ; ../build-nvidia-driver $$a $(VRS) ; done
-	tar xf ../$(FILE7) ; cd $(DIR7) ; cp ../../config.rt2x00 config ; \
+	# both rtl8187 and rt2x00 build eeprom_93cx6.ko and thus conflict
+	# so we have to hack the build
+	tar xf ../$(FILE7) ; tar xf ../$(FILE9) ; cd $(DIR7) ; \
+	    cp ../../config.rt2x00 config ; cp ../$(DIR9)/rtl* . ; \
+	    sed -i 's@"eeprom_93cx6.h"@<linux/eeprom_93cx6.h>@' rtl8187_dev.c ; \
 	    sed -i '/depmod/d' Makefile ; \
+	    echo "obj-m += rtl8187.o" >>Makefile ; \
+	    echo "rtl8187-objs := rtl8187_dev.o rtl8187_rtl8225.o" >>Makefile ; \
 	    patch -Np0 -i ../../$(PATCH2) ; make KERNDIR=`pwd`/.. ; \
 	    make KERNDIR=`pwd`/.. install
 	tar xf ../$(FILE8) ; cd $(DIR8) ; \
