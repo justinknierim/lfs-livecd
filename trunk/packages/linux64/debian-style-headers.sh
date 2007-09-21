@@ -15,7 +15,7 @@ find . -type f -a '(' -name Kconfig\* \
     -o -name Makefile\* -o -name \*.s ')' | (
 	while read file ; do
 	    case "$file" in
-		./arch/i386*|./include/asm-generic*|./include/asm-i386*|./include/asm-x86_64*)
+		./arch/x86_64*|./include/asm-generic*|./include/asm-i386*|./include/asm-x86_64*)
 		    mkdir -p "$DSTDIR/`dirname $file`"
 		    cp "$file" "$DSTDIR/$file"
 		    ;;

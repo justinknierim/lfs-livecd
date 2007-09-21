@@ -108,8 +108,9 @@ compile-stage2:
 	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-tools install-tools ; \
 	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS).tgz . ; cd .. ; \
 	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
-	mv *.tgz /drivers
+	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9)
 	cd .. ; ./debian-style-headers.sh $(DIR)
+	mv *.tgz /drivers
 
 clean:
 	-rm -rf $(DIR)
