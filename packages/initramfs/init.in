@@ -1,5 +1,8 @@
 #!/bin/sh
 
+PATH=/bin:/usr/bin:/sbin:/usr/sbin
+export PATH
+
 EXPECTED_LABEL="lfslivecd-@VERSION@"
 EXPECTED_LABEL="$EXPECTED_LABEL                                "
 EXPECTED_LABEL=${EXPECTED_LABEL:0:32}
@@ -11,6 +14,7 @@ root=
 rootdelay=
 rootfstype=auto
 ro="ro"
+rootflags=
 noresume=0
 resume=
 all_generic_ide=0
@@ -28,6 +32,29 @@ find_cd() {
 	done
 }
 
+problem() {
+	cat <<"EOF"
+The problem may be caused by the fact that ISA IDE and SCSI adapters are
+no longer attempted to be autodetected. If you use such hardware, load the
+proper driver manually with the "modprobe" command and exit from this shell.
+For old IDE controllers, the correct module name is "ide-generic", or, if
+you want to use the new libata-based driver, "pata-legacy". To avoid this
+message next time you boot this CD, use a kernel command line like this:
+linux load=ide-generic
+
+This problem can be also caused by a slow SCSI controller or USB/FireWire
+CD-ROM that needs more time to be detected. If you see any kernel messages
+below, this is the case. In this case, it is sufficient to type "exit",
+and the CD will continue the boot process. To avoid this message next
+ime you boot this CD, use a kernel command line like this:
+linux rootdelay=20
+
+Dropping you to a shell.
+
+EOF
+	sh
+}
+
 do_resume() {
 	case "$resume" in
 	*:*)
@@ -36,8 +63,25 @@ do_resume() {
 	/dev/*)
 		if [ -b ${resume} ] ; then
 			eval echo $( stat -L -c '$(( 0x%t )):$(( 0x%T ))' ${resume} ) >/sys/power/resume
+			# MC syntax highlighting is buggy '
 		else
-			echo "Cannot resume from device $resume, which doesn't exist"
+			cat <<EOF
+The specified resume device ${resume} doesn't exist.
+Please fix this problem and exit this shell. If you don't want to resume,
+type "exit".
+
+EOF
+			problem
+			# Retry
+			if [ -b ${resume} ] ; then
+				eval echo $( stat -L -c '$(( 0x%t )):$(( 0x%T ))' ${resume} ) >/sys/power/resume
+				# MC syntax highlighting is buggy '
+			else
+				cat <<EOF
+The specified resume device ${resume} still doesn't exist.
+Assuming that you don't want to resume.
+EOF
+			fi
 		fi
 		;;
 	esac
@@ -80,9 +124,9 @@ copy_cd_to_ram() {
 	dd if=/.tmpfs/.cdrom/root.ext2 of=of=/.tmpfs/.fakecd.iso \
 		bs=1 count=1 skip=8 seek=47482 conv=notrunc 2>/dev/null
 	umount -n /.tmpfs/.cdrom
-	/sbin/losetup /dev/loop2 /.tmpfs/.fakecd.iso
+	losetup /dev/loop2 /.tmpfs/.fakecd.iso
 	if [ -d /.tmpfs/.partition ] ; then
-		/sbin/losetup -d /dev/loop3
+		losetup -d /dev/loop3
 		umount -n /.tmpfs/.partition && rm -rf /.tmpfs/.partition
 	fi
 	ln -sf /dev/loop2 /dev/lfs-cd
@@ -102,53 +146,32 @@ detect_cd_type() {
 	umount -n /.tmpfs/.cdrom
 }
 
+
 do_mount_cd() {
-	i=1
-	while [ ! -L /dev/lfs-cd ] ; do
+	while [ ! -b /dev/lfs-cd ] ; do
 		find_cd
 
-		if [ ! -L /dev/lfs-cd ] ; then
-			echo "LFS LiveCD not found."
-			TRIES=5
-			DELAY=6    # 30 seconds total
+		if [ ! -b /dev/lfs-cd ] ; then
+			cat <<"EOF"
 
-			for (( ; i<=$TRIES ; i++ )) ; do
-				[ -L /dev/lfs-cd ] && break
+LFS LiveCD could not find its device, perhaps due to unsupported or
+undetected hardware. Please fix this problem and exit this shell.
 
-				echo -n "Retry attempt $i of $TRIES... "
-				sleep $DELAY
-				find_cd
-
-				[ -L /dev/lfs-cd ] && echo "success!" || echo "failed!"
-			done
-		fi
-
-		if [ ! -L /dev/lfs-cd ] ; then
-			echo ""
-			echo "LFS LiveCD could not find its device, perhaps due to"
-			echo "unsupported or undetected hardware. Or maybe this is"
-			echo "just a slow SCSI or USB controller that needs more time"
-			echo "to settle (workaround: add rootdelay=30 to the kernel"
-			echo "command line in the boot loader)."
-			echo ""
-			echo "Dropping you to a shell."
-			echo "Please load the needed modules and, optionally, make"
-			echo "/dev/lfs-cd a symlink pointing to the correct device."
-			echo ""
-			sh
+EOF
+			problem
 		fi
 	done
 	mkdir /.tmpfs/.cdrom
 	detect_cd_type
 	if [ "$toram" = 1 ] ; then copy_cd_to_ram ; fi
 	mount -n -t iso9660 -o ro /dev/lfs-cd /.tmpfs/.cdrom
-	/sbin/losetup /dev/loop0 /.tmpfs/.cdrom/root.ext2
-	SIZE=`/sbin/blockdev --getsize /dev/loop0`
+	losetup /dev/loop0 /.tmpfs/.cdrom/root.ext2
+	SIZE=`blockdev --getsize /dev/loop0`
 	OVERHEAD=$(( 0x1000 + $SIZE * 2 ))
 	OVLSIZE=$(( $SIZE + ( $OVERHEAD + 511 ) / 512 ))
 	dd if=/dev/null of=/.tmpfs/.overlay bs=512 seek=$OVLSIZE 2>/dev/null
-	/sbin/losetup /dev/loop1 /.tmpfs/.overlay
-	echo "0 $SIZE snapshot /dev/loop0 /dev/loop1 p 8" | /sbin/dmsetup create lfs-cd
+	losetup /dev/loop1 /.tmpfs/.overlay
+	echo "0 $SIZE snapshot /dev/loop0 /dev/loop1 p 8" | dmsetup create lfs-cd
 	mount -n -t ext2 /dev/mapper/lfs-cd /.root
 	mount -n --move /.tmpfs /.root/dev/shm
 	if [ "$toram" != 1 ] && [ ! -d /.root/dev/shm/.partition ] ; then
@@ -165,6 +188,10 @@ do_mount_cd() {
 	if [ "$nodhcp" = "1" ] ; then
 		rm -f /.root/etc/udev/rules.d/76-network.rules
 	fi
+	( IFS="," ; for module in $load ; do
+		echo "$module" >>/.root/etc/sysconfig/modules
+	done )
+
 }
 
 do_mount_iso() {
@@ -172,8 +199,48 @@ do_mount_iso() {
 	FILE=${DEVICE#*:}
 	DEVICE=${DEVICE%%:*}
 	mkdir /.tmpfs/.partition
-	mount -n -t "$rootfstype" -o "$rootflags" "$DEVICE" /.tmpfs/.partition
-	/sbin/losetup /dev/loop3 "/.tmpfs/.partition/$FILE"
+	while [ ! -b "$DEVICE" ] ; do
+		cat <<EOF
+
+The device ${DEVICE}, which is supposed to contain a file
+with the ISO9660 image of the LFS LiveCD, does not exist.
+Please fix this problem and exit this shell.
+
+EOF
+		problem
+	done
+	if ! mount -n -t "$rootfstype" -o "$rootflags" "$DEVICE" /.tmpfs/.partition ; then
+		cat <<EOF
+
+Could not mount device ${DEVICE}
+(but it does exist, please mention this when asking for support).
+Sleeping forever. Please reboot and fix the kernel command line.
+
+Maybe you have put the ISO9660 image of the LiveCD onto a partition
+formatted with an unsupported file system?
+
+Or maybe filesystem type autodetection went wrong, in which case
+you should add rootfstype=... to the kernel command line.
+
+Available partitions:
+EOF
+		cat /proc/partitions
+		while true ; do sleep 10000 ; done
+	fi
+	if [ ! -f "/.tmpfs/.partition/$FILE" ] ; then
+		cat <<EOF
+
+The file ${FILE} does not exist on the device ${DEVICE}.
+Sleeping forever. Please reboot and fix the kernel command line.
+
+Maybe you have specified a wrong device or file name? Does the following
+list of files on the partition look right?
+EOF
+		( cd /.tmpfs/.partition ; ls )
+		umount -n /.tmpfs/.partition
+		while true ; do sleep 10000 ; done
+	fi
+	losetup /dev/loop3 "/.tmpfs/.partition/$FILE"
 	ln -sf /dev/loop3 /dev/lfs-cd
 	do_mount_cd
 }
@@ -188,12 +255,51 @@ do_mount_root() {
 		mount -n -t tmpfs -o size=90% tmpfs /.tmpfs
 		do_mount_iso
 		;;
+	/dev/*)
+		while [ ! -b "$root" ] ; do
+			cat <<EOF
+The device ${root}, which is supposed to contain the
+root file system, does not exist.
+Please fix this problem and exit this shell.
+
+EOF
+			problem	
+		done
+		if ! mount -n -t "$rootfstype" -o "$rootflags" "$root" /.root ; then
+			cat <<EOF
+
+Could not mount device ${root}
+Sleeping forever. Please reboot and fix the kernel command line.
+
+Maybe the device is formatted with an unsupported file system?
+
+Or maybe filesystem type autodetection went wrong, in which case
+you should add the rootfstype=... parameter to the kernel command line.
+
+Available partitions:
+EOF
+			cat /proc/partitions
+			while true ; do sleep 10000 ; done
+		fi
+		;;
 	*:*)
 		( IFS=":" ; mknod /dev/root b $root )
-		mount -n -t "$rootfstype" -o "$rootflags" /dev/root /.root
-		;;
-	/dev/*)
-		mount -n -t "$rootfstype" -o "$rootflags" "$root" /.root
+		if ! mount -n -t "$rootfstype" -o "$rootflags" /dev/root /.root ; then
+			cat <<EOF
+
+Could not mount device $root
+Sleeping forever. Please reboot and fix the kernel command line.
+
+Maybe the device is formatted with an unsupported file system?
+
+Or maybe filesystem type autodetection went wrong, in which case
+you should add the rootfstype=... parameter to the kernel command line.
+
+Available partitions:
+EOF
+			cat /proc/partitions
+			while true ; do sleep 10000 ; done
+		fi
 		;;
 	"")
 		mkdir /.tmpfs
@@ -243,6 +349,9 @@ for param in $cmdline ; do
 	rootfstype=*)
 		rootfstype=${param#rootfstype=}
 		;;
+	rootflags=*)
+		rootflags=${param#rootflags=}
+		;;
 	ro)
 		ro="ro"
 		;;
@@ -278,7 +387,6 @@ case "$PATA" in
 			echo "blacklist $drv" >>/etc/modprobe.conf
 		done
 		echo "install ata_piix /sbin/modprobe piix ; /sbin/modprobe -i ata_piix" >>/etc/modprobe.conf
-		echo "blacklist ata_generic" >>/etc/modprobe.conf
 		;;
 	1)
 		for driver in /lib/modules/`uname -r`/kernel/drivers/ide/pci/*.ko ; do
@@ -310,22 +418,25 @@ esac
 if [ "$all_generic_ide" = 1 ] ; then
 	echo "options generic all_generic_ide=1" >>/etc/modprobe.conf
 	echo "options ata-generic all_generic_ide=1" >>/etc/modprobe.conf
-else
-	if [ "$PATA" = 0 ] ; then
-		echo "blacklist generic" >>/etc/modprobe.conf
-	else
-		echo "blacklist ata-generic" >>/etc/modprobe.conf
-	fi
 fi
 
-/sbin/udevd --daemon
+udevd --daemon
 
 ( IFS="," ; for module in $load ; do
-	/sbin/modprobe "$module"
+	modprobe "$module"
 done )
 
-/sbin/udevtrigger
-/sbin/udevsettle
+udevtrigger
+udevsettle
+if [ "$all_generic_ide" = 1 ] ; then
+	if [ "$PATA" = 0 ] ; then
+		modprobe generic
+	else
+		modprobe ata_generic
+	fi
+	udevsettle
+fi
+
 if [ -n "$rootdelay" ] ; then sleep "$rootdelay" ; fi
 
 [ "$noresume" = 0 ] && do_resume
