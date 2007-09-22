@@ -135,7 +135,7 @@ ifeq ($(CD_ARCH),x86_64)
 	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9)
-	cd .. ; ./debian-style-headers.sh $(DIR)
+	../debian-style-headers.sh
 endif
 	mv *.tgz /drivers
 

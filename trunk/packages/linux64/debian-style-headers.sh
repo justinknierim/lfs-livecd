@@ -1,7 +1,5 @@
 #!/bin/sh
 
-cd "$1"
-
 KVERSION=`grep UTS_RELEASE include/linux/utsrelease.h | cut -d '"' -f 2`
 DSTDIR=/usr/src/linux-$KVERSION
 
