@@ -36,6 +36,7 @@ Network Tools
 * cvs
 * pppd
 * rp-pppoe
+* pptp client
 * dhcpcd
 * ncftp
 * traceroute
