@@ -40,7 +40,8 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	svn co $(REVPARM) $(URL) $(DIR)
 	# tar xf $(FILE)
-	cd $(DIR) ; make BASEDIR=../$(HTMLDIR)
+	cd $(DIR) ; make BASEDIR=../$(HTMLDIR) RENDERTMP=.
+	rm $(DIR)/lfs-full.xml $(DIR)/lfs-html.xml
 	cp -av $(DIR) $(HTMLDIR) /usr/share
 	cd $(SRC) ; cp -v `sed 's@^.*/\([^/]*\)$$@\1@' /usr/share/$(HTMLDIR)/wget-list` $(LFSSRC)
 	sed -i \
