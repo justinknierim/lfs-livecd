@@ -20,7 +20,8 @@ stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	# Without -O0, videos cannot be played on x86_64
+	CFLAGS="-O0 -pipe" ./configure --prefix=/usr
 	make
 	make install
 
