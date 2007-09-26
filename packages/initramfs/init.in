@@ -423,7 +423,9 @@ fi
 udevd --daemon
 
 ( IFS="," ; for module in $load ; do
-	modprobe "$module"
+	# Some modules exist only on the main CD filesystem.
+	# Suppress the error about them not being found.
+	modprobe -q "$module"
 done )
 
 udevtrigger
