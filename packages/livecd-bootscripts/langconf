@@ -89,9 +89,13 @@ guess_font() {
 	done <$FONTDB
 	
 	# If UTF-8 locale is used, drop any "-m" flag
+	# and select a font with Euro, if appropriate
 	case "$F_LANG" in
 	*.UTF-8)
 		F_FONT=${F_FONT% -m*}
+		if [ "$F_FONT" = "lat1-16" ] ; then
+			F_FONT=lat0-16
+		fi
 		;;
 	esac
 }
@@ -107,8 +111,7 @@ confirm() {
 If you don't need to convert your keymap to UTF-8 (e.g. because it
 is already in UTF-8, or because you don't want UTF-8), don't fill in
 that field.
-\n\nIn order to enhance Unicode coverage of the Linux console at the
-cost of unavailable bright colors, use the LatArCyrHeb-16 font.\" 0 0 6 \
+\" 0 0 6 \
 	\"Locale:\" 1 1 \"$F_LANG\" 1 30 40 0 \
 	\"Console keymap:\" 2 1 \"$F_KEYMAP\" 2 30 40 0 \
 	\"  autoconverted from charset:\" 3 1 \"$F_LEGACYCHARSET\" 3 30 40 0 \
