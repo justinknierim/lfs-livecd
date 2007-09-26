@@ -64,6 +64,7 @@ Other Programs
 * mdadm
 * LVM2
 * dmraid
+* kpartx
 * hdparm
 * parted
 * xlockmore
