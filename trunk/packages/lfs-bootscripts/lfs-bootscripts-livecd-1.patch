@@ -66,7 +66,7 @@ diff -urN lfs-bootscripts-20060712.orig/lfs/init.d/udev lfs-bootscripts-20060712
 diff -urN lfs-bootscripts-20060712.orig/Makefile lfs-bootscripts-20060712/Makefile
 --- lfs-bootscripts-20060712.orig/Makefile	2006-06-03 08:23:11.000000000 +0600
 +++ lfs-bootscripts-20060712/Makefile	2006-07-14 21:47:48.000000000 +0600
-@@ -86,6 +86,44 @@
+@@ -86,6 +86,46 @@
  	install                   -m ${MODE} lfs/sysconfig/network-devices/services/ipv4-static       ${EXTDIR}/sysconfig/network-devices/services/
  	install                   -m ${MODE} lfs/sysconfig/network-devices/services/ipv4-static-route ${EXTDIR}/sysconfig/network-devices/services/
  
@@ -74,6 +74,7 @@ diff -urN lfs-bootscripts-20060712.orig/Makefile lfs-bootscripts-20060712/Makefi
 +	install -m ${CONFMODE} lfs/init.d/functions ${EXTDIR}/rc.d/init.d/
 +	install -m ${MODE} lfs/init.d/console       ${EXTDIR}/rc.d/init.d/
 +	install -m ${MODE} lfs/init.d/localnet      ${EXTDIR}/rc.d/init.d/
++	install -m ${MODE} lfs/init.d/modules       ${EXTDIR}/rc.d/init.d/
 +	install -m ${MODE} lfs/init.d/mountfs       ${EXTDIR}/rc.d/init.d/
 +	install -m ${MODE} lfs/init.d/mountkernfs   ${EXTDIR}/rc.d/init.d/
 +	install -m ${MODE} lfs/init.d/network       ${EXTDIR}/rc.d/init.d/
@@ -97,6 +98,7 @@ diff -urN lfs-bootscripts-20060712.orig/Makefile lfs-bootscripts-20060712/Makefi
 +	# ln -sf ../init.d/network     ${EXTDIR}/rc.d/rc5.d/S20network
 +	ln -sf ../init.d/network     ${EXTDIR}/rc.d/rc6.d/K80network
 +	ln -sf ../init.d/mountkernfs ${EXTDIR}/rc.d/rcsysinit.d/S00mountkernfs
++	ln -sf ../init.d/modules     ${EXTDIR}/rc.d/rcsysinit.d/S05modules
 +	ln -sf ../init.d/udev        ${EXTDIR}/rc.d/rcsysinit.d/S10udev
 +	ln -sf ../init.d/mountfs     ${EXTDIR}/rc.d/rcsysinit.d/S40mountfs
 +	ln -sf ../init.d/setclock    ${EXTDIR}/rc.d/rcsysinit.d/S60setclock
