@@ -7,7 +7,7 @@ Options [page 4 of 4]:
 new_firewire
   Uses the new FireWire stack.
 
-nomsi noapic nolapic pci=noacpi acpi=off blacklist=yenta-socket ide=nodma
+nomsi noapic pci=noacpi acpi=off clock=pit blacklist=yenta-socket ide=nodma
   These options work around various chipset bugs. Try them one-by-one in the
   order given above and in various combinations if the CD does not boot, or if
   a device does not work correctly or fails after hibernating and resuming.
