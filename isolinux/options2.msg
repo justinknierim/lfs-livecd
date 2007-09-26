@@ -8,7 +8,6 @@ Options [page 2 of 4]:
 toram
   Loads the whole CD contents (except sources and proprietary video
   drivers) to RAM.
-
   Note: this needs at least 512 MB of RAM, and you also need
   to enable swap if you have less than 768 MB of RAM.
 
@@ -25,4 +24,5 @@ resume=/dev/XXX
   Uses /dev/XXX for software suspending (AKA hibernation) and resuming.
   See /root/README for details.
 
-
+debug
+  Causes kernel messages to appear on the screen.
