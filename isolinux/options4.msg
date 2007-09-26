@@ -18,11 +18,11 @@ brltty=drv[,dev[,tbl]]
   device dev, with a translation table tbl. The example specifies a BAUM
   SuperVario 40 Braille display connected by USB with default Braille table.
 
-vga=[res]
+vga=[resolution]
   Examples:
   vga=795 (1280x1024x24)   vga=792 (1024x768x24)   vga=789 (800x600x24)
   vga=794 (1280x1024x16)   vga=791 (1024x768x16)   vga=788 (800x600x16)
 
-  NOTE: This is for the framebuffer console and has nothing to do with X
+  Enables the framebuffer console. This has nothing to do with X
   server resolution. Also, it causes some X video drivers (e.g., "s3virge") to
   malfunction. X server bug reports will be ignored if you use this option.
