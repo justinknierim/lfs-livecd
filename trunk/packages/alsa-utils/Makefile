@@ -23,6 +23,8 @@ compile-stage2:
 	./configure
 	make
 	make install
+	install -m755 ../set-alsa-volume /lib/udev
+	echo 'KERNEL=="controlC[0-9]*", ACTION=="add", RUN+="set-alsa-volume %n"' >/etc/udev/rules.d/40-alsa.rules
 
 clean:
 	-rm -rf $(DIR)
