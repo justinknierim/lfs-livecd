@@ -1,12 +1,12 @@
 # alsa-lib Makefile
 
 NM= alsa-lib
-VRS= 1.0.13
+VRS= 1.0.14a
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)=  http://gd.tuwien.ac.at/opsys/linux/alsa/lib/$(FILE)
-SHA-$(FILE)= 82fa9a7fcb43b319524b18451ca86d691a20f4a3
+URL-$(FILE)= http://gd.tuwien.ac.at/opsys/linux/alsa/lib/$(FILE)
+SHA-$(FILE)= 0d0e217b778c411220471cd941ae48c4af675e61
 
 # Targets
 

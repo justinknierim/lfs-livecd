@@ -1,12 +1,12 @@
 # alsa-firmware Makefile
 
 NM= alsa-firmware
-VRS= 1.0.13
+VRS= 1.0.14
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://gd.tuwien.ac.at/opsys/linux/alsa/firmware/$(FILE)
-SHA-$(FILE)= de5532d5456bc42317ae42f569a1e55391a8cd45
+SHA-$(FILE)= ccc86da526b62aabb3119b5bf03a7e4de0133a9b
 
 # Targets
 
