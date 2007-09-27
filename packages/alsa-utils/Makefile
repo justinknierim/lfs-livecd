@@ -1,12 +1,12 @@
 # alsa-utils Makefile
 
 NM= alsa-utils
-VRS= 1.0.13
+VRS= 1.0.14
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)=  http://gd.tuwien.ac.at/opsys/linux/alsa/utils/$(FILE)
-SHA-$(FILE)= 05b460a0e7ae6519ea37240476f026b59dbc710d
+URL-$(FILE)= http://gd.tuwien.ac.at/opsys/linux/alsa/utils/$(FILE)
+SHA-$(FILE)= 767e71805ee606a4589bda9e95babbca61f9e92f
 
 # Targets
 
