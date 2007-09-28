@@ -63,6 +63,11 @@ FILE9= $(DIR9).tar.bz2
 URL-$(FILE9)= http://www.hauke-m.de/fileadmin/rtl-wifi/$(FILE9)
 SHA-$(FILE9)= 001787fe6556cdfe02ec77665e83f7747d71b953
 
+# Git snapshot - stable versions are incompatible with linux-2.6.22
+DIR10= speakup-20070928
+FILE10= $(DIR10).tar.gz
+URL-$(FILE10)= http://www.linuxfromscratch.org/~alexander/$(FILE10)
+SHA-$(FILE10)= 101a7fcae2cbf2dbad81d91ff7cb262d6857d104
 
 # Targets
 
@@ -72,12 +77,13 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(FILE9) $(PATCH1)
+stage2: Makefile $(FILE) $(FILE1) $(FILE2) $(FILE3) $(FILE4) $(FILE5) $(FILE6) $(FILE7) $(FILE8) $(FILE9) $(FILE10) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
 	tar xf ../$(FILE5) ; cd $(DIR5) ; make KSRC=.. patch_kernel
 	tar xf ../$(FILE6) ; cd $(DIR6) ; echo "Y" | make KSRC=.. patch_kernel
+	tar xf ../$(FILE10) ; cd $(DIR10) ; ./install-spkglue `pwd`/.. ; ./install-speakup `pwd`/..
 	zcat ../$(PATCH1) | patch -Np1
 	patch -Np1 -i ../$(PATCH3)
 	install -d /boot/isolinux
@@ -108,7 +114,7 @@ compile-stage2:
 	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-tools install-tools ; \
 	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS).tgz . ; cd .. ; \
 	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
-	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9)
+	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9) $(DIR10)
 	../debian-style-headers.sh
 	mv *.tgz /drivers
 
