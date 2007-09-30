@@ -13,8 +13,8 @@ case "${1}" in
 		  evaluate_retval
 		  if [ "$SYNTH" = "soft" ] ; then
 			  boot_mesg "Starting software speech synthesizer..."
-			  loadproc speech-dispatcher 2>/dev/null &&
-			  loadproc speechd-up
+			  speech-dispatcher 2>/dev/null &&
+			  speechd-up
 			  evaluate_retval
 		  fi
 		  # Some applications need to be configured specially

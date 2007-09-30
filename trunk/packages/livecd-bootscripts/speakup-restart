@@ -20,8 +20,8 @@ case "${1}" in
 		  killproc /usr/bin/speechd-up >/dev/null 2>&1
 		  killproc /usr/bin/speech-dispatcher >/dev/null 2>&1
 		  sed -i "/DefaultLanguage/s/en/$LL/" /etc/speech-dispatcher/speechd.conf
-		  loadproc speech-dispatcher 2>/dev/null &&
-		  loadproc /usr/bin/speechd-up -c "$CHARMAP"
+		  speech-dispatcher 2>/dev/null &&
+		  /usr/bin/speechd-up -c "$CHARMAP"
 		  evaluate_retval
 		fi
 		;;
