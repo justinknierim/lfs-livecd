@@ -16,7 +16,9 @@ SHA-$(FILE)= 272e7f1980a35a360ff321ca739e07f652dd94f6
 # Chinese file is not downloaded because Chinese cannot be used in
 # Linux console.
 # http://espeak.sourceforge.net/data/zhy_list.zip
- 
+
+PATCH1= espeak-1.29-dont-crash.patch
+
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -33,6 +35,7 @@ stage2: Makefile $(FILE)
 	@touch $@
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
 	# Remove dependency on portaudio
 	sed -i s/-lportaudio// src/Makefile
 	sed -i /USE_PORTAUDIO/d src/speech.h

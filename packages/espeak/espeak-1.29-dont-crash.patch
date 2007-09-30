@@ -1,0 +1,16 @@
+The "fix" is surely wrong (why did phoneme_tab[final_ph] become NULL in the
+first place?), but it does prevent the crash when using espeak with the
+Russian voice.
+diff -ur espeak-1.29-source.orig/src/dictionary.cpp espeak-1.29-source/src/dictionary.cpp
+--- espeak-1.29-source.orig/src/dictionary.cpp	2007-09-30 17:16:23.000000000 +0600
++++ espeak-1.29-source/src/dictionary.cpp	2007-09-30 17:17:12.000000000 +0600
+@@ -1109,6 +1109,9 @@
+ 			stressed_syllable = vowel_count - 3;
+ 			if(vowel_count < 16)
+ 			{
++				if(phoneme_tab[final_ph] == NULL)
++					stressed_syllable = guess_ru[vowel_count];
++				else
+ 				if(phoneme_tab[final_ph]->type == phVOWEL)
+ 					stressed_syllable = guess_ru_v[vowel_count];
+ 				else
