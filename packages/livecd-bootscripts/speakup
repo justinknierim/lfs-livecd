@@ -21,7 +21,9 @@ case "${1}" in
 		  # in order to show cursor on selected items in menus
 		  echo 'visit_items=ON' >>/etc/dialogrc
 		  echo 'set braille_friendly=yes' >>/root/.muttrc
-		  sed -i 's/^#SHOW_CURSOR:FALSE/SHOW_CURSOR:TRUE/' /etc/lynx.cfg
+		  sed -i -e 's/^#SHOW_CURSOR:FALSE/SHOW_CURSOR:TRUE/' \
+		         -e 's/#\(DEFAULT_KEYPAD_MODE\):NUMBERS_AS_ARROWS/\1:LINKS_AND_FIELDS_ARE_NUMBERED/' \
+		         /etc/lynx.cfg
 		  # FIXME: does not help
 		  # sed -i 's/^draw_arrow=OFF/draw_arrow=ON/' /etc/tin/tinrc
 		  # FIXME: others
