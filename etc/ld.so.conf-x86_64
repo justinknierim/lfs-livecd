@@ -1,9 +1,0 @@
-# Begin /etc/ld.so.conf
-
-/usr/local/lib
-/usr/local/lib64
-/opt/lib
-/opt/lib64
-/usr/X11R6/lib64
-
-# End /etc/ld.so.conf
