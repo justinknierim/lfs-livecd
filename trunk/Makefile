@@ -412,7 +412,7 @@ ifeq ($(CD_ARCH),x86_64)
 endif
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
 	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue*
-	@install -m644 doc/README doc/lfscd-remastering-howto.txt $(MP)/root
+	@install -m644 doc/README.txt doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed -i "s/\[version\]/$(VERSION)/" $(MP)/root/README
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m755 scripts/{net-setup,greeting,livecd-login} $(MP)/usr/bin/ 
