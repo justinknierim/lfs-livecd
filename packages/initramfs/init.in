@@ -334,7 +334,7 @@ for param in $cmdline ; do
 	new_firewire)
 		NEW_FIREWIRE=1
 		;;
-	all_generic_ide)
+	all_generic_ide|all-generic-ide)
 		all_generic_ide=1
 		;;
 	init=*)
