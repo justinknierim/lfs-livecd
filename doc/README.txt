@@ -116,18 +116,6 @@ If you don't want the CD to start dhcpcd on the detected network cards,
 type "linux nodhcp" at the boot loader prompt. This may be required for
 wireless connections that utilize WEP or WPA encryption.
 
-Users of wireless cards based on the Atheros chipset have to install the
-proprietary "madwifi" driver. The driver is provided in the precompiled form
-in the /drivers directory (if you loaded the CD contents to RAM, you have to
-mount the CD and look into /media/cdrom/drivers instead). To install it,
-run the following commands:
-
-    cd /drivers
-    tar -C / -xf madwifi-x86-6.3-r2052-kernel-[kernel_version].tgz
-    tar -C / -xf madwifi-x86-6.3-r2052-tools.tgz
-    depmod -ae
-    modprobe ath_pci
-
 CONFIGURING X
 -------------
 
