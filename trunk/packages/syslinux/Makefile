@@ -16,13 +16,18 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) split-boot-help $(ROOT)/doc/README.txt
 	$(std_build)
 
 compile-stage2:
 	mkdir -p /boot/isolinux
 	cp -v isolinux.bin /boot/isolinux
-	cp -v $(ROOT)/isolinux/{isolinux.cfg,*.msg,splash.lss} /boot/isolinux
+	../split-boot-help <$(ROOT)/doc/README.txt
+	cp -v F*.txt /boot/isolinux
+	cp -v $(ROOT)/isolinux/{isolinux.cfg,boot.msg,splash.lss} /boot/isolinux
+ifeq ($(CD_ARCH),x86_64)
+	sed -i 's/kernel linux64/kernel linux/' /boot/isolinux/isolinux.cfg
+endif
 
 clean:
 	-rm -rf $(DIR)

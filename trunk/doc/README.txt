@@ -1,6 +1,6 @@
 Official Linux From Scratch LiveCD
 ==================================
-Version: x86-6.3-r2052
+Version: [version]
 
 
 PACKAGES
@@ -22,7 +22,7 @@ Available packages on this CD for your use:
    - seamonkey (graphical web browser, mail and news reader and irc client)
    - xchat (x-based irc client)
    - pidgin (multiprotocol x-based chat client)
-   - finch (multiprotocol console chat client - works in UTF-8 locales only)
+   - finch (multiprotocol console chat client -- works in UTF-8 locales only)
    - msmtp (SMTP client for use with mutt and tin)
    - mutt (console email client)
    - tin (console news reader)
@@ -90,10 +90,16 @@ VMWARE ISSUE
 ------------
 
 This CD does not detect virtual SCSI disks connected to a virtual machine in
-VMware Workstation 5.x or earlier or VMware Server 1.0.x or earlier. This is
-a known VMware bug. The solution is to upgrade to VMware Workstation 6.x, or
-to choose "BusLogic" as the virtual SCSI controller type instead of the
+VMware Workstation 5.x or earlier or VMware Server 1.0.3 or earlier. This is
+a known VMware bug. The solution is to upgrade to VMware Workstation >= 6.0 or
+VMware Server >= 1.0.4.
+
+The following workarounds help for older versions of VMware products:
+
+ * Choose "BusLogic" as the virtual SCSI controller type instead of the
 default "LSI Logic".
+
+ * Pass the "mptbase.mpt_channel_mapping=1" option to the kernel command line.
 
 The same issue will be present on an LFS system built from this CD.
 
@@ -244,36 +250,6 @@ It is possible to specify the locale using the bootloader prompt, like this:
 
     linux LANG=es_ES@euro
 
-The CD tries to guess the proper screen font and keymap based on this
-information. If the guess is wrong, you can override it by adding the
-following parameters:
-
-KEYMAP:
-  specifies the console keymap(s) to load (actually the arguments to
-  the "loadkeys" program separated by the "+" sign)
-
-Example: "KEYMAP=es+euro1"
-
-LEGACY_CHARSET:
-  sometimes a ready-made UTF-8 keymap is not available and
-  must be obtained by converting an existing keymap from this charset to UTF-8.
-  This parameter is not used in non-UTF-8 locales.
-
-Example: "LEGACY_CHARSET=iso-8859-15".
-
-FONT:
-  specifies the screen font to set (actually, the arguments to the
-  "setfont" program separated by the "+" sign).
-
-Example: "FONT=LatArCyrHeb-16+-m+8859-15"
-
-XKEYMAP:
-  the keymap to use with X window system
-
-Example: "XKEYMAP=us"
-
-Alternatively, these items can be configured interactively using dialog-based
-interface if the locale is not specified on the boot prompt.
 
 For some locales (e.g. lv_LV.ISO-8859-13) there is no valid console keymap,
 but there is a keymap for X. In this case, the only solution is to use X.
@@ -362,7 +338,7 @@ that /dev/hda2 is your (existing or planned) swap partition.
 
 Pass "resume=/dev/hda2" as one of the kernel arguments when booting this CD.
 I.e., the complete boot line may look as:
-  
+
     linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg resume=/dev/hda2
 
 Alternatively, once the system is running, you can activate hibernation by
@@ -508,6 +484,287 @@ computer:
    the target partition.
 
  * Add "rootdelay=20" to the kernel arguments.
+
+BOOT OPTIONS
+------------
+
+### AVAILABLE KERNELS ###
+
+#### linux ####
+
+The default (32-bit on the x86 CD, 64-bit on the x86_64 CD) kernel.
+
+#### linux64 ####
+
+On the x86 CD, this is the alternative (64-bit) kernel, for use with
+Cross-Compiled Linux From Scratch <http://trac.cross-lfs.org/>.
+
+Don't use this kernel for building the regular version of LFS -- it will fail,
+because the x86 CD does not contain a 64-bit capable compiler, and because
+the included book on the x86 CD does not support x86_64 yet.
+
+On the x86_64 CD, this is the same as the default kernel.
+
+After the kernel name, options may be specified, as in the following example:
+
+    linux LANG=ru_RU.UTF-8 TZ=Asia/Yekaterinburg UTC=1
+
+See the list of available options below.
+
+### GRAPHICS AND SOUND ###
+
+#### vga=[resolution] ####
+
+Examples:
+
+    vga=795 (1280x1024x24)   vga=792 (1024x768x24)   vga=789 (800x600x24)
+    vga=794 (1280x1024x16)   vga=791 (1024x768x16)   vga=788 (800x600x16)
+
+This parameter enables the framebuffer console.
+
+It has nothing to do with X server resolution (to set it, edit
+/etc/X11/xorg.conf manually after booting). Also, it causes some X video
+drivers (e.g., "s3virge") to malfunction.
+
+X server bug reports will be ignored if you use this option.
+
+#### volume=[volume] ####
+
+Examples:
+
+    volume=50%
+    volume=-15dB
+
+Ths parameter sets the Master, Front and Headphone volume controls on all sound
+cards to the specified value. The default is 74%. PCM and similar controls are
+always set to 0dB, or, if the driver doesn't know about dB, to 74%.
+
+### DATE AND TIME ###
+
+#### TZ=[timezone] ####
+
+Examples:
+
+    TZ=EDT-4    TZ=America/New_York
+
+The first example means that the timezone is named "EDT"
+and is 4 hours behind (west) of UTC.
+
+#### UTC=[0,1] ####
+
+Example:
+
+    UTC=1
+
+Use UTC=1 if the hardware clock is set to UTC or
+use UTC=0 (default) if the hardware clock is set to local time.
+
+If no TZ parameter is passed at the kernel command line, the CD asks
+for the above settings during boot.
+
+### LOCALIZATION BASICS ###
+
+#### LANG=[locale] ####
+
+Example:
+
+    LANG=fr_FR.UTF-8
+
+If you don't specify your locale at the boot prompt, a configuration dialog
+will appear later during boot.
+
+The CD attempts to guess the keymap and the screen font based on the LANG
+variable. If the default guess is wrong, you can override it, as described
+in the "FINE-TUNING LOCALIZATION" section below.
+
+UTF-8 locales don't work well on Linux text console. Copying and pasting
+non-ASCII characters is impossible, as well as using dead keys for entering
+characters outside of the Latin-1 range of Unicode.
+
+UTF-8 locales don't work at all with accessibility software (brltty and
+speakup) due to the same kernel limitation.
+
+### FINE-TUNING LOCALIZATION ###
+
+#### KEYMAP=[keymap] ####
+
+Example:
+
+    KEYMAP=es+euro1
+
+Specifies the console keymap(s) to load, separated by the "+" sign.
+
+#### LEGACY_CHARSET=[charset] ####
+
+Example:
+
+    LEGACY_CHARSET=iso-8859-15
+
+Instructs the CD to convert an existing keymap from this charset to UTF-8
+with the "dumpkeys" program.
+
+#### FONT=[screen_font] ####
+
+Example:
+
+    FONT=LatArCyrHeb-16+-m+8859-15
+
+Specifies the screen font to set (actually, the arguments to the "setfont"
+program, separated by the "+" sign).
+
+#### XKEYMAP=[keymap1,keymap2] ####
+
+Example:
+
+    XKEYMAP=us,ru(winkeys)
+
+Keymap(s) for X window system. To switch between them, press Alt+Shift.
+
+### ACCESSIBILITY: BRLTTY ###
+
+#### brltty=drv[,dev[,tbl]] ####
+
+Example:
+
+    brltty=bm,usb:
+
+Enables a refreshable Braille display supported by driver drv, connected to
+device dev, with a translation table tbl. The example specifies a BAUM
+SuperVario 40 Braille display connected viw USB with default Braille table.
+
+Available drivers:
+
+    al, at, bd, bl, bm, bn, cb, ec, eu, fs, ht, il,
+    lt, mb, md, mn, pm, tn, ts, vd, vo, vr, vs.
+
+Available tables:
+
+    brf, cz, da-1252, da-lt, da, de, en_UK, en_US, es,
+    fi1, fi2, fr-2007, fr_CA, fr-cbifs, fr_FR, it, nabcc,
+    no-h, no-p, pl, pt, ru, se-old, simple, visiob.
+
+The charset of the selected locale must match the charset of the Braille table.
+
+BRLTTY is not compatible with UTF-8 locales.
+
+### ACCESSIBILITY: SPEAKUP ###
+
+#### speakup.synth=[syn] ####
+
+Example:
+
+    speakup.synth=soft
+
+Enables a speech synthesis engine syn. Available drivers: acntpc, acntsa,
+appolo, audptr, bns, decext, dectlk, dtlk, keypc, ltlk, soft, spkout, txprt.
+The "soft" driver uses Espeak to output sound through the first sound card.
+
+The GIT snapshot of speakup used on this CD has a known bug: copying and
+pasting text produces garbage and even can crash the computer. For copying
+and pasting text between programs, please use the "screen" terminal emulator
+instead of this buggy built-in feature of speakup.
+
+#### speakup.ser=[index] ####
+
+Example:
+
+    speakup.ser=2
+
+One-based serial port index to use with a hardware synth. The example above
+means that /dev/ttyS1 will be used.
+
+#### speakup.port=[port] ####
+
+A port address to use with speakup.
+
+### MODULE HANDLING ###
+
+#### load=module1,module2,... ####
+
+Example:
+
+    load=ide-generic
+
+Loads the specified modules unconditionally from initramfs. Use if your SCSI
+or IDE controller is not autodetected. If you don't specify this parameter
+and the CD doesn't detect your SCSI or IDE controller, you will be dropped
+into a debugging shell where you can load the needed module manually.
+
+#### blacklist=module1,module2,... ####
+
+Example:
+
+    blacklist=yenta-socket
+
+Prevents the specified modules from being autoloaded. Use if udev autoloads
+a module that causes your computer to misbehave (e.g., crash or freeze).
+
+#### module.option=value ####
+
+Example:
+
+    psmouse.proto=bare
+
+Sets arbitrary module options.
+
+### ALTERNATIVE DRIVERS ###
+
+Options in this section do not take parameters. Example:
+
+    pata new_firewire
+
+#### pata ####
+
+Causes the CD to use new libata-based drivers for IDE controllers. This option
+may be required for controller detection or recommended for optimal performance
+on computers manufactured in year 2006 and later.
+
+Caution: new drivers are safe to use only with IDE chipsets from AMD, Intel,
+ITE, JMicron, Marvell, Netcell, NVIDIA, Serverworks, Promise, Silicon Image,
+VIA, or Winbond. Drivers for other chipsets are likely to contain bugs that
+lead to data loss.
+
+#### new_firewire ####
+
+Uses the new (experimental) Juju FireWire stack.
+
+#### all-generic-ide ####
+
+Attempts to support unknown PCI IDE and SATA controllers (slow).
+For SATA support to work with this option, the SATA controller
+must be put into "Legacy" (as opposed to "Native") mode in the BIOS.
+
+### TROUBLESHOOTING ###
+
+#### debug ####
+
+Displays kernel messages during the boot process.
+
+#### rootdelay=X ####
+
+Example:
+
+    rootdelay=20
+
+Waits X seconds before attempting to find the CD. Required (with X=20)
+for booting from USB or FireWire CD-ROMs.
+
+#### nodhcp ####
+
+Prevents the CD from attempting to obtain an IP address automatically.
+May be required for wireless networking, because the WEP or WPA key
+needs to be set up first.
+
+#### Options for buggy motherboards ####
+
+Example:
+
+    nomsi noapic nolapic pci=noacpi acpi=off clock=pit ide=nodma
+
+These options work around various chipset bugs. Try them one-by-one in the
+order given above and in various combinations if the CD does not boot, or if
+a device does not work correctly or fails after hibernating and resuming.
+Note: if this helps, the bug is in the hardware or the BIOS, not in this CD.
 
 THANKS
 ------
