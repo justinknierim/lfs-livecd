@@ -26,7 +26,7 @@ done
 # Errors are ignored, because not all controls exist on all cards
 set_master_level()
 {
-	amixer -c "$CARD" -q set "$1" "$MASTER_VOLUME" unmute
+	amixer -c "$CARD" -q -- set "$1" "$MASTER_VOLUME" unmute
 }
 
 # PCM volume and similar controls are first set to 0dB and unmuted.
@@ -41,9 +41,9 @@ set_master_level()
 # Further errors are ignored, because not all controls exist on all cards
 set_pcm_level()
 {
-	AMIXER_OUTPUT=`	amixer -c "$CARD" -q set "$1" 0dB unmute 2>&1`
+	AMIXER_OUTPUT=`	amixer -c "$CARD" -q -- set "$1" 0dB unmute 2>&1`
 	if [ "$AMIXER_OUTPUT" = 'amixer: Invalid command!' ] ; then
-		amixer -c "$CARD" -q set "$1" "74%" unmute
+		amixer -c "$CARD" -q -- set "$1" "74%" unmute
 	fi
 }
 
@@ -57,7 +57,6 @@ set_master_level "Master"
 set_master_level "Master Mono"
 set_master_level "Master Digital"
 set_master_level "Headphone"
-set_master_level "Playback"
 set_master_level "Front"
 
 # Some card-specific quirks
@@ -76,6 +75,7 @@ set_pcm_level "DAC,1"
 # is 74% or, equivalently, 0dB there.
 set_pcm_level "Wave"
 set_pcm_level "AC97"
+set_pcm_level "Playback"
 set_pcm_level "Dynamic Range Compression"
 
 # This script should never fail due to
