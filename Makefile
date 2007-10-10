@@ -424,8 +424,9 @@ iso: prepiso
 	# This is not a bug.
 	@-e2fsck -f -p root.ext2
 	@( LC_ALL=C ; export LC_ALL ; \
-	    cat $(ROOT)/doc/README.html.head ; cat $(ROOT)/doc/README.txt | \
-	    $(WD)/bin/Markdown | $(WD)/bin/SmartyPants ; \
+	    cat $(ROOT)/doc/README.html.head ; \
+	    sed 's/\[version\]/$(VERSION)/' $(ROOT)/doc/README.txt | \
+		$(WD)/bin/Markdown --html4tags | $(WD)/bin/SmartyPants ; \
 	    cat $(ROOT)/doc/README.html.tail ) >$(MPBASE)/iso/README.html
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
