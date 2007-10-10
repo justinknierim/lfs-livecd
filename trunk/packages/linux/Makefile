@@ -53,10 +53,15 @@ FILE7= $(DIR7).tar.gz
 URL-$(FILE7)= http://www.linuxfromscratch.org/~alexander/$(FILE7)
 SHA-$(FILE7)= 3eba4dc8e08ce256280adff492b541bda9c0198b
 
-DIR8= madwifi-0.9.3.2
-FILE8= $(DIR8).tar.bz2
-URL-$(FILE8)= http://easynews.dl.sourceforge.net/sourceforge/madwifi/$(FILE8)
-SHA-$(FILE8)= ccd8f4ba267df75ca002d8dbf66b09347e1bc0b6
+# The latest version from
+# http://ftp.kernel.org/pub/linux/kernel/people/linville/wireless-2.6/ath5k/
+# does not compile against linux-2.6.22. So here is an old SVN snapshot
+# from http://madwifi.org/
+
+DIR8= ath5k-r2701
+FILE8= $(DIR8).tar.gz
+URL-$(FILE8)= http://www.linuxfromscratch.org/~alexander/$(FILE8)
+SHA-$(FILE8)= d14a002ba192788881ca9a715348f8b7b898fe3c
 
 DIR9=rtl-mac80211-20070729
 FILE9= $(DIR9).tar.bz2
@@ -109,11 +114,7 @@ compile-stage2:
 	    patch -Np0 -i ../../$(PATCH2) ; make KERNDIR=`pwd`/.. ; \
 	    make KERNDIR=`pwd`/.. install
 	tar xf ../$(FILE8) ; cd $(DIR8) ; \
-	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. ; \
-	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-modules install-modules ; \
-	    make BINDIR=/usr/bin MANDIR=/usr/share/man KERNELPATH=`pwd`/.. DESTDIR=`pwd`/DESTDIR-tools install-tools ; \
-	    cd DESTDIR-modules ; tar zcvf ../../$(DIR8)-kernel-$(VRS).tgz . ; cd .. ; \
-	    cd DESTDIR-tools ; tar zcvf ../../$(DIR8)-tools.tgz .
+	    make KDIR=`pwd`/.. ; make KDIR=`pwd`/.. install
 	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9) $(DIR10)
 	../debian-style-headers.sh
 	mv *.tgz /drivers

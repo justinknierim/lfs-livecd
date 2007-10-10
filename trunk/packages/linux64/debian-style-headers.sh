@@ -5,7 +5,7 @@ DSTDIR=/usr/src/linux-$KVERSION
 
 rm -rf "$DSTDIR"
 mkdir "$DSTDIR"
-cp -r .config Makefile Module.symvers .kconfig.d .version .kernelrelease scripts "$DSTDIR"
+cp -r .config Makefile Module.symvers .version scripts "$DSTDIR"
 mkdir -p "$DSTDIR/include"
 find include -maxdepth 1 | grep -v asm- | xargs '-I{}' cp -r '{}' "$DSTDIR/include"
 cp -r include/asm-{i386,x86_64,generic} "$DSTDIR/include"
