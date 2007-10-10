@@ -285,7 +285,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-espeak ch-dotconf ch-speech-dispatcher ch-speechd-up ch-brltty  \
 	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm \
 	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
-	ch-blfs-bootscripts ch-oui-data \
+	ch-blfs-bootscripts ch-oui-data ch-Markdown ch-SmartyPants \
 	ch-man-pages-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
 	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
@@ -405,13 +405,8 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-	@install -m644 isolinux/{isolinux.cfg,*.msg,splash.lss} $(MP)/boot/isolinux
-ifeq ($(CD_ARCH),x86_64)
-	@sed -i -e '/linux64/d' -e 's/ 32-bit//' $(MP)/boot/isolinux/options?.msg
-	@sed -i '/linux64/,$$d' $(MP)/boot/isolinux/isolinux.cfg
-endif
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/boot/isolinux/boot.msg
-	@sed -i "s/Version:/Version: $(VERSION)/" $(MP)/etc/issue*
+	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/boot/isolinux/boot.msg
+	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/etc/issue*
 	@install -m644 doc/lfscd-remastering-howto.txt $(MP)/root
 	@sed "s/\[version\]/$(VERSION)/" doc/README.txt >$(MP)/root/README.txt
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
@@ -422,10 +417,16 @@ endif
 
 iso: prepiso
 	@make unmount
-	# FIXME: sometimes e2fsck bombs out even after a clean build.
-	# Kernel bug?
+	# Bug in old kernels requires a sync after unmounting the loop device
+	# for data integrity.
 	@sync ; sleep 1 ; sync
+	# e2fsck optimizes directories and returns 1 after a clean build.
+	# This is not a bug.
 	@-e2fsck -f -p root.ext2
+	@( LC_ALL=C ; export LC_ALL ; \
+	    cat $(ROOT)/doc/README.html.head ; cat $(ROOT)/doc/README.txt | \
+	    $(WD)/bin/Markdown | $(WD)/bin/SmartyPants ; \
+	    cat $(ROOT)/doc/README.html.tail ) >$(MPBASE)/iso/README.html
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
 	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \

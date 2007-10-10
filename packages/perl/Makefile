@@ -22,7 +22,7 @@ stage1: $(FILE) $(PATCH1)
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
 	./configure.gnu --prefix=$(WD) \
-	 -Dstatic_ext='Data/Dumper Fcntl IO POSIX' \
+	 -Dstatic_ext='Data/Dumper Digest/MD5 Fcntl IO POSIX' \
 	 -Darchname=$${LFS_TARGET%%-*}-linux
 	make perl utilities
 	cp -v perl pod/pod2man $(WD)/bin
