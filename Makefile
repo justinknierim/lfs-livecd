@@ -408,7 +408,8 @@ prepiso: $(MKTREE)
 	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/boot/isolinux/boot.msg
 	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/etc/issue*
 	@install -m644 doc/lfscd-remastering-howto.txt $(MP)/root
-	@sed "s/\[version\]/$(VERSION)/" doc/README.txt >$(MP)/root/README.txt
+	@sed -e 's/\[version\]/$(VERSION)/' -e 's/\\_/_/g' \
+	    doc/README.txt >$(MP)/root/README.txt
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m755 scripts/{net-setup,greeting,livecd-login} $(MP)/usr/bin/ 
 	@sed s/@LINKER@/$(LINKER)/ scripts/shutdown-helper.in >$(MP)/usr/bin/shutdown-helper

@@ -99,7 +99,7 @@ The following workarounds help for older versions of VMware products:
  * Choose "BusLogic" as the virtual SCSI controller type instead of the
 default "LSI Logic".
 
- * Pass the "mptbase.mpt_channel_mapping=1" option to the kernel command line.
+ * Pass the "mptbase.mpt\_channel\_mapping=1" option to the kernel command line.
 
 The same issue will be present on an LFS system built from this CD.
 
@@ -221,7 +221,7 @@ you have to customize the CD. Create the following files:
     Edit this file if you want to allow root to login using a password via
     ssh. It is more secure to use public key based authentication instead.
 
-/etc/ssh/ssh_host_dsa_key, /etc/ssh/ssh_host_rsa_key:
+/etc/ssh/ssh\_host\_dsa\_key, /etc/ssh/ssh\_host\_rsa\_key:
     Create those files as described in the *ssh-keygen(1)* manual page. If you
     do not do that, random host keys will be generated for you automatically
     during the boot process. This is less secure, because you cannot verify
@@ -716,7 +716,7 @@ lead to data loss.
 
 Uses the new (experimental) Juju FireWire stack.
 
-#### all-generic-ide ####
+#### all\_generic\_ide ####
 
 Attempts to support unknown PCI IDE and SATA controllers (slow).
 For SATA support to work with this option, the SATA controller
