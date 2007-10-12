@@ -271,8 +271,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
 	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-alsa-lib ch-alsa-utils ch-alsa-firmware ch-alsa-oss \
-	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss \
-	ch-libtheora ch-librcd ch-librcc ch-taglib ch-xine-lib \
+	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss ch-libtheora ch-xine-lib \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
 	ch-xfmedia ch-irssi ch-pidgin ch-net-tools \
