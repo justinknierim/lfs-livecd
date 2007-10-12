@@ -22,8 +22,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	# Do we want this?
 	# sed -i 's/usb_object="linux"/usb_object="libusb"/' configure
-	./configure --prefix=/usr --sysconfdir=/etc --disable-speech-support \
-	    --disable-api
+	./configure --prefix=/usr --sysconfdir=/etc --disable-api
 	make
 	make install
 
