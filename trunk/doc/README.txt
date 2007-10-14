@@ -80,8 +80,9 @@ Available packages on this CD for your use:
    - parted
    - xlockmore
 
-This CD also includes jhalfs (a tool for extracting commands from the Linux From Scratch book and creating
-Makefiles that can download, check and build each LFS package for you.)
+This CD also includes jhalfs (a tool for extracting commands from the
+Linux From Scratch book and creating Makefiles that can download, check
+and build each LFS package for you.)
 
 You can compile other programs from sources directly on the CD. All locations
 on the CD can be written to (including /usr).
@@ -304,9 +305,9 @@ wrong result in the ru_RU.CP1251 locale.
 
  * All other Chinese, Japanese and Korean locales (no support in 'brltty')
 
-If 'brltty' displays incorrect Braille patterns in your locale, please revert to
-the en_US locale, thus avoiding the use of non-ASCII characters. If you know how
-to fix this problem for your locale, mail this information to
+If 'brltty' displays incorrect Braille patterns in your locale, please revert
+to the en_US locale, thus avoiding the use of non-ASCII characters. If you
+know how to fix this problem for your locale, mail this information to
 <livecd@linuxfromscratch.org>.
 
 RESUMING THE BUILD
@@ -403,8 +404,8 @@ AUTOMATING THE BUILD
 
 This CD comes with the "jhalfs" tool that allows extracting commands from the
 XML version of the LFS or CLFS book into Makefiles and shell scripts. You can
-find the jhalfs installation in the home directory of the "jhalfs" user, and the
-XML LFS book is in /usr/share/LFS-BOOK-6.3-XML. In order to use jhalfs,
+find the jhalfs installation in the home directory of the "jhalfs" user, and
+the XML LFS book is in /usr/share/LFS-BOOK-6.3-XML. In order to use jhalfs,
 you have to:
 
  * create a directory for your future LFS system and mount a partition there
