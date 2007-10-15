@@ -10,15 +10,16 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-REV= 8348
-REVPARM= -r $(REV)
-
 ifeq ($(CD_ARCH),x86)
+REV= 8348
 URL= svn://svn.linuxfromscratch.org/LFS/tags/6.3/BOOK
 endif
 ifeq ($(CD_ARCH),x86_64)
+REV= 8276
 URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK
 endif
+
+REVPARM= -r $(REV)
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
