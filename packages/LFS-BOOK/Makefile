@@ -11,15 +11,11 @@ HTMLDIR= $(DIRBASE)-HTML
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
 ifeq ($(CD_ARCH),x86)
-REV= 8348
-URL= svn://svn.linuxfromscratch.org/LFS/tags/6.3/BOOK
+URL= svn://svn.linuxfromscratch.org/LFS/tags/6.3/BOOK@8348
 endif
 ifeq ($(CD_ARCH),x86_64)
-REV= 8276
-URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK
+URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK@8276
 endif
-
-REVPARM= -r $(REV)
 
 SEAMONKEY_CONFIG= $(ROOT)/root/.mozilla/default/79exklwh.slt/prefs.js
 
@@ -39,7 +35,7 @@ stage2: Makefile $(FILE)
 	@touch $@
 
 compile-stage2:
-	svn co $(REVPARM) $(URL) $(DIR)
+	svn co $(URL) $(DIR)
 	# tar xf $(FILE)
 	cd $(DIR) ; make BASEDIR=../$(HTMLDIR) RENDERTMP=.
 	rm $(DIR)/lfs-full.xml $(DIR)/lfs-html.xml
