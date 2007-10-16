@@ -22,7 +22,7 @@ stage2: Makefile $(FILE) split-boot-help $(ROOT)/doc/README.txt
 compile-stage2:
 	mkdir -p /boot/isolinux
 	cp -v isolinux.bin /boot/isolinux
-	../split-boot-help <$(ROOT)/doc/README.txt
+	sed 's/\\_/_/g' $(ROOT)/doc/README.txt | ../split-boot-help
 	cp -v F*.txt /boot/isolinux
 	cp -v $(ROOT)/isolinux/{isolinux.cfg,boot.msg,splash.lss} /boot/isolinux
 ifeq ($(CD_ARCH),x86_64)
