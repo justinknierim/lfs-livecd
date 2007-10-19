@@ -8,6 +8,7 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= http://www.freebsoft.org/pub/projects/speechd/$(FILE)
 SHA-$(FILE)= 9350cffa71bb1d960cefe0dae66af5bfe9036570
 
+PATCH1= $(DIR)-host-1.patch
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -20,6 +21,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH1)
 	sed -i 	-e 's/LogLevel  3/LogLevel  0/' \
 		-e 's/# DefaultLanguage  "en"/DefaultLanguage  "en"/' \
 		-e 's/^AddModule/#Addmodule/' \
