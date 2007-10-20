@@ -345,12 +345,12 @@ and Speakup 2.0 are listed below.
  * Copying and pasting produces garbage characters and can crash the computer
    (use the "screen" program instead of the built-in copy-and-paste feature).
  * Kernel parameters are renamed:
-   + speakup_synth became speakup.synth, and the "sftsyn" synthesizer
+   + speakup\_synth became speakup.synth, and the "sftsyn" synthesizer
      became "soft";
-   + speakup_ser became speakup.ser, and serial ports are now numbered
+   + speakup\_ser became speakup.ser, and serial ports are now numbered
      starting from 1, not from 0 (i.e., speakup_ser=1 became speakup.ser=2);
-   + speakup_quiet became speakup.quiet, valid values are 0 and 1;
-   + speakup_port became speakup.port.
+   + speakup\_quiet became speakup.quiet, valid values are 0 and 1;
+   + speakup\_port became speakup.port.
  * The /proc/speakup/synth interface does not exist.
 
 Speakup has been tested only with the en_US locale and may work incorrectly in
