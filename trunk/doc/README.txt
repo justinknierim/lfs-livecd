@@ -310,6 +310,52 @@ to the en_US locale, thus avoiding the use of non-ASCII characters. If you
 know how to fix this problem for your locale, mail this information to
 <livecd@linuxfromscratch.org>.
 
+SPEECH OUTPUT WITH SPEAKUP
+--------------------------
+
+This CD includes a development version of Speakup (because no stable versions
+work with linux-2.6.22.x), as an alternative method that allows a blind person
+to access the contents of Linux console with the help of a hardware speech
+synthesizer or the "espeak" software text-to-speech engine. In order to
+activate it, insert the CD into the drive, reboot the computer. Some BIOSes
+will produce a beep indicating successful power-on self-testing. If so, the
+boot loader will produce a second beep indicating the boot prompt is available.
+After that beep (first or second depending on if your computer normally beeps
+upon startup), type:
+
+    linux speakup.synth=soft
+
+[NOTE]
+This example assumes that the software text-to-speech engine has to be used.
+
+Hardware speech synthesizers are also supported. E.g., for a
+DoubleTalk LT/LiteTalk synthesizer connected to /dev/ttyS1, use the
+following command line:
+
+    linux speakup.synth=ltlk speakup.ser=2
+
+Documentation on the official Speakup home page <http://www.linux-speakup.org/>
+applies to the stable version of Speakup (2.0) and thus contains outdated
+information. Nevertheless, users that are new to Speakup should read it,
+keeping this fact in mind.
+
+The key user-visible differences between the included version of Speakup
+and Speakup 2.0 are listed below.
+
+ * Copying and pasting produces garbage characters and can crash the computer
+   (use the "screen" program instead of the built-in copy-and-paste feature).
+ * Kernel parameters are renamed:
+   + speakup_synth became speakup.synth, and the "sftsyn" synthesizer
+     became "soft";
+   + speakup_ser became speakup.ser, and serial ports are now numbered
+     starting from 1, not from 0 (i.e., speakup_ser=1 became speakup.ser=2);
+   + speakup_quiet became speakup.quiet, valid values are 0 and 1;
+   + speakup_port became speakup.port.
+ * The /proc/speakup/synth interface does not exist.
+
+Speakup has been tested only with the en_US locale and may work incorrectly in
+other locales.
+
 RESUMING THE BUILD
 ------------------
 
