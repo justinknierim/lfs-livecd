@@ -97,6 +97,7 @@ compile-stage2:
 	make
 	make modules_install
 	cp -v arch/i386/boot/bzImage /boot/isolinux/linux
+	create-initramfs $(VERSION) $(VRS) /boot/isolinux/initramfs_data.cpio.gz
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
 	chmod 755 ../fakes-for-fglrx/{uname,cat}

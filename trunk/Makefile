@@ -290,7 +290,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
 	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-libaal ch-reiser4progs ch-vbetool ch-bin86 ch-lilo ch-syslinux \
-	ch-scsi-firmware ch-net-firmware ch-linux32
+	ch-scsi-firmware ch-net-firmware ch-linux32 ch-initramfs
 ifeq ($(CD_ARCH),x86)
 	make ch-grub
 	make ch-linux
@@ -298,7 +298,6 @@ ifeq ($(CD_ARCH),x86)
 	make ch-gcc64
 endif
 	make ch-linux64
-	make ch-initramfs
 	make ch-gcc33
 	make update-caches
 
