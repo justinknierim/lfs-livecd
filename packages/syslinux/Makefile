@@ -27,7 +27,7 @@ compile-stage2:
 	cp -v $(ROOT)/isolinux/{isolinux.cfg,boot.msg,splash.lss} /boot/isolinux
 ifeq ($(CD_ARCH),x86_64)
 	sed -i 	-e 's/kernel linux$$/kernel linux64/' \
-		-e 's/data_cpio/data64_cpio/'/boot/isolinux/isolinux.cfg
+		-e 's/data_cpio/data64_cpio/' /boot/isolinux/isolinux.cfg
 endif
 
 clean:
