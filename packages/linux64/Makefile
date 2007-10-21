@@ -105,6 +105,8 @@ compile-stage2:
 	touch include/linux/ioctl32.h
 	$(CROSS_MAKE)
 	$(CROSS_MAKE) modules_install
+	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
+	create-initramfs $(VERSION) $(VRS) /boot/isolinux/initramfs_data64.cpio.gz
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
 	chmod 755 ../fakes-for-fglrx/{uname,cat}
@@ -133,15 +135,12 @@ endif
 	    make KDIR=`pwd`/.. ; make KDIR=`pwd`/.. install
 ifeq ($(CD_ARCH),x86)
 	rm /lib/modules/*-64bit/{source,build}
-	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
 endif
 ifeq ($(CD_ARCH),x86_64)
-	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux
 	rm -rf $(DIR2) $(DIR3) $(DIR4) $(DIR5) $(DIR6) $(DIR7) $(DIR8) $(DIR9) $(DIR10)
 	../debian-style-headers.sh
 endif
 	mv *.tgz /drivers
-
 
 clean:
 	-rm -rf $(DIR)
