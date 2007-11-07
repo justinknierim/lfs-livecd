@@ -5,7 +5,7 @@ VRS= 2.9.3
 DIR= $(NM)-$(VRS)
 
 FILE=$(NM)_$(VRS)-1.tar.gz
-URL-$(FILE)= ftp://oss.sgi.com/projects/xfs/cmd_tars/$(FILE)
+URL-$(FILE)= http://www.linuxfromscratch.org/~alexander/$(FILE)
 SHA-$(FILE)= 79996d24faefa89d46eb678d4c1c08d25d20dec7
 
 # Targets
