@@ -1,11 +1,12 @@
 # hibernate-script Makefile
 
+# Do not update - new versions are buggy (call hooks more than once)
 NM= hibernate-script
 VRS= 1.91
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://at-mirror.suspend2.net/downloads/all/$(FILE)
+URL-$(FILE)= http://at-mirror.tuxonice.net/downloads/all/$(FILE)
 SHA-$(FILE)= b81808f499068937a9696e977ef1cfd499d21eee
 
 PATCH1=$(DIR)-lfs-3.patch

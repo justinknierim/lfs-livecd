@@ -75,12 +75,12 @@ SHA-$(FILE15)= bee20b114e3f29c28819ec6a716472621bf6ac47
 DIR16= RT61_Firmware_V1.2
 FILE16= $(DIR16).zip
 URL-$(FILE16)= http://www.ralinktech.com.tw/data/$(FILE16)
-SHA-$(FILE16)= fded9f76ce620595b876b23b6a8c416af596dc5b
+SHA-$(FILE16)= 8a50899160d1ef1cd9770e4f0426930fb2b42a1b
 
 DIR17= RT71W_Firmware_V1.8
 FILE17= $(DIR17).zip
 URL-$(FILE17)= http://www.ralinktech.com.tw/data/$(FILE17)
-SHA-$(FILE17)= 8f40bd8448c136e7edcc005f45e657258085ab8e
+SHA-$(FILE17)= 51541bec5cf2fe6ff46e46a0bb157b774d2ff050
 
 DIR18= iwlwifi-3945-ucode-2.14.4
 FILE18= $(DIR18).tgz

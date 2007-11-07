@@ -5,7 +5,7 @@ VRS= 3.2.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
-URL-$(FILE)= http://ftp.belnet.be/pub/mirror/ftp.ncftp.com/ncftp/$(FILE)
+URL-$(FILE)= http://ftp.belnet.be/mirror/ftp.ncftp.com/ncftp/older_versions/$(FILE)
 SHA-$(FILE)= 708222170df81ed957e4f187213d69ea21e4f7dd
 
 # Targets
