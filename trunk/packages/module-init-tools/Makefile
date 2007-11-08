@@ -25,9 +25,9 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/ --enable-zlib
+	./configure --prefix=/ --mandir=/usr/share/man --enable-zlib
 	make
-	make install
+	make INSTALL=install install
 	install -m644 $(ROOT)/etc/modprobe.conf /etc/modprobe.conf
 
 clean:
