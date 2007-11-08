@@ -64,7 +64,7 @@ compile-stage3:
 	ln -sfv vim /usr/bin/vi
 	for L in "" fr it pl ru ; do \
 	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
-	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
+	ln -nsfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 
 clean:

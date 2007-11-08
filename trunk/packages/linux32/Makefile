@@ -18,7 +18,7 @@ compile-stage2:
 	install -m 755 linux32 /usr/bin
 	install -m644 linux32.1 /usr/share/man/man1
 	ln -sf linux32 /usr/bin/linux64
-	ln -sf linux32 /usr/share/man/man1/linux64.1
+	ln -sf linux32.1 /usr/share/man/man1/linux64.1
 
 clean:
 	rm -f linux32
