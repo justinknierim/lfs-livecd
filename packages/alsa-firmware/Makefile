@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i s/multisound// Makefile.in
 	./configure --prefix=/usr --disable-loader
 	make
 	make install
