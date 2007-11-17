@@ -5,7 +5,7 @@ VRS= 406
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.greenwoodsoftware.com/less/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 7aeab848682c3ac7cd9ba54e4c96199f9fdf25e5
 
 # Targets
