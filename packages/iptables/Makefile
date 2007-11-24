@@ -20,8 +20,10 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man KERNEL_DIR=/usr
-	make PREFIX=/usr LIBDIR=/lib BINDIR=/bin MANDIR=/usr/share/man KERNEL_DIR=/usr install
+	sed -i 's/name="$node/name="node/' iptables.xslt
+	make PREFIX=/usr LIBDIR=/lib BINDIR=/sbin MANDIR=/usr/share/man KERNEL_DIR=/usr
+	make PREFIX=/usr LIBDIR=/lib BINDIR=/sbin MANDIR=/usr/share/man KERNEL_DIR=/usr install
+	install -v -m644 iptables.xslt /lib/iptables
 
 clean:
 	-rm -rf $(DIR)

@@ -35,7 +35,6 @@ compile-stage2:
 	install -m754 blfs/init.d/portmap /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/nfs-server /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/nfs-client /etc/rc.d/init.d/ 
-	install -m754 blfs/init.d/iptables /etc/rc.d/init.d/ 
 	install -m754 blfs/init.d/rsyncd /etc/rc.d/init.d/
 	sed -i 's| --compress||' /etc/rc.d/init.d/rsyncd
 
