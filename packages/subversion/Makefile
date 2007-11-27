@@ -25,11 +25,11 @@ stage2: Makefile $(FILE) $(FILE2)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
-	./configure --prefix=/usr --with-ssl \
+	unset VERSION ; ./configure --prefix=/usr --with-ssl \
 	 --with-editor=/usr/bin/vim \
 	 --with-installbuilddir=/usr/share/apr/build
-	make
-	make install
+	unset VERSION ; make
+	unset VERSION ; make install
 	install -v -d -m755 /usr/share/doc/$(DIR)
 	cp -v -R doc/* /usr/share/doc/$(DIR)
 
