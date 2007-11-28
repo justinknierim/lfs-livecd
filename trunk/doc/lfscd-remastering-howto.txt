@@ -1,6 +1,6 @@
-AUTHOR:		Alexander E. Patrakov <patrakov@ums.usu.ru>, Sylvie Migneault <alisou@alixe.org>
+AUTHOR:		Alexander E. Patrakov <patrakov@gmail.com>, Sylvie Migneault <alisou@alixe.org>
 
-DATE:		2007-08-28
+DATE:		2007-11-28
 
 LICENSE:	GNU Free Documentation License Version 1.2
 
@@ -96,11 +96,22 @@ Chroot to the filesystem:
 	chroot $WORK/root
 
 In the chroot, change the current directory to /build, and install any
-additional packages you want. Modify other files as necessary.
+additional packages you want. Modify other files as necessary. If you want
+to compile a new kernel, please include the following options:
+	CONFIG_MD=y
+	CONFIG_BLK_DEV_DM=y
+	CONFIG_DM_SNAPSHOT=y
+	CONFIG_EXT2_FS=y or m
+	CONFIG_ISO9660_FS=y or m
+	CONFIG_ZISOFS=y
 
 Generate initramfs images for your CD by running the create-initramfs command
 for each kernel. This command accepts the following parameters: the LiveCD
 version, the kernel version, and the name of the initramfs file to create.
+For self-compiled kernels, the list of directories to search for modules is not
+accurate, and you can either ignore "no such file" errors (if you feel lucky)
+or edit the /usr/bin/create-initramfs script. For the default LiveCD kernel,
+the shipped script should just work.
 
 For x86:
 	create-initramfs x86-6.3-custom 2.6.22.5 initramfs_data.cpio.gz
@@ -111,7 +122,8 @@ For x86_64:
 
 (you can replace the "6.3-custom" with your own string). This produces the
 initramfs_data.cpio.gz and possibly initramfs_data64.cpio.gz files in the
-current directory. Copy them to /build:
+current directory. Copy them (and kernel bzImages, if you have built any)
+to /build:
 	cp initramfs_data*.cpio.gz /build
 
 Exit from the chroot and clean up the mounts:
@@ -151,7 +163,8 @@ Now make the directory structure for your LiveCD:
 Copy the directory structure from the original LiveCD:
 	cp -r /media/cdrom/*/ $WORK/iso
 
-Replace the stock initramfs images with your own:
+Replace the stock initramfs images (and, possibly, kernel images) with your
+own:
 	cp $WORK/build/initramfs_data*.cpio.gz \
 	    $WORK/iso/boot/isolinux/
 
@@ -189,3 +202,7 @@ CHANGELOG:
 
    [2007-10-21]
     * Updated for the new create-initramfs script
+
+   [2007-11-28[
+    * Updated my e-mail address
+    * Added kernel instructions

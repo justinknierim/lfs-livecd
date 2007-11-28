@@ -141,7 +141,8 @@ rate, run the "gtf" command. E.g., if your monitor can handle 1280x1024@85Hz:
 
     $ gtf 1280 1024 85
 
-NOTE: You must specify the refresh rate of 60 Hz for VGA-connected LCD monitors.
+[NOTE]
+You must specify the refresh rate of 60 Hz for VGA-connected LCD monitors.
 
 Then look at the output:
 
@@ -201,8 +202,51 @@ CUSTOMIZING THE CD CONTENTS
 ---------------------------
 
 It is possible to burn a customized version of the official Linux From
-Scratch LiveCD, with your own files added. To do that, follow the
-instructions in the /root/lfscd-remastering-howto.txt file.
+Scratch LiveCD, with changed default boot parameters and/or your own files
+added.
+
+To change the default boot arguments, follow these steps as root.
+
+ * Create directories:
+
+    export WORK=/mnt/lfslivecd
+    mkdir -p $WORK/{orig,copy}
+	
+ * Copy all files except root.ext2 from the original image:
+
+    mount -t iso9660 -o loop lfslivecd-[version].iso $WORK/orig
+    cp -a $WORK/orig/*/ $WORK/copy/
+    umount $WORK/orig
+	
+ * Copy the compressed root.ext2 file without uncompressing it:
+
+    mount -t iso9660 -o loop,norock lfslivecd-[version].iso $WORK/orig
+    cp $WORK/orig/root.ext2 $WORK/copy/
+    chmod 644 $WORK/copy/root.ext2
+    umount $WORK/orig
+	
+ * Edit the boot loader configuration:
+
+    # Append new kernel options to the "append" lines
+    vim $WORK/copy/boot/isolinux/isolinux.cfg
+	
+ * Create the new LiveCD image:
+
+    mkisofs -z -R -l --allow-leading-dots -D -o \
+        lfslivecd-[version]-custom.iso -b boot/isolinux/isolinux.bin \
+	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
+	-V "lfslivecd-[version]" $WORK/copy
+
+[NOTE]
+You cannot change the volume label of the customized CD (i.e., the
+argument to the "-V" option) this way. The "-nosrc" suffix is not part of
+the volume label and should be left out, but "-min" should be preserved.
+If in doubt, you can find out the correct volume label by running this command:
+
+    file lfslivecd-[version].iso
+
+To add or remove files, follow the instructions in the
+/root/lfscd-remastering-howto.txt file instead.
 
 AUTOSSHD
 --------
@@ -267,8 +311,21 @@ If your monitor cannot handle such resolution, edit the
 /etc/X11/xinit/xserverrc file with vim, nano or joe, and add the "-dpi 94"
 parameter to the X server command line there.
 
-BRAILLE DISPLAY SUPPORT
------------------------
+ACCESSIBILITY
+-------------
+
+The Live CD includes software (BRLTTY and speakup) that make the contents
+of the Linux text console accessible to visually-impaired users. This
+software is not started by default, and special boot parameters (documented
+below) are needed in order to use it.
+
+Unfortunately, the boot loader expects the parameters to be entered with
+US English keyboard layout, which is not familiar to non-US users, and they
+cannot see their mistakes. Thus, it is recommended for such users to
+customize default boot parameters of the CD as described above instead of
+trying to type them at the boot prompt.
+
+### BRAILLE DISPLAY SUPPORT ###
 
 The LiveCD includes the "brltty" program that allows a blind person to read
 the contents of the Linux text console on a Braille display. In order to
@@ -293,7 +350,7 @@ becomes invalid when another encoding for the same language is used.
 E.g., that is why the "ru" table (designed for the KOI8-R encoding) produces
 wrong result in the ru_RU.CP1251 locale.
 
-### Known non-working cases ###
+#### Known non-working cases ####
 
  * All CP1251-based locales (no CP1251 Braille table in "brltty")
 
@@ -310,8 +367,7 @@ to the en_US locale, thus avoiding the use of non-ASCII characters. If you
 know how to fix this problem for your locale, mail this information to
 <livecd@linuxfromscratch.org>.
 
-SPEECH OUTPUT WITH SPEAKUP
---------------------------
+### SPEECH OUTPUT WITH SPEAKUP ###
 
 This CD includes a development version of Speakup (because no stable versions
 work with linux-2.6.22.x), as an alternative method that allows a blind person
@@ -401,7 +457,8 @@ When your time runs out, execute the "hibernate" command as root. It is not
 necessary to stop the compilation, but running this command during a
 testsuite may lead to failures that would not occur otherwise.
 
-NOTE: you must unmount all USB flash drives and all partitions used by other
+[NOTE]
+You must unmount all USB flash drives and all partitions used by other
 operating systems installed on your computer before hibernating! Do not
 attempt to mount partitions used by a hibernated system from other systems
 (even read-only, because there is no true read-only mount on journaled
@@ -462,8 +519,8 @@ you have to:
 
  * as user "jhalfs", follow the instructions in the jhalfs README file
 
-Note that this user already has the required root access (via "sudo") to
-complete the build.
+This user already has the required root access (via "sudo") to complete
+the build.
 
 LOADING CD CONTENTS TO RAM
 --------------------------
@@ -477,7 +534,8 @@ To load the CD contents to RAM, type "linux toram" at the boot prompt.
 The minimum required amount of RAM is 512 MB. If you have less than 768 MB of
 RAM, add swap when the CD boot finishes.
 
-NOTE: in order to save RAM, sources and proprietary drivers are not loaded
+[NOTE]
+In order to save RAM, sources and proprietary drivers are not loaded
 there. In order to access them, please mount this CD and look into
 /media/cdrom/sources and /media/cdrom/drivers.
 
@@ -799,7 +857,7 @@ Example:
 These options work around various chipset bugs. Try them one-by-one in the
 order given above and in various combinations if the CD does not boot, or if
 a device does not work correctly or fails after hibernating and resuming.
-Note: if this helps, the bug is in the hardware or the BIOS, not in this CD.
+If this helps, the bug is in the hardware or the BIOS, not in this CD.
 
 THANKS
 ------
