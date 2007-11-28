@@ -16,5 +16,9 @@
 		<pref name='blist'>
 			<pref name='list_visible' type='bool' value='1'/>
 		</pref>
+		<pref name='sound'>
+			<pref name='command' type='path' value='aplay -q %s'/>
+			<pref name='method' type='string' value='custom'/>
+		</pref>
 	</pref>
 </pref>
