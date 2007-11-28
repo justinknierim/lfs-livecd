@@ -209,41 +209,38 @@ To change the default boot arguments, follow these steps as root.
 
  * Create directories:
 
-    export WORK=/mnt/lfslivecd
-    mkdir -p $WORK/{orig,copy}
+        export WORK=/mnt/lfslivecd
+        mkdir -p $WORK/{orig,copy}
 	
  * Copy all files except root.ext2 from the original image:
 
-    mount -t iso9660 -o loop lfslivecd-[version].iso $WORK/orig
-    cp -a $WORK/orig/*/ $WORK/copy/
-    umount $WORK/orig
+        mount -t iso9660 -o loop lfslivecd-[version].iso $WORK/orig
+        cp -a $WORK/orig/*/ $WORK/copy/
+        umount $WORK/orig
 	
  * Copy the compressed root.ext2 file without uncompressing it:
 
-    mount -t iso9660 -o loop,norock lfslivecd-[version].iso $WORK/orig
-    cp $WORK/orig/root.ext2 $WORK/copy/
-    chmod 644 $WORK/copy/root.ext2
-    umount $WORK/orig
+        mount -t iso9660 -o loop,norock lfslivecd-[version].iso $WORK/orig
+        cp $WORK/orig/root.ext2 $WORK/copy/
+        chmod 644 $WORK/copy/root.ext2
+        umount $WORK/orig
 	
  * Edit the boot loader configuration:
 
-    # Append new kernel options to the "append" lines
-    vim $WORK/copy/boot/isolinux/isolinux.cfg
+        # Append new kernel options to the "append" lines
+        vim $WORK/copy/boot/isolinux/isolinux.cfg
 	
  * Create the new LiveCD image:
 
-    mkisofs -z -R -l --allow-leading-dots -D -o \
-        lfslivecd-[version]-custom.iso -b boot/isolinux/isolinux.bin \
-	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
-	-V "lfslivecd-[version]" $WORK/copy
+        mkisofs -z -R -l --allow-leading-dots -D -o \
+            lfslivecd-[version]-custom.iso -b boot/isolinux/isolinux.bin \
+            -c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
+            -V "lfslivecd-[version]" $WORK/copy
 
 [NOTE]
 You cannot change the volume label of the customized CD (i.e., the
 argument to the "-V" option) this way. The "-nosrc" suffix is not part of
 the volume label and should be left out, but "-min" should be preserved.
-If in doubt, you can find out the correct volume label by running this command:
-
-    file lfslivecd-[version].iso
 
 To add or remove files, follow the instructions in the
 /root/lfscd-remastering-howto.txt file instead.
