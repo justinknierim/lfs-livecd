@@ -215,7 +215,7 @@ To change the default boot arguments, follow these steps as root.
  * Copy all files except root.ext2 from the original image:
 
         mount -t iso9660 -o loop lfslivecd-[version].iso $WORK/orig
-        cp -a $WORK/orig/*/ $WORK/copy/
+        cp -a $WORK/orig/*/ $WORK/orig/README.html $WORK/copy/
         umount $WORK/orig
 	
  * Copy the compressed root.ext2 file without uncompressing it:

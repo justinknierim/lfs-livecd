@@ -161,7 +161,7 @@ Now make the directory structure for your LiveCD:
 	mkdir $WORK/iso
 
 Copy the directory structure from the original LiveCD:
-	cp -r /media/cdrom/*/ $WORK/iso
+	cp -r /media/cdrom/*/ /media/cdrom/README.html $WORK/iso
 
 Replace the stock initramfs images (and, possibly, kernel images) with your
 own:
