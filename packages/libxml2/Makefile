@@ -1,5 +1,8 @@
 # LibXML2 Makefile
 
+# Don't upgrade to 2.6.30 - will segfault on x86_64
+# see http://bugs.debian.org/439967 and its duplicates
+
 NM= libxml2
 VRS= 2.6.27
 DIR= $(NM)-$(VRS)
