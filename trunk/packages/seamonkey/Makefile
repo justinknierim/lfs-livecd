@@ -8,7 +8,7 @@ FILE= $(NM)-$(VRS).source.tar.bz2
 URL-$(FILE)= http://releases.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
 SHA-$(FILE)= 3f7136c8b746d8c789e41839e99465ad4baa1ccb
 
-MFH=/usr/lib/seamonkey-$(VRS)
+MFH=/usr/lib/seamonkey
 
 # Targets
 
