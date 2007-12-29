@@ -267,9 +267,9 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-Xorg-font ch-Xorg-driver ch-xorg-udev-rules ch-XML-Parser ch-xkeyboard-config \
 	ch-synaptics ch-inputattach ch-fonts-thai \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
-	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib ch-imlib ch-imlib2 \
-	ch-gc ch-w3m ch-lftp ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-gtk2 ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
+	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib \
+	ch-gc ch-lftp ch-cairo ch-hicolor-icon-theme \
+	ch-pango ch-atk ch-gtk2 ch-w3m ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
 	ch-alsa-lib ch-alsa-utils ch-alsa-firmware \
 	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss ch-libtheora ch-xine-lib \
 	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
