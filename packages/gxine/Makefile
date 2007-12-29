@@ -31,8 +31,8 @@ compile-stage2:
 	    --disable-integration-wizard
 	make
 	make GXINE_PLUGINPATH=/usr/lib/seamonkey/plugins install
-	sed -n -e 's/\\$$/;/' \
-	    -e 's/;\\|$$/; gxine "%s"; test=test -n "$$DISPLAY"\\n/g' \
+	sed -n -e 's/\$$/;/' \
+	    -e 's/;\|$$/; gxine "%s"; test=test -n "$$DISPLAY"\n/g' \
 	    -e 's/MimeType=// p' /usr/share/applications/gxine.desktop >/etc/mailcap
 
 clean:
