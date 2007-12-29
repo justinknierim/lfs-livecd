@@ -22,6 +22,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's/-\$(MOZ_APP_VERSION)//' config/autoconf.mk.in
 	sed 's:@TOPSRCDIR@:$(ROOT)/$(PKG)/$(NM)/mozilla:' ../.mozconfig \
 	 > .mozconfig
 	make -f client.mk build
