@@ -1,6 +1,6 @@
 Official Linux From Scratch LiveCD
 ==================================
-Version: [version]
+Version: [Version]
 
 
 PACKAGES
@@ -183,8 +183,8 @@ autoconfiguration process. Here is how to enable them.
 ### NVIDIA ###
 
     cd /drivers
-    tar -C / -xf NVIDIA-Linux-[userspace_arch]-x86-6.3-r2052-glx.tgz
-    tar -C / -xf NVIDIA-Linux-[kernel_arch]-x86-6.3-r2052-kernel-[kernel_version].tgz
+    tar -C / -xf NVIDIA-Linux-[userspace_arch]-[version]-glx.tgz
+    tar -C / -xf NVIDIA-Linux-[kernel_arch]-[version]-kernel-[kernel_version].tgz
     depmod -ae
     ldconfig
     vim /etc/X11/xorg.conf   # use the "nvidia" driver instead of "vesa" or "nv"
@@ -192,8 +192,8 @@ autoconfiguration process. Here is how to enable them.
 ### FGLRX ###
 
     cd /drivers
-    tar -C / -xf fglrx-x710-x86-6.3-r2052-[userspace_arch]-1.tgz
-    tar -C / -xf fglrx-module-x86-6.3-r2052-[kernel_arch]-1_kernel_[kernel_version].tgz
+    tar -C / -xf fglrx-x710-[version]-[userspace_arch]-1.tgz
+    tar -C / -xf fglrx-module-[version]-[kernel_arch]-1_kernel_[kernel_version].tgz
     depmod -ae
     ldconfig
     vim /etc/X11/xorg.conf   # use the "fglrx" driver instead of "vesa" or "ati"
