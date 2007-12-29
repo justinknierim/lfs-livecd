@@ -34,6 +34,8 @@ compile-stage2:
 	 --enable-session-screenshots --with-sound=alsa ; \
 	make ; \
 	make install ; cd .. ; rm -rf $$i*/ ; done
+	sed -i 's/aumix -v\\([+-]\\?\\)\\([^"]*\\)/amixer set PCM \\2%\\1/' \
+	    /usr/share/xfce-mcs-plugins/shortcuts/default.xml
 	cp $(ROOT)/root/.xinitrc /etc/X11/xinit/xinitrc
 	cp ../desktop-files/* /usr/share/applications
 	install -D -m644 ../helpers.rc /etc/xdg/xfce4/helpers.rc
