@@ -1,12 +1,12 @@
-# Tar Makefile
+# Util-Linux-NG Makefile
 
-NM= tar
-VRS= 1.20
+NM= util-linux-ng
+VRS= 2.14.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4d4cda2ce857b5ea77b39dc718260ab09c145335
+SHA-$(FILE)= 4b738db04b27278329af216b15e96752e5af8cc3
 
 # Targets
 
@@ -17,8 +17,9 @@ stage1: $(FILE)
 
 compile-stage1:
 	./configure --prefix=$(WD)
-	make
-	make install
+	make BLKID_LIBS="-lblkid -luuid" -C mount mount umount
+	make -C text-utils more
+	cp mount/{,u}mount text-utils/more $(WD)/bin
 
 chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
@@ -28,7 +29,10 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
+	sed -e 's@etc/adjtime@var/lib/hwclock/adjtime@g' \
+	 -i $$(grep -rl '/etc/adjtime' .)
+	mkdir -pv /var/lib/hwclock
+	./configure --enable-arch --enable-partx --enable-write
 	make
 	make install
 

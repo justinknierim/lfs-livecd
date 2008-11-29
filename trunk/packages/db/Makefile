@@ -1,16 +1,16 @@
 # DB Makefile
 
 NM= db
-VRS= 4.5.20
+VRS= 4.7.25
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 0e5a6c152c5d7089899481d9de689d1f7e77bde1
+SHA-$(FILE)= 957c10358df1211e1dc37ea997aadef42117d6a5
 
-PATCH1= $(DIR)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
-SHA-$(PATCH1)= adf217ef8606f25b6fd4e7c9a0c1ea9f01c4f250
+PATCH1= $(DIR)-upstream_fixes-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 737f11c8f7f9b7bd2523f6c19460bd0aacd6799f
 
 # Targets
 

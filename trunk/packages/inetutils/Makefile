@@ -5,7 +5,7 @@ VRS= 1.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/inetutils/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 825834b94cd387b2d088ef1cfe727de824b9589e
 
 PATCH1= $(DIR)-no_server_man_pages-2.patch
@@ -25,6 +25,8 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+	sed -i 's@<sys/types.h>@<sys/types.h>\n#include <stdlib.h>@' \
+	 libicmp/icmp_timestamp.c
 	./configure --prefix=/usr --libexecdir=/usr/sbin \
 	--sysconfdir=/etc --localstatedir=/var --disable-ifconfig \
 	--disable-logger --disable-syslogd \

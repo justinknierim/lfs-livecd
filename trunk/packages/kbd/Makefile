@@ -1,30 +1,16 @@
 # Kbd Makefile
 
 NM= kbd
-VRS= 1.12
+VRS= 1.14.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 65eaae4d98fca3f7ae7dfc9d9cb7c5a432c6475f
-
-BELARUSIAN_FILE= belarusian-0.3.tar.gz
-URL-$(BELARUSIAN_FILE)= http://www.mova.org/bellinux/$(BELARUSIAN_FILE)
-SHA-$(BELARUSIAN_FILE)= c0026a915fff58cdc3b68bb57de4eec35a220c43
-
-THAI_FILE= thai-console-data_cvs20051001.tar.bz2
-URL-$(THAI_FILE)= http://www.linuxfromscratch.org/~alexander/$(THAI_FILE)
-SHA-$(THAI_FILE)= 2d5e8f4d6cf488987600d455078fe8f5d4199217
+SHA-$(FILE)= 12d91613096d1a724fc780e2d7974a0a1b308dce
 
 PATCH1= $(DIR)-backspace-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 39e332e42d5145dfc47786dba5eff63cda91d0ba
-
-PATCH3= $(DIR)-gcc4_fixes-1.patch
-URL-$(PATCH3)= $(HTTP)/$(NM)/$(PATCH3)
-SHA-$(PATCH3)= 93ec9885a79ff79088f1533ec52f1a87dae69500
-
-STAGE2-DEPS = $(FILE) $(BELARUSIAN_FILE) $(THAI_FILE) $(PATCH1) $(PATCH3)
+SHA-$(PATCH1)= 66a421533f6c8e5c38db57c1e25f1842db7b82ae
 
 # Targets
 
@@ -34,35 +20,24 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(STAGE2-DEPS)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	cd .. ; unpack $(BELARUSIAN_FILE) ; unpack $(THAI_FILE)
-	zcat ../bellinux/console/keymaps/by2_win.kmap.gz > data/keymaps/i386/qwerty/by2_win.map
-	sed -i -e 's/\(50 = 0x.\)A/\1C/' data/keymaps/i386/qwerty/by2_win.map
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH3)
-	./configure --datadir=/lib/kbd
+	sed -i -e '1i KEYCODES_PROGS = @KEYCODES_PROGS@' \
+	 -e '1i RESIZECONS_PROGS = @RESIZECONS_PROGS@' src/Makefile.in
+	var=OPTIONAL_PROGS
+	sed -i "s/ifdef $$var/ifeq (\$$($$var),yes)/" man/Makefile.in
+	unset var
+	./configure --prefix=/usr --datadir=/lib/kbd
 	make
 	make install
-	mv /usr/bin/{setfont,kbd_mode,openvt} /bin
-	# Turkish fixup
-	cp /lib/kbd/consoletrans/cp857_to_uni.trans /lib/kbd/unimaps/cp857.uni
-	# Thai fonts and keymaps
-	gzip ../thai-console-data/consolefonts/*.psf
-	install -m644 ../thai-console-data/consolefonts/*.psf.gz /lib/kbd/consolefonts
-	install -m644 ../thai-console-data/consoletrans/tis620.acm /lib/kbd/consoletrans/tis620_to_uni.trans
-	for a in ../thai-console-data/keymaps/*.kmap \
-	 ../thai-console-data/keymaps/experimental/*.kmap ; do \
-	    mv $${a} $${a%kmap}map ; done
-	sed -i 's,\+U,U,g' ../thai-console-data/keymaps/experimental/*.map
-	gzip ../thai-console-data/keymaps/*.map ../thai-console-data/keymaps/experimental/*.map
-	install -m644 ../thai-console-data/keymaps/*.map.gz ../thai-console-data/keymaps/experimental/*uni*.map.gz /lib/kbd/keymaps/i386/qwerty
+	mv /usr/bin/{kbd_mode,loadkeys,openvt,setfont} /bin
+	mkdir -v /usr/share/doc/$(DIR)
+	cp -R -v doc/* /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
-	-rm -rf bellinux
-	-rm -rf thai-console-data
 
 .PHONY: clean chroot compile-stage2

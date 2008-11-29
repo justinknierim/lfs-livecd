@@ -1,11 +1,11 @@
 # Wget Makefile
 
 NM= wget
-VRS= 1.10.2
+VRS= 1.11.4
 DIR= $(NM)-$(VRS)
 FILE= $(DIR).tar.gz
 URL-$(FILE)= http://ftp.gnu.org/gnu/$(NM)/$(FILE)
-SHA-$(FILE)= a258357297959964fd42fed6afa1a4cce9069980
+SHA-$(FILE)= a78a3b71fd59504df3ff3dbc0a2195a1410e9eac
 
 # Targets
 

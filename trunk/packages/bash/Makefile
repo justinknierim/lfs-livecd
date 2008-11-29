@@ -8,9 +8,9 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= fe6466c7ee98061e044dae0347ca5d1a8eab4a0d
 
-PATCH1= $(DIR)-fixes-5.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
-SHA-$(PATCH1)= b85f303e6317fe50b6f5d0c204e2e68824010a88
+PATCH1= $(DIR)-fixes-8.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= b7366d418e292b64ac089f99056e59043d7decde
 
 FILE1 = $(NM)-doc-$(VRS).tar.gz
 URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
@@ -25,7 +25,7 @@ stage1: $(FILE) $(PATCH1)
 
 compile-stage1:
 	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=$(WD) --without-bash-malloc
+	./configure --prefix=$(WD) --without-bash-malloc ac_cv_func_working_mktime=yes
 	make
 	make install
 	ln -sv bash $(WD)/bin/sh
@@ -43,7 +43,7 @@ compile-stage2:
 	 Makefile.in
 	patch -Np1 -i ../$(PATCH1)
 	./configure --prefix=/usr --bindir=/bin --without-bash-malloc \
-	 --with-installed-readline
+	 --with-installed-readline ac_cv_func_working_mktime=yes
 	make
 	make install
 

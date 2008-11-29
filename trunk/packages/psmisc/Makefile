@@ -1,12 +1,12 @@
 # Psmisc Makefile
 
 NM= psmisc
-VRS= 22.5
+VRS= 22.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/psmisc/$(FILE)
-SHA-$(FILE)= 0fd6c52dd0dad464a9be7baa79fb810caf43c923
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= cb15c23e9cfe618e9de5f066525bce7dc7b77421
 
 # Targets
 

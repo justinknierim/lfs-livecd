@@ -16,9 +16,6 @@ SHA-$(PATCH1)= 651801fe6d851c9f59ccd16b6bd49f1358c9594c
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE) $(PATCH1)
-	@echo GRUB downloaded
-
 chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'

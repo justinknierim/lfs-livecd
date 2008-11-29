@@ -32,12 +32,10 @@ ROOTFS_MEGS := 1536
 #==============================================================================
 
 export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
-export VERSION ?= $(CD_ARCH)-6.3
-export CFLAGS ?= -O2 -pipe -s -fno-strict-aliasing
+export VERSION ?= $(CD_ARCH)-6.4
 
 ifeq ($(CD_ARCH),x86)
 export LFS_TARGET ?= i486-pc-linux-gnu
-export CFLAGS := $(CFLAGS) -mtune=i686
 export LINKER := ld-linux.so.2
 endif
 
@@ -47,8 +45,6 @@ export LFS_TARGET ?= x86_64-unknown-linux-gnu
 export LINKER := ld-linux-x86-64.so.2
 endif
 
-export CXXFLAGS ?= $(CFLAGS)
-
 # Default timezone
 export timezone ?= GMT
 # Default paper size for groff.
@@ -56,7 +52,7 @@ export pagesize ?= letter
 
 # HTTP:     Default http server for the lfs-base packages
 # HTTPBLFS: Default http server for the BLFS packages
-export HTTP ?= http://ftp.lfs-matrix.net/pub/lfs/conglomeration
+export HTTP ?= http://kerrek.linuxfromscratch.org/pub/lfs/conglomeration
 export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
 
 #==============================================================================
@@ -70,20 +66,19 @@ export LFSSRC := /lfs-sources
 export PKG := packages
 
 export MKTREE := $(MP)$(ROOT)
-export CONFIG_SITE := $(ROOT)/scripts/config.site
 
 # Environment Variables
 # The following lines need to be all on one line - no newlines.
 #===============================================================================
-export lfsenv := exec env -i HOME=$$HOME CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
+export lfsenv := exec env -i HOME=$$HOME LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
 
-export chenv-pre-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
+export chenv-pre-bash := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
 
-export chenv-post-bash := $(WD)/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' CXXFLAGS='$(CXXFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
+export chenv-post-bash := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
 
 export lfsbash := set +h && umask 022 && cd $(MKTREE)
 
-export chenv-blfs := /usr/bin/env -i HOME=/root CFLAGS='$(CFLAGS)' TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog" /bin/bash -c
+export chenv-blfs := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog" /bin/bash -c
 
 # More Environment Variables
 #==============================================================================
@@ -143,25 +138,19 @@ $(MKTREE): root.ext2
 	-mkdir -p $(MP)/{proc,sys,dev/shm,dev/pts}
 	-mount -t proc proc $(MP)/proc
 	-mount -t sysfs sysfs $(MP)/sys
-	-mount -t tmpfs tmpfs $(MP)/dev/shm
-	-mount -t devpts -o gid=4,mode=620 devpts $(MP)/dev/pts
-	-install -d $(MP)/{bin,etc/opt,home,lib,mnt}
-	-install -d $(MP)/{sbin,srv,usr/local,var,opt}
-	-install -d $(MP)/root -m 0750
-	-install -d $(MP)/tmp $(MP)/var/tmp -m 1777
-	-install -d $(MP)/media/{floppy,cdrom}
-	-install -d $(MP)/usr/{bin,include,lib,sbin,share,src}
-	-install -d $(MP)/usr/share/{doc,info,locale,man}
-	-install -d $(MP)/usr/share/{misc,terminfo,zoneinfo}
-	-install -d $(MP)/usr/share/man/man{1,2,3,4,5,6,7,8}
-	-install -d $(MP)/usr/local/{bin,etc,include,lib,sbin,share,src}
-	-install -d $(MP)/usr/local/share/{doc,info,locale,man}
-	-install -d $(MP)/usr/local/share/{misc,terminfo,zoneinfo}
-	-install -d $(MP)/usr/local/share/man/man{1,2,3,4,5,6,7,8}
-	-install -d $(MP)/var/{lock,log,mail,run,spool}
-	-install -d $(MP)/var/{opt,cache,lib/{misc,locate},local}
-	-install -d $(MP)/opt/{bin,doc,include,info}
-	-install -d $(MP)/opt/{lib,man/man{1,2,3,4,5,6,7,8}}
+	-mount -t tmpfs shm $(MP)/dev/shm
+	-mount -t devpts devpts $(MP)/dev/pts
+	-mkdir -pv $(MP)/{bin,boot,etc/opt,home,lib,mnt,opt}
+	-mkdir -pv $(MP)/{media/{floppy,cdrom},sbin,srv,var}
+	-install -d -m 0750 $(MP)/root
+	-install -d -m 1777 $(MP)/tmp $(MP)/var/tmp
+	-mkdir -pv $(MP)/usr/{,local/}{bin,include,lib,sbin,src}
+	-mkdir -pv $(MP)/usr/{,local/}share/{doc,info,locale,man}
+	-mkdir -v  $(MP)/usr/{,local/}share/{misc,terminfo,zoneinfo}
+	-mkdir -pv $(MP)/usr/{,local/}share/man/man{1..8}
+	-for dir in $(MP)/usr $(MP)/usr/local; do ln -sv share/{man,doc,info} $$dir ; done
+	-mkdir -v $(MP)/var/{lock,log,mail,run,spool}
+	-mkdir -pv $(MP)/var/{opt,cache,lib/{misc,locate},local}
 	-mknod -m 600 $(MP)/dev/console c 5 1
 	-mknod -m 666 $(MP)/dev/null c 1 3
 	-mknod -m 666 $(MP)/dev/zero c 1 5
@@ -198,9 +187,6 @@ lfs-base: $(MKTREE) lfsuser
 	 make post-bash $(chbash-post-bash)'
 	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
 
-stop-here:
-	exit 1
-
 extend-lfs: $(MKTREE)
 	@cp $(WD)/bin/which $(MP)/usr/bin
 	@cp $(ROOT)/scripts/unpack $(MP)/bin
@@ -235,25 +221,25 @@ tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
 	lfs-linux-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
 	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
 	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
-	lfs-coreutils-scpt lfs-diffutils-scpt lfs-findutils-scpt \
-	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt \
+	lfs-coreutils-scpt lfs-diffutils-scpt lfs-e2fsprogs-scpt lfs-findutils-scpt \
+	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt lfs-m4-scpt \
 	lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
-	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-scpt lfs-wget-scpt \
-	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt lfs-grub-scpt
+	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-ng-scpt lfs-wget-scpt \
+	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt
 	@cp /etc/resolv.conf $(WD)/etc
 	@touch $@
 
 pre-bash: createfiles ch-linux-headers ch-man-pages \
-	ch-glibc re-adjust-toolchain ch-binutils ch-gcc ch-db ch-sed \
-	ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison ch-gpm \
-	ch-ncurses ch-procps ch-libtool ch-perl ch-readline ch-zlib \
+	ch-glibc re-adjust-toolchain ch-binutils ch-gmp ch-mpfr ch-gcc ch-db \
+	ch-sed ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison \
+	ch-ncurses ch-procps ch-libtool ch-zlib ch-perl ch-readline \
 	ch-autoconf ch-automake ch-bash
 
-post-bash: ch-bzip2 ch-diffutils ch-file ch-findutils ch-flex \
-	ch-gawk ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
-	ch-iproute2 ch-kbd ch-less ch-make ch-man-db ch-mktemp \
+post-bash: ch-bzip2 ch-diffutils ch-file ch-gawk ch-findutils \
+	ch-flex ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
+	ch-iproute2 ch-kbd ch-less ch-make ch-man-db \
 	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
-	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux ch-vim \
+	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux-ng ch-vim \
 	final-environment
 
 blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-joe \
@@ -351,6 +337,8 @@ createfiles:
 	@chgrp utmp /var/run/utmp /var/log/lastlog
 	@chmod 664 /var/run/utmp /var/log/lastlog
 	@cp $(WD)/etc/resolv.conf /etc
+	@-cp $(ROOT)/etc/hosts /etc
+	@touch $@
 
 # Do not call the targets below manually! They are used internally and must be
 # called by other targets.
@@ -381,7 +369,6 @@ final-environment:
 	@-cp $(ROOT)/etc/bashrc /etc
 	@-cp $(ROOT)/etc/profile /etc
 	@-dircolors -p > /etc/dircolors
-	@-cp $(ROOT)/etc/hosts /etc
 	@-cp $(ROOT)/etc/fstab /etc
 
 update-caches:
@@ -485,6 +472,6 @@ zeroes: $(MKTREE)
 
 .PHONY: mount unmount clean_sources scrub clean iso chroot-gvim update-caches \
 	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
-	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 createfiles \
+	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 \
 	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
 	lfs-rm-wget blfs post-bash pre-bash tools pre-which zeroes

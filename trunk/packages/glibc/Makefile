@@ -1,31 +1,34 @@
 # Glibc Makefile
 
 NM= glibc
-VRS= 2.5.1
+VRS= 2.8-20080929
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnu.org/gnu/glibc/$(FILE)
-SHA-$(FILE)= 2b7da136df025bb8c787be3351cba58374226d9c
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 9f2ad5f67bd484d390b33593ce4b613da8c260bd
 
-FILE2= $(NM)-libidn-$(VRS).tar.gz
-URL-$(FILE2)= http://ftp.gnu.org/gnu/glibc/$(FILE2)
-SHA-$(FILE2)= 816f410835a8d4ecbccdfed2d86ccc6284c2fa92
+PATCH1= $(DIR)-iconv_tests-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 90ad8b8d76f3eaa02f789d50df50d1e7d3520a48
 
-PATCH50= $(DIR)-supported_locales-1.patch
+PATCH2= $(DIR)-ildoubl_test-1.patch
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= 038597c7001fed849863b467f25499058baa7191
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
-stage1: $(FILE) $(FILE2)
+stage1: $(FILE)
 	$(sep_dir_build)
 
 compile-stage1:
-# --enable-static overrides the unsuitable default in config.site
+	cd ../$(DIR) ; sed -i 's@/etc/ld.so.preload@/tools/etc/ld.so.preload@' elf/rtld.c
+	echo "CFLAGS += -march=i486 -mtune=native" > configparms
 	../$(DIR)/configure --prefix=$(WD) --disable-profile \
 	 --enable-add-ons --enable-kernel=2.6.0 --with-binutils=$(WD)/bin \
-	 --without-gd --with-headers=$(WD)/include --without-selinux --enable-static
+	 --without-gd --with-headers=$(WD)/include --without-selinux
 	make
 	# LFS says:
 	# mkdir -v /tools/etc
@@ -37,23 +40,20 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(FILE) $(FILE2)
+stage2: $(FILE) $(PATCH1) $(PATCH2)
 	$(sep_dir_build)
 	touch $@
 
 compile-stage2:
-	cd ../$(DIR) ; unpack ../$(FILE2) ; mv glibc-libidn-$(VRS) libidn
-	sed -i \
-	's|libs -o|libs -L/usr/lib -Wl,-dynamic-linker=/lib/$(LINKER) -o|' \
-	        ../$(DIR)/scripts/test-installation.pl
-# LiveCD specific locale additions
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH50)
-# --enable-static overrides the unsuitable default in config.site
-	sed -i 's|@BASH@|/bin/bash|' ../$(DIR)/elf/ldd.bash.in
+	cd ../$(DIR) ; sed -i '/vi_VN.TCVN/d' localedata/SUPPORTED
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
+	cd ../$(DIR) ; sed -i 's|@BASH@|/bin/bash|' elf/ldd.bash.in 
+	echo "CFLAGS += -march=i486 -mtune=native" > configparms
 	../$(DIR)/configure --prefix=/usr --disable-profile \
-	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc \
-	 --enable-static
+	 --enable-add-ons --enable-kernel=2.6.0 --libexecdir=/usr/lib/glibc
 	make
+	cp -v ../$(DIR)/iconvdata/gconv-modules iconvdata
 	-make -k check
 	touch /etc/ld.so.conf
 	make install

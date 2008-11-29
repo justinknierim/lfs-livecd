@@ -4,9 +4,9 @@ NM= zlib
 VRS= 1.2.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 60faeaaf250642db5c0ea36cd6dcc9f99c8f3902
+SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
 # Targets
 
@@ -28,14 +28,14 @@ compile-stage1:
 	make install
 
 compile-stage2:
-	unset CFLAGS ; ./configure --prefix=/usr --shared --libdir=/lib
-	unset CFLAGS ; make
+	./configure --prefix=/usr --shared --libdir=/lib
+	make
 	make install
-	rm /lib/libz.so
-	ln -sf ../../lib/libz.so.$(VRS) /usr/lib/libz.so
+	rm -v /lib/libz.so
+	ln -sfv ../../lib/libz.so.$(VRS) /usr/lib/libz.so
 	make clean
-	unset CFLAGS ; ./configure --prefix=/usr
-	unset CFLAGS ; make
+	./configure --prefix=/usr
+	make
 	make install
 	chmod 644 /usr/lib/libz.a
 

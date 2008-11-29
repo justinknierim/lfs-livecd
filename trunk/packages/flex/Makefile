@@ -1,12 +1,12 @@
 # Flex Makefile
 
 NM= flex
-VRS= 2.5.33
+VRS= 2.5.35
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= acdb8fff6455967ad1a5bfc71855dbcc1253ee56
+SHA-$(FILE)= c507095833aaeef2d6502e12638e54bf7ad2f24a
 
 # Targets
 
@@ -31,6 +31,8 @@ compile-stage2:
 	echo "" >> /usr/bin/lex
 	echo "# End /usr/bin/lex" >> /usr/bin/lex
 	chmod 755 /usr/bin/lex
+	mkdir -v /usr/share/doc/$(DIR)
+	cp -v doc/flex.pdf /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

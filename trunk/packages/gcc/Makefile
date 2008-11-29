@@ -1,16 +1,20 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.1.2
+VRS= 4.3.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7981b8d1b58b10ddfd7d5142eab16352d9206f3b
+SHA-$(FILE)= 787b566ad4f386a9896e2d5703e6ff5e7ccaca58
 
-PATCH1= $(DIR)-specs-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 1bdfbb49437642d3e450f0e3ba25a3e30e25e857
+FILE1= mpfr-2.3.2.tar.bz2
+URL-$(FILE1)= $(HTTP)/mpfr/$(FILE1)
+SHA-$(FILE1)= 37dbd478e1c136f37cf4c68eb1522e86e2307288
+
+FILE2= gmp-4.2.4.tar.bz2
+URL-$(FILE2)= $(HTTP)/gmp/$(FILE2)
+SHA-$(FILE2)= bb721f94fbeeb8c609104540b408da6707c370ec
 
 # Targets
 
@@ -18,19 +22,23 @@ include $(ROOT)/scripts/functions
 
 export LFS_USE_TARGET := yes
 
-pass1: $(FILE)
+pass1: $(FILE) $(FILE1) $(FILE2)
 	$(sep_dir_build)
 
 compile-pass1:
-# --enable-static overrides the unsuitable default in config.site
-	unset CFLAGS ; CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) \
-	 --with-local-prefix=$(WD) --disable-nls --enable-shared \
-	 --enable-languages=c --enable-static --disable-multilib
-	unset CFLAGS ; make bootstrap
-	unset CFLAGS ; make install
+	cd ../$(DIR) ; unpack ../$(FILE1)
+	cd ../$(DIR) ; mv mpfr-2.3.2 mpfr
+	cd ../$(DIR) ; unpack ../$(FILE2)
+	cd ../$(DIR) ; mv gmp-4.2.4 gmp	
+	CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) \
+	 --with-local-prefix=$(WD) --disable-nls --disable-shared \
+	 --enable-languages=c --disable-libssp --disable-multilib
+	make
+	make install
+	ln -vs libgcc.a `gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
 	ln -vs gcc $(WD)/bin/cc
 
-pass2: $(FILE) $(PATCH1)
+pass2: $(FILE) $(FILE1) $(FILE2)
 	$(sep_dir_build)
 
 compile-pass2:
@@ -39,17 +47,28 @@ compile-pass2:
 	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.tmp} && \
 	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
 	 > gcc/Makefile.in
-	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+	cd ../$(DIR) ; for file in $$(find gcc/config -name linux64.h -o -name linux.h) ; \
+	do \
+	cp -uv $$file{,.orig} && \
+	sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' -e 's@/usr@/tools@g' $$file.orig > $$file && \
+	echo " " >> $$file && \
+	echo "#undef STANDARD_INCLUDE_DIR" >> $$file && \
+	echo "#define STANDARD_INCLUDE_DIR 0" >> $$file && \
+	touch $$file.orig ; \
+	done
 ifdef 64bit
 	cd ../$(DIR) ; cp -v gcc/config/i386/t-linux64{,.tmp} && \
 	 sed '/MULTILIB_OSDIRNAMES/d' gcc/config/i386/t-linux64.tmp \
 	 > gcc/config/i386/t-linux64
 endif
-# --enable-static overrides the unsuitable default in config.site
+	cd ../$(DIR) ; unpack ../$(FILE1)
+	cd ../$(DIR) ; mv mpfr-2.3.2 mpfr
+	cd ../$(DIR) ; unpack ../$(FILE2)
+	cd ../$(DIR) ; mv gmp-4.2.4 gmp
 	../$(DIR)/configure --prefix=$(WD) \
 	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
 	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
-	 --disable-libstdcxx-pch --enable-static --disable-multilib
+	 --disable-libstdcxx-pch --disable-bootstrap --disable-multilib
 	make
 	make install
 
@@ -57,7 +76,7 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: $(FILE) $(PATCH1)
+stage2: $(FILE)
 	$(sep_dir_build)
 
 compile-stage2:
@@ -66,11 +85,9 @@ compile-stage2:
 	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
 	 gcc/Makefile.in
 	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
-	cd ../$(DIR) ; sed -i 's/@have_mktemp_command@/yes/' gcc/gccbug.in
-# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static \
+	 --enable-clocale=gnu --enable-languages=c,c++ --disable-bootstrap \
 	 --disable-multilib
 	make
 	-make -k check

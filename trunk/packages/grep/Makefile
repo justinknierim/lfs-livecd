@@ -1,29 +1,30 @@
 # Grep Makefile
 
-# Do not update this package before RedHat! Some of the fixes are scheduled
-# for grep-2.5.3, not 2.5.2
-
 NM= grep
-VRS= 2.5.1a
+VRS= 2.5.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 2cd082775d30be463c0ac674a00595eb56fda22e
+SHA-$(FILE)= 53227ca9a01d5548448372f9b2e9111adf159f3b
 
-PATCH1= $(DIR)-redhat_fixes-2.patch
+PATCH1= $(DIR)-debian_fixes-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 6f7f1623d1909f07dc08a8a16a24cbce6be8dfc5
+SHA-$(PATCH1)= 77b5967bc0aa25fa827f892cd0f4625e18d0361f
+
+PATCH2= $(DIR)-upstream_fixes-1.patch
+URL-$(PATCH2)= $(HTTP)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= 464e42df7bb8aa1f170705cf7a98e0fdc7669709
 
 # Targets
 
 include $(ROOT)/scripts/functions
 
 stage1: $(FILE)
-	$(std_build) # See the scripts/functions file for functions like this
+	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD) --disable-perl-regexp
+	./configure --prefix=$(WD) --disable-perl-regexp --without-included-regex
 	make
 	make install
 
@@ -31,13 +32,13 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	chmod +x tests/fmbtest.sh
-	./configure --prefix=/usr --bindir=/bin
+	patch -Np1 -i ../$(PATCH2)
+	./configure --prefix=/usr --bindir=/bin --without-included-regex
 	make
 	make install
 
