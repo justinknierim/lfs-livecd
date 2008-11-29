@@ -1,20 +1,12 @@
 # Texinfo Makefile
 
 NM= texinfo
-VRS= 4.9
-DIR= $(NM)-$(VRS)
+VRS= 4.13a
+DIR= $(NM)-4.13
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnu.org/gnu/texinfo/$(FILE)
-SHA-$(FILE)= 19a0cc0b56cbfcfe610925bef31e0bdf749492c9
-
-PATCH1= $(DIR)-tempfile_fix-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
-SHA-$(PATCH1)= 2ead28cb8e2679cdb53e1e4908209f0a31397dfe
-
-PATCH2= $(DIR)-multibyte-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH2)
-SHA-$(PATCH2)= b97ae3468c03f8389dbf5c9b6eed64f996f9ed5c
+FILE= $(DIR)a.tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= a1533cf8e03ea4fa6c443b73f4c85e4da04dead0
 
 # Targets
 
@@ -32,12 +24,10 @@ chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
 	./configure --prefix=/usr
 	make
 	make install

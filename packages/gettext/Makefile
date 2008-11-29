@@ -1,12 +1,12 @@
 # Gettext Makefile
 
 NM= gettext
-VRS= 0.16.1
+VRS= 0.17
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/gettext/$(FILE)
-SHA-$(FILE)= 8642f4346dfd6a18ecd883329e150bfe9e0886c3
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= c51803d9f745f6ace36bd09c0486d5735ce399cf
 
 # Targets
 
@@ -29,7 +29,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure --prefix=/usr --docdir=/usr/share/doc/$(DIR)
 	make
 	make install
 

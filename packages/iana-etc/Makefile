@@ -1,12 +1,12 @@
 # Iana-etc Makefile
 
 NM= iana-etc
-VRS= 2.20
+VRS= 2.30
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 88a5f57df1ee5f5f2a020abfd346df15cec4f573
+SHA-$(FILE)= 218593bcb9264014c4e397d838b2c218eac9df06
 
 # Targets
 

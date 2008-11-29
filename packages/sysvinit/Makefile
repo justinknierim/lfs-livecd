@@ -8,8 +8,6 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 3e78df609a2ff0fea6304cb662a7f10298d03667
 
-PATCH1= $(DIR)-reexec06-1.patch
-
 # Targets
 
 include $(ROOT)/scripts/functions
@@ -18,12 +16,13 @@ chroot:
 	chroot "$(MP)" $(chenv-post-bash) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	sed -i 's@Sending processes@& started by init@g' src/init.c
+	sed -i 's@Sending processes@& configured via /etc/inittab@g' src/init.c
+	sed -i -e 's/utmpdump wall/utmpdump/' \
+	 -e 's/mountpoint.1 wall.1/mountpoint.1/' src/Makefile
 	ROOT="" make -C src
 	ROOT="" make -C src install
 	cp $(ROOT)/etc/inittab /etc

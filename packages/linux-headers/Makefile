@@ -1,12 +1,12 @@
 # Linux-headers Makefile
 
 NM= linux
-VRS= 2.6.22.5
+VRS= 2.6.27.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= http://www.kernel.org/pub/linux/kernel/v2.6/$(FILE)
-SHA-$(FILE)= a04e4efb32884ab95fe0ec38d60552cf3e0c49b8
+SHA-$(FILE)= 45c4b7c25d473306b2082671a3b95fba8e873c81
 
 # Targets
 
@@ -29,7 +29,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i '/scsi/d' include/Kbuild
 	make mrproper
 	make headers_check
 	make INSTALL_HDR_PATH=dest headers_install

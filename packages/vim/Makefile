@@ -1,24 +1,20 @@
 # Vim Makefile
 
 NM= vim
-VRS= 7.1
-DIR= $(NM)71
+VRS= 7.2
+DIR= $(NM)72
 
 FILE= $(NM)-$(VRS).tar.bz2
-URL-$(FILE)= http://ftp.vim.org/pub/vim/unix/$(FILE)
-SHA-$(FILE)= 981e1acecc4d8f15680b6e160de84aed038d857d
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= a4b6641ca528fada71ea77c998a441495ed4984c
 
 FILE2= $(NM)-$(VRS)-lang.tar.gz
-URL-$(FILE2)= http://ftp.vim.org/pub/vim/extra/$(FILE2)
-SHA-$(FILE2)= 7c1e2f498e1f8304879e73b88562f9036801c7ee
+URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+SHA-$(FILE2)= 970e0dda7e5b2308cf33488be1ea33d593d951cb
 
-PATCH1= $(NM)-$(VRS)-fixes-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
-SHA-$(PATCH1)= 6005e12fc31ce07a4da2806ea4c503cb569f235e
-
-PATCH2= $(NM)-$(VRS)-mandir-1.patch
-URL-$(PATCH2)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH2)
-SHA-$(PATCH2)= 182f46dfacefdd3bf6f821dea71f90547d414230
+PATCH1= $(NM)-$(VRS)-fixes-3.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= ba16e6b8749d686dd21672017f76ef0671922d22
 
 # Targets
 
@@ -32,20 +28,19 @@ chroot3:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make chroot-gvim $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE2) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE) $(FILE2) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
 	unpack ../$(FILE2) --strip-components=1
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
 	echo '#define SYS_VIMRC_FILE "/etc/vimrc"' >> src/feature.h
 	./configure --prefix=/usr --enable-multibyte
 	make
 	make install
 	ln -sfv vim /usr/bin/vi
-	for L in "" fr it pl ru ; do \
-	    ln -sfv vim.1 /usr/share/man/$L/man1/vi.1 ; done
+	for L in /usr/share/man/{,*/}man1/vim.1 ; do \
+	    ln -sfv vim.1 $$(dirname $$L)/vi.1 ; done
 	ln -sfv ../vim/$(DIR)/doc /usr/share/doc/vim-$(VRS)
 	cp $(ROOT)/etc/vimrc /etc
 

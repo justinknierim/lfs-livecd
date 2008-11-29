@@ -1,16 +1,16 @@
 # Module-Init-Tools Makefile
 
 NM= module-init-tools
-VRS= 3.2.2
+VRS= 3.4.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b51e8ac170be23a1f2e301a1dddd47a47ec2186a
+SHA-$(FILE)= cb957cccbbeb4d4c0bbd3f2be4d9848bcfb61102
 
-PATCH1= $(DIR)-modprobe-1.patch
+PATCH1= $(DIR)-manpages-1.patch
 URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 0caecb2078cc47c97e496e2e4717b8b82a52eb01
+SHA-$(PATCH1)= 3b3a0a6a56d0f50168f1a3447a0afc103a63d828
 
 # Targets
 
@@ -25,7 +25,7 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/ --mandir=/usr/share/man --enable-zlib
+	./configure --prefix=/ --enable-zlib --mandir=/usr/share/man
 	make
 	make INSTALL=install install
 	install -m644 $(ROOT)/etc/modprobe.conf /etc/modprobe.conf

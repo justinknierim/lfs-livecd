@@ -1,12 +1,12 @@
 # Findutils Makefile
 
 NM= findutils
-VRS= 4.2.31
+VRS= 4.4.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/findutils/$(FILE)
-SHA-$(FILE)= e031ddb4f50c8a053d3f216d10f92621c1fa21ba
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 25e3d4dec40cec0165ffeff50acc4d4523ec3e07
 
 # Targets
 

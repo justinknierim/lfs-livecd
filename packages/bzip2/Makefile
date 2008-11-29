@@ -1,15 +1,15 @@
 # Bzip2 Makefile
 
 NM= bzip2
-VRS= 1.0.4
+VRS= 1.0.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.bzip.org/$(VRS)/$(FILE)
-SHA-$(FILE)= f2388ec8f2c506e02aa89e67577b3c6331cbaa4c
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 8b02713ea0c8eb501cc8bdac4432d7f29700f767
 
 PATCH1= $(DIR)-install_docs-1.patch
-URL-$(PATCH1)= http://www.linuxfromscratch.org/patches/lfs/6.3/$(PATCH1)
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 86fa168b260bb12651ebfa6d47939e926e067036
 
 # Targets
@@ -32,7 +32,6 @@ stage2: Makefile $(FILE) $(PATCH1)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	sed -i 's,X)/man,X)/share/man,g' Makefile
 	make -f Makefile-libbz2_so
 	make clean
 	make

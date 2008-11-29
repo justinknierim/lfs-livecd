@@ -1,13 +1,12 @@
 # Iproute2 Makefile
 
-NM= iproute
-VRS= 2.6.20
-DATE= 070313
-DIR= $(NM)-$(VRS)-$(DATE)
+NM= iproute2
+VRS= 2.6.26
+DIR= $(NM)-$(VRS)
 
-FILE= $(NM)2-$(VRS)-$(DATE).tar.gz
-URL-$(FILE)= http://developer.osdl.org/dev/iproute2/download/$(FILE)
-SHA-$(FILE)= 6c46d381a9840c94a12faf3b2d64577c4e74323d
+FILE= $(NM)-$(VRS).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 95e0f528066eae7304b5d7c610348b522628c92f
 
 # Targets
 
@@ -21,9 +20,9 @@ stage2: Makefile $(FILE)
 	$(std_build) 
 
 compile-stage2:
-	sed -i -e '/tc-bfifo.8/d' -e '/tc-pfifo.8/s/pbfifo/bfifo/' Makefile
-	make SBINDIR=/sbin
-	make SBINDIR=/sbin install
+	make DESTDIR= SBINDIR=/sbin
+	make DESTDIR= SBINDIR=/sbin MANDIR=/usr/share/man \
+	 DOCDIR=/usr/share/doc/$(DIR) install
 	mv -v /sbin/arpd /usr/sbin
 
 clean:

@@ -1,12 +1,12 @@
 # Libtool Makefile
 
 NM= libtool
-VRS= 1.5.24
-DIR= $(NM)-$(VRS)
+VRS= 2.2.6a
+DIR= $(NM)-2.2.6
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ftp.gnu.org/gnu/libtool/$(FILE)
-SHA-$(FILE)= b4c994f1bf4a76d2b0c1d0a6f54d16598c15f3db
+FILE= $(DIR)a.tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 7b547877b1b78b547343e4678a531aece8949904
 
 # Targets
 
