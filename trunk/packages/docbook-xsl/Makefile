@@ -1,17 +1,17 @@
 # DocBook XSL Stylesheets Makefile
 
 NM= docbook-xsl
-VRS= 1.69.1
-OLDVERSIONS= 1.67.2
+VRS= 1.71.1
+OLDVERSIONS= 1.69.1 1.67.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= aaabf0e274609134e187a6c36d2be23f3471f507
+SHA-$(FILE)= de7199a9e55ced7a2a212e9902eff747103e4a24
 
 FILE1= $(NM)-doc-$(VRS).tar.bz2
 URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 2844c94d3127a9c517462b6efd9a4a9a38c5d9ba
+SHA-$(FILE1)= 2ef6945d5caeb17bd3a0d7ad706b53fa97265a36
 
 # Targets
 

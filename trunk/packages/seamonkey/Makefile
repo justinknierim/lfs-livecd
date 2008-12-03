@@ -1,12 +1,12 @@
 # Seamonkey Makefile
 
 NM= seamonkey
-VRS= 1.1.3
+VRS= 1.1.9
 DIR= mozilla
 
 FILE= $(NM)-$(VRS).source.tar.bz2
-URL-$(FILE)= http://releases.mozilla.org/pub/mozilla.org/$(NM)/releases/$(VRS)/$(FILE)
-SHA-$(FILE)= 3f7136c8b746d8c789e41839e99465ad4baa1ccb
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= e33d78a005d01f982e45db55034d776fda419e25
 
 MFH=/usr/lib/seamonkey
 
@@ -25,6 +25,8 @@ compile-stage2:
 	sed -i 's/-$$(MOZ_APP_VERSION)//' config/autoconf.mk.in
 	sed 's:@TOPSRCDIR@:$(ROOT)/$(PKG)/$(NM)/mozilla:' ../.mozconfig \
 	 > .mozconfig
+	echo "EXTRA_DSO_LDOPTS += \$$(XLDFLAGS) -lX11 -lXrender" >> \
+	 layout/build/Makefile.in
 	make -f client.mk build
 	make -f client.mk install
 	svn export --force $(ROOT)/root/.mozilla /root/.mozilla

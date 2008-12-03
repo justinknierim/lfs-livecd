@@ -1,11 +1,11 @@
 # Lynx Makefile
 
 NM= lynx
-VRS= 2.8.6
+VRS= 2.8.6rel.5
 DIR= $(NM)2-8-6
 
 FILE= $(NM)$(VRS).tar.bz2
-URL-$(FILE)= http://lynx.isc.org/$(NM)$(VRS)/$(NM)$(VRS).tar.bz2
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 019246b83fc7b6cb32bac0023f2ae6c5d330d18c
 
 # Targets
@@ -20,15 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --with-zlib --with-bzlib \
-	    --with-ssl --enable-charset-choice --enable-nls \
-	    --enable-locale-charset --with-screen=ncursesw
+	./configure --prefix=/usr --sysconfdir=/etc/lynx \
+	 --datadir=/usr/share/doc/$(NM)-$(VRS) --with-zlib --with-bzlib \
+	 --with-screen=ncursesw --enable-locale-charset
 	make
-	make docdir=/usr/share/doc/$(NM)-$(VRS)/doc \
-	 helpdir=/usr/share/doc/$(NM)-$(VRS)/help install-full
-	chgrp -R root /usr/share/doc/$(NM)-$(VRS)/doc
-	sed -i -e 's/#LOCALE_CHARSET:FALSE/LOCALE_CHARSET:TRUE/' \
-	    -e 's/#DEFAULT_EDITOR:/DEFAULT_EDITOR:vi/' /etc/lynx.cfg
+	make install-full
+	chgrp -v -R root /usr/share/doc/$(NM)-$(VRS)/lynx_doc
 
 clean:
 	-rm -rf $(DIR)

@@ -1,12 +1,12 @@
 # popt Makefile
 
 NM= popt
-VRS= 1.10.4
+VRS= 1.14
 DIR= $(NM)-$(VRS)
 
 FILE= $(NM)-$(VRS).tar.gz
-URL-$(FILE)= http://rpm.net.in/mirror/rpm-4.4.x/$(FILE)
-SHA-$(FILE)= 10e6649c4c37ecfb6fb4296aeca609b5fdd5e34d
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= af0a7e2b187d600d624515a53d88374c15104e15
 
 # Targets
 
@@ -20,7 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i -e "/*origOptString ==/c 0)" popt.c
 	./configure --prefix=/usr
 	make
 	make install

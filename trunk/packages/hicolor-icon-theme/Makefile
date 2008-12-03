@@ -5,7 +5,7 @@ VRS= 0.10
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://icon-theme.freedesktop.org/releases/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 30a1526cd337ecbd9aaecfff2737884b86c72508
 
 # Targets

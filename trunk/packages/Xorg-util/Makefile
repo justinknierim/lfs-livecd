@@ -1,14 +1,8 @@
-NM= X.org-util
-VRS= X11R7.2
-URLBASE= http://xorg.freedesktop.org/releases/individual/util
+NM= Xorg-util
+VRS= X11R7.4
+URLBASE= $(HTTPBLFS)/$(NM)
 
-FILE101= util-macros-1.1.5.tar.bz2
-URL-$(FILE101)= $(URLBASE)/$(FILE101)
-SHA-$(FILE101)= c4bbfa389df7e5f568599d6313f2460a381f0502
-
-FILE102= gccmakedep-1.0.2.tar.bz2
-URL-$(FILE102)= $(URLBASE)/$(FILE102)
-SHA-$(FILE102)= a3d971a507a460233afd8ed46e9f06135fed634d
+include $(ROOT)/$(PKG)/$(NM)/filelist
 
 ALLFILES= $(foreach FILE,$(sort $(filter FILE%,$(.VARIABLES))),$($(FILE)))
 
@@ -18,7 +12,7 @@ stage2: Makefile $(ALLFILES)
 	$(foreach DIR,$(subst .tar.bz2,,$(ALLFILES)),make FILE=$(DIR).tar.bz2 DIR=$(DIR) $(DIR)-stage2 && ) true
 
 compile-%-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var
 	make
 	make install
 

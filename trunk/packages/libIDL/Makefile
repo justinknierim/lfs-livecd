@@ -1,12 +1,12 @@
 # LibIDL Makefile
 
 NM= libIDL
-VRS= 0.8.8
+VRS= 0.8.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/$(NM)/0.8/$(FILE)
-SHA-$(FILE)= 4d891df913dafec531fbf72995b47e7e2cd7d3b5
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 6e0c5ef5716a96bcad5193853b7c3bf417c680e6
 
 # Targets
 

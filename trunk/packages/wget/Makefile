@@ -41,9 +41,10 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --with-ssl
+	./configure --prefix=/usr --sysconfdir=/etc
 	make
 	make install
+	install-info --info-dir=/usr/share/info /usr/share/info/wget.info
 
 clean:
 	-rm -rf $(DIR)

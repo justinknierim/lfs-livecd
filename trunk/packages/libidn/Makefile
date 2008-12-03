@@ -1,12 +1,12 @@
 # libidn Makefile
 
 NM= libidn
-VRS= 0.6.11
+VRS= 0.6.14
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://josefsson.org/libidn/releases/$(FILE)
-SHA-$(FILE)= 66b58bcd5f9a1c3f0519a2cb356f9416a495c14f
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 2aec09195949c4d90e03207cb10abec07a85d751
 
 # Targets
 
@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --libdir=/usr/lib
+	./configure --prefix=/usr
 	make
 	make install
 

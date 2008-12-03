@@ -1,12 +1,12 @@
 # xkeyboard-config Makefile
 
 NM= xkeyboard-config
-VRS= 0.9
+VRS= 1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://xlibs.freedesktop.org/xkbdesc/$(FILE)
-SHA-$(FILE)= 05139163da656001fd837c6678254665c0d8ca00
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 7ad0ff286233b3569ea38ab951f61efb2e4745b9
 
 # Targets
 
@@ -20,13 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	rm -rf /usr/share/X11/xkb/compiled
-	mkdir -p /var/lib/xkb
-	./configure --prefix=/usr --sysconfdir=/etc \
-	    --with-xkb-base=/usr/share/X11/xkb --with-xkb-rules-symlink=xorg \
-	    --enable-compat-rules
+	./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var \
+	 --with-xkb-rules-symlink=xorg
 	make
 	make install
+	install -dv -m755 /usr/share/doc/$(DIR)
+	install -v -m644 docs/{README,HOWTO}* /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

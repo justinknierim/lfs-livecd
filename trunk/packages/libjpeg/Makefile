@@ -4,13 +4,13 @@ NM= libjpeg
 VRS= 6b
 DIR= jpeg-$(VRS)
 
-FILE= jpegsrc.v$(VRS).tar.bz2
+FILE= jpegsrc.v$(VRS).tar.gz
 URL-$(FILE)= $(HTTPBLFS)/jpeg/$(FILE)
-SHA-$(FILE)= 0b4ef1e7dcee85e631a958b1ea493b6b0f2f2250
+SHA-$(FILE)= 7079f0d6c42fad0cfba382cf6ad322add1ace8f9
 
-PATCH= $(DIR)-config_update-1.patch
-URL-$(PATCH)= http://svn.cross-lfs.org/svn/repos/patches/jpeg/$(PATCH)
-SHA-$(PATCH)= 5d99bf64e42500b7c357684ed153ad5ecbaa3c2c
+#PATCH= $(DIR)-config_update-1.patch
+#URL-$(PATCH)= http://svn.cross-lfs.org/svn/repos/patches/jpeg/$(PATCH)
+#SHA-$(PATCH)= 5d99bf64e42500b7c357684ed153ad5ecbaa3c2c
 
 # Targets
 
@@ -20,14 +20,14 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH)
+	#patch -Np1 -i ../$(PATCH)
 	./configure --prefix=/usr --enable-static --enable-shared
 	make
-	make mandir=/usr/share/man/man1 install
+	make install
 	/sbin/ldconfig
 
 clean:

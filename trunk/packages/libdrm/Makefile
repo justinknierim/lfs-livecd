@@ -1,12 +1,12 @@
 # libdrm Makefile
 
 NM= libdrm
-VRS= 2.3.0
+VRS= 2.3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://dri.freedesktop.org/libdrm/$(FILE)
-SHA-$(FILE)= af2e8d6e3ad6b906b4d6f1b2ada2d523188c28ea
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 775dc69fcabb324552b0b9fe3a67eceb324be194
 
 # Targets
 

@@ -1,12 +1,12 @@
 # dbus Makefile
 
 NM= dbus
-VRS= 1.0.2
+VRS= 1.2.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://dbus.freedesktop.org/releases/dbus/$(FILE)
-SHA-$(FILE)= 2870efd6ea0b5b0d14e52195f560238a74bb1e0e
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 913d796b79802b6ee6ca2b0ef59c670f3fd79774
 
 # Targets
 
@@ -20,10 +20,12 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var \
-	    --disable-python
+	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
 	make
 	make install
+	install -v -m755 -d /usr/share/doc/$(DIR)
+	install -v -m644 doc/{TODO,*.{dtd,html,xml,xsl,txt,c}} \
+	 /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

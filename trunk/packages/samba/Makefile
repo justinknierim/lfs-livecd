@@ -1,12 +1,12 @@
 # Samba Makefile
 
 NM= samba
-VRS= 3.0.25
+VRS= 3.0.30
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://us3.samba.org/$(NM)/ftp/old-versions/$(FILE)
-SHA-$(FILE)= 413fb84366e4bc98a64398996d6944f8fb8e0f7f
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 609c602d9a17ea05954fc9fc021cfd95227eaefb
 
 # Targets
 
@@ -21,11 +21,19 @@ stage2: Makefile $(FILE)
 
 compile-stage2:
 	cd source ; ./configure --prefix=/usr --sysconfdir=/etc \
-	 --localstatedir=/var --with-piddir=/var/run --with-fhs \
-	 --with-smbmount --without-sys-quotas --without-quotas
+	 --localstatedir=/var --with-piddir=/var/run \
+	 --with-pammodulesdir=/lib/security --with-fhs \
+	 --with-smbmount
 	cd source ; make
-	cd source ; make install ; mv -v /usr/lib/samba/*.so /usr/lib
-	mkdir -p /etc/samba
+	cd source ; make install
+	mv -v /usr/lib/samba/libsmbclient.so /usr/lib
+	ln -v -sf ../libsmbclient.so /usr/lib/samba
+	ln -v -sf libsmbclient.so /usr/lib/libsmbclient.so.0
+	chmod -v 644 /usr/include/lib{smbclient,msrpc}.h
+	cd source ; install -v -m644 ../examples/smb.conf.default /etc/samba
+	install -v -m755 -d /usr/share/doc/$(DIR)
+	cd source ; install -v -m644 ../docs/*.pdf /usr/share/doc/$(DIR)
+	ln -v -s ../../samba/swat  /usr/share/doc/$(DIR)
 	install -m644 $(ROOT)/etc/samba/smb.conf /etc/samba
 
 clean:

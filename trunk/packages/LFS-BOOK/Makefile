@@ -1,7 +1,7 @@
 # LFS Book Makefile
 
 NM= LFS-BOOK
-VRS= 6.3
+VRS= 6.4
 DIRBASE= $(NM)-$(VRS)
 DIR= $(DIRBASE)-XML
 HTMLDIR= $(DIRBASE)-HTML
@@ -10,8 +10,8 @@ HTMLDIR= $(DIRBASE)-HTML
 #URL-$(FILE)= http://www.linuxfromscratch.org/lfs/downloads/6.2/$(FILE)
 #SHA-$(FILE)= 729bcf04d8e4ed0af3c58daf0d289e94d6385052
 
-ifeq ($(CD_ARCH),x86)
-URL= svn://svn.linuxfromscratch.org/LFS/tags/6.3/BOOK@8348
+ifeq ($(CD_ARCH),i686)
+URL= svn://svn.linuxfromscratch.org/LFS/tags/6.4/BOOK@8749
 endif
 ifeq ($(CD_ARCH),x86_64)
 URL= svn://svn.linuxfromscratch.org/LFS/branches/x86_64/BOOK@8276

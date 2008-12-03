@@ -1,16 +1,16 @@
 # Mesa Makefile
 
 NM= Mesa
-VRS= 6.5.2
+VRS= 7.2
 DIR= $(NM)-$(VRS)
 
 FILE= MesaLib-$(VRS).tar.bz2
-URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/mesa3d/$(FILE)
-SHA-$(FILE)= ba860bb6ee57c02202342dfd5927464a068ea18f
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= a6dce814cc56a562890ab79cf4e205f62459a29c
 
 FILE1= MesaDemos-$(VRS).tar.bz2
-URL-$(FILE1)= http://heanet.dl.sourceforge.net/sourceforge/mesa3d/$(FILE1)
-SHA-$(FILE1)= beac8b2fa9c6e25efd44b911d2d7952b2f87534c
+URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
+SHA-$(FILE1)= 3d7b9b3ee84ed3637849f7598faf3d60c5a2a9fd
 
 # Targets
 
@@ -25,16 +25,11 @@ stage2: Makefile $(FILE) $(FILE1)
 
 compile-stage2:
 	unpack ../$(FILE1) --strip-components=1
-ifeq ($(CD_ARCH),x86)
-	make linux-dri-x86 OPT_FLAGS="$(CFLAGS)" MKDEP="gccmakedep" INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri
-endif
-ifeq ($(CD_ARCH),x86_64)
-	make linux-dri-x86-64 OPT_FLAGS="$(CFLAGS)" MKDEP="gccmakedep" INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri
-endif
-	make INSTALL_DIR=/usr DRI_DRIVER_INSTALL_DIR=/usr/lib/dri install
-	sed -i 's@-l$$(GLUT_LIB)@@g' configs/default
-	cd progs/xdemos ; make PROGS='glxinfo glxgears'
-	cd progs/xdemos ; install -v -m755 glxinfo glxgears /usr/bin
+	sed 's@FLAGS=\"-g@FLAGS=\"@' -i configure
+	./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var
+	make
+	make install
+	install -v -m755 progs/xdemos/glx{info,gears} /usr/bin
 
 clean:
 	-rm -rf $(DIR)

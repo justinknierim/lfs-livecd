@@ -106,7 +106,7 @@ compile-stage2:
 	$(CROSS_MAKE)
 	$(CROSS_MAKE) modules_install
 	cp -v arch/x86_64/boot/bzImage /boot/isolinux/linux64
-	create-initramfs $(VERSION) $(VRS)-64bit /boot/isolinux/initramfs_data64.cpio.gz
+	create-initramfs $(CD_VERSION) $(VRS)-64bit /boot/isolinux/initramfs_data64.cpio.gz
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/uname.in >../fakes-for-fglrx/uname
 	sed 's/VERSION/$(VRS)/' ../fakes-for-fglrx/cat.in >../fakes-for-fglrx/cat
 	chmod 755 ../fakes-for-fglrx/{uname,cat}

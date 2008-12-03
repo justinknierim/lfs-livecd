@@ -23,6 +23,9 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
+	install -v -m755 -d /usr/share/doc/$(DIR)/html
+	install -v -m644 doc/*.{png,html} /usr/share/doc/$(DIR)/html
+	install -v -m644 doc/*.txt /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

@@ -1,138 +1,8 @@
-NM= X.org-app
-VRS= X11R7.2
-URLBASE= http://xorg.freedesktop.org/releases/individual/app
-FILE101= iceauth-1.0.1.tar.bz2
+NM= Xorg-app
+VRS= X11R7.4
+URLBASE= $(HTTPBLFS)/$(NM)
 
-URL-$(FILE101)= $(URLBASE)/$(FILE101)
-SHA-$(FILE101)= 525a870033da099688826b61c6552e5d1f418618
-
-FILE102= mkfontdir-1.0.2.tar.bz2
-URL-$(FILE102)= $(URLBASE)/$(FILE102)
-SHA-$(FILE102)= f7e243cd26bacb9c5000eaf1595bb6c7b8bafb14
-
-FILE103= mkfontscale-1.0.3.tar.bz2
-URL-$(FILE103)= $(URLBASE)/$(FILE103)
-SHA-$(FILE103)= f635e66e8fc214a52c29c7fcb459fb65ba4ce1e4
-
-FILE104= rgb-1.0.1.tar.bz2
-URL-$(FILE104)= $(URLBASE)/$(FILE104)
-SHA-$(FILE104)= 004e9d7359f0fd1742710c35bcae3eaf9917839f
-
-FILE105= scripts-1.0.1.tar.bz2
-URL-$(FILE105)= $(URLBASE)/$(FILE105)
-SHA-$(FILE105)= e5785e243cea56c48a6492f6ec329c5cf7dbbca6
-
-FILE106= sessreg-1.0.2.tar.bz2
-URL-$(FILE106)= $(URLBASE)/$(FILE106)
-SHA-$(FILE106)= 2f2a36967ecffb29461ae28def3b013955e584dd
-
-FILE107= setxkbmap-1.0.3.tar.bz2
-URL-$(FILE107)= $(URLBASE)/$(FILE107)
-SHA-$(FILE107)= 0e11546b3cedd8ba53a753685b60be15cf34316a
-
-FILE108= smproxy-1.0.2.tar.bz2
-URL-$(FILE108)= $(URLBASE)/$(FILE108)
-SHA-$(FILE108)= 18c49ba13a32dc83d00b2183455e31d5d96aec6f
-
-FILE109= xauth-1.0.2.tar.bz2
-URL-$(FILE109)= $(URLBASE)/$(FILE109)
-SHA-$(FILE109)= 64bf289e3b3776de7f6b5984eb6ed238cfe9e2aa
-
-FILE110= xcursorgen-1.0.1.tar.bz2
-URL-$(FILE110)= $(URLBASE)/$(FILE110)
-SHA-$(FILE110)= 7982d93e1c456e4a4d7922dbbee5b170c5852ce1
-
-FILE111= xdpyinfo-1.0.1.tar.bz2
-URL-$(FILE111)= $(URLBASE)/$(FILE111)
-SHA-$(FILE111)= 497b6aca9f6fe3efafc3182ae63d8a0da012a08b
-
-FILE112= xdriinfo-1.0.1.tar.bz2
-URL-$(FILE112)= $(URLBASE)/$(FILE112)
-SHA-$(FILE112)= c9cea5c1150641490de6db2eb8ed5ad192a8883e
-
-FILE113= xgamma-1.0.1.tar.bz2
-URL-$(FILE113)= $(URLBASE)/$(FILE113)
-SHA-$(FILE113)= 0685b96318a71bc9349364c263473c84edbab356
-
-FILE114= xhost-1.0.1.tar.bz2
-URL-$(FILE114)= $(URLBASE)/$(FILE114)
-SHA-$(FILE114)= 37d39febdf0a26f4a5c9e4bd9711c528d1c6ea72
-
-FILE115= xinit-1.0.3.tar.bz2
-URL-$(FILE115)= $(URLBASE)/$(FILE115)
-SHA-$(FILE115)= caab4f9b56fc76edd8500d596d46cf1a9794caff
-
-FILE116= xkbcomp-1.0.3.tar.bz2
-URL-$(FILE116)= $(URLBASE)/$(FILE116)
-SHA-$(FILE116)= b0e32f66dd9a18dd5d28cd582f062709b28e901a
-
-FILE117= xkbutils-1.0.1.tar.bz2
-URL-$(FILE117)= $(URLBASE)/$(FILE117)
-SHA-$(FILE117)= 2ee3172f4b17cb9aa97d899c400493bbe83089d9
-
-FILE118= xkill-1.0.1.tar.bz2
-URL-$(FILE118)= $(URLBASE)/$(FILE118)
-SHA-$(FILE118)= fb88211f4632a16f8514b196343806cc9e3a2e4f
-
-FILE119= xlsclients-1.0.1.tar.bz2
-URL-$(FILE119)= $(URLBASE)/$(FILE119)
-SHA-$(FILE119)= 7df3de52252c57020480e730e2da809e62a9d2db
-
-FILE120= xlsfonts-1.0.1.tar.bz2
-URL-$(FILE120)= $(URLBASE)/$(FILE120)
-SHA-$(FILE120)= 76dd63376dc20ccb784d97b0ae16acbf0338f72a
-
-FILE121= xmag-1.0.1.tar.bz2
-URL-$(FILE121)= $(URLBASE)/$(FILE121)
-SHA-$(FILE121)= f0e706de7f012491cce750faaa5e8ab10e3afeec
-
-FILE122= xmessage-1.0.1.tar.bz2
-URL-$(FILE122)= $(URLBASE)/$(FILE122)
-SHA-$(FILE122)= 3afc3c89472afdb5d4336d3c332b481be5e8b7ff
-
-FILE123= xmodmap-1.0.2.tar.bz2
-URL-$(FILE123)= $(URLBASE)/$(FILE123)
-SHA-$(FILE123)= 915294312359d4b3067ae2a2702eb1f1f41dbd0b
-
-FILE124= xrandr-1.0.2.tar.bz2
-URL-$(FILE124)= $(URLBASE)/$(FILE124)
-SHA-$(FILE124)= 7003eb14d62d1470cae292ad37f5fb6fd14657fe
-
-FILE125= xrdb-1.0.2.tar.bz2
-URL-$(FILE125)= $(URLBASE)/$(FILE125)
-SHA-$(FILE125)= b6d6e1f8a73321731e7f04f9a15c60276df8dc45
-
-FILE126= xrefresh-1.0.2.tar.bz2
-URL-$(FILE126)= $(URLBASE)/$(FILE126)
-SHA-$(FILE126)= 4f33382e07b8e0b2061edf0c10ace0df50b95af5
-
-FILE127= xset-1.0.2.tar.bz2
-URL-$(FILE127)= $(URLBASE)/$(FILE127)
-SHA-$(FILE127)= 3e11aab1a48fbee0094c2bfea829cca48b05c2b3
-
-FILE128= xsetmode-1.0.0.tar.bz2
-URL-$(FILE128)= $(URLBASE)/$(FILE128)
-SHA-$(FILE128)= add4e6a91c9d0e7d1a80b3534c64d6b7bf633ea0
-
-FILE129= xsetpointer-1.0.0.tar.bz2
-URL-$(FILE129)= $(URLBASE)/$(FILE129)
-SHA-$(FILE129)= 67ec2bf63a693a9e3445af57d00ffc19306b2d9a
-
-FILE130= xsetroot-1.0.1.tar.bz2
-URL-$(FILE130)= $(URLBASE)/$(FILE130)
-SHA-$(FILE130)= 1a0353b4ab580314d39d704013e332b9b1bb8642
-
-FILE131= xvidtune-1.0.1.tar.bz2
-URL-$(FILE131)= $(URLBASE)/$(FILE131)
-SHA-$(FILE131)= 63ec5ecff8bdef3988bf2612a3694ad7d87d3867
-
-FILE132= xwd-1.0.1.tar.bz2
-URL-$(FILE132)= $(URLBASE)/$(FILE132)
-SHA-$(FILE132)= 9901672e05b298e5c2c03516f17b4fac69e53a0d
-
-FILE133= xwud-1.0.1.tar.bz2
-URL-$(FILE133)= $(URLBASE)/$(FILE133)
-SHA-$(FILE133)= de938e6d21fb0f27cb62853773b9635bbfaa6d0f
+include $(ROOT)/$(PKG)/$(NM)/filelist
 
 ALLFILES= $(foreach FILE,$(sort $(filter FILE%,$(.VARIABLES))),$($(FILE)))
 
@@ -142,7 +12,7 @@ stage2: Makefile $(ALLFILES)
 	$(foreach DIR,$(subst .tar.bz2,,$(ALLFILES)),make FILE=$(DIR).tar.bz2 DIR=$(DIR) $(DIR)-stage2 && ) true
 
 compile-%-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var
 	make
 	make install
 

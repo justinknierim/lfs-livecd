@@ -1,12 +1,12 @@
 # XFS Progs Makefile
 
 NM= xfsprogs
-VRS= 2.9.3
+VRS= 2.9.7
 DIR= $(NM)-$(VRS)
 
 FILE=$(NM)_$(VRS)-1.tar.gz
-URL-$(FILE)= http://www.linuxfromscratch.org/~alexander/$(FILE)
-SHA-$(FILE)= 79996d24faefa89d46eb678d4c1c08d25d20dec7
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 7cc9d12681597344978705e2c4a5bc54599e400a
 
 # Targets
 
@@ -20,12 +20,13 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i '/autoconf/d' Makefile
-	unset CFLAGS ; \
-	    make DEBUG=-DNDEBUG INSTALL_USER=root INSTALL_GROUP=root \
-	    LOCAL_CONFIGURE_OPTIONS="--enable-static --disable-shared --enable-readline=yes" \
-	    OPTIMIZER="$(CFLAGS)"
+	make DEBUG=-DNDEBUG INSTALL_USER=root INSTALL_GROUP=root \
+	 LOCAL_CONFIGURE_OPTIONS="--enable-readline=yes"
 	make install
+	make install-dev
+	chmod -v 755 /lib/libhandle.so*
+	rm -f /lib/libhandle.{a,la,so}
+	ln -svf ../../lib/libhandle.so.1 /usr/lib/libhandle.so
 
 clean:
 	-rm -rf $(DIR)

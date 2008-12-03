@@ -4,13 +4,21 @@ NM= unzip
 VRS= 5.52
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
+FILE= $(NM)552.tar.gz
 URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= d3d0b410f51b98dae3b056b5e9768fccb1402beb
+SHA-$(FILE)= 1831bd59b9e607a69052f83b263384895e2d4a19
 
 PATCH1= $(DIR)-security_fix-1.patch
 URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
 SHA-$(PATCH1)= 7f6a287c0b480bc4748abdf69429dfc76383e1d6
+
+PATCH2= $(DIR)-security_fix-2.patch
+URL-$(PATCH2)= $(HTTPBLFS)/$(NM)/$(PATCH2)
+SHA-$(PATCH2)= 009386ef72467e98a43c33878e954e7164ee063e
+
+PATCH3= unzip-5.50-alt-iconv-v1.1.patch
+URL-$(PATCH3)= $(HTTPBLFS)/$(NM)/$(PATCH3)
+SHA-$(PATCH3)= 9c9ddb436d8b4a317f7a1dc539c87190bfe135f4
 
 # Targets
 
@@ -20,17 +28,19 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
 	$(std_build)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH2)
+	patch -Np1 -i ../$(PATCH3)
 ifeq ($(CD_ARCH),x86)
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
 else
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux_noasm
 endif
-	make prefix=/usr MANDIR=/usr/share/man/man1 install
+	make prefix=/usr install
 
 clean:
 	-rm -rf $(DIR)

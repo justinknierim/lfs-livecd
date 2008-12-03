@@ -1,12 +1,12 @@
 # libxslt Makefile
 
 NM= libxslt
-VRS= 1.1.20
+VRS= 1.1.24
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnome.org/pub/gnome/sources/libxslt/1.1/$(FILE)
-SHA-$(FILE)= 365263bc9f47f1df4c23ffb8169d48b56ebc2417
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= b5402e24abff5545ed76f6a55049cbebc664bd58
 
 # Targets
 

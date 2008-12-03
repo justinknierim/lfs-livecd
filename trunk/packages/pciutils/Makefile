@@ -5,7 +5,7 @@ VRS= 2.2.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.kernel.org/pub/software/utils/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 4a58d578cd0e0d81b85f8ee592c0c5e1d6ce6cda
 
 # Targets
@@ -20,6 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
+	sed -i 's/null ;/null 2>\&1 ;/' update-pciids.sh
 	make PREFIX=/usr
 	make PREFIX=/usr install
 	install -m 755 -d /usr/include/pci
