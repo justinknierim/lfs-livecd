@@ -5,7 +5,7 @@ VRS= 0.72
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://easynews.dl.sourceforge.net/linux-usb/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 891b8825d964880146d5c980e52bb9e23d92fe2b
 
 # Targets

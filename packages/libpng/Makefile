@@ -1,12 +1,12 @@
 # libpng Makefile
 
 NM= libpng
-VRS= 1.2.16
+VRS= 1.2.33
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://easynews.dl.sourceforge.net/libpng/$(FILE)
-SHA-$(FILE)= 0b37d42d2ae33c22093d46a28e6b8fa21eb4c1da
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 72b5327cbc1677d11d8c910ce61b683733f80592
 
 # Targets
 
@@ -23,8 +23,6 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
-	# Stray symlink because we disable static libraries
-	rm -f /usr/lib/libpng.a
 	install -v -m755 -d /usr/share/doc/$(DIR)
 	install -v -m644 README libpng-$(VRS).txt /usr/share/doc/$(DIR)
 

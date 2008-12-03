@@ -5,7 +5,7 @@ VRS= 1.5
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnupg.org/gcrypt/libgpg-error/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 1f83d9af8e8ed3bcbf3a5e9018db257dc6336655
 
 # Targets
@@ -23,6 +23,7 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
+	install -v -m644 -D README /usr/share/doc/$(DIR)/README
 
 clean:
 	-rm -rf $(DIR)

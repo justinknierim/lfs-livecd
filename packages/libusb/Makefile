@@ -5,7 +5,7 @@ VRS= 0.1.12
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://easynews.dl.sourceforge.net/libusb/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 599a5168590f66bc6f1f9a299579fd8500614807
 
 # Targets

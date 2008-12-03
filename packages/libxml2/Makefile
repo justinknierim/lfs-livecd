@@ -1,15 +1,12 @@
 # LibXML2 Makefile
 
-# Don't upgrade to 2.6.30 - will segfault on x86_64
-# see http://bugs.debian.org/439967 and its duplicates
-
 NM= libxml2
-VRS= 2.6.27
+VRS= 2.6.31
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnome.org/pub/GNOME/sources/libxml2/2.6/$(FILE)
-SHA-$(FILE)= 8a68083c9b2487a8ce7057629140b857ca2abf74
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 97233a210425bad96b35e52aa3e0010ac11bbcc9
 
 # Targets
 
@@ -23,7 +20,6 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's/@TAR@/& --wildcards/' xstc/Makefile.in
 	./configure --prefix=/usr --with-history
 	make
 	make install

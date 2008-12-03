@@ -31,17 +31,15 @@ ROOTFS_MEGS := 1536
 # please use "linux32 make" instead of plain "make".
 #==============================================================================
 
-export CD_ARCH := $(shell uname -m | sed 's|i[3456]|x|')
-export VERSION ?= $(CD_ARCH)-6.4
+export CD_ARCH := $(shell uname -m)
+export CD_VERSION ?= $(CD_ARCH)-6.4
 
-ifeq ($(CD_ARCH),x86)
-export LFS_TARGET ?= i486-pc-linux-gnu
+ifeq ($(CD_ARCH),i686)
 export LINKER := ld-linux.so.2
 endif
 
 ifeq ($(CD_ARCH),x86_64)
 export 64bit = true
-export LFS_TARGET ?= x86_64-unknown-linux-gnu
 export LINKER := ld-linux-x86-64.so.2
 endif
 
@@ -53,7 +51,7 @@ export pagesize ?= letter
 # HTTP:     Default http server for the lfs-base packages
 # HTTPBLFS: Default http server for the BLFS packages
 export HTTP ?= http://kerrek.linuxfromscratch.org/pub/lfs/conglomeration
-export HTTPBLFS ?= http://ftp.lfs-matrix.net/pub/blfs/conglomeration
+export HTTPBLFS ?= http://kerrek.linuxfromscratch.org/pub/blfs/conglomeration
 
 #==============================================================================
 # The following variables are not expected to be changed
@@ -102,7 +100,7 @@ export WHITE= "[00m"
 # lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
 
 all: test-host lfs-base extend-lfs iso
-	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso, is ready!"
+	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION).iso, is ready!"
 
 test-host:
 	@if [ `whoami` != "root" ] ; then \
@@ -236,29 +234,29 @@ pre-bash: createfiles ch-linux-headers ch-man-pages \
 	ch-autoconf ch-automake ch-bash
 
 post-bash: ch-bzip2 ch-diffutils ch-file ch-gawk ch-findutils \
-	ch-flex ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
+	ch-flex ch-grub ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
 	ch-iproute2 ch-kbd ch-less ch-make ch-man-db \
 	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
 	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux-ng ch-vim \
 	final-environment
 
-blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-joe \
+blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
 	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
 	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml ch-libxslt \
-	ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng \
-	ch-freetype ch-fontconfig \
-	ch-Xorg-base ch-Xorg-util ch-Xorg-proto ch-Xorg-lib ch-libdrm ch-Mesa \
-	ch-xbitmaps ch-Xorg-app ch-xcursor-themes ch-xorg-server \
-	ch-Xorg-font ch-Xorg-driver ch-xorg-udev-rules ch-XML-Parser ch-xkeyboard-config \
-	ch-synaptics ch-inputattach ch-fonts-thai \
+	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml \
+	ch-libxslt ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
+	ch-fontconfig ch-Xorg-base ch-Xorg-proto ch-Xorg-util ch-libXau ch-libXdmcp \
+	ch-xcb-proto ch-libpthread-stubs ch-libxcb ch-ed ch-Xorg-lib \
+	ch-xbitmaps ch-libdrm ch-Mesa ch-Xorg-app ch-xcursor-themes \
+	ch-Xorg-font ch-XML-Parser ch-intltool ch-xkeyboard-config ch-luit \
+	ch-dbus ch-pcre ch-glib2 ch-dbus-glib ch-pciutils ch-libusb ch-usbutils \
+	ch-xorg-server ch-Xorg-driver \
 	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
-	ch-libjpeg ch-libtiff ch-openssh ch-glib2 ch-giflib \
-	ch-gc ch-lftp ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-gtk2 ch-w3m ch-cvs ch-popt ch-samba ch-libIDL ch-seamonkey \
-	ch-alsa-lib ch-alsa-utils ch-alsa-firmware \
-	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss ch-libtheora ch-xine-lib \
-	ch-pciutils ch-libusb ch-usbutils ch-dbus ch-dbus-glib ch-parted \
+	ch-libjpeg ch-libtiff ch-openssh ch-giflib \
+	ch-gc ch-cairo ch-hicolor-icon-theme \
+	ch-pango ch-atk ch-jasper ch-gtk2 ch-w3m ch-cvs ch-popt ch-samba ch-libIDL \
+	ch-seamonkey ch-alsa-lib ch-alsa-utils ch-alsa-firmware \
+	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss ch-libtheora ch-xine-lib ch-parted \
 	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
 	ch-gxine ch-irssi ch-pidgin ch-net-tools \
 	ch-xchat ch-wireless_tools ch-wpa_supplicant \
@@ -277,8 +275,7 @@ blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-jfsutils ch-nano ch-j
 	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
 	ch-libaal ch-reiser4progs ch-vbetool ch-bin86 ch-lilo ch-syslinux \
 	ch-scsi-firmware ch-net-firmware ch-linux32 ch-initramfs
-ifeq ($(CD_ARCH),x86)
-	make ch-grub
+ifeq ($(CD_ARCH),i686)
 	make ch-linux
 	make ch-binutils64
 	make ch-gcc64
@@ -390,10 +387,10 @@ prepiso: $(MKTREE)
 	@>$(MP)/var/log/btmp
 	@>$(MP)/var/log/wtmp
 	@>$(MP)/var/log/lastlog
-	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/boot/isolinux/boot.msg
-	@sed -i 's/Version:$$/Version: $(VERSION)/' $(MP)/etc/issue*
+	@sed -i 's/Version:$$/Version: $(CD_VERSION)/' $(MP)/boot/isolinux/boot.msg
+	@sed -i 's/Version:$$/Version: $(CD_VERSION)/' $(MP)/etc/issue*
 	@install -m644 doc/lfscd-remastering-howto.txt $(MP)/root
-	@sed -e 's/\[Version\]/$(VERSION)/' -e 's/\\_/_/g' \
+	@sed -e 's/\[Version\]/$(CD_VERSION)/' -e 's/\\_/_/g' \
 	    doc/README.txt >$(MP)/root/README.txt
 	@install -m600 root/.bashrc $(MP)/root/.bashrc
 	@install -m755 scripts/{net-setup,greeting,livecd-login} $(MP)/usr/bin/ 
@@ -411,18 +408,18 @@ iso: prepiso
 	@-e2fsck -f -p root.ext2
 	@( LC_ALL=C ; export LC_ALL ; \
 	    cat $(ROOT)/doc/README.html.head ; \
-	    sed 's/\[version\]/$(VERSION)/' $(ROOT)/doc/README.txt | \
+	    sed 's/\[version\]/$(CD_VERSION)/' $(ROOT)/doc/README.txt | \
 		$(WD)/bin/Markdown --html4tags | $(WD)/bin/SmartyPants ; \
 	    cat $(ROOT)/doc/README.html.tail ) >$(MPBASE)/iso/README.html
 	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
-	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION).iso -b boot/isolinux/isolinux.bin \
+	$(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
-	-V "lfslivecd-$(VERSION)" ./
+	-V "lfslivecd-$(CD_VERSION)" ./
 	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
-	$(MPBASE)$(ROOT)/lfslivecd-$(VERSION)-nosrc.iso -b boot/isolinux/isolinux.bin \
+	$(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION)-nosrc.iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
-	-m lfs-sources -V "lfslivecd-$(VERSION)" ./
+	-m lfs-sources -V "lfslivecd-$(CD_VERSION)" ./
 
 # Targets to clean your tree. 
 #==============================================================================
@@ -446,7 +443,7 @@ clean: unmount
 	@-rm root.ext2
 
 scrub: clean
-	@rm -f lfslivecd-$(VERSION).iso lfslivecd-$(VERSION)-nosrc.iso
+	@rm -f lfslivecd-$(CD_VERSION).iso lfslivecd-$(CD_VERSION)-nosrc.iso
 
 mount: $(MKTREE)
 

@@ -1,12 +1,12 @@
 # Expat Makefile
 
 NM= expat
-VRS= 2.0.0
+VRS= 2.0.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://ufpr.dl.sourceforge.net/sourceforge/expat/$(FILE)
-SHA-$(FILE)= 9ff011a75a1f5b60145c4afdec520442cb398d93
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= 663548c37b996082db1f2f2c32af060d7aa15c2d
 
 # Targets
 
@@ -23,6 +23,8 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
+	install -v -m755 -d /usr/share/doc/$(DIR)
+	install -v -m644 doc/*.{html,png,css} /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

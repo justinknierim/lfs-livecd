@@ -1,12 +1,16 @@
 # FreeType Makefile
 
 NM= freetype
-VRS= 2.3.4
+VRS= 2.3.7
 DIR= $(NM)-$(VRS)
 	 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://download.savannah.gnu.org/releases/freetype/$(FILE)
-SHA-$(FILE)= 09b8f5ecbb3e06a14cc1c2f2dc7c04fe34c48eca
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= f16f849d6e739ce8842008586af36371a32ac064
+
+FILE2= $(NM)-doc-$(VRS).tar.bz2
+URL-$(FILE2)= $(HTTPBLFS)/$(NM)/$(FILE2)
+SHA-$(FILE2)= 852918fc87dc2a8a8d7fac03ed3ee9750d695bab
 
 # Targets
 
@@ -16,15 +20,18 @@ chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(FILE2)
 	$(std_build)
 
 compile-stage2:
-	sed -i -r 's:.*(#.*BYTE.*) .*:\1:' include/freetype/config/ftoption.h
-	sed -i '/define .*PATENT/s/define/undef/' include/freetype/config/ftoption.h
+	unpack ../$(FILE2) --strip-components=2 -C docs
+	sed -i -r -e 's:.*(#.*BYTE.*) .*:\1:' -e 's:.*(#.*SUBPIX.*) .*:\1:' \
+	 include/freetype/config/ftoption.h
 	./configure --prefix=/usr
 	make
 	make install
+	install -v -m755 -d /usr/share/doc/$(DIR)
+	cp -v -R docs/* /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)

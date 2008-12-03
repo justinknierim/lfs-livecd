@@ -1,13 +1,13 @@
 # FreeFont Makefile
 
 NM= freefont
-VRS= 20060126
+VRS= 20080912
 DIR= $(NM)-$(VRS)
 LOCATION= /usr/share/fonts
 
 FILE= $(NM)-ttf-$(VRS).tar.gz
-URL-$(FILE)= http://download.savannah.gnu.org/releases/$(NM)/$(FILE)
-SHA-$(FILE)= f3b53235bc1bebd228a8942068bd049693d71363
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= b2566d186d59b7fddf2cffd72728a98b0121b772
 
 # Targets
 

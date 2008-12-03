@@ -5,10 +5,8 @@ VRS= 0.5.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
 SHA-$(FILE)= 484522547ae6dbb342d3858a2a53a65451e273f9
-
-PATCH1= $(DIR)-gpm_fix-1.patch
 
 # Targets
 
@@ -22,11 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	autoconf
-	./configure --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc \
-	    --enable-image \
-	    --with-mailer=/usr/bin/mutt --with-browser=/usr/bin/seamonkey
+	./configure --prefix=/usr --libexecdir=/usr/lib --sysconfdir=/etc
 	make
 	make install
 	install -v -D -m 644 doc/keymap.default /etc/w3m/keymap

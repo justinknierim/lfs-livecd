@@ -53,6 +53,7 @@ compile-stage2:
 	ln -sfv libncurses.a /usr/lib/libcurses.a
 	mkdir -v /usr/share/doc/$(DIR)
 	cp -v -R doc/* /usr/share/doc/$(DIR)
+	# The non-wide library is for commercial software only => not for the Live CD
 
 clean:
 	-rm -rf $(DIR)

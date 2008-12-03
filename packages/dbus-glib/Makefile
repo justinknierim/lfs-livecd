@@ -1,12 +1,12 @@
 # dbus-glib Makefile
 
 NM= dbus-glib
-VRS= 0.73
+VRS= 0.76
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://dbus.freedesktop.org/releases/dbus-glib/$(FILE)
-SHA-$(FILE)= 31ad5dc7bed3111c1d21d9e9b53744a25c3e3556
+URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+SHA-$(FILE)= f7bfe7c394559bee12f0adfffd333304d471779a
 
 # Targets
 
@@ -20,7 +20,7 @@ stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	./configure --prefix=/usr
 	make
 	make install
 
