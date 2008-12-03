@@ -208,9 +208,11 @@ pre-wget:
 
 maybe-tools:
 	@if [ -f tools.tar.bz2 ] ; then \
+	    echo "Found previously built tools. Unpacking..." && \
 	    tar -C .. -jxpf tools.tar.bz2 ; \
 	else \
 	    su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) tools'" && \
+	    echo "Packaging tools for later use..." && \
 	    tar -C .. -jcpf tools.tar.bz2 tools ; \
 	fi
 	@touch $@
@@ -429,7 +431,7 @@ clean: unmount
 	@-userdel lfs
 	@-groupdel lfs
 	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget,maybe-tools}
+	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget,maybe-tools,createfiles}
 	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
 	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
 	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
