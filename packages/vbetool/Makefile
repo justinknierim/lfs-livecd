@@ -1,21 +1,16 @@
 # vbetool Makefile
 
 NM= vbetool
-VRS= 0.7
-VRS1= 1.1
+VRS= 1.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(NM)_$(VRS)-$(VRS1).tar.gz
-URL-$(FILE)= http://ftp.debian.org/debian/pool/main/v/$(NM)/$(FILE)
-SHA-$(FILE)= 889b9b61de44b05a247616d5013a79f6d44fc2ab
+FILE= $(NM)-$(VRS).tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= c7ba7c0635160c47fb1b94fd7c7cbe39cb717d22
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

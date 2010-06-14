@@ -10,13 +10,15 @@ SHA-$(FILE)= fd82ffd396eba5b595f76d2f4a068cb7fcc6cffb
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT) \
+		--libdir=$(TT)/$(MY_LIBDIR)
 	make install
 
 clean:

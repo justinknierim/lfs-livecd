@@ -1,42 +1,34 @@
 # Samba Makefile
 
 NM= samba
-VRS= 3.0.30
+VRS= 3.5.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 609c602d9a17ea05954fc9fc021cfd95227eaefb
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= f49733ea2fb9715bd4ec24d7ec96668cc6a97a1f
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cd source ; ./configure --prefix=/usr --sysconfdir=/etc \
-	 --localstatedir=/var --with-piddir=/var/run \
-	 --with-pammodulesdir=/lib/security --with-fhs \
-	 --with-smbmount
-	cd source ; make
-	cd source ; make install
-	mv -v /usr/lib/samba/libsmbclient.so /usr/lib
-	ln -v -sf ../libsmbclient.so /usr/lib/samba
-	ln -v -sf libsmbclient.so /usr/lib/libsmbclient.so.0
-	chmod -v 644 /usr/include/lib{smbclient,msrpc}.h
-	cd source ; install -v -m644 ../examples/smb.conf.default /etc/samba
-	install -v -m755 -d /usr/share/doc/$(DIR)
-	cd source ; install -v -m644 ../docs/*.pdf /usr/share/doc/$(DIR)
-	ln -v -s ../../samba/swat  /usr/share/doc/$(DIR)
-	install -m644 $(ROOT)/etc/samba/smb.conf /etc/samba
+	cd source3 ; ./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+	 	--localstatedir=/var \
+	 	--with-piddir=/var/run \
+	 	--with-pammodulesdir=/lib/security \
+	 	--with-fhs
+	cd source3 ; make
+	cd source3 ; make install
+	cd source3 ; install -v -m644 ../examples/smb.conf.default /etc/samba
+	install -m644 $(MY_ROOT)/etc/samba/smb.conf /etc/samba
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -6,11 +6,7 @@ VRS= SVN
 SCRIPTS= clkconf langconf brltty brltty-restart speakup speakup-restart
 DATA= font.dat font-errors.dat lang.dat
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(SCRIPTS) $(DATA)
 	@$(call echo_message, Building)
@@ -32,4 +28,4 @@ compile-stage2:
 
 clean:
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

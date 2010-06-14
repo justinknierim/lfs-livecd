@@ -1,20 +1,16 @@
 # alsa-lib Makefile
 
 NM= alsa-lib
-VRS= 1.0.14a
+VRS= 1.0.21
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://gd.tuwien.ac.at/opsys/linux/alsa/lib/$(FILE)
-SHA-$(FILE)= 0d0e217b778c411220471cd941ae48c4af675e61
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= cac69df85692ac407c4c80e7ca7a016ee8f35918
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -30,4 +26,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,20 +1,16 @@
 # SCIM-Input-Pad Makefile
 
 NM= scim-input-pad
-VRS= 0.1.1
+VRS= 0.1.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= c8722aaa261cc46bdc49a3586524ed53422b42dc
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= e3c5bceba046f627ef0db22c7ab4142f61ba38dc
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

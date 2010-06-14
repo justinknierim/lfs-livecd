@@ -1,20 +1,16 @@
 # mdadm Makefile
 
 NM= mdadm
-VRS= 2.6.1
+VRS= 3.1.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tgz
-URL-$(FILE)= http://www.cse.unsw.edu.au/~neilb/source/$(NM)/$(FILE)
-SHA-$(FILE)= c0f523853a9c816986c24c699fa80b2c02336f3d
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 0599bd60a6cf8194bc2b5306ec939e05f825e4ce
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -26,4 +22,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

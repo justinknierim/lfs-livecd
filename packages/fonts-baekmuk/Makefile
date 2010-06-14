@@ -3,27 +3,22 @@
 NM= baekmuk-ttf
 VRS= 2.2
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://kldp.net/frs/download.php/1429/$(FILE)
+URL-$(FILE)= $(HTTP)/baekmuk-fonts/$(FILE)
 SHA-$(FILE)= afdee34f700007de6ea87b43c92a88b7385ba65b
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) 
 	$(std_build)
 
 compile-stage2:
-	cp -v ttf/*.ttf $(LOCATION)
+	cp -v ttf/*.ttf /usr/share/fonts
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

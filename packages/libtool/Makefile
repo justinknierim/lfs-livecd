@@ -1,30 +1,27 @@
 # Libtool Makefile
 
 NM= libtool
-VRS= 2.2.6a
-DIR= $(NM)-2.2.6
+VRS= 2.2.6b
+DIR= $(NM)-$(VRS)
 
-FILE= $(DIR)a.tar.gz
+FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7b547877b1b78b547343e4678a531aece8949904
+SHA-$(FILE)= 5afa73c8ef9ebe64bbb438a0f8779c9036e43c55
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

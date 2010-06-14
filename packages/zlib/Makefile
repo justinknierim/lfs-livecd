@@ -10,22 +10,18 @@ SHA-$(FILE)= 967e280f284d02284b0cd8872a8e2e04bfdc7283
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
-
-stage1: Makefile $(FILE)
-	$(std_build)
-
-stage2: Makefile $(FILE)
+stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=/tools/zlib
+	./configure --prefix=$(TT) --shared
 	make
 	make install
+
+stage2: Makefile $(FILE)
+	$(std_build)
 
 compile-stage2:
 	./configure --prefix=/usr --shared --libdir=/lib
@@ -34,7 +30,7 @@ compile-stage2:
 	rm -v /lib/libz.so
 	ln -sfv ../../lib/libz.so.$(VRS) /usr/lib/libz.so
 	make clean
-	./configure --prefix=/usr
+	./configure --prefix=/usr --libdir=/usr/lib
 	make
 	make install
 	chmod 644 /usr/lib/libz.a
@@ -42,4 +38,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: clean chroot compile-stage2

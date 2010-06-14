@@ -1,20 +1,16 @@
 # Zip Makefile
 
 NM= zip
-VRS= 2.32
-DIR= $(NM)-$(VRS)
+VRS= 30
+DIR= $(NM)$(VRS)
 
-FILE= $(NM)232.tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 5bc562bf95d9aee0cb6625e6038898e1f191a4aa
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= c9f4099ecf2772b53c2dd4a8e508064ce015d182
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -26,4 +22,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

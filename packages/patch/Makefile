@@ -1,38 +1,41 @@
 # Patch Makefile
 
 NM= patch
-VRS= 2.5.4
+VRS= 2.6.1
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
+FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= a12d520eba0dc35d1c4d50ec75b7684451a40de9
+SHA-$(FILE)= 105f313d14b5458e0aa229c518bda9ebdf921a1b
+
+PATCH= $(DIR)-test_fix-1.patch
+URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
+SHA-$(PATCH)= c6e7b69a51c282c910dcc30365bd7a428f244a45
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT)
 	make
 	make install
 
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	patch -Np1 -i ../$(PATCH)
+	./configure \
+		--prefix=/usr
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

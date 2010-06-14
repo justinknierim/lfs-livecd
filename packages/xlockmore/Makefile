@@ -1,20 +1,16 @@
 # xlockmore Makefile
 
 NM= xlockmore
-VRS= 5.22
+VRS= 5.30
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.tux.org/pub/X-Windows/xlockmore/$(FILE)
-SHA-$(FILE)= 5f1789d6a9a20aef972bb37e414719610074bfb5
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 960f711a75d9f0a2e30873443386a9d3cd46c3c6
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

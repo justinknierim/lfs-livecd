@@ -1,20 +1,16 @@
 # speex Makefile
 
 NM= speex
-VRS= 1.2beta1
+VRS= 1.2rc1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://downloads.xiph.org/releases/speex/$(FILE)
-SHA-$(FILE)= c1841de0e13a8326d5f0eda1a9f7a2ca444d9a25
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 52daa72572e844e5165315e208da539b2a55c5eb
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,20 +1,16 @@
 # gxine Makefile
 
 NM= gxine
-VRS= 0.5.11
+VRS= 0.5.905
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://easynews.dl.sourceforge.net/xine/$(FILE)
-SHA-$(FILE)= 74d7e46ff55261c36994b60d66e55720cdb9e165
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= dc01b617641d6eac4152259c592f15f31b9d9bf0
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -38,4 +34,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

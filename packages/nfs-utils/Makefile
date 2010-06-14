@@ -1,31 +1,29 @@
 # NFS Utilities Makefile
 
 NM= nfs-utils
-VRS= 1.0.12
+VRS= 1.2.2
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/nfs/$(FILE)
-SHA-$(FILE)= 477e3eb387b0ccde2eaeb8e67c6437cc0d2668e3
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= bf823cb85844de3ff3bf07601698aaa1cfdd8a28
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --disable-nfsv4 \
-	 --disable-gss
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--disable-gss
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

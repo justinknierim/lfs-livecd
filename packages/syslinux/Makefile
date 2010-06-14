@@ -1,36 +1,29 @@
 # Syslinux Makefile
 
 NM= syslinux
-VRS= 3.50
+VRS= 3.86
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.kernel.org/pub/linux/utils/boot/syslinux/Old/$(FILE)
-SHA-$(FILE)= 181d5dd92da1c709ae09a00e991573c7a1a21203
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 2d41043a3083c26e5e6bac3a5e8f17c3c0d963a1
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) split-boot-help $(ROOT)/doc/README.txt
+stage2: Makefile $(FILE) split-boot-help $(MY_ROOT)/doc/README.txt
 	$(std_build)
 
 compile-stage2:
-	mkdir -p /boot/isolinux
-	cp -v isolinux.bin /boot/isolinux
-	sed 's/\\_/_/g' $(ROOT)/doc/README.txt | ../split-boot-help
+	chmod +x ../split-boot-help
+	install -dv /boot/isolinux
+	cp -v core/isolinux.bin /boot/isolinux
+	sed 's/\\_/_/g' $(MY_ROOT)/doc/README.txt | ../split-boot-help
 	cp -v F*.txt /boot/isolinux
-	cp -v $(ROOT)/isolinux/{isolinux.cfg,boot.msg,splash.lss} /boot/isolinux
-ifeq ($(CD_ARCH),x86_64)
-	sed -i 	-e 's/kernel linux$$/kernel linux64/' \
-		-e 's/data_cpio/data64_cpio/' /boot/isolinux/isolinux.cfg
-endif
+	cp -v $(MY_ROOT)/isolinux/{isolinux.cfg,boot.msg,splash.lss} /boot/isolinux
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

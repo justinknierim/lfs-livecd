@@ -8,30 +8,27 @@ FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 8b02713ea0c8eb501cc8bdac4432d7f29700f767
 
-PATCH1= $(DIR)-install_docs-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 86fa168b260bb12651ebfa6d47939e926e067036
+PATCH= $(DIR)-install_docs-1.patch
+URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
+SHA-$(PATCH)= 86fa168b260bb12651ebfa6d47939e926e067036
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
 	make
-	make PREFIX=$(WD) install
+	make PREFIX=$(TT) install
 
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE) $(PATCH)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
+	patch -Np1 -i ../$(PATCH)
+	sed -i 's@\(ln -s -f \)$$(PREFIX)/bin/@\1@' Makefile
 	make -f Makefile-libbz2_so
 	make clean
 	make
@@ -46,4 +43,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

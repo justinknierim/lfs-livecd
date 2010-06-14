@@ -1,20 +1,16 @@
 # libogg Makefile
 
 NM= libogg
-VRS= 1.1.3
+VRS= 1.1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://downloads.xiph.org/releases/ogg/$(FILE)
-SHA-$(FILE)= a3e495a8baf6939efad7e0bd11cc0e466838c3db
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 868ace372004cf303231b954c60a836acbd71065
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

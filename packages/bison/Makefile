@@ -1,26 +1,23 @@
 # Bison Makefile
 
 NM= bison
-VRS= 2.3
+VRS= 2.4.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 7e489f35c6d8171f0cb0cad3dda0fb39f2cb0b62
+SHA-$(FILE)= fc96b28ee4a6a914b18cb1eddb68177d94b83361
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr
 	echo '#define YYENABLE_NLS 1' >> config.h
 	make
 	make install
@@ -28,4 +25,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

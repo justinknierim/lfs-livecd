@@ -1,12 +1,12 @@
 # espeak Makefile
 
 NM= espeak
-VRS= 1.29
+VRS= 1.43.03
 DIR= $(NM)-$(VRS)-source
 
 FILE= $(DIR).zip
-URL-$(FILE)= http://easynews.dl.sourceforge.net/sourceforge/espeak/$(FILE)
-SHA-$(FILE)= 272e7f1980a35a360ff321ca739e07f652dd94f6
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 354dad04ccd96cc2f03f647d06b6d45aba593681
 
 # Russian file is not downloaded because espeak mispronounces many words
 # (because it doesn't know about "hard" and "soft" consonants)
@@ -17,36 +17,25 @@ SHA-$(FILE)= 272e7f1980a35a360ff321ca739e07f652dd94f6
 # Linux console.
 # http://espeak.sourceforge.net/data/zhy_list.zip
 
-PATCH1= espeak-1.29-dont-crash.patch
-
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	@$(call echo_message, Building)
-	@unzip $(FILE) >$(DIR)-$@.log 2>&1
-	@make -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-	@make clean >>$(DIR)-$@.log 2>&1
+	@touch $(DIR)-$@.log
+	@-ln -sf ../packages/$(shell basename `pwd`)/$(DIR)-$@.log $(MY_ROOT)/logs/ 
+	@unzip $(FILE) 2>&1 | tee -a $(MY_ROOT)/logs/build.log >$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@make -C $(DIR) -f ../Makefile compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@make clean 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
 	@touch $@
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	# Remove dependency on portaudio
-	sed -i s/-lportaudio// src/Makefile
-	sed -i /USE_PORTAUDIO/d src/speech.h
-	# Don't install the crippled "espeak" executable and static library
-	# install only shared library, headers and data
-	sed -i '/INSTALL.*BIN2_NAME/d' src/Makefile
-	sed -i '/INSTALL.*STATIC/d' src/Makefile
+	cp -v src/portaudio19.h src/portaudio.h
 	make -C src
 	make -C src install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

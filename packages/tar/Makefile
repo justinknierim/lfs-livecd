@@ -1,38 +1,38 @@
 # Tar Makefile
 
 NM= tar
-VRS= 1.20
+VRS= 1.22
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4d4cda2ce857b5ea77b39dc718260ab09c145335
+SHA-$(FILE)= ca99a6ade7308f9293bdb04048cb335e52c63215
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT)
 	make
 	make install
-
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --bindir=/bin --libexecdir=/usr/sbin
+	./configure \
+		--prefix=/usr \
+		--bindir=/bin \
+		--libexecdir=/usr/sbin
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

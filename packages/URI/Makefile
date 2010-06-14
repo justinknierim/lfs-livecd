@@ -1,20 +1,16 @@
 # URI Makefile
 
 NM= URI
-VRS= 1.35
+VRS= 1.54
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.cpan.org/authors/id/G/GA/GAAS/$(FILE)
-SHA-$(FILE)= e385446f95bbf12ea55e002cf594c85a73e85e7b
+URL-$(FILE)= $(HTTP)/perl-modules/$(FILE)
+SHA-$(FILE)= e0ef831aed3b3dd44b3027075b610a81c135ddae
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,20 +1,16 @@
 # libtheora Makefile
 
 NM= libtheora
-VRS= 1.0alpha7
+VRS= 1.1.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://downloads.xiph.org/releases/theora/$(FILE)
-SHA-$(FILE)= ee97d30e0818c27666477113c019d53f15449d3d
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 8dcaa8e61cd86eb1244467c0b64b9ddac04ae262
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

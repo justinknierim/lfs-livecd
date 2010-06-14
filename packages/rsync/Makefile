@@ -1,20 +1,16 @@
 # rsync Makefile
 
 NM= rsync
-VRS= 2.6.9
+VRS= 3.0.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://rsync.samba.org/ftp/rsync/$(FILE)
-SHA-$(FILE)= 341618e230ea2e0e551d0ccf06f840d4f824c843
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 63426a1bc71991d93159cd522521fbacdafb7a61
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

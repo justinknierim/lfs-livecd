@@ -1,29 +1,25 @@
 # pptp Makefile
 
 NM= pptp
-VRS= 1.7.1
+VRS= 1.7.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://kent.dl.sourceforge.net/sourceforge/pptpclient/$(FILE)
-SHA-$(FILE)= cc2e4f40c5e3316bede41ec0a092a32025682851
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 1007eb1d4d21629fab390903e8b394d6157b4983
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	make OPTIMIZE="$(CFLAGS)"
+	make OPTIMIZE="-O2 -pipe"
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

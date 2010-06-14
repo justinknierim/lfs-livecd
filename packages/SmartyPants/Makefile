@@ -10,11 +10,7 @@ SHA-$(FILE)= 339a493f89cfee1e9f051bb1b39f9dcae4c595ca
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	unzip $(FILE)
@@ -27,4 +23,4 @@ stage2: Makefile $(FILE)
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot
+.PHONY: clean

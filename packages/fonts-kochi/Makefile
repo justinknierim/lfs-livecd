@@ -1,29 +1,24 @@
 # Kochi fonts Makefile
 
 NM= kochi-substitute
-VRS= 20030628
+VRS= 20030809
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/efont/4845/$(FILE)
-SHA-$(FILE)= b7e2eb45092779fd5f87a00cdc8faf1a625bbc74
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 9c48f3ba33558b4d48e7764b944fcb2f5f941dd8
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) 
 	$(std_build)
 
 compile-stage2:
-	cp -v ./*.ttf $(LOCATION)
+	cp -v ./*.ttf /usr/share/fonts
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

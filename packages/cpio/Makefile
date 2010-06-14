@@ -1,20 +1,16 @@
 # cpio Makefile
 
 NM= cpio
-VRS= 2.9
+VRS= 2.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ftp.gnu.org/pub/gnu/cpio/$(FILE)
-SHA-$(FILE)= ef381d0f33f1ea74475b6d813c42a74327762c4a
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 6f1934b0079dc1e85ddff89cabdf01adb3a74abb
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +24,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

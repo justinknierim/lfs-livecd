@@ -1,20 +1,16 @@
 # Fontconfig Makefile
 
 NM= fontconfig
-VRS= 2.4.2
+VRS= 2.8.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= cd5e30625680a0435563b586275156eaf8d0d34a
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 570fb55eb14f2c92a7b470b941e9d35dbfafa716
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,13 +24,8 @@ compile-stage2:
 	make install
 	install -v -m644 doc/*.3 /usr/share/man/man3
 	install -v -m644 doc/*.5 /usr/share/man/man5
-	install -v -m755 -d /usr/share/doc/$(DIR)/fontconfig-devel
-	install -v -m644 doc/*.{html,pdf,txt} \
-	 /usr/share/doc/$(DIR)
-	install -v -m644 doc/fontconfig-devel/* \
-	 /usr/share/doc/$(DIR)/fontconfig-devel
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

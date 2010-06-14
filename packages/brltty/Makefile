@@ -1,27 +1,21 @@
 # BRLTTY Makefile
 
 NM= brltty
-VRS= 3.8
+VRS= 4.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://www.mielke.cc/brltty/releases/$(FILE)
-SHA-$(FILE)= d6d12254aa9a01fb34d1665027bc894c28e75e79
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= d25802d08599b75841e7bb2f29bc88737f2992d2
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	# Do we want this?
-	# sed -i 's/usb_object="linux"/usb_object="libusb"/' configure
 	./configure --prefix=/usr --sysconfdir=/etc --disable-api
 	make
 	make install
@@ -29,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

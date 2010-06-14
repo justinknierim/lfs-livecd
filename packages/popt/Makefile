@@ -1,30 +1,27 @@
 # popt Makefile
 
 NM= popt
-VRS= 1.14
+VRS= 1.15
 DIR= $(NM)-$(VRS)
 
-FILE= $(NM)-$(VRS).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= af0a7e2b187d600d624515a53d88374c15104e15
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= d9bc3067a4e7e62ac0bd9818e8cd649ee0dd12dc
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

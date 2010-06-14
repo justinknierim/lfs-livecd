@@ -1,33 +1,29 @@
 # sudo Makefile
 
 NM= sudo
-VRS= 1.6.8p12
+VRS= 1.7.2p6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= a79631e9e1c0d0d3f2aa88ae685628e5fde61982
-
-PATCH1= $(DIR)-envvar_fix-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 08d7579c7ca96a330e5eb7108b0d40bf689a751f
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 45976e82cc2ca9f34cad574629ddd998c377734e
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/usr --libexecdir=/usr/lib \
-	 --enable-noargs-shell --with-ignore-dot --with-all-insults \
-	 --enable-shell-sets-home
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+	 	--enable-noargs-shell \
+	 	--with-ignore-dot \
+	 	--with-all-insults \
+	 	--enable-shell-sets-home \
+	 	--with-pam=no
 	make
 	rm -f /etc/sudoers
 	echo 'jhalfs    ALL=(ALL) NOPASSWD:ALL' >>sudoers
@@ -36,4 +32,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

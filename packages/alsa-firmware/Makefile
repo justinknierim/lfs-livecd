@@ -1,20 +1,16 @@
 # alsa-firmware Makefile
 
 NM= alsa-firmware
-VRS= 1.0.14
+VRS= 1.0.20
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://gd.tuwien.ac.at/opsys/linux/alsa/firmware/$(FILE)
-SHA-$(FILE)= ccc86da526b62aabb3119b5bf03a7e4de0133a9b
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 184742e14c5edcbea8da01db7c9e96b9d0bd3678
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +24,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -5,11 +5,7 @@ VRS= 1
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile init.in
 	@make compile-$@
@@ -25,4 +21,4 @@ compile-stage2:
 
 clean:
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,26 +1,22 @@
 # usbutils Makefile
 
 NM= usbutils
-VRS= 0.72
+VRS= 0.86
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 891b8825d964880146d5c980e52bb9e23d92fe2b
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 8789fe562a0c791cc1cdffd30af5908876efb6da
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's|DEST=|&/usr/share/|' update-usbids.sh
+	sed -i 's|DEST=|&/usr/share/|' update-usbids.sh.in
 	./configure --prefix=/usr
 	make
 	make install
@@ -29,4 +25,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

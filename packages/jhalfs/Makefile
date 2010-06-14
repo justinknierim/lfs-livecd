@@ -1,37 +1,30 @@
 # jhalfs Makefile
 
 NM= jhalfs
-VRS= 2.3.1
+VRS= trunk
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://www.linuxfromscratch.org/alfs/downloads/jhalfs/stable/$(FILE)
-SHA-$(FILE)= 95a41e2e1c3ff01feaaefafeda7d187760a24dfe
+# Using trunk version for now...
 
-FILE1= configuration
-
-PATCH1= jhalfs-2.3.1-locale-1.patch
-# Targets
-
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 chroot:
 	chroot "$(MP)" $(chenv-blfs) \
 	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
-stage2: Makefile $(FILE) $(FILE1)
-	$(std_build)
-
-compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	cp ../$(FILE1) .
-	mkdir -p /home/jhalfs
-	cp -v $(ROOT)/root/.bashrc /home/jhalfs/.bashrc
-	cp -av . /home/jhalfs/$(DIR)
-	chown -R jhalfs:jhalfs /home/jhalfs
+stage2: Makefile $(FILE1)
+	@$(call echo_message, Building)
+	@touch $(DIR)-$@.log
+	@-ln -sf ../packages/$(shell basename `pwd`)/$(DIR)-$@.log $(MY_ROOT)/logs/ 
+	@make compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
 	@touch $@
+	
+compile-stage2:
+	mkdir -p /home/jhalfs
+	cd /home/jhalfs ; svn export svn://linuxfromscratch.org/ALFS/jhalfs/trunk jhalfs-trunk
+	cp -v $(MY_ROOT)/root/.bashrc /home/jhalfs/.bashrc
+	chown -R jhalfs:jhalfs /home/jhalfs
 
 clean:
-	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

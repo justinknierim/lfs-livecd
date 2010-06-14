@@ -1,26 +1,26 @@
 # dbus Makefile
 
 NM= dbus
-VRS= 1.2.4
+VRS= 1.2.16
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 913d796b79802b6ee6ca2b0ef59c670f3fd79774
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 28aa5c8839e60d82eb9ce934e3e244abdda913f7
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc --localstatedir=/var
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+		--libexecdir=/usr/lib/dbus-1.0 \
+		--localstatedir=/var
 	make
 	make install
 	install -v -m755 -d /usr/share/doc/$(DIR)
@@ -30,4 +30,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,26 +1,22 @@
-# Procps Makefile
+# procps Makefile
 
 NM= procps
-VRS= 3.2.7
+VRS= 3.2.8
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b60567cc6263167fa1a4ff6a5bea26db86022c10
+SHA-$(FILE)= a0c86790569dec26b5d9037e8868ca907acc9829
 
 PATCH= $(DIR)-watch_unicode-1.patch
 URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
-SHA-$(PATCH)= cb3e542c7786d44f8d77d949972dab2cd0d432a9
+SHA-$(PATCH)= 70eb76e7370448213130d5520d8132f0bd1c761f
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) $(PATCH)
+stage2: $(FILE) $(PATCH)
 	$(std_build)
 
 compile-stage2:
@@ -31,4 +27,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

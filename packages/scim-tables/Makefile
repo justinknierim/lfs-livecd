@@ -1,20 +1,16 @@
 # SCIM-Tables Makefile
 
 NM= scim-tables
-VRS= 0.5.7
+VRS= 0.5.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/scim/$(FILE)
-SHA-$(FILE)= 0764724368eab3975138a69b2f50ad1b753c35f7
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= aeca1c8a2eb10a214edc07fa248cd7450f78e387
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2
