@@ -1,20 +1,16 @@
 # Curl Makefile
 
 NM= curl
-VRS= 7.19.0
+VRS= 7.20.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= fffb34be2e3c66e58a5d3daaf8aa38cae33b284f
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= bc3ba6d83069ef1f13d320f29b26f1c63f6056b3
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -23,11 +19,8 @@ compile-stage2:
 	./configure --prefix=/usr
 	make
 	make install
-	find docs -name "Makefile*" -o -name "*.1" -o -name "*.3" | xargs rm
-	install -v -d -m755 /usr/share/doc/$(DIR)
-	cp -R docs/* /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

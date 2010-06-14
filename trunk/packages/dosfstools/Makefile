@@ -1,30 +1,25 @@
 # dosfstools Makefile
 
 NM= dosfstools
-VRS= 2.11
+VRS= 3.0.9
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).src.tar.gz
-URL-$(FILE)= http://ftp.uni-erlangen.de/pub/Linux/LOCAL/dosfstools/$(FILE)
-SHA-$(FILE)= b0d8714475ca7c7a96a46adf7c4839d69ce2f412
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 9e2b458e6aa4fabb152a49dc6367a50a625d08dd
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's,ln -s,ln -sf,' */Makefile
 	make
 	make MANDIR=/usr/share/man/man8 install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

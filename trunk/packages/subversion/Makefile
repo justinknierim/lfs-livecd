@@ -1,30 +1,26 @@
 # Subversion Makefile
 
 NM= subversion
-VRS= 1.4.4
+VRS= 1.6.11
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 1ba850187b3cedb3265850acf32341b7dbe4f945
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 36cf9d39c14e5bd8d713302ac770c3964fe196b3
 
 FILE2= $(NM)-deps-$(VRS).tar.bz2
-URL-$(FILE2)= $(HTTPBLFS)/$(NM)/$(FILE2)
-SHA-$(FILE2)= 85f5ec38794f4350432c32dc581f4f9f898d171e
+URL-$(FILE2)= $(HTTP)/$(NM)/$(FILE2)
+SHA-$(FILE2)= bb65755933c385122918ab1f60f7715ebd4b52df
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) $(FILE2)
 	$(std_build)
 
 compile-stage2:
-	unpack ../$(FILE2) --strip-components=1
+	tar --strip-components=1 -xvf ../$(FILE2)
 	./configure --prefix=/usr
 	make
 	make install
@@ -34,4 +30,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

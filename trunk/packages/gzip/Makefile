@@ -1,39 +1,33 @@
 # Gzip Makefile
 
 NM= gzip
-VRS= 1.3.12
+VRS= 1.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 264e82876f201d9576626fbb1e0e9fe458efe9b9
+SHA-$(FILE)= 1d398dac6a7920a7de6e2685fe472a840eb2ce6e
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build) 
 
 compile-stage1:
-	for file in gzip.c lib/utimens.{c,h} ; do \
-	  cp -v $$file{,.orig} && \
-	  sed 's/futimens/gl_&/' $$file.orig > $$file ; \
-	done
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT)
 	make
 	make install
-
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
+	
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i 's/futimens/gl_&/' gzip.c lib/utimens.{c,h}
-	./configure --prefix=/usr --bindir=/bin
+	./configure \
+		--prefix=/usr \
+		--bindir=/bin
 	make
 	make install
 	mv -v /bin/{gzexe,uncompress,zcmp,zdiff,zegrep} /usr/bin
@@ -42,4 +36,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

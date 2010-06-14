@@ -1,22 +1,18 @@
 # SCIM-Anthy Makefile
 
 NM= scim-anthy
-VRS= 1.3.0
+VRS= 1.3.1
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/scim-imengine/24675/$(FILE)
-SHA-$(FILE)= e1e046682390e0757d9319d75364863b6512cbf9
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 7c71c86deafab0f9a9844e77bbd75e71463dc36a
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

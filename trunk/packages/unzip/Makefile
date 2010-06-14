@@ -1,40 +1,21 @@
 # UnZip Makefile
 
 NM= unzip
-VRS= 5.52
-DIR= $(NM)-$(VRS)
+VRS= 60
+DIR= $(NM)$(VRS)
 
-FILE= $(NM)552.tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 1831bd59b9e607a69052f83b263384895e2d4a19
-
-PATCH1= $(DIR)-security_fix-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= 7f6a287c0b480bc4748abdf69429dfc76383e1d6
-
-PATCH2= $(DIR)-security_fix-2.patch
-URL-$(PATCH2)= $(HTTPBLFS)/$(NM)/$(PATCH2)
-SHA-$(PATCH2)= 009386ef72467e98a43c33878e954e7164ee063e
-
-PATCH3= unzip-5.50-alt-iconv-v1.1.patch
-URL-$(PATCH3)= $(HTTPBLFS)/$(NM)/$(PATCH3)
-SHA-$(PATCH3)= 9c9ddb436d8b4a317f7a1dc539c87190bfe135f4
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= abf7de8a4018a983590ed6f5cbd990d4740f8a22
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2) $(PATCH3)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
-	patch -Np1 -i ../$(PATCH3)
 ifeq ($(CD_ARCH),x86)
 	make -f unix/Makefile LOCAL_UNZIP=-D_FILE_OFFSET_BITS=64 linux
 else
@@ -45,4 +26,4 @@ endif
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

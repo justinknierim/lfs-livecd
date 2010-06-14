@@ -1,20 +1,16 @@
 # XML-Parser Makefile
 
 NM= XML-Parser
-VRS= 2.34
+VRS= 2.36
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/perl-modules/$(FILE)
-SHA-$(FILE)= 253cb641057d929616622408de5a572ab37a8df9
+URL-$(FILE)= $(HTTP)/perl-modules/$(FILE)
+SHA-$(FILE)= 74acac4f939ebf788d8ef5163cbc9802b1b04bfa
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

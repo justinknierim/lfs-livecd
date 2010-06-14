@@ -5,16 +5,12 @@ VRS= 0.5.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 484522547ae6dbb342d3858a2a53a65451e273f9
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -31,4 +27,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

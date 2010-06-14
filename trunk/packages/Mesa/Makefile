@@ -1,30 +1,26 @@
 # Mesa Makefile
 
 NM= Mesa
-VRS= 7.2
+VRS= 7.6
 DIR= $(NM)-$(VRS)
 
 FILE= MesaLib-$(VRS).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= a6dce814cc56a562890ab79cf4e205f62459a29c
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 4bb10d98afa2585bf60cffb6861b511e86b7b240
 
 FILE1= MesaDemos-$(VRS).tar.bz2
-URL-$(FILE1)= $(HTTPBLFS)/$(NM)/$(FILE1)
-SHA-$(FILE1)= 3d7b9b3ee84ed3637849f7598faf3d60c5a2a9fd
+URL-$(FILE1)= $(HTTP)/$(NM)/$(FILE1)
+SHA-$(FILE1)= 2d1ba323711b595f93ed5bc98aa0dfe674c7c768
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) $(FILE1)
 	$(std_build)
 
 compile-stage2:
-	unpack ../$(FILE1) --strip-components=1
+	tar --strip-components=1 -xvf ../$(FILE1) 
 	sed 's@FLAGS=\"-g@FLAGS=\"@' -i configure
 	./configure --prefix=/usr --sysconfdir=/etc --mandir=/usr/share/man --localstatedir=/var
 	make

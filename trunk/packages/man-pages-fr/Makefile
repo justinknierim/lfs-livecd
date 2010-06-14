@@ -1,29 +1,27 @@
 # man-pages-fr Makefile
 
 NM= man-pages-fr
-VRS= 2.40.0
+VRS= 3.03.0
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://manpagesfr.free.fr/download/$(FILE)
-SHA-$(FILE)= b6997da3658289f5b22053a05caa65147e1535e0
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= de913b8cecba855b58f7bcc05a5c28c0d470c48b
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./utf8_en_latin1.sh
-	cp -r man? /usr/share/man/fr
-
+	./configure \
+		--prefix=/usr
+	make
+	make install
+	
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: clean compile-stage2

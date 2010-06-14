@@ -1,25 +1,23 @@
 # SCIM Makefile
 
 NM= scim
-VRS= 1.4.6
+VRS= 1.4.9
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://heanet.dl.sourceforge.net/sourceforge/$(NM)/$(FILE)
-SHA-$(FILE)= 3b8d26ff5a4ebab1ca90928d0363d2d2b0028ccf
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 7717339575fdbf909309a78882e30c60cce9f8eb
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
+	# The following only tested on 1.4.9 - uses a specific line number
+	sed -i '3364s/char/const &/' src/ltdl.cpp
 	./configure --prefix=/usr --sysconfdir=/etc
 	make
 	make install
@@ -28,4 +26,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

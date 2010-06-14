@@ -1,20 +1,16 @@
 # slang Makefile
 
 NM= slang
-VRS= 2.0.7
+VRS= 2.2.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(NM)-$(VRS).tar.bz2
-URL-$(FILE)= http://gd.tuwien.ac.at/editors/davis/slang/v2.0/$(FILE)
-SHA-$(FILE)= c246a18dde8b61e66ed7095217ae3c0406d78ba6
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 13bb6344f71779cad8c05e1b6b1ef2d073888d58
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +24,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

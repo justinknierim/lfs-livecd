@@ -1,32 +1,31 @@
 # libpng Makefile
 
 NM= libpng
-VRS= 1.2.33
+VRS= 1.2.42
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 72b5327cbc1677d11d8c910ce61b683733f80592
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= e41cea7a6f5e3065f4289de3742db87ded05b99d
+
+PATCH= $(DIR)-apng-1.patch
+URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
+SHA-$(PATCH)= aab6f1e4a275bed05c0dacf1146fe656772f0482
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH)
 	$(std_build)
 
 compile-stage2:
+	patch -Np1 -i ../$(PATCH)
 	./configure --prefix=/usr
 	make
 	make install
-	install -v -m755 -d /usr/share/doc/$(DIR)
-	install -v -m644 README libpng-$(VRS).txt /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,31 +1,26 @@
 # Psmisc Makefile
 
 NM= psmisc
-VRS= 22.6
+VRS= 22.10
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= cb15c23e9cfe618e9de5f066525bce7dc7b77421
+SHA-$(FILE)= 20bfa81ec36603c6a141bd7e6137cf9d3b52c3d9
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --exec-prefix=""
+	./configure --prefix=/usr
 	make
 	make install
-	mv -v /bin/pstree* /usr/bin
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

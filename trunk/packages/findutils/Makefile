@@ -1,35 +1,34 @@
 # Findutils Makefile
 
 NM= findutils
-VRS= 4.4.0
+VRS= 4.4.2
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 25e3d4dec40cec0165ffeff50acc4d4523ec3e07
+SHA-$(FILE)= e8dd88fa2cc58abffd0bfc1eddab9020231bb024
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT)
 	make
 	make install
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --libexecdir=/usr/lib/findutils \
-	 --localstatedir=/var/lib/locate
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib/findutils \
+	 	--localstatedir=/var/lib/locate
 	make
 	make install
 	mv -v /usr/bin/find /bin
@@ -38,4 +37,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

@@ -1,29 +1,24 @@
 # DejaVu fonts Makefile
 
 NM= dejavu-fonts-ttf
-VRS= 2.27
+VRS= 2.30
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/share/fonts
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 9689967aea645acc460098ce091bf6abcc50c2ac
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 3a09830033f74be6e370155410091f76193f5528
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cp -v ttf/*.ttf $(LOCATION)
+	cp -v ttf/*.ttf /usr/share/fonts
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

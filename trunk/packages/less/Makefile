@@ -1,20 +1,16 @@
 # Less Makefile 
 
 NM= less
-VRS= 418
+VRS= 436
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= ec4fb48680878a7ac3499c46564c47c448b0aa22
+SHA-$(FILE)= f78998a1a79a7e1962c901dd41bdc3d1c2005471
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,20 +1,16 @@
 # dmraid Makefile
 
 NM= dmraid
-VRS= 1.0.0.rc14
+VRS= 1.0.0.rc16
 DIR= $(NM)
 
 FILE= $(NM)-$(VRS).tar.bz2
-URL-$(FILE)= http://people.redhat.com/~heinzm/sw/$(NM)/src/$(FILE)
-SHA-$(FILE)= 2b3284db46a995967d88993ae5ae36b57c513bc4
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 99e76332bb03c5a79406e3c8cb12b6746288635d
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +24,4 @@ compile-stage2:
 clean:
 	-rm -rf $(NM)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

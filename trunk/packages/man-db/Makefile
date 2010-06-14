@@ -1,36 +1,33 @@
 # man-db Makefile
 
 NM= man-db
-VRS= 2.5.2
+VRS= 2.5.6
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b82b7ff0b13693cecbdc053b4d4381b2063017d1
+SHA-$(FILE)= e8799313afb31976f9c7a4e34bc4498293a6fef8
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	sed -i -e '\%\t/usr/man%d' -e '\%\t/usr/local/man%d' src/man_db.conf.in
-	./configure --prefix=/usr --libexecdir=/usr/lib \
-	 --sysconfdir=/etc --disable-setuid \
-	 --enable-mb-groff --with-browser=/usr/bin/lynx \
-	 --with-col=/usr/bin/col --with-vgrind=/usr/bin/vgrind \
-	 --with-grap=/usr/bin/grap
+	./configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+	 	--sysconfdir=/etc \
+	 	--disable-setuid \
+	 	--with-browser=/usr/bin/lynx \
+	 	--with-vgrind=/usr/bin/vgrind \
+	 	--with-grap=/usr/bin/grap
 	make
 	make install
-	install -m755 ../convert-mans /usr/bin
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

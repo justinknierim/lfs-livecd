@@ -1,80 +1,95 @@
 # Gcc Makefile
 
 NM= gcc
-VRS= 4.3.2
+VRS= 4.4.3
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 787b566ad4f386a9896e2d5703e6ff5e7ccaca58
+SHA-$(FILE)= 619766282734728539ce58a5c383cb371f1999c7
 
-FILE1= mpfr-2.3.2.tar.bz2
+FILE1= mpfr-2.4.2.tar.bz2
 URL-$(FILE1)= $(HTTP)/mpfr/$(FILE1)
-SHA-$(FILE1)= 37dbd478e1c136f37cf4c68eb1522e86e2307288
+SHA-$(FILE1)= 7ca93006e38ae6e53a995af836173cf10ee7c18c
 
-FILE2= gmp-4.2.4.tar.bz2
+FILE2= gmp-5.0.0.tar.bz2
 URL-$(FILE2)= $(HTTP)/gmp/$(FILE2)
-SHA-$(FILE2)= bb721f94fbeeb8c609104540b408da6707c370ec
+SHA-$(FILE2)= 11a49c6fec0a3cfae2df9966d321d740af9f603f
+
+PATCH1= $(NM)-$(VRS)-startfiles_fix-1.patch
+URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
+SHA-$(PATCH1)= 779bc28d8e3b330d189af660a236f7a2f51698fe
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-export LFS_USE_TARGET := yes
-
-pass1: $(FILE) $(FILE1) $(FILE2)
+prebuild: $(FILE) $(FILE1) $(FILE2)
 	$(sep_dir_build)
 
-compile-pass1:
-	cd ../$(DIR) ; unpack ../$(FILE1)
-	cd ../$(DIR) ; mv mpfr-2.3.2 mpfr
-	cd ../$(DIR) ; unpack ../$(FILE2)
-	cd ../$(DIR) ; mv gmp-4.2.4 gmp	
-	CC="gcc -B/usr/bin/" ../$(DIR)/configure --prefix=$(WD) \
-	 --with-local-prefix=$(WD) --disable-nls --disable-shared \
-	 --enable-languages=c --disable-libssp --disable-multilib
+compile-prebuild:
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE1)) mpfr
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE2)) gmp
+	../$(DIR)/configure \
+		--prefix=$(TT) \
+		--target=$(BUILD_ARCH) \
+		--disable-nls \
+		--disable-shared \
+		--disable-decimal-float \
+		--disable-threads \
+		--disable-libmudflap \
+		--disable-libssp \
+		--disable-libgomp \
+		--disable-multilib \
+		--enable-languages=c
 	make
 	make install
-	ln -vs libgcc.a `gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
-	ln -vs gcc $(WD)/bin/cc
+	ln -sv libgcc.a `$(BUILD_ARCH)-gcc -print-libgcc-file-name | sed 's/libgcc/&_eh/'`
 
-pass2: $(FILE) $(FILE1) $(FILE2)
+stage1: $(FILE) $(FILE1) $(FILE2) $(PATCH1)
 	$(sep_dir_build)
 
-compile-pass2:
-	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.orig} && \
-	 sed 's@\./fixinc\.sh@-c true@' gcc/Makefile.in.orig > gcc/Makefile.in
-	cd ../$(DIR) ; cp -v gcc/Makefile.in{,.tmp} && \
-	 sed 's/^XCFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in.tmp \
-	 > gcc/Makefile.in
-	cd ../$(DIR) ; for file in $$(find gcc/config -name linux64.h -o -name linux.h) ; \
-	do \
-	cp -uv $$file{,.orig} && \
-	sed -e 's@/lib\(64\)\?\(32\)\?/ld@/tools&@g' -e 's@/usr@/tools@g' $$file.orig > $$file && \
-	echo " " >> $$file && \
-	echo "#undef STANDARD_INCLUDE_DIR" >> $$file && \
-	echo "#define STANDARD_INCLUDE_DIR 0" >> $$file && \
+compile-stage1:
+	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
+	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
+	cd ../$(DIR) ; sed -i 's/^T_CFLAGS =$$/& -fomit-frame-pointer/' gcc/Makefile.in
+	cd ../$(DIR) ; for file in $$(find gcc/config -name linux64.h -o -name linux.h -o -name sysv4.h) ; \
+	do cp -uv $$file{,.orig} && \
+	sed -e 's@/lib\(64\)\?\(32\)\?/ld@$(TT)&@g' \
+	    -e 's@/usr@$(TT)@g' $$file.orig > $$file && \
+	echo '' >> $$file && \
+	echo '#undef STANDARD_INCLUDE_DIR' >> $$file && \
+	echo '#define STANDARD_INCLUDE_DIR 0' >> $$file && \
+	echo '#define STANDARD_STARTFILE_PREFIX_1 ""' >> $$file && \
+	echo '#define STANDARD_STARTFILE_PREFIX_2 ""' >> $$file && \
 	touch $$file.orig ; \
 	done
-ifdef 64bit
-	cd ../$(DIR) ; cp -v gcc/config/i386/t-linux64{,.tmp} && \
-	 sed '/MULTILIB_OSDIRNAMES/d' gcc/config/i386/t-linux64.tmp \
-	 > gcc/config/i386/t-linux64
-endif
-	cd ../$(DIR) ; unpack ../$(FILE1)
-	cd ../$(DIR) ; mv mpfr-2.3.2 mpfr
-	cd ../$(DIR) ; unpack ../$(FILE2)
-	cd ../$(DIR) ; mv gmp-4.2.4 gmp
-	../$(DIR)/configure --prefix=$(WD) \
-	 --with-local-prefix=$(WD) --enable-clocale=gnu --enable-shared \
-	 --enable-threads=posix --enable-__cxa_atexit --enable-languages=c,c++ \
-	 --disable-libstdcxx-pch --disable-bootstrap --disable-multilib
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE1)) mpfr
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE2)) gmp
+	CC="$(BUILD_ARCH)-gcc -B$(TT)/lib/" \
+		AR=$(BUILD_ARCH)-ar \
+		RANLIB=$(BUILD_ARCH)-ranlib \
+		../$(DIR)/configure \
+		--prefix=$(TT) \
+		--with-local-prefix=$(TT) \
+		--enable-clocale=gnu \
+		--enable-shared \
+		--enable-threads=posix \
+		--enable-__cxa_atexit \
+		--enable-languages=c,c++ \
+		--disable-libstdcxx-pch \
+		--disable-multilib \
+		--disable-bootstrap
 	make
 	make install
+	ln -vs gcc $(TT)/bin/cc
+	echo 'main(){}' | cc -x c - -v -lrt -Wl,--verbose
+	readelf -l a.out | grep $(TT)
+	rm -vf a.out
 
 chroot:
 	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+	'cd $(MY_ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 stage2: $(FILE)
 	$(sep_dir_build)
@@ -82,21 +97,53 @@ stage2: $(FILE)
 compile-stage2:
 	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
 	 libiberty/Makefile.in
-	cd ../$(DIR) ; sed -i 's/^XCFLAGS =$$/& -fomit-frame-pointer/' \
+	cd ../$(DIR) ; sed -i 's,\./fixinc\.sh,-c true,' gcc/Makefile.in
+	cd ../$(DIR) ; sed -i 's/getline/get_line/' libiberty/testsuite/test-demangle.c
+	cd ../$(DIR) ; sed -i 's/^T_CFLAGS =$$/& -fomit-frame-pointer/' \
 	 gcc/Makefile.in
-	cd ../$(DIR) ; sed -i 's@\./fixinc\.sh@-c true@' gcc/Makefile.in
-	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
-	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-clocale=gnu --enable-languages=c,c++ --disable-bootstrap \
-	 --disable-multilib
+	../$(DIR)/configure \
+		--prefix=/usr \
+		--libexecdir=/usr/lib \
+		--enable-shared \
+		--enable-threads=posix \
+		--enable-__cxa_atexit \
+		--enable-clocale=gnu \
+		--enable-languages=c,c++ \
+		--disable-bootstrap \
+		--disable-multilib
 	make
-	-make -k check
 	make install
 	ln -svf ../usr/bin/cpp /lib
 	ln -svf gcc /usr/bin/cc
+	echo 'main(){}' | cc -x c - -v -lrt -Wl,--verbose
+	readelf -l a.out | grep "/lib"
+	rm -vf a.out
+	
+stage3: $(FILE) $(FILE1) $(FILE2)
+	$(sep_dir_build)
+	
+compile-stage3:
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE1)) mpfr
+	cd ../$(DIR) ; mv -v $$(unpack ../$(FILE2)) gmp
+	cd ../$(DIR) ; sed -i 's/install_to_$$(INSTALL_DEST) //' \
+	 libiberty/Makefile.in
+	cd ../$(DIR) ; sed -i 's,\./fixinc\.sh,-c true,' gcc/Makefile.in
+	cd ../$(DIR) ; sed -i 's/getline/get_line/' libiberty/testsuite/test-demangle.c
+	cd ../$(DIR) ; sed -i 's/^T_CFLAGS =$$/& -fomit-frame-pointer/' \
+	 gcc/Makefile.in
+	PATH=$$PATH:$(WD)/bin \
+		../$(DIR)/configure \
+		--prefix=$(TT) \
+		--target=x86_64-unknown-linux-gnu \
+		--disable-shared \
+		--disable-threads \
+		--enable-languages=c \
+		--enable-static
+	PATH=$$PATH:$(TT)/bin make all-gcc
+	PATH=$$PATH:$(TT)/bin make install-gcc
 
 clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: compile-pass1 clean chroot compile-pass2 compile-stage2
+.PHONY: compile-stage1 clean chroot compile-prebuild compile-stage2 compile-stage3

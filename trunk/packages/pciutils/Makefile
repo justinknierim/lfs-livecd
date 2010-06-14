@@ -1,20 +1,16 @@
 # PCI Utilities Makefile
 
 NM= pciutils
-VRS= 2.2.3
+VRS= 3.1.7
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 4a58d578cd0e0d81b85f8ee592c0c5e1d6ce6cda
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 58336ef8c1bbe870f2cc0ed9481a8cf8a58e039c
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,8 +23,10 @@ compile-stage2:
 	install -m 644 lib/*.h /usr/include/pci
 	install -m 644 lib/libpci.a /usr/lib
 	update-pciids
+	rm -f /usr/share/pci.ids.gz.old
+	gunzip /usr/share/pci.ids.gz
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

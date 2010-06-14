@@ -1,20 +1,16 @@
 # Anthy Makefile
 
 NM= anthy
-VRS= 8819
+VRS= 9100h
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://osdn.dl.sourceforge.jp/anthy/25046/$(FILE)
-SHA-$(FILE)= 231d98518b55f85865bc7c18d365015999cfd179
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= bfea9e74e208c4b976b6bd7ac6784cd290c636fd
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

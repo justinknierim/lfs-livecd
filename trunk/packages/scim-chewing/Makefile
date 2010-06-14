@@ -1,20 +1,16 @@
 # scim-chewing Makefile
 
 NM= scim-chewing
-VRS= 0.3.1
+VRS= 0.3.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://chewing.csie.net/download/scim/$(FILE)
-SHA-$(FILE)= 8114f297322fe94755c0349d287ee550ee6a96a2
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 346d9a1511cfbb1025c0290d5a97a799329cb24e
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,33 +1,36 @@
 # mutt Makefile
 
 NM= mutt
-VRS= 1.5.15
+VRS= 1.5.20
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
-URL-$(FILE)= http://mirrors.dotsrc.org/mutt/devel/$(FILE)
-SHA-$(FILE)= 1adabf6e07e099bb664c83e3c0100bbbdfec7a9a
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= d2bec7a33771f128ca49b1723b06b6d248a35d31
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc \
-	 --with-docdir=/usr/share/doc/mutt --enable-imap \
-	 --enable-pop --with-ssl --enable-hcache
+	# Fix for new SSL
+	sed -i 's@STACK \*@STACK_OF(X509) \*@' mutt_ssl.c
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc \
+	 	--with-docdir=/usr/share/doc/mutt \
+	 	--enable-imap \
+		--enable-pop \
+		--with-ssl \
+		--enable-hcache
 	make
 	make install
-	install -m600  $(ROOT)/root/.muttrc /root
+	install -m600 $(MY_ROOT)/root/.muttrc /root
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

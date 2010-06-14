@@ -1,40 +1,38 @@
 # Ncurses Makefile
 
 NM= ncurses
-VRS= 5.6
+VRS= 5.7
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.gz
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= 4d54d8ad0b90fffa2780a0a45edb6fcb027ef18d
-
-PATCH1=$(DIR)-coverity_fixes-1.patch
-URL-$(PATCH1)= $(HTTP)/$(NM)/$(PATCH1)
-SHA-$(PATCH1)= ad7a49ad6e35e61d975700226279594106842f59
+SHA-$(FILE)= 8233ee56ed84ae05421e4e6d6db6c1fe72ee6797
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD) --with-shared \
-	 --without-debug --without-ada --enable-overwrite
+	./configure --prefix=$(TT) \
+		--with-shared \
+		--without-debug \
+		--without-ada \
+		--enable-overwrite
 	make
 	make install
 
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
-
-stage2: Makefile $(FILE) $(PATCH1)
+stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	patch -Np1 -i ../$(PATCH1)
-	./configure --prefix=/usr --with-shared --without-debug --enable-widec
+	./configure \
+		--prefix=/usr \
+		--with-shared \
+		--without-debug \
+		--enable-widec
 	make
 	make install
 	chmod -v 644 /usr/lib/libncurses++w.a
@@ -51,11 +49,8 @@ compile-stage2:
 	ln -svf libncurses.so /usr/lib/libcurses.so
 	ln -sfv libncursesw.a /usr/lib/libcursesw.a
 	ln -sfv libncurses.a /usr/lib/libcurses.a
-	mkdir -v /usr/share/doc/$(DIR)
-	cp -v -R doc/* /usr/share/doc/$(DIR)
-	# The non-wide library is for commercial software only => not for the Live CD
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

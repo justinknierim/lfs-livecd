@@ -1,31 +1,30 @@
 # Dialog Makefile
 
 NM= dialog
-VRS= 1.1-20070409
+VRS= 1.1-20100428
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tgz
-URL-$(FILE)= ftp://invisible-island.net/dialog/$(FILE)
-SHA-$(FILE)= 1ef678ccbb9fd8fecc16189985c2f6dbc815fd37
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 6945b302bf5b107c12f6009c25699d265b45579c
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --enable-nls \
-	    --enable-widec --with-ncursesw
+	./configure \
+		--prefix=/usr \
+		--enable-nls \
+	    --enable-widec \
+	    --with-ncursesw
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

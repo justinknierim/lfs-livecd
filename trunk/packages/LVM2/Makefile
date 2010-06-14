@@ -1,30 +1,29 @@
 # lvm2 Makefile
 
 NM= LVM2
-VRS= 2.02.27
+VRS= 2.02.64
 DIR= $(NM).$(VRS)
 
 FILE= $(DIR).tgz
-URL-$(FILE)= ftp://sources.redhat.com/pub/lvm2/$(FILE)
-SHA-$(FILE)= 0deae8047c934a370d8e825675a514c6f413428f
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 033a317f1ca8baa3b30e10cf4095f0491a10db7f
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr \
+		--enable-dmeventd \
+		--enable-cmdlib
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

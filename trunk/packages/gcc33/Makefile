@@ -18,11 +18,7 @@ SHA-$(PATCH2)= dd73dfe163ec16b59d3f258e7d60099a8c8de424
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-unexport CFLAGS CXXFLAGS
-
-export LFS_USE_TARGET := yes
+include $(MY_ROOT)/scripts/functions
 
 stage2: $(FILE) $(PATCH1) $(PATCH2)
 	$(sep_dir_build)
@@ -30,17 +26,15 @@ stage2: $(FILE) $(PATCH1) $(PATCH2)
 compile-stage2:
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH1)
 	cd ../$(DIR) ; patch -Np1 -i ../$(PATCH2)
-# --enable-static overrides the unsuitable default in config.site
 	../$(DIR)/configure --prefix=/usr --libexecdir=/usr/lib \
 	 --enable-shared --enable-threads=posix --enable-__cxa_atexit \
-	 --enable-clocale=gnu --enable-languages=c,c++ --enable-static \
-	 --build=$(LFS_TARGET) --host=$(LFS_TARGET) --target=$(LFS_TARGET) \
+	 --enable-clocale=gnu --enable-languages=c,c++ \
 	 --disable-multilib
 	make bootstrap
-	cp -av $(LFS_TARGET)/libstdc++-v3/src/.libs/libstdc++.so.5* /usr/lib
+	cp -av i686-pc-linux-gnu/libstdc++-v3/src/.libs/libstdc++.so.5* /usr/lib
 
 clean:
 	-rm -rf $(DIR)
 	-rm -rf $(NM)-build
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

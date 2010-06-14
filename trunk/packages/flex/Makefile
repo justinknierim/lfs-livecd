@@ -8,19 +8,21 @@ FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= c507095833aaeef2d6502e12638e54bf7ad2f24a
 
+PATCH= $(DIR)-gcc44-1.patch
+URL-$(PATCH)= $(HTTP)/$(NM)/$(PATCH)
+SHA-$(PATCH)= 68ac2b16f2710f9c3bf1e3e90ad833b6f554afe2
+
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
-
-stage2: Makefile $(FILE)
+stage2: Makefile $(FILE) $(PATCH)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	patch -Np1 -i ../$(PATCH)
+	./configure \
+		--prefix=/usr
 	make
 	make install
 	ln -sfv libfl.a /usr/lib/libl.a
@@ -31,10 +33,8 @@ compile-stage2:
 	echo "" >> /usr/bin/lex
 	echo "# End /usr/bin/lex" >> /usr/bin/lex
 	chmod 755 /usr/bin/lex
-	mkdir -v /usr/share/doc/$(DIR)
-	cp -v doc/flex.pdf /usr/share/doc/$(DIR)
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

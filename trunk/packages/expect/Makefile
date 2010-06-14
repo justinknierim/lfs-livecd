@@ -18,7 +18,7 @@ SHA-$(PATCH2)= 268c90379acd02d365f525e9d83017a75f62aa98
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE) $(PATCH1) $(PATCH2)
 	$(std_build)
@@ -28,8 +28,11 @@ compile-stage1:
 	patch -Np1 -i ../$(PATCH2)
 	cp configure{,.bak}
 	sed 's:/usr/local/bin:/bin:' configure.bak > configure
-	./configure --prefix=$(WD) --with-tcl=$(WD)/lib \
-	--with-tclinclude=$(WD)/include --with-x=no
+	./configure \
+		--prefix=$(TT) \
+		--with-tcl=$(TT)/lib \
+		--with-tclinclude=$(TT)/include \
+		--with-x=no
 	make
 	make SCRIPTS="" install
 

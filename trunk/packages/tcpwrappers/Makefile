@@ -4,23 +4,19 @@ NM= tcpwrappers
 VRS= 7.6
 DIR= tcp_wrappers_$(VRS)
 
-FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/tcp_wrappers/$(FILE)
-SHA-$(FILE)= 1b76da674d6557542b3cda5c55822ed7f1379127
+FILE= $(DIR).tar.gz
+URL-$(FILE)= $(HTTP)/tcp_wrappers/$(FILE)
+SHA-$(FILE)= 61689ec85b80f4ca0560aef3473eccd9e9e80481
 
 PATCH1= tcp_wrappers-$(VRS)-shared_lib_plus_plus-1.patch
-URL-$(PATCH1)= $(HTTPBLFS)/tcp_wrappers/$(PATCH1)
+URL-$(PATCH1)= $(HTTP)/tcp_wrappers/$(PATCH1)
 SHA-$(PATCH1)= 915652d43c57f346d6f0a14eeaf706bbfed98ffa
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-stage2: Makefile $(FILE) $(PATCH1) $(PATCH2)
+stage2: Makefile $(FILE) $(PATCH1)
 	$(std_build)
 
 compile-stage2:
@@ -32,4 +28,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

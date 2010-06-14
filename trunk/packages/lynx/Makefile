@@ -1,20 +1,16 @@
 # Lynx Makefile
 
 NM= lynx
-VRS= 2.8.6rel.5
-DIR= $(NM)2-8-6
+VRS= 2.8.7rel.1
+DIR= $(NM)2-8-7
 
 FILE= $(NM)$(VRS).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 019246b83fc7b6cb32bac0023f2ae6c5d330d18c
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= f5e67a298322b22fe0edcfba326c02eaa5edcb72
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -30,4 +26,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

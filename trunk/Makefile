@@ -8,9 +8,6 @@
 # These scripts are published under the GNU General Public License, version 2
 #
 #==============================================================================
-#
-# Unless otherwise noted, please try to keep all line lengths below 80 chars. 
-#
 
 # Place your personal customizations in Makefile.personal
 # instead of editing this Makefile.
@@ -18,128 +15,147 @@
 
 -include Makefile.personal
 
-# Here are the various variables you might want/need to change.
-# Variables mentioned in the README will not be commented on here.
+#==============================================================================
+# Variables you may want to change.
+#==============================================================================
 
-export MPBASE ?= /mnt/lfs
+# Timezone
+export timezone ?= America/New_York
+
+# Remote server location for packages
+export HTTP ?= http://dev.lightcube.us/~jhuntwork/sources
+
+# Default paper size for groff.
+export pagesize ?= letter
+
+#==============================================================================
+# The following variables are not expected to be changed, but could be, if you
+# understand how they are used and accept the consequences of changing them.
+#==============================================================================
+
+# Location for the temporary tools, must be a directory immediately under /
+export TT := /tools
+
+# Location for the sources, must be a directory immediately under /
+export SRC := /sources
+
+# The name of the build user account to create and use for the temporary tools
+export USER := builduser
+
+# Compiler optimizations
+export CFLAGS := -O2 -pipe
+export CXXFLAGS := $(CFLAGS)
+export LDFLAGS := -s
+
+# Set the base architecture
+# Currently supported: i686
+# FIXME: Verify that the host is one of the above
+export MY_ARCH := $(shell uname -m)
+export LINKER = ld-linux.so.2
+
+# The full path to the build scripts on the host OS
+# e.g., /mnt/build/build-env
+export MY_BASE := $(shell pwd)
+
+# The path to the build directory - This must be the parent directory of $(MY_BUILD)
+# e.g., /mnt/build
+export MY_BUILD := $(shell dirname $(MY_BASE))
+
+# The chroot form of $(MY_BASE), needed so that certain functions and scripts will
+# work both inside and outside of the chroot environment.
+# e.g., /build-env
+export MY_ROOT := /$(shell basename $(MY_BASE))
 
 # Free disk space needed for the build.
 ROOTFS_MEGS := 1536
 
-# Machine architecure, LiveCD version, and specific arch variables.
-# When building a 32-bit CD from a 64-bit multilib host,
-# please use "linux32 make" instead of plain "make".
-#==============================================================================
-
-export CD_ARCH := $(shell uname -m)
-export CD_VERSION ?= $(CD_ARCH)-6.4
-
-ifeq ($(CD_ARCH),i686)
-export LINKER := ld-linux.so.2
-endif
-
-ifeq ($(CD_ARCH),x86_64)
-export 64bit = true
-export LINKER := ld-linux-x86-64.so.2
-endif
-
-# Default timezone
-export timezone ?= GMT
-# Default paper size for groff.
-export pagesize ?= letter
-
-# HTTP:     Default http server for the lfs-base packages
-# HTTPBLFS: Default http server for the BLFS packages
-export HTTP ?= http://kerrek.linuxfromscratch.org/pub/lfs/conglomeration
-export HTTPBLFS ?= http://kerrek.linuxfromscratch.org/pub/blfs/conglomeration
+# LiveCD version
+export CD_VERSION ?= $(MY_ARCH)-6.6
 
 #==============================================================================
 # The following variables are not expected to be changed
+#==============================================================================
 
-export WD := /tools
-export MP := $(MPBASE)/image
-export ROOT := /lfs-livecd
-export SRC := /sources
+export MP := $(MY_BUILD)/image
+export MKTREE := $(MP)$(MY_ROOT)
 export LFSSRC := /lfs-sources
-export PKG := packages
 
-export MKTREE := $(MP)$(ROOT)
-
-# Environment Variables
-# The following lines need to be all on one line - no newlines.
-#===============================================================================
-export lfsenv := exec env -i HOME=$$HOME LFS=$(MP) LC_ALL=POSIX PATH=$(WD)/bin:/bin:/usr/bin /bin/bash -c
-
-export chenv-pre-bash := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin $(WD)/bin/bash -c
-
-export chenv-post-bash := $(WD)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(WD)/bin /bin/bash -c
-
-export lfsbash := set +h && umask 022 && cd $(MKTREE)
-
-export chenv-blfs := /usr/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin INPUTRC=/etc/inputrc XML_CATALOG_FILES="/usr/share/xml/docbook/xsl-stylesheets-1.69.1/catalog.xml /etc/xml/catalog" /bin/bash -c
-
-# More Environment Variables
 #==============================================================================
-export chbash-pre-bash := SHELL=$(WD)/bin/bash
-export chbash-post-bash := SHELL=/bin/bash
-export WHICH ?= $(WD)/bin/which
-export WGET ?= wget
-
-export BRW= "[0;1m"
-export RED= "[0;31m"
-export GREEN= "[0;32m"
-export ORANGE= "[0;33m"
-export BLUE= "[0;44m"
-export WHITE= "[00m"
-
-
-# TARGETS
+# Environment Variables - don't modify these!
 #==============================================================================
-#
-# The build starts and ends here, first building the dependency targets,
-# lfs-base, extend-lfs and iso, then it echoes a notice that it's finished. :)
 
-all: test-host lfs-base extend-lfs iso
-	@echo "The LiveCD, $(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION).iso, is ready!"
+export toolsenv := env -i HOME=/home/$(USER) LC_ALL=POSIX PATH=$(TT)/bin:/bin:/usr/bin /bin/bash -c
+export toolsbash := set +o hashall 2>/dev/null || set -o nohash && umask 022 && cd $(MY_ROOT)
 
+export chenv-pre-bash := $(TT)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(TT)/bin $(TT)/bin/bash -c
+export chenv-post-bash := $(TT)/bin/env -i HOME=/root TERM=$(TERM) PS1='\u:\w\$$ ' PATH=/bin:/usr/bin:/sbin:/usr/sbin:$(TT)/bin /bin/bash -c
+
+export WGET := $(TT)/bin/wget
+
+export BRW = "[0;1m"
+export RED = "[0;31m"
+export GREEN = "[0;32m"
+export ORANGE = "[0;33m"
+export BLUE = "[0;44m"
+export WHITE = "[00m"
+
+# Architecture specifics
+ifeq ($(MY_ARCH),ppc)
+export MY_LIBDIR := lib
+export BUILD_ARCH := powerpc-custom-linux-gnu
+else
+export BUILD_ARCH := $(MY_ARCH)-custom-linux-gnu
+endif
+
+#==============================================================================
+# Build Targets
+#==============================================================================
+
+all: test-host base iso
+	@echo $(GREEN)"The LiveCD, $(MY_BUILD)$(MY_ROOT)/lfslivecd-$(CD_VERSION).iso, is ready!"$(WHITE)
+
+# Check host prerequisites
+# FIXME: Fill this out with more package pre-reqs
 test-host:
-	@if [ `whoami` != "root" ] ; then \
+	@if [ $$EUID -ne 0 ] ; then \
 	 echo "You must be logged in as root." && exit 1 ; fi
+	@if ! type -p gawk >/dev/null 2>&1 ; then \
+	 echo -e "Missing gawk on host!\nPlease install gawk and re-run 'make'." && exit 1 ; fi 
 
-test-env:
-	env
-
-# This image should be kept as clean as possible, i.e.:
-# avoid creating files on it that you will later delete,
-# preserve as many zeroed sectors as possible.
-root.ext2:
-	dd if=/dev/null of=root.ext2 bs=1M seek=$(ROOTFS_MEGS)
-	mke2fs -F root.ext2
-	tune2fs -c 0 -i 0 root.ext2
+base: $(MKTREE) builduser build-tools
+	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
+	 chown -R 0:0 $(TT) $(SRC) $(MY_ROOT) && \
+	 cd $(MY_ROOT) && make SHELL=$(TT)/bin/bash pre-bash'
+	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(MY_ROOT) && \
+	 make SHELL=/bin/bash post-bash'
+	@install -m644 etc/issue* $(MP)/etc
+	@touch $@
 
 # This target populates the root.ext2 image and sets up some mounts
 $(MKTREE): root.ext2
-	mkdir -p $(MP) $(MPBASE)$(SRC) $(MPBASE)$(WD)/bin $(MPBASE)/iso/boot
+	mkdir -p $(MP) $(MY_BUILD)$(SRC) $(MY_BUILD)$(TT)/bin $(MY_BUILD)/iso/boot
 	mount -o loop root.ext2 $(MP)
-	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(WD)
-	mkdir -p $(MP)/boot $(MP)$(LFSSRC) $(MPBASE)/iso$(LFSSRC)
-	mkdir -p $(MP)/drivers $(MPBASE)/iso/drivers
-	mount --bind $(MPBASE)$(ROOT) $(MP)$(ROOT)
-	mount --bind $(MPBASE)$(WD) $(MP)$(WD)
-	mount --bind $(MPBASE)$(SRC) $(MP)$(SRC)
-	mount --bind $(MPBASE)/iso/boot $(MP)/boot
-	mount --bind $(MPBASE)/iso$(LFSSRC) $(MP)$(LFSSRC)
-	mount --bind $(MPBASE)/iso/drivers $(MP)/drivers
-	-ln -nsf $(MPBASE)$(WD) /
-	-ln -nsf $(MPBASE)$(SRC) /
-	-ln -nsf $(MPBASE)$(ROOT) /
+	mkdir -p $(MKTREE) $(MP)$(SRC) $(MP)$(TT)
+	mkdir -p $(MP)/boot $(MP)$(LFSSRC) $(MY_BUILD)/iso$(LFSSRC)
+	mount --bind $(MY_BASE) $(MP)$(MY_ROOT)
+	mount --bind $(MY_BUILD)$(TT) $(MP)$(TT)
+	mount --bind $(MY_BUILD)$(SRC) $(MP)$(SRC)
+	mount --bind $(MY_BUILD)/iso/boot $(MP)/boot
+	mount --bind $(MY_BUILD)/iso$(LFSSRC) $(MP)$(LFSSRC)
+	-ln -nsf $(MY_BUILD)$(TT) /
+	-install -dv $(TT)/bin
+	-ln -sv /bin/bash $(TT)/bin/sh
+	-ln -nsf $(MY_BUILD)$(SRC) /
+	-ln -nsf $(MY_BUILD)$(MY_ROOT) /
 	-mkdir -p $(MP)/{proc,sys,dev/shm,dev/pts}
 	-mount -t proc proc $(MP)/proc
 	-mount -t sysfs sysfs $(MP)/sys
 	-mount -t tmpfs shm $(MP)/dev/shm
 	-mount -t devpts devpts $(MP)/dev/pts
-	-mkdir -pv $(MP)/{bin,boot,etc/opt,home,lib,mnt,opt}
+	-mkdir -pv $(MP)/{bin,boot,etc,home,lib,mnt,opt}
 	-mkdir -pv $(MP)/{media/{floppy,cdrom},sbin,srv,var}
+	-install -dv $(TT)/bin
+	-install -m755 $(MY_BASE)/scripts/unpack $(TT)/bin
 	-install -d -m 0750 $(MP)/root
 	-install -d -m 1777 $(MP)/tmp $(MP)/var/tmp
 	-mkdir -pv $(MP)/usr/{,local/}{bin,include,lib,sbin,src}
@@ -161,49 +177,33 @@ $(MKTREE): root.ext2
 	-ln -s /proc/self/fd/1 $(MP)/dev/stdout
 	-ln -s /proc/self/fd/2 $(MP)/dev/stderr
 	-ln -s /proc/kcore $(MP)/dev/core
+	-install -dv $(MY_BASE)/logs
 	touch $(MKTREE)
-ifdef 64bit
-	-ln -nsf lib $(WD)/lib64
-	-ln -nsf lib $(MP)/lib64
-	-ln -nsf lib $(MP)/usr/lib64
-endif
 
-# This target builds just a base LFS system, minus the kernel and bootscripts
-#==============================================================================
-lfs-base: $(MKTREE) lfsuser
-	@-chown -R lfs $(WD) $(MP)$(WD) $(WD)/bin \
-	 $(MP)$(SRC) $(MKTREE)
-	@cp $(ROOT)/scripts/unpack $(WD)/bin
-	@make maybe-tools
-	@touch $(PKG)/wget/.pass2
-	@install -m644 -oroot -groot $(ROOT)/etc/{group,passwd} $(MP)/etc
-	@-ln -s $(WD)/bin/bash $(MP)/bin/bash
-	@chroot "$(MP)" $(chenv-pre-bash) 'set +h && \
-	 chown -R 0:0 $(WD) $(SRC) $(ROOT) && \
-	 cd $(ROOT) && make pre-bash $(chbash-pre-bash)'
-	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(ROOT) && \
-	 make post-bash $(chbash-post-bash)'
-	@-ln -s $(WD)/bin/wget $(MP)/usr/bin/wget
+# This image should be kept as clean as possible, i.e.:
+# avoid creating files on it that you will later delete,
+# preserve as many zeroed sectors as possible.
+root.ext2:
+	dd if=/dev/null of=root.ext2 bs=1M seek=$(ROOTFS_MEGS)
+	mke2fs -F root.ext2
+	tune2fs -c 0 -i 0 root.ext2
 
-extend-lfs: $(MKTREE)
-	@cp $(WD)/bin/which $(MP)/usr/bin
-	@cp $(ROOT)/scripts/unpack $(MP)/bin
-	@chroot "$(MP)" $(chenv-blfs) 'set +h && cd $(ROOT) && \
-	 make blfs $(chbash-post-bash)'
-	@install -m644 etc/issue* $(MP)/etc
-
-lfsuser:
-	@-groupadd lfs
-	@-useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+# Add the unprivileged user - will be used for building the temporary tools
+builduser:
+	@-groupadd $(USER)
+	@-useradd -s /bin/bash -g $(USER) -m -k /dev/null $(USER)
+	@-chown -R $(USER):$(USER) $(MY_BUILD)$(TT) $(MY_BUILD)$(SRC) $(MY_BASE)
 	@touch $@
 
-pre-which:
-	@echo "#!/bin/sh" > $(WHICH)
-	@echo 'type -pa "$$@" | head -n 1 ; exit $${PIPESTATUS[0]}' >> $(WHICH)
-	@chmod 755 $(WHICH)
-
-pre-wget:
-	@make -C $(PKG)/wget prebuild
+build-tools:
+	@su - $(USER) -c "$(toolsenv) '$(toolsbash) && make bash-prebuild'"
+	@su - $(USER) -c "$(toolsenv) '$(toolsbash) && make SHELL=$(TT)/bin/sh wget-prebuild'"
+	@su - $(USER) -c "$(toolsenv) '$(toolsbash) && make SHELL=$(TT)/bin/sh coreutils-prebuild'"
+	@$(TT)/bin/su - $(USER) -c "$(toolsenv) '$(toolsbash) && make SHELL=$(TT)/bin/sh tools'"
+	@cp /etc/resolv.conf $(TT)/etc
+	@rm -rf $(TT)/{,share/}{info,man}
+	@-ln -s $(TT)/bin/bash $(MP)/bin/bash
+	@install -m644 -oroot -groot $(MY_BASE)/etc/{group,passwd} $(MP)/etc
 	@touch $@
 
 maybe-tools:
@@ -217,74 +217,309 @@ maybe-tools:
 	fi
 	@touch $@
 
-tools:  pre-which pre-wget lfs-binutils-pass1 lfs-gcc-pass1 \
-	lfs-linux-headers-scpt lfs-glibc-scpt lfs-adjust-toolchain \
-	lfs-tcl-scpt lfs-expect-scpt lfs-dejagnu-scpt lfs-gcc-pass2 \
-	lfs-binutils-pass2 lfs-ncurses-scpt lfs-bash-scpt lfs-bzip2-scpt \
-	lfs-coreutils-scpt lfs-diffutils-scpt lfs-e2fsprogs-scpt lfs-findutils-scpt \
-	lfs-gawk-scpt lfs-gettext-scpt lfs-grep-scpt lfs-gzip-scpt lfs-m4-scpt \
-	lfs-make-scpt lfs-patch-scpt lfs-perl-scpt lfs-sed-scpt \
-	lfs-tar-scpt lfs-texinfo-scpt lfs-util-linux-ng-scpt lfs-wget-scpt \
-	lfs-cdrtools-scpt lfs-zlib-scpt lfs-zisofs-tools-scpt
-	@cp /etc/resolv.conf $(WD)/etc
+tools: \
+	make-prebuild \
+	sed-prebuild \
+	binutils-prebuild \
+	gcc-prebuild \
+	linux-headers-stage1 \
+	glibc-stage1 \
+	binutils-stage1 \
+	gcc-stage1 \
+	tcl-stage1 \
+	expect-stage1 \
+	dejagnu-stage1 \
+	ncurses-stage1 \
+	bash-stage1 \
+	bzip2-stage1 \
+	coreutils-stage1 \
+	diffutils-stage1 \
+	findutils-stage1 \
+	gawk-stage1 \
+	gettext-stage1 \
+	grep-stage1 \
+	gzip-stage1 \
+	m4-stage1 \
+	make-stage1 \
+	patch-stage1 \
+	perl-stage1 \
+	sed-stage1 \
+	tar-stage1 \
+	texinfo-stage1 \
+	wget-stage1 \
+	zlib-stage1 \
+	cdrtools-stage1
+	
+pre-bash: \
+	createfiles \
+	linux-headers-stage2 \
+	man-pages-stage2 \
+	glibc-stage2 \
+	zlib-stage2 \
+	binutils-stage2 \
+	gmp-stage2 \
+	mpfr-stage2 \
+	file-stage2 \
+	gcc-stage2 \
+	sed-stage2 \
+	pkg-config-stage2 \
+	ncurses-stage2 \
+	util-linux-ng-stage2 \
+	e2fsprogs-stage2 \
+	coreutils-stage2 \
+	iana-etc-stage2 \
+	m4-stage2 \
+	bison-stage2 \
+	procps-stage2 \
+	grep-stage2 \
+	readline-stage2 \
+	bash-stage2
+
+createfiles:
+	@-$(TT)/bin/ln -s $(TT)/bin/{bash,cat,grep,pwd,stty} /bin
+	@-$(TT)/bin/ln -s $(TT)/bin/perl /usr/bin
+	@-$(TT)/bin/ln -s $(TT)/lib/libgcc_s.so{,.1} /usr/lib
+	@-$(TT)/bin/ln -s $(TT)/lib/libstdc++.so{,.6} /usr/lib
+	@-$(TT)/bin/ln -s bash /bin/sh
+	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
+	@chgrp utmp /var/run/utmp /var/log/lastlog
+	@chmod 664 /var/run/utmp /var/log/lastlog
+	@cp $(TT)/etc/resolv.conf /etc
+	@-cp $(MY_ROOT)/etc/hosts /etc
 	@touch $@
 
-pre-bash: createfiles ch-linux-headers ch-man-pages \
-	ch-glibc re-adjust-toolchain ch-binutils ch-gmp ch-mpfr ch-gcc ch-db \
-	ch-sed ch-e2fsprogs ch-coreutils ch-iana-etc ch-m4 ch-bison \
-	ch-ncurses ch-procps ch-libtool ch-zlib ch-perl ch-readline \
-	ch-autoconf ch-automake ch-bash
+post-bash: \
+	libtool-stage2 \
+	gdbm-stage2 \
+	inetutils-stage2 \
+	perl-stage2 \
+	autoconf-stage2 \
+	automake-stage2 \
+	bzip2-stage2 \
+	diffutils-stage2 \
+	gawk-stage2 \
+	findutils-stage2 \
+	flex-stage2 \
+	gettext-stage2 \
+	groff-stage2 \
+	grub-stage2 \
+	gzip-stage2 \
+	iproute2-stage2 \
+	kbd-stage2 \
+	less-stage2 \
+	make-stage2 \
+	man-db-stage2 \
+	module-init-tools-stage2 \
+	patch-stage2 \
+	psmisc-stage2 \
+	shadow-stage2 \
+	sysklogd-stage2 \
+	sysvinit-stage2 \
+	tar-stage2 \
+	texinfo-stage2 \
+	udev-stage2 \
+	final-environment \
+	openssl-stage2 \
+	wget-stage2 \
+	Python-stage2 \
+	attr-stage2 \
+	acl-stage2 \
+	reiserfsprogs-stage2 \
+	xfsprogs-stage2 \
+	nano-stage2 \
+	joe-stage2 \
+	screen-stage2 \
+	libidn-stage2 \
+	libgpg-error-stage2 \
+	libgcrypt-stage2 \
+	gnutls-stage2 \
+	curl-stage2 \
+	zip-stage2 \
+	unzip-stage2 \
+	lynx-stage2 \
+	libxml2-stage2 \
+	expat-stage2 \
+	subversion-stage2 \
+	lfs-bootscripts-stage2 \
+	livecd-bootscripts-stage2 \
+	blfs-bootscripts-stage2 \
+	docbook-xml-stage2 \
+	libxslt-stage2 \
+	docbook-xsl-stage2 \
+	html_tidy-stage2 \
+	LFS-BOOK-stage2 \
+	openssh-stage2 \
+	pcre-stage2 \
+	glib2-stage2 \
+	which-stage2 \
+	pciutils-stage2 \
+	libusb-stage2 \
+	libusb-compat-stage2 \
+	usbutils-stage2 \
+	cvs-stage2 \
+	popt-stage2 \
+	samba-stage2 \
+	LVM2-stage2 \
+	parted-stage2 \
+	irssi-stage2 \
+	wireless_tools-stage2 \
+	wpa_supplicant-stage2 \
+	tcpwrappers-stage2 \
+	portmap-stage2 \
+	libtirpc-stage2 \
+	libcap-stage2 \
+	libnfsidmap-stage2 \
+	libevent-stage2 \
+	nfs-utils-stage2 \
+	rsync-stage2 \
+	jhalfs-stage2 \
+	sudo-stage2 \
+	bc-stage2 \
+	dialog-stage2 \
+	ncftp-stage2 \
+	dmraid-stage2 \
+	mdadm-stage2 \
+	dhcpcd-stage2 \
+	distcc-stage2 \
+	ppp-stage2 \
+	rp-pppoe-stage2 \
+	pptp-stage2 \
+	cpio-stage2 \
+	mutt-stage2 \
+	msmtp-stage2 \
+	strace-stage2 \
+	slang-stage2 \
+	tin-stage2 \
+	iptables-stage2 \
+	eject-stage2 \
+	hdparm-stage2 \
+	mc-stage2 \
+	fuse-stage2 \
+	dosfstools-stage2 \
+	ntfsprogs-stage2 \
+	man-pages-fr-stage2 \
+	man-pages-it-stage2 \
+	man-pages-es-stage2 \
+	manpages-de-stage2 \
+	manpages-ru-stage2 \
+	libpng-stage2 \
+	freetype-stage2 \
+	fontconfig-stage2 \
+	Xorg-base-stage2 \
+	Xorg-proto-stage2 \
+	Xorg-util-stage2 \
+	libXau-stage2 \
+	libXdmcp-stage2 \
+	xcb-proto-stage2 \
+	libpthread-stubs-stage2 \
+	libxcb-stage2 \
+	ed-stage2 \
+	Xorg-lib-stage2 \
+	xbitmaps-stage2 \
+	libdrm-stage2 \
+	Mesa-stage2 \
+	Xorg-app-stage2 \
+	xcursor-themes-stage2 \
+	Xorg-font-stage2 \
+	XML-Parser-stage2 \
+	intltool-stage2 \
+	xkeyboard-config-stage2 \
+	luit-stage2 \
+	pixman-stage2 \
+	dbus-stage2 \
+	dbus-glib-stage2 \
+	hal-stage2 \
+	hal-info-stage2 \
+	xorg-server-stage2 \
+	Xorg-driver-stage2 \
+	freefont-stage2 \
+	fonts-dejavu-stage2 \
+	fonts-kochi-stage2 \
+	fonts-firefly-stage2 \
+	fonts-baekmuk-stage2 \
+	libjpeg-stage2 \
+	libtiff-stage2 \
+	giflib-stage2 \
+	gc-stage2 \
+	cairo-stage2 \
+	hicolor-icon-theme-stage2 \
+	pango-stage2 \
+	atk-stage2 \
+	jasper-stage2 \
+	gtk2-stage2 \
+	w3m-stage2 \
+	libIDL-stage2 \
+	alsa-lib-stage2 \
+	alsa-utils-stage2 \
+	alsa-firmware-stage2 \
+	libogg-stage2 \
+	libvorbis-stage2 \
+	seamonkey-stage2 \
+	speex-stage2 \
+	flac-stage2 \
+	libdvdcss-stage2 \
+	libtheora-stage2 \
+	xine-lib-stage2 \
+	librsvg-stage2 \
+	startup-notification-stage2 \
+	vim-stage2 \
+	vte-stage2 \
+	URI-stage2 \
+	ExtUtils-Depends-stage2 \
+	ExtUtils-PkgConfig-stage2 \
+	Glib-stage2 \
+	libglade-stage2 \
+	libwnck-stage2 \
+	gstreamer-stage2 \
+	liboil-stage2 \
+	gstreamer-plugins-base-stage2 \
+	xfce-stage2 \
+	pidgin-stage2 \
+	xchat-stage2 \
+	xlockmore-stage2 \
+	linux32-stage2 \
+	initramfs-stage2 \
+	sysfsutils-stage2 \
+	pcmciautils-stage2 \
+	ddccontrol-stage2 \
+	ddccontrol-db-stage2 \
+	syslinux-stage2 \
+	dotconf-stage2 \
+	portaudio-stage2 \
+	espeak-stage2 \
+	speech-dispatcher-stage2 \
+	speechd-up-stage2 \
+	brltty-stage2 \
+	anthy-stage2 \
+	scim-stage2 \
+	scim-tables-stage2 \
+	scim-anthy-stage2 \
+	libhangul-stage2 \
+	scim-hangul-stage2 \
+	libchewing-stage2 \
+	scim-chewing-stage2 \
+	scim-pinyin-stage2 \
+	scim-input-pad-stage2 \
+	hibernate-script-stage2 \
+	xz-stage2 \
+	libx86-stage2 \
+	vbetool-stage2 \
+	gcc33-stage2 \
+	linux-stage2 \
+	binutils-stage3 \
+	gcc-stage3 \
+	linux-stage3 \
+	zisofs-tools-stage2 \
+	update-caches
 
-post-bash: ch-bzip2 ch-diffutils ch-file ch-gawk ch-findutils \
-	ch-flex ch-grub ch-gettext ch-grep ch-groff ch-gzip ch-inetutils \
-	ch-iproute2 ch-kbd ch-less ch-make ch-man-db \
-	ch-module-init-tools ch-patch ch-psmisc ch-shadow ch-sysklogd \
-	ch-sysvinit ch-tar ch-texinfo ch-udev ch-util-linux-ng ch-vim \
-	final-environment
-
-blfs:   ch-openssl ch-wget ch-reiserfsprogs ch-xfsprogs ch-nano ch-joe \
-	ch-screen ch-pkgconfig ch-libidn ch-libgpg-error ch-libgcrypt \
-	ch-gnutls ch-curl ch-zip ch-unzip ch-lynx ch-libxml2 ch-expat \
-	ch-subversion ch-lfs-bootscripts ch-livecd-bootscripts ch-docbook-xml \
-	ch-libxslt ch-docbook-xsl ch-html_tidy ch-LFS-BOOK ch-libpng ch-freetype \
-	ch-fontconfig ch-Xorg-base ch-Xorg-proto ch-Xorg-util ch-libXau ch-libXdmcp \
-	ch-xcb-proto ch-libpthread-stubs ch-libxcb ch-ed ch-Xorg-lib \
-	ch-xbitmaps ch-libdrm ch-Mesa ch-Xorg-app ch-xcursor-themes \
-	ch-Xorg-font ch-XML-Parser ch-intltool ch-xkeyboard-config ch-luit \
-	ch-dbus ch-pcre ch-glib2 ch-dbus-glib ch-pciutils ch-libusb ch-usbutils \
-	ch-xorg-server ch-Xorg-driver \
-	ch-freefont ch-fonts-dejavu ch-fonts-kochi ch-fonts-firefly ch-fonts-baekmuk \
-	ch-libjpeg ch-libtiff ch-openssh ch-giflib \
-	ch-gc ch-cairo ch-hicolor-icon-theme \
-	ch-pango ch-atk ch-jasper ch-gtk2 ch-w3m ch-cvs ch-popt ch-samba ch-libIDL \
-	ch-seamonkey ch-alsa-lib ch-alsa-utils ch-alsa-firmware \
-	ch-libogg ch-libvorbis ch-speex ch-flac ch-libdvdcss ch-libtheora ch-xine-lib ch-parted \
-	ch-librsvg ch-startup-notification chroot-gvim ch-vte ch-URI ch-xfce \
-	ch-gxine ch-irssi ch-pidgin ch-net-tools \
-	ch-xchat ch-wireless_tools ch-wpa_supplicant \
-	ch-tcpwrappers ch-portmap ch-nfs-utils \
-	ch-traceroute ch-rsync ch-jhalfs ch-sudo ch-bc ch-dialog ch-ncftp  \
-	ch-device-mapper ch-LVM2 ch-dmraid ch-multipath-tools \
-	ch-dhcpcd ch-distcc ch-ppp ch-rp-pppoe ch-pptp \
-	ch-cpio ch-mutt ch-msmtp ch-tin ch-mdadm ch-which \
-	ch-espeak ch-dotconf ch-speech-dispatcher ch-speechd-up ch-brltty  \
-	ch-strace ch-iptables ch-eject ch-xlockmore ch-hdparm \
-	ch-sysfsutils ch-pcmcia-cs ch-pcmciautils ch-ddccontrol ch-ddccontrol-db \
-	ch-blfs-bootscripts ch-oui-data ch-Markdown ch-SmartyPants \
-	ch-man-pages-fr ch-man-pages-es ch-man-pages-it ch-manpages-de ch-manpages-ru \
-	ch-anthy ch-scim ch-scim-tables ch-scim-anthy ch-libhangul ch-scim-hangul \
-	ch-libchewing ch-scim-chewing ch-scim-pinyin ch-scim-input-pad \
-	ch-hibernate-script ch-slang ch-mc ch-fuse ch-dosfstools ch-ntfsprogs \
-	ch-libaal ch-reiser4progs ch-vbetool ch-bin86 ch-lilo ch-syslinux \
-	ch-scsi-firmware ch-net-firmware ch-linux32 ch-initramfs
-ifeq ($(CD_ARCH),i686)
-	make ch-linux
-	make ch-binutils64
-	make ch-gcc64
-endif
-	make ch-linux64
-	make ch-gcc33
-	make update-caches
+final-environment:
+	@cp -a $(MY_ROOT)/etc/sysconfig /etc
+	@rm -rf /etc/sysconfig/.svn
+	@-cp $(MY_ROOT)/etc/inputrc /etc
+	@-cp $(MY_ROOT)/etc/bashrc /etc
+	@-cp $(MY_ROOT)/etc/profile /etc
+	@-dircolors -p > /etc/dircolors
+	@-cp $(MY_ROOT)/etc/fstab /etc
 
 wget-list:
 	@>wget-list ; \
@@ -293,82 +528,46 @@ wget-list:
 	 done ; \
 	 sed -i '/^$$/d' wget-list
 
+stop:
+	@echo $(GREEN)Stopping due to user specified stop point.$(WHITE)
+	@exit 1
+
+#==============================================================================
 # Targets for building packages individually. Useful for troubleshooting.
-# These do not generally get used as part of the script. They're for manual
-# use only ie, 'make [target]'
+# These are not used internally, but are expected to be specified manually on
+# the command line, i.e., 'make [target]'
 #==============================================================================
 
-# The following takes the form 'make lfs-[package name]-only'	
-lfs-%-only: lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-scpt'"
+%-only-prebuild: builduser
+	@su - $(USER) -c "$(toolsenv) '$(toolsbash) && make $*-prebuild'"
 
-# The following two take the form 'make lfs-[package name]-only-pass#'	
-lfs-%-only-pass1: lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass1'"
+%-only-stage1: builduser
+	@su - $(USER) -c "$(toolsenv) '$(toolsbash) && make $*-stage1'"
 
-lfs-%-only-pass2: lfsuser
-	@su - lfs -c "$(lfsenv) '$(lfsbash) && $(MAKE) lfs-$*-pass2'"
+%-only-stage2: $(MKTREE)
+	@chroot "$(MP)" $(chenv-post-bash) 'set +h && cd $(MY_ROOT) && \
+	 make SHELL=/bin/bash -C packages/$* stage2'
 
-# The following takes the form 'make [package name]-only-ch'	
-%-only-ch: $(MKTREE)
-	make -C $(PKG)/$* chroot
-
-gvim: $(MKTREE)
-	make -C $(PKG)/vim chroot3
-
-# The following takes the form 'make [package name]-clean'
-# Cleans the build directory of a single package.
-
+# Clean the build directory of a single package.
 %-clean:
-	make -C $(PKG)/$* clean
+	make -C packages/$* clean
 
-# The targets below can be called manually, but are also used by the
-# scripts internally.
+#==============================================================================
+# Do not call the targets below manually!
+# These are used internally and must be called by other targets.
 #==============================================================================
 
-createfiles:
-	@-$(WD)/bin/ln -s $(WD)/bin/{bash,cat,grep,pwd,stty} /bin
-	@-$(WD)/bin/ln -s $(WD)/bin/perl /usr/bin
-	@-$(WD)/bin/ln -s $(WD)/lib/libgcc_s.so{,.1} /usr/lib
-	@-$(WD)/bin/ln -s $(WD)/lib/libstdc++.so{,.6} /usr/lib
-	@-$(WD)/bin/ln -s bash /bin/sh
-	@touch /var/run/utmp /var/log/{btmp,lastlog,wtmp}
-	@chgrp utmp /var/run/utmp /var/log/lastlog
-	@chmod 664 /var/run/utmp /var/log/lastlog
-	@cp $(WD)/etc/resolv.conf /etc
-	@-cp $(ROOT)/etc/hosts /etc
-	@touch $@
+%-prebuild: %-clean
+	make -C packages/$* prebuild
 
-# Do not call the targets below manually! They are used internally and must be
-# called by other targets.
-#==============================================================================
+%-stage1: %-clean
+	make -C packages/$* stage1
 
-lfs-%-scpt:
-	$(MAKE) -C $(PKG)/$* stage1
+%-stage2: %-clean
+	make -C packages/$* stage2
 
-lfs-%-pass1:
-	$(MAKE) -C $(PKG)/$* pass1
-
-lfs-%-pass2:
-	$(MAKE) -C $(PKG)/$* pass2
-
-lfs-adjust-toolchain:
-	$(MAKE) -C $(PKG)/binutils adjust-toolchain
-
-ch-%:
-	make -C $(PKG)/$* stage2
-
-re-adjust-toolchain:
-	make -C $(PKG)/binutils re-adjust-toolchain
-
-final-environment:
-	@cp -ra $(ROOT)/etc/sysconfig /etc
-	@rm -rf /etc/sysconfig/.svn
-	@-cp $(ROOT)/etc/inputrc /etc
-	@-cp $(ROOT)/etc/bashrc /etc
-	@-cp $(ROOT)/etc/profile /etc
-	@-dircolors -p > /etc/dircolors
-	@-cp $(ROOT)/etc/fstab /etc
+%-stage3: %-clean
+	make -C packages/$* stage3
 
 update-caches:
 	cd /usr/share/fonts ; mkfontscale ; mkfontdir ; fc-cache -f
@@ -376,10 +575,8 @@ update-caches:
 	echo 'dummy / ext2 defaults 0 0' >/etc/mtab
 	updatedb --prunepaths='/sources /tools /lfs-livecd /lfs-sources /proc /sys /dev /tmp /var/tmp'
 	echo >/etc/mtab
-
-chroot-gvim:
-	make -C $(PKG)/vim stage3
-
+	
+#==============================================================================
 # Targets to create the iso
 #==============================================================================
 
@@ -398,7 +595,7 @@ prepiso: $(MKTREE)
 	@install -m755 scripts/{net-setup,greeting,livecd-login} $(MP)/usr/bin/ 
 	@sed s/@LINKER@/$(LINKER)/ scripts/shutdown-helper.in >$(MP)/usr/bin/shutdown-helper
 	@chmod 755 $(MP)/usr/bin/shutdown-helper
-	@svn export --force root $(MP)/etc/skel
+	#@svn export --force root $(MP)/etc/skel
 
 iso: prepiso
 	@make unmount
@@ -408,39 +605,35 @@ iso: prepiso
 	# e2fsck optimizes directories and returns 1 after a clean build.
 	# This is not a bug.
 	@-e2fsck -f -p root.ext2
-	@( LC_ALL=C ; export LC_ALL ; \
-	    cat $(ROOT)/doc/README.html.head ; \
-	    sed 's/\[version\]/$(CD_VERSION)/' $(ROOT)/doc/README.txt | \
-		$(WD)/bin/Markdown --html4tags | $(WD)/bin/SmartyPants ; \
-	    cat $(ROOT)/doc/README.html.tail ) >$(MPBASE)/iso/README.html
-	@$(WD)/bin/mkzftree -F root.ext2 $(MPBASE)/iso/root.ext2
-	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
-	$(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION).iso -b boot/isolinux/isolinux.bin \
+	@$(TT)/bin/mkzftree -F root.ext2 $(MY_BUILD)/iso/root.ext2
+	@cd $(MY_BUILD)/iso ; $(TT)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
+	$(MY_BUILD)$(MY_ROOT)/lfslivecd-$(CD_VERSION).iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-V "lfslivecd-$(CD_VERSION)" ./
-	@cd $(MPBASE)/iso ; $(WD)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
-	$(MPBASE)$(ROOT)/lfslivecd-$(CD_VERSION)-nosrc.iso -b boot/isolinux/isolinux.bin \
+	@cd $(MY_BUILD)/iso ; $(TT)/bin/mkisofs -z -R -l --allow-leading-dots -D -o \
+	$(MY_BUILD)$(MY_ROOT)/lfslivecd-$(CD_VERSION)-nosrc.iso -b boot/isolinux/isolinux.bin \
 	-c boot/boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table \
 	-m lfs-sources -V "lfslivecd-$(CD_VERSION)" ./
 
-# Targets to clean your tree. 
+#==============================================================================
+# Targets to clean the tree.
+# 'clean' cleans the build system tree, scrub also cleans the installed system
 #==============================================================================
 
 clean: unmount
-	@-rm -rf $(WD) $(MPBASE)$(WD) $(MPBASE)/iso
-	@-userdel lfs
-	@-groupdel lfs
-	@-rm -rf /home/lfs
-	@-rm {prepiso,lfsuser,lfs-base,extend-lfs,pre-wget,maybe-tools,createfiles}
-	@-rm $(PKG)/binutils/{,re-}adjust-toolchain
-	@-for i in `ls $(PKG)` ; do $(MAKE) -C $(PKG)/$$i clean ; done
-	@find $(PKG) -name "pass*" -exec rm -rf \{} \;
-	@find $(PKG) -name "stage*" -exec rm -rf \{} \;
-	@find $(PKG) -name "*.log" -exec rm -rf \{} \;
-	@rm -f $(PKG)/Xorg-*/*-stage2
-	@rm -f $(PKG)/wget/prebuild
-	@rm -f $(PKG)/binutils/{a.out,dummy.c,.spectest}
-	@-rm -f $(SRC) $(ROOT)
+	@-rm -rf $(TT) $(MY_BUILD)$(TT) $(MY_BUILD)/iso
+	@-userdel $(USER)
+	@-groupdel $(USER)
+	@rm -rf /home/$(USER)
+	@rm -f {dirstruct,builduser,build-tools,base,createfiles,prep-mount,tools,prepiso}
+	@-for i in `ls packages` ; do $(MAKE) -C packages/$$i clean ; done
+	@find packages -name "prebuild" -exec rm -f \{} \;
+	@find packages -name "stage*" -exec rm -f \{} \;
+	@find packages -name "*.log" -exec rm -f \{} \;
+	@rm -f logs/*
+	@rm -f packages/Xorg-*/*-stage2
+	@rm -f packages/binutils/{a.out,dummy.c,.spectest}
+	@-rm -f $(SRC) $(MY_ROOT)
 	@find packages/* -xtype l -exec rm -f \{} \;
 	@-rm root.ext2
 
@@ -455,13 +648,12 @@ unmount:
 	-umount $(MP)/proc
 	-umount $(MP)/sys
 	-umount $(MP)/boot
-	-umount $(MP)/drivers
 	-umount $(MP)$(LFSSRC)
 	-umount $(MP)$(SRC)
-	-umount $(MP)$(WD)
-	-umount $(MP)$(ROOT)
-	-rmdir $(MP)$(SRC) $(MP)$(WD) $(MP)$(ROOT)
-	-rmdir $(MP)/boot $(MP)$(LFSSRC) $(MP)/drivers
+	-umount $(MP)$(TT)
+	-umount $(MP)$(MY_ROOT)
+	-rmdir $(MP)$(SRC) $(MP)$(TT) $(MP)$(MY_ROOT)
+	-rmdir $(MP)/boot $(MP)$(LFSSRC)
 	-umount $(MP)
 
 zeroes: $(MKTREE)
@@ -469,8 +661,6 @@ zeroes: $(MKTREE)
 	-rm $(MP)/zeroes
 	-make unmount
 
-.PHONY: mount unmount clean_sources scrub clean iso chroot-gvim update-caches \
-	final-environment re-adjust-toolchain ch-% ch-glibc-32 lfs-adjust-toolchain \
-	lfs-%-scpt lfs-%-scpt-32 lfs-%-pass1 lfs-%-pass2 \
-	gvim %-only-ch lfs-%-only lfs-%-only-pass1 lfs-%-only-pass2 lfs-wget \
-	lfs-rm-wget blfs post-bash pre-bash tools pre-which zeroes
+#==============================================================================
+.PHONY: unmount clean final-environment %-stage2 %-prebuild %-stage1 \
+	%-only-stage2 %-only-prebuild %-only-stage1 post-bash pre-bash

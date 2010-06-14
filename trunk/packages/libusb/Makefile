@@ -1,20 +1,16 @@
 # libusb Makefile
 
 NM= libusb
-VRS= 0.1.12
+VRS= 1.0.7
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 599a5168590f66bc6f1f9a299579fd8500614807
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 8b7dd10dd9e86dbdefc80f42c923a5ecd9d3e2ef
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -27,4 +23,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

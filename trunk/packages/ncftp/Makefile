@@ -1,26 +1,24 @@
 # ncftp Makefile
 
 NM= ncftp
-VRS= 3.2.0
+VRS= 3.2.4
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR)-src.tar.bz2
-URL-$(FILE)= http://ftp.belnet.be/mirror/ftp.ncftp.com/ncftp/older_versions/$(FILE)
-SHA-$(FILE)= 708222170df81ed957e4f187213d69ea21e4f7dd
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 7e149123c45e1628882c0866c3ebea3ba37f9929
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc
 	make -C libncftp shared
 	make -C libncftp soinstall
 	make
@@ -29,4 +27,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

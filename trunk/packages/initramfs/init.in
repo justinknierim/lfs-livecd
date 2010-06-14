@@ -420,7 +420,7 @@ if [ "$all_generic_ide" = 1 ] ; then
 	echo "options ata-generic all_generic_ide=1" >>/etc/modprobe.conf
 fi
 
-udevd --daemon
+udevd --daemon --resolve-names=never
 
 ( IFS="," ; for module in $load ; do
 	# Some modules exist only on the main CD filesystem.
@@ -428,8 +428,8 @@ udevd --daemon
 	modprobe -q "$module"
 done )
 
-udevtrigger
-udevsettle
+udevadm trigger
+udevadm settle
 if [ "$all_generic_ide" = 1 ] ; then
 	if [ "$PATA" = 0 ] ; then
 		modprobe generic

@@ -1,30 +1,24 @@
 # BLFS Bootscripts Makefile
 
 NM= blfs-bootscripts
-VRS= 20060910
+VRS= 20090302
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= 933c4a2e3c4b968fd82cba9992f04bf9c780cf41
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= ef50182fd20b89c2cb081c1d07a7371e0da47cc3
 
 PATCH1=$(NM)-add-autosshd-1.patch
-PATCH2=$(NM)-newpppoe-1.patch
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
 	patch -Np1 -i ../$(PATCH1)
-	patch -Np1 -i ../$(PATCH2)
 	make install-service-dhcpcd
 	make install-service-pppoe
 	make install-gpm
@@ -41,4 +35,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -14,7 +14,7 @@ SHA-$(PATCH1)= [sha1sum of $(PATCH1)]
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build) # See the scripts/functions file for functions like this
@@ -23,28 +23,6 @@ compile-stage1:
 	./configure --prefix=$(WD)
 	make
 	make install
-
-# The following target is for use with packages that must be built in chroot
-# and which you want to build one at a time. Mostly for troubleshooting.
-# For use with packages built in chroot but before the chroot installation of
-# Bash.
-# NOTE: You would never call the 'chroot' targets directly, they would be
-# referenced by other targets in the root Makefile.
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
-
-# Below is a variation of the above target. This would be used with packages
-# built in chroot after Bash, but before BLFS-type packages.
-#chroot:
-#	chroot "$(MP)" $(chenv-post-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
-
-# Below is the final variation of the above two. For use with packages built
-# in chroot but after the lfs-base is done. BLFS-type packages.
-#chroot:
-#	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE) $(PATCH1)
 	$(sep_dir_build) # Simple function to create a separate build directory
@@ -58,4 +36,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2

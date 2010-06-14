@@ -5,16 +5,12 @@ VRS= 1.55
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
-URL-$(FILE)= http://ditec.um.es/~piernas/manpages-es/$(FILE)
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
 SHA-$(FILE)= 1d72e80d0c41f9e5c24ba6a4eea161fc151ec5b5
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -22,7 +18,7 @@ stage2: Makefile $(FILE)
 compile-stage2:
 	mv man7/iso_8859-2.7{,X}
 	mv man7/iso_8859-7.7{,X}
-	convert-mans UTF-8 ISO-8859-1 man?/*.?
+	sh ../convert-mans UTF-8 ISO-8859-1 man?/*.?
 	mv man7/iso_8859-2.7{X,}
 	mv man7/iso_8859-7.7{X,}
 	make install
@@ -30,4 +26,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

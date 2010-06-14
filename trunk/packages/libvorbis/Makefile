@@ -1,20 +1,16 @@
 # libvorbis Makefile
 
 NM= libvorbis
-VRS= 1.1.2
+VRS= 1.2.3
 DIR= $(NM)-$(VRS)
 
-FILE= $(DIR).tar.gz
-URL-$(FILE)= http://downloads.xiph.org/releases/vorbis/$(FILE)
-SHA-$(FILE)= 26289fc41aa5436b1a277d726bb5cb106d675c35
+FILE= $(DIR).tar.bz2
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 9b0ae094aebe75cee2d2bf3b7572deccab3746cb
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -28,4 +24,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

@@ -1,30 +1,27 @@
 # Autoconf Makefile
 
 NM= autoconf
-VRS= 2.63
+VRS= 2.65
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= f15e14aa34acf871b47f659ef99a2e6707db4a18
+SHA-$(FILE)= 9126ffb8d7d59f38f305ef53e208531d4b75bb87
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr
 	make
 	make install
 
 clean:
 	-rm -rf $(DIR) 
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

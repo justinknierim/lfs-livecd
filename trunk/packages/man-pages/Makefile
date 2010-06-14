@@ -1,20 +1,16 @@
 # Man-pages Makefile
 
 NM= man-pages
-VRS= 3.11
+VRS= 3.23
 DIR= $(NM)-$(VRS)
 
 FILE= $(DIR).tar.bz2
 URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
-SHA-$(FILE)= b2d278fe261fcf5a86f425ed4cce13dea6d78ffc
+SHA-$(FILE)= 34452a00ccd9a9463d7ca66aeab55d5993a70fa9
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
@@ -25,4 +21,4 @@ compile-stage2:
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

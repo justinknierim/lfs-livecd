@@ -1,29 +1,24 @@
 # FreeFont Makefile
 
 NM= freefont
-VRS= 20080912
+VRS= 20090104
 DIR= $(NM)-$(VRS)
-LOCATION= /usr/share/fonts
 
 FILE= $(NM)-ttf-$(VRS).tar.gz
-URL-$(FILE)= $(HTTPBLFS)/$(NM)/$(FILE)
-SHA-$(FILE)= b2566d186d59b7fddf2cffd72728a98b0121b772
+URL-$(FILE)= $(HTTP)/$(NM)/$(FILE)
+SHA-$(FILE)= 776393e70028e74062754d48c74fe6829271d182
 
 # Targets
 
-include $(ROOT)/scripts/functions
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
+include $(MY_ROOT)/scripts/functions
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	cp -v *.ttf $(LOCATION)
+	cp -v *.ttf /usr/share/fonts
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: clean chroot compile-stage2
+.PHONY: clean compile-stage2

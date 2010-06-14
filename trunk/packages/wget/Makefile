@@ -9,44 +9,43 @@ SHA-$(FILE)= a78a3b71fd59504df3ff3dbc0a2195a1410e9eac
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 ftpget:
-	@if ! which wget >/dev/null 2>&1 ; then cd $(SRC) ; \
-	 $(ROOT)/scripts/ftpget $(VRS) ; fi
+	@cd $(SRC) ; sh $(MY_ROOT)/scripts/ftpget $(NM) $(VRS)
+	@touch $@
 
 prebuild: ftpget $(FILE)
 	$(std_build)
 
 compile-prebuild:
-	unset CFLAGS ; ./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
-	 --enable-static --disable-shared --disable-nls
-	unset CFLAGS ; make
-	unset CFLAGS ; make install
+	cp -v Makefile.in{,.bak}
+	sed -e '/^SUBDIRS/s@ doc@@' -e '/^install:/s@ install.info@@' \
+	-e 's/@COMMENT_IF_NO_POD2MAN@install.man//' Makefile.in.bak > Makefile.in
+	./configure --prefix=$(TT) --disable-nls
+	make
+	make install
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD) --libdir=$(WD)/lib --without-ssl \
-	 --enable-static --disable-shared --disable-nls
+	./configure \
+	   --prefix=/tools
 	make
 	make install
-
-chroot:
-	chroot "$(MP)" $(chenv-blfs) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-post-bash)'
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr --sysconfdir=/etc
+	./configure \
+		--prefix=/usr \
+		--sysconfdir=/etc
 	make
 	make install
-	install-info --info-dir=/usr/share/info /usr/share/info/wget.info
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-prebuild compile-stage1 clean chroot compile-stage2
+.PHONY: compile-prebuild clean chroot compile-stage2

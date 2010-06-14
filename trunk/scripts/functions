@@ -1,10 +1,3 @@
-#==============================================================================
-# Functions for use in the LiveCD Makefiles
-#
-# Authors: Jeremy Huntwork, Alexander Patrakov
-# Date  : 2005-07-17
-#==============================================================================
-
 define echo_message
 	@echo $(BRW)
 	@echo ================================================================================
@@ -12,37 +5,47 @@ define echo_message
 	@echo ================================================================================$(WHITE)
 endef
 
+define setup_build
+    @touch $(DIR)-$@.log
+    @-ln -sf ../packages/$(shell basename `pwd`)/$(DIR)-$@.log $(MY_ROOT)/logs/ 
+    @unpack $(FILE) 2>&1 | tee -a $(MY_ROOT)/logs/build.log >$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+endef
+
+define clean_build
+    @make clean 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+endef
+
 define std_build
 	@$(call echo_message, Building)
-        @unpack $(FILE) >$(DIR)-$@.log 2>&1
-        @make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-        @make clean >>$(DIR)-$@.log 2>&1
-        @touch $@
+    @$(setup_build)
+    @make -C $(DIR) -f ../Makefile compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+    @$(clean_build)
+    @touch $@
 endef
 
 define std_build_noclean
 	@$(call echo_message, Building)
-        @unpack $(FILE) >$(DIR)-$@.log 2>&1
-        @make CROSSVARS=../$(CROSSVARS) -C $(DIR) -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-        @touch $@
+	@$(setup_build)
+    @make -C $(DIR) -f ../Makefile compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+    @touch $@
 endef
 
 define sep_dir_build
 	@$(call echo_message, Building)
-	@unpack $(FILE) >$(DIR)-$@.log 2>&1
-	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
-	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
-	@make CROSSVARS=../$(CROSSVARS) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
-	@make clean >>$(DIR)-$@.log 2>&1
+	@$(setup_build)
+	@rm -rf $(NM)-build 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@install -dv $(NM)-build 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@make -C $(NM)-build -f ../Makefile compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@$(clean_build)
 	@touch $@
 endef
 
 define sep_dir_build_noclean
 	@$(call echo_message, Building)
-	@unpack $(FILE) >$(DIR)-$@.log 2>&1
-	@rm -rf $(NM)-build >>$(DIR)-$@.log 2>&1
-	@mkdir -v $(NM)-build >>$(DIR)-$@.log 2>&1
-	@make CROSSVARS=../$(CROSSVARS) -C $(NM)-build -f ../Makefile compile-$@ >>$(DIR)-$@.log 2>&1
+	@$(setup_build)
+	@rm -rf $(NM)-build 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@install -dv $(NM)-build 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
+	@make -C $(NM)-build -f ../Makefile compile-$@ 2>&1 | tee -a $(MY_ROOT)/logs/build.log >>$(DIR)-$@.log ; exit $${PIPESTATUS[0]}
 	@touch $@
 endef
 
@@ -53,68 +56,10 @@ define download
 	 $(WGET) -c "$(2)" ; fi
 	@if echo "$(3)  $(SRC)/$(1)" | sha1sum -c - >/dev/null 2>/dev/null ; then \
 	 echo $(BRW)sha1sum check on "$(SRC)/$(1)": $(GREEN)[ OK ]$(WHITE); \
-	 else echo $(BRW)sha1sum check on "$(SRC)/$(1)": $(RED)[ FAILED ]$(WHITE); exit 1 ; fi
+	 else echo $(BRW)sha1sum check on "$(SRC)/$(1)": $(RED)[ FAILED ]$(WHITE); \
+	 echo $(BRW)The sha1sum for the downloaded file is:$(WHITE) $$(sha1sum $(SRC)/$(1) | awk '{print $$1}'); exit 1 ; fi
 	@ln -sf "$(SRC)/$(1)" .
 endef
 
 %.gz %.tgz %.bz2 %.zip %.patch %.diff %.rules %.ttf %.jpg %.run:
 	$(call download,$@,$(URL-$@),$(SHA-$@))
-
-wget-list-entry:
-	@echo $(URL-$(FILE)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE1)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE2)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE3)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE4)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE5)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE101)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE102)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE103)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE104)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE105)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE106)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE107)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE108)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE109)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE110)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE111)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE112)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE113)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE114)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE115)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE116)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE117)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE118)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE119)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE120)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE121)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE122)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE123)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE124)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE125)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE126)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE127)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE128)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE129)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE130)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE131)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE132)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE133)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE134)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE135)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE136)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE137)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE138)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE139)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE140)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(FILE141)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH1)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH2)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH3)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH4)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH5)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH6)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH7)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH50)) >>$(MPBASE)$(ROOT)/wget-list
-	@echo $(URL-$(PATCH51)) >>$(MPBASE)$(ROOT)/wget-list

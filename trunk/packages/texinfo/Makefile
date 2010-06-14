@@ -10,29 +10,28 @@ SHA-$(FILE)= a1533cf8e03ea4fa6c443b73f4c85e4da04dead0
 
 # Targets
 
-include $(ROOT)/scripts/functions
+include $(MY_ROOT)/scripts/functions
 
 stage1: $(FILE)
 	$(std_build)
 
 compile-stage1:
-	./configure --prefix=$(WD)
+	./configure \
+		--prefix=$(TT)
 	make
 	make install
-
-chroot:
-	chroot "$(MP)" $(chenv-pre-bash) \
-	'cd $(ROOT) && make ch-$(NM) $(chbash-pre-bash)'
 
 stage2: Makefile $(FILE)
 	$(std_build)
 
 compile-stage2:
-	./configure --prefix=/usr
+	./configure \
+		--prefix=/usr
 	make
 	make install
+	make TEXMF=/usr/share/texmf install-tex
 
 clean:
 	-rm -rf $(DIR)
 
-.PHONY: compile-stage1 clean chroot compile-stage2
+.PHONY: compile-stage1 clean compile-stage2
